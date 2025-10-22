@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import styles from "./Header.module.scss";
 
 const Header = () => {
   return (
-    <header>
-      <h1>MyLogo</h1>
+    <header className={styles.header}>
+      <h1 style={{ color: "lime"}}>MyLogo</h1>
       <nav>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
