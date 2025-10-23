@@ -6,7 +6,9 @@ import Logo from "../../assets/logo.svg";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
-  const navRef = useRef(null);
+
+  // Type the ref as HTML element
+  const navRef = useRef<HTMLElement | null>(null);
   const [navHeight, setNavHeight] = useState(0);
 
   // Update mobile state on resize
@@ -23,7 +25,6 @@ const Header = () => {
     }
   }, [isOpen, isMobile]);
 
-  // Function to close mobile menu
   const handleLinkClick = () => {
     if (isMobile) setIsOpen(false);
   };
