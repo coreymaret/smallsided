@@ -1,64 +1,45 @@
 /* Header.module.scss */
-/* Header container */
+
+/* Base header styles */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
   background-color: #20264A;
-  position: relative; /* needed for absolute nav on mobile */
+  position: relative;
   z-index: 1000;
 }
 
-/* Logo */
+/* ✅ Single logo, scalable by breakpoint */
 .logo img {
-  width: 9.375rem; // 150px
-  height: auto;
-}
-
-/* Desktop logo */
-.logo-desktop {
-  display: none;
-  width: 14rem; // 220px
-  height: auto;
-}
-.logo-tablet {
-  display: none;
-}
-.logo-mobile {
   display: block;
-  width: 3rem !important;
   height: auto;
+  width: 10rem; // Mobile default (e.g., 128px)
 }
 
-@media (min-width: 45rem) { // ≥725px
-  .logo-mobile {
-    display: none;
-  }
-  .logo-tablet {
-    display: block;
+/* Tablet breakpoint */
+@media (min-width: 49rem) { // ≥640px
+  .logo img {
+    width: 12rem; // ~160px
   }
 }
 
+/* Desktop breakpoint */
 @media (min-width: 64rem) { // ≥1024px
-  .logo-tablet {
-    display: none;
-  }
-  .logo-desktop {
-    display: block;
-    width: 14rem !important; // 👈 adjust this to make it wider
-    height: auto;
+  .logo img {
+    width: 15rem; // ~192px
   }
 }
 
-/* Hamburger */
+/* Hamburger menu (unchanged) */
 .hamburger {
   display: block;
   cursor: pointer;
   width: 2rem;
   height: 2rem;
   position: relative;
-  z-index: 1100; // above mobile nav
+  z-index: 1100;
 
   span {
     background-color: #98ED66;
@@ -85,10 +66,9 @@ header {
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
 
-  /* Mobile: absolute under header */
-  @media (max-width: 44.99rem) { // <725px
+  @media (max-width: 48.99rem) {
     position: absolute;
-    top: 100%; /* below header */
+    top: 100%;
     left: 0;
     width: 100%;
     background-color: #20264A;
@@ -97,7 +77,7 @@ header {
 
   ul {
     display: flex;
-    flex-direction: column; // stack for mobile
+    flex-direction: column;
     list-style: none;
     gap: 1rem;
     margin: 0;
@@ -116,7 +96,6 @@ header {
 
       &:hover {
         color: #98ED66;
-        text-decoration: none;
       }
 
       &:active {
@@ -126,18 +105,18 @@ header {
   }
 
   &.open {
-    max-height: 100vh; /* temporary fallback if dynamic fails */
+    max-height: 100vh;
   }
 }
 
 /* Tablet & up: horizontal nav */
-@media (min-width: 45rem) { // ≥725px
+@media (min-width: 49rem) {
   .main-nav {
     position: static;
     max-height: none;
 
     ul {
-      flex-direction: row; // horizontal
+      flex-direction: row;
     }
   }
 
@@ -147,7 +126,7 @@ header {
 }
 
 /* Desktop spacing adjustments */
-@media (min-width: 64rem) { // ≥1024px
+@media (min-width: 64rem) {
   header {
     padding: 1rem 2rem;
   }
