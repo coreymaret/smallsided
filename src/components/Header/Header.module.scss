@@ -1,3 +1,4 @@
+/* Header.module.scss */
 /* Header container */
 header {
   display: flex;
@@ -13,6 +14,41 @@ header {
 .logo img {
   width: 9.375rem; // 150px
   height: auto;
+}
+
+/* Desktop logo */
+.logo-desktop {
+  display: none;
+  width: 14rem; // 220px
+  height: auto;
+}
+.logo-tablet {
+  display: none;
+}
+.logo-mobile {
+  display: block;
+  width: 3rem !important;
+  height: auto;
+}
+
+@media (min-width: 45rem) { // ≥725px
+  .logo-mobile {
+    display: none;
+  }
+  .logo-tablet {
+    display: block;
+  }
+}
+
+@media (min-width: 64rem) { // ≥1024px
+  .logo-tablet {
+    display: none;
+  }
+  .logo-desktop {
+    display: block;
+    width: 14rem !important; // 👈 adjust this to make it wider
+    height: auto;
+  }
 }
 
 /* Hamburger */
@@ -50,7 +86,7 @@ header {
   transition: max-height 0.3s ease-in-out;
 
   /* Mobile: absolute under header */
-  @media (max-width: 39.99rem) { // <640px
+  @media (max-width: 44.99rem) { // <725px
     position: absolute;
     top: 100%; /* below header */
     left: 0;
@@ -79,8 +115,12 @@ header {
       cursor: pointer;
 
       &:hover {
-        color: #0f0;
-        text-decoration: underline;
+        color: #98ED66;
+        text-decoration: none;
+      }
+
+      &:active {
+        color: #ffffff;
       }
     }
   }
@@ -91,7 +131,7 @@ header {
 }
 
 /* Tablet & up: horizontal nav */
-@media (min-width: 40rem) { // ≥640px
+@media (min-width: 45rem) { // ≥725px
   .main-nav {
     position: static;
     max-height: none;

@@ -1,24 +1,23 @@
+// Header.tsx
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Header.module.scss";
-import Logo from "../../assets/logo.svg";
+import LogoDesktop from "../../assets/logo-desktop.svg";
+import LogoTablet from "../../assets/logo-tablet.svg";
+import LogoMobile from "../../assets/logo-mobile.svg";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
-
-  // Type the ref as HTML element
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 725);
   const navRef = useRef<HTMLElement | null>(null);
   const [navHeight, setNavHeight] = useState(0);
 
-  // Update mobile state on resize
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    const handleResize = () => setIsMobile(window.innerWidth < 725);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Update nav height dynamically
   useEffect(() => {
     if (navRef.current && isMobile) {
       setNavHeight(navRef.current.scrollHeight);
@@ -32,7 +31,9 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <Link to="/" className={styles.logo} onClick={handleLinkClick}>
-        <img src={Logo} alt="Small Sided Logo" />
+        <img src={LogoDesktop} alt="Small Sided Logo" className={styles['logo-desktop']} />
+        <img src={LogoTablet} alt="Small Sided Logo" className={styles['logo-tablet']} />
+        <img src={LogoMobile} alt="Small Sided Logo" className={styles['logo-mobile']} />
       </Link>
 
       <nav
