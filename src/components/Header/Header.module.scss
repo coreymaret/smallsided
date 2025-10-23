@@ -1,13 +1,122 @@
-.header {
-  background-color: #0f2748;
+/* Header container */
+header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #20264A;
+  position: relative; /* needed for absolute nav on mobile */
+  z-index: 1000;
 }
 
-nav {
-  a {
-    margin-left: 2rem;
-    font-weight: 500;
+/* Logo */
+.logo img {
+  width: 9.375rem; // 150px
+  height: auto;
+}
+
+/* Hamburger */
+.hamburger {
+  display: block;
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  position: relative;
+  z-index: 1100; // above mobile nav
+
+  span {
+    background-color: #98ED66;
+    display: block;
+    height: 0.2rem;
+    width: 100%;
+    margin: 0.35rem 0;
+    transition: 0.3s;
+  }
+
+  &.active span:nth-child(1) {
+    transform: rotate(45deg) translate(0.35rem, 0.35rem);
+  }
+  &.active span:nth-child(2) {
+    opacity: 0;
+  }
+  &.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(0.35rem, -0.35rem);
+  }
+}
+
+/* Main nav */
+.main-nav {
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+
+  /* Mobile: absolute under header */
+  @media (max-width: 39.99rem) { // <640px
+    position: absolute;
+    top: 100%; /* below header */
+    left: 0;
+    width: 100%;
+    background-color: #20264A;
+    z-index: 1000;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column; // stack for mobile
+    list-style: none;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+
+    li a {
+      display: block;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #98ED66;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      letter-spacing: 0.05rem;
+      transition: color 0.2s ease;
+      cursor: pointer;
+
+      &:hover {
+        color: #0f0;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &.open {
+    max-height: 100vh; /* temporary fallback if dynamic fails */
+  }
+}
+
+/* Tablet & up: horizontal nav */
+@media (min-width: 40rem) { // ≥640px
+  .main-nav {
+    position: static;
+    max-height: none;
+
+    ul {
+      flex-direction: row; // horizontal
+    }
+  }
+
+  .hamburger {
+    display: none;
+  }
+}
+
+/* Desktop spacing adjustments */
+@media (min-width: 64rem) { // ≥1024px
+  header {
+    padding: 1rem 2rem;
+  }
+
+  .main-nav ul {
+    gap: 2rem;
+  }
+
+  nav a {
+    font-size: 1.125rem;
   }
 }
