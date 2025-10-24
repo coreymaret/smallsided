@@ -1,28 +1,82 @@
 {
   "compilerOptions": {
+    // Path where TypeScript stores incremental build info (for faster rebuilds)
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
+    // The ECMAScript version to compile to — ES2022 supports top-level await,
+    // class fields, and other modern JS features (well-supported by browsers)
     "target": "ES2022",
+
+    // Ensures `class` fields behave consistently with native JS semantics
+    // (uses `Object.defineProperty` behind the scenes)
     "useDefineForClassFields": true,
+
+    // Defines which built-in library features TypeScript will include
+    // - ES2022: standard JS features (Promises, Arrays, etc.)
+    // - DOM: gives access to `document`, `window`, etc.
+    // - DOM.Iterable: adds iterable types (like NodeList for...of loops)
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
+
+    // Output module type — `ESNext` means “modern ESM syntax” (import/export)
+    // which Vite expects for tree-shaking and modern bundling
     "module": "ESNext",
+
+    // Include type definitions for Vite (gives autocompletion and globals like `import.meta.env`)
     "types": ["vite/client"],
+
+    // Skip type checking of .d.ts files in node_modules to speed up builds
     "skipLibCheck": true,
 
-    /* Bundler mode */
+
+    /* ------------------------------
+       ⚙️  Bundler Mode Configuration
+       ------------------------------ */
+
+    // Resolve imports like a bundler would (Vite-style) rather than Node’s default
     "moduleResolution": "bundler",
+
+    // Allow importing files with .ts/.tsx extensions directly
     "allowImportingTsExtensions": true,
+
+    // Keep your import/export syntax exactly as written —
+    // don’t rewrite to CommonJS or change paths
     "verbatimModuleSyntax": true,
+
+    // Treat every file as a module (even if it doesn’t have an import/export)
     "moduleDetection": "force",
+
+    // Don’t output compiled JS files — Vite + SWC handle transpilation
     "noEmit": true,
+
+    // Enables the modern JSX transform (used by React 17+)
+    // This means you don’t have to `import React` in every file using JSX
     "jsx": "react-jsx",
 
-    /* Linting */
+
+    /* ------------------------------
+       🧹 Linting & Safety Options
+       ------------------------------ */
+
+    // Turn on all strict type-checking options (best practice)
     "strict": true,
+
+    // Warn/error if local variables are declared but never used
     "noUnusedLocals": true,
+
+    // Warn/error if function parameters are declared but not used
     "noUnusedParameters": true,
+
+    // Only allow syntax that fully disappears after transpilation
+    // (ensures no TypeScript-only constructs remain in the output)
     "erasableSyntaxOnly": true,
+
+    // Prevent missing `break` statements between switch cases
     "noFallthroughCasesInSwitch": true,
+
+    // Disallow imports that are only there for side effects unless intentional
     "noUncheckedSideEffectImports": true
   },
+
+  // Files/folders TypeScript should include for type checking and IntelliSense
   "include": ["src"]
 }

@@ -1,26 +1,67 @@
 {
   "compilerOptions": {
+    // Where TypeScript stores incremental build info (for faster rebuilds)
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+
+    // ECMAScript version of output JavaScript (modern JS features allowed)
     "target": "ES2023",
+
+    // Built-in libraries included (no DOM since this is for Node)
     "lib": ["ES2023"],
+
+    // Output module system (Vite + Node use modern ES modules)
     "module": "ESNext",
+
+    // Include Node.js type definitions (gives access to things like process, __dirname, etc.)
     "types": ["node"],
+
+    // Skip type checking in node_modules for faster compilation
     "skipLibCheck": true,
 
-    /* Bundler mode */
+
+    /* ------------------------------
+       ⚙️  Bundler Mode Configuration
+       ------------------------------ */
+
+    // Use modern module resolution similar to how bundlers like Vite handle imports
     "moduleResolution": "bundler",
+
+    // Allow importing `.ts` files directly with extensions (e.g. import './file.ts')
     "allowImportingTsExtensions": true,
+
+    // Keep import/export syntax as-is, don't rewrite it to CommonJS
     "verbatimModuleSyntax": true,
+
+    // Treat all files as modules even if they don't have import/export statements
     "moduleDetection": "force",
+
+    // Don’t emit compiled JavaScript — only perform type checking (Vite handles the actual build)
     "noEmit": true,
 
-    /* Linting */
+
+    /* ------------------------------
+       🧹 Linting & Safety Options
+       ------------------------------ */
+
+    // Enable all strict type-checking options for maximum safety
     "strict": true,
+
+    // Error if you have variables that are declared but never used
     "noUnusedLocals": true,
+
+    // Error if function parameters are declared but never used
     "noUnusedParameters": true,
+
+    // Restrict TypeScript to syntax that can be completely erased when compiling (no runtime TS)
     "erasableSyntaxOnly": true,
+
+    // Prevent missing 'break' statements in switch-case blocks
     "noFallthroughCasesInSwitch": true,
+
+    // Disallow imports that only have side effects unless they're explicitly allowed
     "noUncheckedSideEffectImports": true
   },
+
+  // Files that this TypeScript configuration applies to
   "include": ["vite.config.ts"]
 }

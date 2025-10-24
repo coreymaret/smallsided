@@ -1,141 +1,196 @@
-/* Header.module.scss */
+/* ============================================
+   Header.module.scss
+   --------------------------------------------
+   This file defines all the visual styles for
+   your <Header /> component in a modular, 
+   scoped way (using CSS Modules).
+   ============================================ */
 
-/* Base header styles */
+
+/* ============================================
+   Base Header Styles
+   --------------------------------------------
+   Styles the <header> wrapper that holds the
+   logo, navigation, and hamburger icon.
+   ============================================ */
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  background-color: #20264A;
-  position: relative;
-  z-index: 1000;
+  display: flex;                  // Arrange child elements (logo, nav, hamburger) in a row
+  justify-content: space-between; // Push logo to the left and nav/hamburger to the right
+  align-items: center;            // Vertically center items within the header
+  padding: 1rem 1.5rem;           // Add some spacing inside the header
+  background-color: #15141a;      // Dark blue background color
+  position: relative;             // Allows absolutely positioned children (like mobile nav)
+  z-index: 1000;                  // Ensures the header sits above most other elements
 }
 
-/* ✅ Single logo, scalable by breakpoint */
+
+/* ============================================
+   Logo Styles
+   --------------------------------------------
+   The .logo class is applied to the <Link> 
+   wrapping your <img>. These control how the 
+   logo image scales at different screen sizes.
+   ============================================ */
 .logo img {
-  display: block;
-  height: auto;
-  width: 10rem; // Mobile default (e.g., 128px)
+  display: block;                 // Removes extra whitespace under the image (default inline behavior)
+  height: auto;                   // Keeps aspect ratio intact
+  width: 10rem;                   // Base logo size (~160px on mobile)
 }
 
-/* Tablet breakpoint */
-@media (min-width: 49rem) { // ≥640px
+/* Tablet breakpoint (≥ 49rem = ~784px) */
+@media (min-width: 49rem) {
   .logo img {
-    width: 12rem; // ~160px
+    width: 12rem;                 // Slightly larger logo on tablets (~192px)
   }
 }
 
-/* Desktop breakpoint */
-@media (min-width: 64rem) { // ≥1024px
+/* Desktop breakpoint (≥ 64rem = ~1024px) */
+@media (min-width: 64rem) {
   .logo img {
-    width: 15rem; // ~192px
+    width: 15rem;                 // Even larger logo for desktop screens
   }
 }
 
-/* Hamburger menu (unchanged) */
+
+/* ============================================
+   Hamburger Menu (Mobile Only)
+   --------------------------------------------
+   The .hamburger div toggles visibility of the 
+   mobile menu. The three <span> elements form 
+   the stacked bars, which transform into an "X"
+   when the menu is active.
+   ============================================ */
 .hamburger {
-  display: block;
-  cursor: pointer;
-  width: 2rem;
-  height: 2rem;
-  position: relative;
-  z-index: 1100;
+  display: block;                 // Visible by default (hidden later on larger screens)
+  cursor: pointer;                // Makes it clear it's clickable
+  width: 1.5rem;                    // Button width (~32px)
+  height: 1.5rem;                   // Button height (~32px)
+  position: relative;             // Used for positioning the inner spans if needed
+  z-index: 1100;                  // Slightly above the nav so clicks always register
 
+  /* Each "bar" of the hamburger icon */
   span {
-    background-color: #98ED66;
-    display: block;
-    height: 0.2rem;
-    width: 100%;
-    margin: 0.35rem 0;
-    transition: 0.3s;
+    background-color: #ffffff;    // Bright green color for contrast
+    display: block;               // Makes each span a block-level element
+    height: 0.2rem;               // Thickness of each bar
+    width: 100%;                  // Each bar spans the full button width
+    margin: 0.35rem 0;            // Vertical spacing between bars
+    transition: 0.3s;             // Smooth animation for open/close transformation
   }
 
+  /* When menu is active (open), animate bars into an X shape */
   &.active span:nth-child(1) {
     transform: rotate(45deg) translate(0.35rem, 0.35rem);
   }
+
   &.active span:nth-child(2) {
-    opacity: 0;
+    opacity: 0;                   // Hide the middle bar
   }
+
   &.active span:nth-child(3) {
     transform: rotate(-45deg) translate(0.35rem, -0.35rem);
   }
 }
 
-/* Main nav */
-.main-nav {
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
 
+/* ============================================
+   Main Navigation
+   --------------------------------------------
+   The <nav> element containing your menu links.
+   On mobile, it’s collapsible (animated via 
+   max-height). On larger screens, it displays 
+   horizontally.
+   ============================================ */
+.main-nav {
+  overflow: hidden;               // Ensures hidden menu content doesn’t overflow when closed
+  transition: max-height 0.3s ease-in-out; // Smooth open/close animation
+
+  /* MOBILE STYLES (≤ 48.99rem = ~783px) */
   @media (max-width: 48.99rem) {
-    position: absolute;
-    top: 100%;
-    left: 0;
+    position: absolute;           // Position below the header
+    top: 100%;                    // Places nav directly under header
+    left: 0;                      // Full width across screen
     width: 100%;
-    background-color: #20264A;
-    z-index: 1000;
+    background-color: #15141a;    // Same color as header background
+    z-index: 1000;                // Keep above main content
   }
 
+  /* The <ul> holds all the <li><Link></Link></li> items */
   ul {
     display: flex;
-    flex-direction: column;
-    list-style: none;
-    gap: 1rem;
+    flex-direction: column;       // Stack links vertically (mobile default)
+    list-style: none;             // Remove bullets
+    gap: 1rem;                    // Vertical space between each link
     margin: 0;
     padding: 0;
 
+    /* Style for each navigation link */
     li a {
-      display: block;
-      font-size: 1rem;
-      font-weight: 500;
-      color: #98ED66;
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      letter-spacing: 0.05rem;
+      display: block;             // Makes entire area clickable
+      font-size: 16px; //1.25rem;        // Readable size for mobile
+      font-weight: 400;
+      color: #ffffff;             // Matches hamburger color (consistency)
+      text-decoration: none;      // Remove underline
+      padding: 0.5rem 1rem;       // Add clickable space
+      letter-spacing: 0.05rem;    // Slight letter spacing for style
       transition: color 0.2s ease;
       cursor: pointer;
 
       &:hover {
-        color: #98ED66;
+        color: #98ED66;           // Optional hover feedback (same color)
       }
 
       &:active {
-        color: #ffffff;
+        color: #98ED66;           // White flash when tapped
       }
     }
   }
 
+  /* The .open class is toggled by React when menu is open */
   &.open {
-    max-height: 100vh;
+    max-height: 100vh;            // Allows full expansion (menu fully visible)
   }
 }
 
-/* Tablet & up: horizontal nav */
+
+/* ============================================
+   Tablet & Up Styles (≥ 49rem)
+   --------------------------------------------
+   Switch the navigation to a horizontal layout 
+   and hide the hamburger icon.
+   ============================================ */
 @media (min-width: 49rem) {
   .main-nav {
-    position: static;
-    max-height: none;
+    position: static;             // Return nav to normal document flow
+    max-height: none;             // Disable mobile height animation
 
     ul {
-      flex-direction: row;
+      flex-direction: row;        // Display links side-by-side
     }
   }
 
   .hamburger {
-    display: none;
+    display: none;                // Hide hamburger button on larger screens
   }
 }
 
-/* Desktop spacing adjustments */
+
+/* ============================================
+   Desktop-Specific Adjustments (≥ 64rem)
+   --------------------------------------------
+   Provide extra breathing room and scale up
+   spacing and font size slightly.
+   ============================================ */
 @media (min-width: 64rem) {
   header {
-    padding: 1rem 2rem;
+    padding: 1rem 2rem;           // Wider horizontal padding for big screens
   }
 
   .main-nav ul {
-    gap: 2rem;
+    gap: 2rem;                    // More space between menu links
   }
 
   nav a {
-    font-size: 1.125rem;
+    font-size: 1.125rem;          // Slightly smaller than tablet to balance spacing
   }
 }

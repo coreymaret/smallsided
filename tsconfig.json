@@ -1,7 +1,20 @@
 {
+  // An empty "files" array means this root config doesn’t directly
+  // include any source files itself.
+  // Instead, it delegates responsibility to other tsconfig files
+  // via the "references" field below.
   "files": [],
+
+  // The "references" array tells TypeScript that this project is composed
+  // of multiple sub-projects (a "composite" setup).
+  // Each referenced config is treated as its own compilation unit.
   "references": [
+    // 👇 This points to your app configuration,
+    // which handles all React/front-end TypeScript files inside `src/`
     { "path": "./tsconfig.app.json" },
+
+    // 👇 This points to your Node/Vite configuration,
+    // which only applies to files like `vite.config.ts`
     { "path": "./tsconfig.node.json" }
   ]
 }
