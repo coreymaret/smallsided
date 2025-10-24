@@ -1,6 +1,6 @@
 const Work = () => (
   <>
-    <h2>Home</h2>
+    <h2>Work</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
