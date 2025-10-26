@@ -79,36 +79,46 @@
    when the menu is active.
    ============================================ */
 .hamburger {
-  display: block;                 // Visible by default (hidden later on larger screens)
-  cursor: pointer;                // Makes it clear it's clickable
-  width: 1.5rem;                    // Button width (~32px)
-  height: 1.5rem;                   // Button height (~32px)
-  position: relative;             // Used for positioning the inner spans if needed
-  z-index: 1100;                  // Slightly above the nav so clicks always register
+  align-self: center;             // Center vertically in header
+  display: flex;                  // Flex container for inner spans
+  flex-direction: column;
+  justify-content: center;        // Center bars vertically
+  gap: 0.25rem;                   // Space between bars
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  position: relative;
+  z-index: 1100;
+  box-sizing: border-box; // includes padding/border in width/height calculations
 
-  /* Each "bar" of the hamburger icon */
   span {
-    background-color: #ffffff;    // Bright green color for contrast
-    display: block;               // Makes each span a block-level element
-    height: 0.2rem;               // Thickness of each bar
-    width: 100%;                  // Each bar spans the full button width
-    margin: 0.35rem 0;            // Vertical spacing between bars
-    transition: 0.3s;             // Smooth animation for open/close transformation
+    background-color: #ffffff;
+    display: block;
+    height: 0.2rem;               // Bar thickness
+    width: 100%;
+    border-radius: 1px;           // Slightly rounded ends
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;     // Rotate around center
   }
 
-  /* When menu is active (open), animate bars into an X shape */
-  &.active span:nth-child(1) {
-    transform: rotate(45deg) translate(0.35rem, 0.35rem);
-  }
+  /* -------------------
+     Active / X State
+     ------------------- */
+  &.active {
+    span:nth-child(1) {
+      transform: rotate(45deg) translate(0.3rem, 0.3rem); // top-right diagonal
+    }
 
-  &.active span:nth-child(2) {
-    opacity: 0;                   // Hide the middle bar
-  }
+    span:nth-child(2) {
+      opacity: 0;                 // hide middle bar
+    }
 
-  &.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(0.35rem, -0.35rem);
+    span:nth-child(3) {
+      transform: rotate(-45deg) translate(0.35rem, -0.35rem); // bottom-left diagonal
+    }
   }
 }
+
 
 
 /* ============================================
