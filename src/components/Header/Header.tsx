@@ -73,6 +73,37 @@ const Header = () => {
     if (isMobile) setIsOpen(false);
   };
 
+
+  /*AHHHHHHHHHHHHHHHHHHHHH */
+  const [visible, setVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.body.scrollHeight;
+
+      // Detect near-bottom (e.g. last 200px)
+      const nearBottom = documentHeight - (currentScrollY + windowHeight) < 200;
+
+      if (nearBottom) {
+        setVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // scrolling down
+        setVisible(false);
+      } else {
+        // scrolling up
+        setVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+
   /**
    * JSX RETURN
    * -----------
@@ -80,7 +111,7 @@ const Header = () => {
    * It includes the logo, navigation links, and hamburger button (on mobile).
    */
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${visible ? styles.show : styles.hide}`}>
       {/* Logo: Clicking it navigates home and closes the menu (on mobile) */}
       <Link to="/" className={styles.logo} onClick={handleLinkClick}>
         <img src={Logo} alt="Small Sided Logo" />

@@ -13,15 +13,33 @@
    Styles the <header> wrapper that holds the
    logo, navigation, and hamburger icon.
    ============================================ */
-header {
-  display: flex;                  // Arrange child elements (logo, nav, hamburger) in a row
-  justify-content: space-between; // Push logo to the left and nav/hamburger to the right
-  align-items: center;            // Vertically center items within the header
-  padding: 1rem 1.5rem;           // Add some spacing inside the header
-  background-color: #15141a;      // Dark blue background color
-  position: relative;             // Allows absolutely positioned children (like mobile nav)
-  z-index: 1000;                  // Ensures the header sits above most other elements
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #15141a;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 1000;
 }
+
+.header.hide {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.header.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 
 
 /* ============================================
