@@ -9,3 +9,30 @@ html, body {
   font-family: 'Inter', sans-serif;
 
 }
+
+/* Scrollbar width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track (background) */
+::-webkit-scrollbar-track {
+  background: #15141a; /* black background */
+}
+
+/* Thumb (draggable part) */
+::-webkit-scrollbar-thumb {
+  background-color: #98ED66; /* green accent */
+  border-radius: 3px;        /* rounded edges */
+  border: 1px solid #15141a; /* blends with track for subtle border */
+}
+
+/* Thumb hover effect */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #7dd24f; /* slightly darker green on hover */
+}
+* {
+  scrollbar-width: thin;               /* slim scrollbar */
+  scrollbar-color: #98ED66 #15141a;   /* thumb | track */
+}
