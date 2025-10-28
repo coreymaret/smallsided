@@ -1,84 +1,68 @@
-// ============================================
-// Smallsided.com Service Worker
-// ============================================
+const CACHE_NAME = "site-cache-v1";
+const OFFLINE_URL = "/offline.html";
 
-const CACHE_VERSION = 'v1.0.0';
-const STATIC_CACHE = `smallsided-static-${CACHE_VERSION}`;
-const DYNAMIC_CACHE = `smallsided-dynamic-${CACHE_VERSION}`;
-const OFFLINE_URL = '/offline.html';
-
-// Assets to precache on install
-const STATIC_ASSETS = [
-  '/',
-  '/about',
-  '/services',
-  '/work',
-  '/contact',
-  '/index.html',
+// These are the files you want to cache on install
+const PRECACHE_ASSETS = [
+  "/",
+  "/index.html",
   OFFLINE_URL,
-  '/manifest.json',
-  '/favicon.ico',
 ];
 
-// -----------------------------
-// INSTALL
-// -----------------------------
-self.addEventListener('install', event => {
+// --- INSTALL ---
+self.addEventListener("install", (event) => {
+  console.log("[ServiceWorker] Install");
   event.waitUntil(
-    caches.open(STATIC_CACHE).then(cache => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log("[ServiceWorker] Pre-caching offline page and shell");
+      return cache.addAll(PRECACHE_ASSETS);
+    })
   );
-  self.skipWaiting(); // activate immediately
+  self.skipWaiting();
 });
 
-// -----------------------------
-// ACTIVATE
-// -----------------------------
-self.addEventListener('activate', event => {
+// --- ACTIVATE ---
+self.addEventListener("activate", (event) => {
+  console.log("[ServiceWorker] Activate");
   event.waitUntil(
-    caches.keys().then(keys =>
+    caches.keys().then((keyList) =>
       Promise.all(
-        keys
-          .filter(k => ![STATIC_CACHE, DYNAMIC_CACHE].includes(k))
-          .map(k => caches.delete(k))
+        keyList.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log("[ServiceWorker] Removing old cache", key);
+            return caches.delete(key);
+          }
+        })
       )
     )
   );
   self.clients.claim();
 });
 
-// -----------------------------
-// FETCH HANDLER
-// -----------------------------
-self.addEventListener('fetch', event => {
-  const { request } = event;
-
-  // Skip non-GET requests (e.g., POST from forms)
-  if (request.method !== 'GET') return;
+// --- FETCH ---
+self.addEventListener("fetch", (event) => {
+  // Skip non-GET requests
+  if (event.request.method !== "GET") return;
 
   event.respondWith(
-    fetch(request)
-      .then(networkRes => {
-        // If successful, clone & store dynamically
-        const resClone = networkRes.clone();
-        caches.open(DYNAMIC_CACHE).then(cache => cache.put(request, resClone));
-        return networkRes;
+    fetch(event.request)
+      .then((response) => {
+        // Network first: cache the fresh version
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseClone);
+        });
+        return response;
       })
-      .catch(async () => {
-        // Offline fallback to cache
-        const cachedRes = await caches.match(request);
-        if (cachedRes) return cachedRes;
-        if (request.mode === 'navigate') {
-          return caches.match(OFFLINE_URL);
-        }
+      .catch(() => {
+        // If offline, try cached response
+        return caches.match(event.request).then((cached) => {
+          if (cached) return cached;
+
+          // Fallback to offline.html for navigation requests
+          if (event.request.mode === "navigate") {
+            return caches.match(OFFLINE_URL);
+          }
+        });
       })
   );
-});
-
-// -----------------------------
-// OPTIONAL: Message listener (for updates)
-// -----------------------------
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
 });

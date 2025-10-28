@@ -14,26 +14,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   </React.StrictMode>
 );
 
-// Register Service Worker (after React mounts)
-if ('serviceWorker' in navigator) {
+// Register Service Worker only in production
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/service-worker.js')
-      .then(reg => {
-        console.log('✅ Service Worker registered:', reg.scope);
-
-        // Optional: handle updates
-        reg.addEventListener('updatefound', () => {
-          const newWorker = reg.installing;
-          if (newWorker) {
-            newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                console.log('New content available — refresh to update.');
-              }
-            });
-          }
-        });
-      })
-      .catch(err => console.error('Service Worker registration failed:', err));
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.error('SW registration failed', err));
   });
 }
