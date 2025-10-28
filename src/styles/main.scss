@@ -33,8 +33,33 @@ html, body {
   background-color: #7dd24f; /* slightly darker green on hover */
 }
 * {
-  scrollbar-width: thin;               /* slim scrollbar */
-  scrollbar-color: #98ED66 #15141a;   /* thumb | track */
+  /* Make the scrollbar skinny */
+::-webkit-scrollbar {
+  width: 6px;              /* For vertical scrollbars */
+  height: 6px;             /* For horizontal scrollbars */
+}
+
+/* Remove scrollbar arrows */
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Scrollbar track (background) */
+::-webkit-scrollbar-track {
+  background: #15141a;     /* Your black color */
+}
+
+/* Scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background-color: #98ED66;   /* Accent color */
+  border-radius: 10px;
+}
+
+/* Optional: change thumb color when hovered */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #b4ff80;
+}
+
 }
 body {
   margin: 100px;
