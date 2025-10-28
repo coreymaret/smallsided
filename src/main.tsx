@@ -5,7 +5,6 @@ import './styles/main.scss';
 import './styles/_reset.scss';
 import { BrowserRouter } from 'react-router-dom';
 
-// Mount the React app
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -14,12 +13,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   </React.StrictMode>
 );
 
-// Register Service Worker only in production
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
-      .register('/sw.js')   // Vite PWA plugin will generate /sw.js
-      .then(reg => console.log('Service Worker registered:', reg.scope))
-      .catch(err => console.log('SW registration failed:', err));
+      .register('/service-worker.js')
+      .then((reg) => console.log('[ServiceWorker] registered:', reg.scope))
+      .catch((err) => console.log('[ServiceWorker] registration failed:', err));
   });
 }
