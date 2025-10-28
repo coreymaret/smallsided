@@ -1,48 +1,30 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { VitePWA } from 'vite-plugin-pwa';
+// Import the `defineConfig` helper from Vite.
+// This gives you IntelliSense (auto-completion and type checking) in TypeScript
+// and helps ensure your configuration is validated by Vite.
+import { defineConfig } from 'vite'
 
+// Import the official Vite plugin that enables React support,
+// using the high-performance SWC compiler instead of Babel.
+// SWC (written in Rust) makes builds and hot reloading much faster.
+import react from '@vitejs/plugin-react-swc'
+
+
+// -------------------------------------------------------------
+// Export the configuration using `defineConfig()`
+// -------------------------------------------------------------
+//
+// This function simply wraps your config object for better IDE support.
+// Everything inside the object defines how Vite should behave
+// during development and when building for production.
+//
 export default defineConfig({
-  plugins: [
-    react(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: [
-        'favicon.svg',
-        'favicon-32x32.png',
-        'favicon-16x16.png',
-        'apple-touch-icon.png',
-      ],
-      manifest: {
-        name: 'Small Sided Soccer',
-        short_name: 'SmallSided',
-        description: 'Your go-to site for small-sided soccer enthusiasts',
-        theme_color: '#15141a',
-        background_color: '#15141a',
-        display: 'standalone',
-        start_url: '/',
-        icons: [
-          { src: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-          { src: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-          { src: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-        ],
-      },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg,ico,json}'],
-        runtimeCaching: [
-          {
-            urlPattern: /^\/.*\.(?:js|css|html|json)$/,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'local-assets',
-              expiration: {
-                maxEntries: 200,
-                maxAgeSeconds: 7 * 24 * 60 * 60, // 1 week
-              },
-            },
-          },
-        ],
-      },
-    }),
-  ],
-});
+  /**
+   * PLUGINS
+   * -------
+   * Plugins extend Vite’s core features.
+   * The `react()` plugin adds React Fast Refresh (instant state-preserving reloads)
+   * and support for JSX/TSX syntax.
+   */
+  plugins: [react()],
+})
+
