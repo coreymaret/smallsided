@@ -17,8 +17,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 // Register Service Worker only in production
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('SW registered:', reg.scope))
-      .catch(err => console.error('SW registration failed', err));
+    navigator.serviceWorker
+      .register('/sw.js')   // Vite PWA plugin will generate /sw.js
+      .then(reg => console.log('Service Worker registered:', reg.scope))
+      .catch(err => console.log('SW registration failed:', err));
   });
 }

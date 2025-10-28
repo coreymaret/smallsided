@@ -1,30 +1,66 @@
-// Import the `defineConfig` helper from Vite.
-// This gives you IntelliSense (auto-completion and type checking) in TypeScript
-// and helps ensure your configuration is validated by Vite.
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import { VitePWA } from 'vite-plugin-pwa';
 
-// Import the official Vite plugin that enables React support,
-// using the high-performance SWC compiler instead of Babel.
-// SWC (written in Rust) makes builds and hot reloading much faster.
-import react from '@vitejs/plugin-react-swc'
-
-
-// -------------------------------------------------------------
-// Export the configuration using `defineConfig()`
-// -------------------------------------------------------------
-//
-// This function simply wraps your config object for better IDE support.
-// Everything inside the object defines how Vite should behave
-// during development and when building for production.
-//
 export default defineConfig({
-  /**
-   * PLUGINS
-   * -------
-   * Plugins extend Vite’s core features.
-   * The `react()` plugin adds React Fast Refresh (instant state-preserving reloads)
-   * and support for JSX/TSX syntax.
-   */
-  plugins: [react()],
-})
-
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.svg', 'favicon-32x32.png', 'favicon-16x16.png', 'apple-touch-icon.png'],
+      manifest: {
+        name: 'Small Sided Soccer',
+        short_name: 'SmallSided',
+        description: 'Your go-to site for small-sided soccer enthusiasts, news, and training tips.',
+        theme_color: '#15141a',
+        background_color: '#15141a',
+        display: 'standalone',
+        start_url: '/',
+        scope: '/',
+        lang: 'en-US',
+        icons: [
+          { src: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+          { src: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+          { src: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
+        ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.destination === 'document',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'html-cache',
+              networkTimeoutSeconds: 3,
+              expiration: { maxEntries: 10, maxAgeSeconds: 24 * 60 * 60 },
+            },
+          },
+          {
+            urlPattern: ({ request }) => request.destination === 'script' || request.destination === 'style',
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'assets-cache',
+              expiration: { maxEntries: 50, maxAgeSeconds: 30 * 24 * 60 * 60 },
+            },
+          },
+          {
+            urlPattern: ({ request }) => request.destination === 'image',
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images-cache',
+              expiration: { maxEntries: 50, maxAgeSeconds: 30 * 24 * 60 * 60 },
+            },
+          },
+        ],
+      },
+      devOptions: {
+        enabled: true,
+        type: 'module'
+      }
+    })
+  ],
+  server: {
+    host: true
+  }
+});
