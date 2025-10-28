@@ -1,25 +1,9 @@
-/* ============================================
-   Header.module.scss
-   --------------------------------------------
-   This file defines all the visual styles for
-   your <Header /> component in a modular, 
-   scoped way (using CSS Modules).
-   ============================================ */
-
-
-/* ============================================
-   Base Header Styles
-   --------------------------------------------
-   Styles the <header> wrapper that holds the
-   logo, navigation, and hamburger icon.
-   ============================================ */
 .header {
-  display: flex;
+  display: block;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
   background-color: #15141a;
-
   position: fixed;
   top: 0;
   left: 0;
@@ -40,185 +24,108 @@
   opacity: 1;
 }
 
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #15141a;
+  position: relative; // <-- Added to keep TopToggleBar above without breaking layout
+  z-index: 100;       // ensures hamburger & nav are above header background
+  padding-top: 3rem;
+}
 
-
-/* ============================================
-   Logo Styles
-   --------------------------------------------
-   The .logo class is applied to the <Link> 
-   wrapping your <img>. These control how the 
-   logo image scales at different screen sizes.
-   ============================================ */
 .logo img {
-  display: block;                 // Removes extra whitespace under the image (default inline behavior)
-  height: auto;                   // Keeps aspect ratio intact
-  width: 10rem;                   // Base logo size (~160px on mobile)
+  display: block;
+  height: auto;
+  width: 10rem;
 }
 
-/* Tablet breakpoint (≥ 49rem = ~784px) */
 @media (min-width: 49rem) {
-  .logo img {
-    width: 12rem;                 // Slightly larger logo on tablets (~192px)
-  }
+  .logo img { width: 12rem; }
 }
 
-/* Desktop breakpoint (≥ 64rem = ~1024px) */
 @media (min-width: 64rem) {
-  .logo img {
-    width: 15rem;                 // Even larger logo for desktop screens
-  }
+  .logo img { width: 15rem; }
 }
 
-
-/* ============================================
-   Hamburger Menu (Mobile Only)
-   --------------------------------------------
-   The .hamburger div toggles visibility of the 
-   mobile menu. The three <span> elements form 
-   the stacked bars, which transform into an "X"
-   when the menu is active.
-   ============================================ */
 .hamburger {
-  align-self: center;             // Center vertically in header
-  display: flex;                  // Flex container for inner spans
+  align-self: center;
+  display: flex;
   flex-direction: column;
-  justify-content: center;        // Center bars vertically
-  gap: 0.25rem;                   // Space between bars
+  justify-content: center;
+  gap: 0.25rem;
   width: 1.5rem;
   height: 1.5rem;
   cursor: pointer;
   position: relative;
   z-index: 1100;
-  box-sizing: border-box; // includes padding/border in width/height calculations
 
   span {
     background-color: #ffffff;
     display: block;
-    height: 0.2rem;               // Bar thickness
+    height: 0.2rem;
     width: 100%;
-    border-radius: 1px;           // Slightly rounded ends
+    border-radius: 1px;
     transition: transform 0.3s ease, opacity 0.3s ease;
-    transform-origin: center;     // Rotate around center
+    transform-origin: center;
   }
 
-  /* -------------------
-     Active / X State
-     ------------------- */
   &.active {
-    span:nth-child(1) {
-      transform: rotate(45deg) translate(0.3rem, 0.3rem); // top-right diagonal
-    }
-
-    span:nth-child(2) {
-      opacity: 0;                 // hide middle bar
-    }
-
-    span:nth-child(3) {
-      transform: rotate(-45deg) translate(0.35rem, -0.35rem); // bottom-left diagonal
-    }
+    span:nth-child(1) { transform: rotate(45deg) translate(0.3rem, 0.3rem); }
+    span:nth-child(2) { opacity: 0; }
+    span:nth-child(3) { transform: rotate(-45deg) translate(0.35rem, -0.35rem); }
   }
 }
 
-
-
-/* ============================================
-   Main Navigation
-   --------------------------------------------
-   The <nav> element containing your menu links.
-   On mobile, it’s collapsible (animated via 
-   max-height). On larger screens, it displays 
-   horizontally.
-   ============================================ */
 .main-nav {
-  overflow: hidden;               // Ensures hidden menu content doesn’t overflow when closed
-  transition: max-height 0.3s ease-in-out; // Smooth open/close animation
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
 
-  /* MOBILE STYLES (≤ 48.99rem = ~783px) */
   @media (max-width: 48.99rem) {
-    position: absolute;           // Position below the header
-    top: 100%;                    // Places nav directly under header
-    left: 0;                      // Full width across screen
+    position: absolute;
+    top: 100%;
+    left: 0;
     width: 100%;
-    background-color: #15141a;    // Same color as header background
-    z-index: 1000;                // Keep above main content
+    background-color: #15141a;
+    z-index: 1000;
   }
 
-  /* The <ul> holds all the <li><Link></Link></li> items */
   ul {
     display: flex;
-    flex-direction: column;       // Stack links vertically (mobile default)
-    list-style: none;             // Remove bullets
-    gap: 1rem;                    // Vertical space between each link
+    flex-direction: column;
+    list-style: none;
+    gap: 1rem;
     margin: 0;
     padding: 0;
 
-    /* Style for each navigation link */
     li a {
-      display: block;             // Makes entire area clickable
-      font-size: 16px; //1.25rem;        // Readable size for mobile
+      display: block;
+      font-size: 16px;
       font-weight: 400;
-      color: #ffffff;             // Matches hamburger color (consistency)
-      text-decoration: none;      // Remove underline
-      padding: 0.5rem 1rem;       // Add clickable space
-      letter-spacing: 0.05rem;    // Slight letter spacing for style
+      color: #ffffff;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      letter-spacing: 0.05rem;
       transition: color 0.2s ease;
       cursor: pointer;
 
-      &:hover {
-        color: #98ED66;           // Optional hover feedback (same color)
-      }
-
-      &:active {
-        color: #98ED66;           // White flash when tapped
-      }
+      &:hover { color: #98ED66; }
+      &:active { color: #98ED66; }
     }
   }
 
-  /* The .open class is toggled by React when menu is open */
-  &.open {
-    max-height: 100vh;            // Allows full expansion (menu fully visible)
-  }
+  &.open { max-height: 100vh; }
 }
 
-
-/* ============================================
-   Tablet & Up Styles (≥ 49rem)
-   --------------------------------------------
-   Switch the navigation to a horizontal layout 
-   and hide the hamburger icon.
-   ============================================ */
 @media (min-width: 49rem) {
-  .main-nav {
-    position: static;             // Return nav to normal document flow
-    max-height: none;             // Disable mobile height animation
-
-    ul {
-      flex-direction: row;        // Display links side-by-side
-    }
-  }
-
-  .hamburger {
-    display: none;                // Hide hamburger button on larger screens
-  }
+  .main-nav { position: static; max-height: none; }
+  .main-nav ul { flex-direction: row; }
+  .hamburger { display: none; }
 }
 
-
-/* ============================================
-   Desktop-Specific Adjustments (≥ 64rem)
-   --------------------------------------------
-   Provide extra breathing room and scale up
-   spacing and font size slightly.
-   ============================================ */
 @media (min-width: 64rem) {
-  header {
-    padding: 1rem 2rem;           // Wider horizontal padding for big screens
-  }
-
-  .main-nav ul {
-    gap: 2rem;                    // More space between menu links
-  }
-
-  nav a {
-    font-size: 1.125rem;          // Slightly smaller than tablet to balance spacing
-  }
+  header { padding: 1rem 2rem; }
+  .main-nav ul { gap: 2rem; }
+  nav a { font-size: 1.125rem; }
 }
