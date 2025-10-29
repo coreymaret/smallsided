@@ -67,20 +67,6 @@ const Header = () => {
           <img src={Logo} alt="Small Sided Logo" />
         </Link>
 
-        <nav
-          ref={navRef}
-          className={`${styles["main-nav"]} ${isOpen ? styles.open : ""}`}
-          style={isMobile ? { maxHeight: isOpen ? `${navHeight}px` : 0 } : {}}
-        >
-          <ul>
-            <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
-            <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
-            <li><Link to="/services" onClick={handleLinkClick}>Services</Link></li>
-            <li><Link to="/work" onClick={handleLinkClick}>Work</Link></li>
-            <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
-          </ul>
-        </nav>
-
         {isMobile && (
           <div
             className={`${styles.hamburger} ${isOpen ? styles.active : ""}`}
@@ -92,6 +78,21 @@ const Header = () => {
           </div>
         )}
       </div>
+
+      {/* ------------------ MOVE NAV OUTSIDE .headerContent FOR MOBILE ------------------ */}
+      <nav
+        ref={navRef}
+        className={`${styles["main-nav"]} ${isOpen ? styles.open : ""}`}
+        style={isMobile ? { maxHeight: isOpen ? `${navHeight}px` : 0 } : {}}
+      >
+        <ul>
+          <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
+          <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
+          <li><Link to="/services" onClick={handleLinkClick}>Services</Link></li>
+          <li><Link to="/work" onClick={handleLinkClick}>Work</Link></li>
+          <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
+        </ul>
+      </nav>
     </header>
   );
 };
