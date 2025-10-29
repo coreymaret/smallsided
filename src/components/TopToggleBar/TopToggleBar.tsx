@@ -3,7 +3,7 @@ import styles from "./TopToggleBar.module.scss";
 import { X, AlertCircle, Glasses, Star } from "lucide-react";
 
 interface TopToggleBarProps {
-  onClose?: () => void; // Optional onClose prop
+  onClose?: () => void;
 }
 
 const TopToggleBar: React.FC<TopToggleBarProps> = ({ onClose }) => {
@@ -17,12 +17,36 @@ const TopToggleBar: React.FC<TopToggleBarProps> = ({ onClose }) => {
 
   useEffect(() => {
     const stored = localStorage.getItem("topBarClosed");
-    if (stored === "true") setIsVisible(false);
+    
+    if (stored) {
+      try {
+        const { closed, timestamp } = JSON.parse(stored);
+        const now = Date.now();
+        const fortyEightHours = 48 * 60 * 60 * 1000; // 48 hours in milliseconds
+        
+        // Check if 48 hours have passed
+        if (now - timestamp < fortyEightHours) {
+          setIsVisible(!closed); // Keep it closed if within 48 hours
+        } else {
+          // 48 hours have passed, clear the preference and show the bar
+          localStorage.removeItem("topBarClosed");
+          setIsVisible(true);
+        }
+      } catch (error) {
+        // If parsing fails, clear the storage and show the bar
+        localStorage.removeItem("topBarClosed");
+        setIsVisible(true);
+      }
+    }
   }, []);
 
   const handleClose = () => {
     setIsVisible(false);
-    localStorage.setItem("topBarClosed", "true");
+    const data = {
+      closed: true,
+      timestamp: Date.now()
+    };
+    localStorage.setItem("topBarClosed", JSON.stringify(data));
     if (onClose) onClose();
   };
 
@@ -32,7 +56,6 @@ const TopToggleBar: React.FC<TopToggleBarProps> = ({ onClose }) => {
     <div className={styles.topToggleBar}>
       <div className={styles.content}>
         <div className={styles.textSlider}>
-          {/* Render messages twice for seamless loop */}
           {messages.map((m, i) => (
             <div key={i} className={styles.line}>
               {m.icon}

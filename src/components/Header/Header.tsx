@@ -10,7 +10,7 @@ const Header = () => {
   const navRef = useRef<HTMLElement | null>(null);
   const [navHeight, setNavHeight] = useState(0);
 
-  const [topBarVisible, setTopBarVisible] = useState(true); // Track visibility of TopToggleBar
+  const [topBarVisible, setTopBarVisible] = useState(true);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 785);
@@ -21,8 +21,20 @@ const Header = () => {
   useEffect(() => {
     // Check localStorage for top bar visibility on reload
     const topBarState = localStorage.getItem("topBarClosed");
-    if (topBarState === "true") {
-      setTopBarVisible(false); // Set it to false if the toggle bar was closed
+    if (topBarState) {
+      try {
+        const data = JSON.parse(topBarState);
+        const now = Date.now();
+        const fortyEightHours = 48 * 60 * 60 * 1000;
+        
+        if (now - data.timestamp < fortyEightHours) {
+          setTopBarVisible(!data.closed);
+        } else {
+          setTopBarVisible(true);
+        }
+      } catch (error) {
+        setTopBarVisible(true);
+      }
     }
 
     if (navRef.current && isMobile) {
@@ -36,6 +48,7 @@ const Header = () => {
 
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -59,30 +72,29 @@ const Header = () => {
   }, [lastScrollY]);
 
   return (
-    <header className={`${styles.header} ${visible ? styles.show : styles.hide}`}>
-      {/* Pass onClose prop to TopToggleBar */}
-      <TopToggleBar onClose={() => setTopBarVisible(false)} />
+  <header 
+    className={`${styles.header} ${visible ? styles.show : styles.hide}`}
+  >
+    {topBarVisible && <TopToggleBar onClose={() => setTopBarVisible(false)} />}
 
       <div
         className={styles.headerContent}
         style={{
-          paddingTop: topBarVisible ? "3rem" : "1rem", // Adjust padding when the TopToggleBar is visible
+          paddingTop: topBarVisible ? "3rem" : "1rem",
         }}
       >
         <Link to="/" className={styles.logo} onClick={handleLinkClick}>
           <img src={Logo} alt="Small Sided Logo" />
         </Link>
 
-        {/* Main nav */}
         <nav
-  ref={navRef}
-  className={`${styles["main-nav"]} ${isOpen ? styles.open : ""}`}
-  style={{
-    maxHeight: isOpen ? `${navHeight}px` : 0,
-    // Update this line to position below the header content
-    top: topBarVisible ? "6rem" : "4rem", // 4rem accounts for header when TopToggleBar is hidden
-  }}
->
+          ref={navRef}
+          className={`${styles["main-nav"]} ${isOpen ? styles.open : ""}`}
+          style={{
+            maxHeight: isOpen ? `${navHeight}px` : 0,
+            top: topBarVisible ? "6rem" : "4rem",
+          }}
+        >
           <ul>
             <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
             <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
@@ -92,7 +104,6 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/* Hamburger menu for mobile */}
         {isMobile && (
           <div
             className={`${styles.hamburger} ${isOpen ? styles.active : ""}`}
