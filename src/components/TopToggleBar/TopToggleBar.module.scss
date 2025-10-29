@@ -32,7 +32,7 @@
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
-  animation: scrollSlide 9s infinite; /* Default animation */
+  animation: scrollSlide 9s infinite !important; /* Add !important here */
 }
 
 :global {
@@ -49,7 +49,7 @@
   /* Mobile adjustments */
   @media (max-width: 768px) {
     .textSlider {
-      animation: scrollSlideMobile 9s infinite;
+      animation: scrollSlideMobile 9s infinite !important; /* Force mobile animation */
     }
 
     @keyframes scrollSlideMobile {
@@ -66,7 +66,7 @@
       height: 2rem;
       display: flex;
       align-items: center;
-      justify-content: flex-start; /* Align text and icon properly on mobile */
+      justify-content: flex-start;
       gap: 0.4rem;
     }
   }

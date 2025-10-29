@@ -11,7 +11,7 @@ const Header = () => {
   const [navHeight, setNavHeight] = useState(0);
 
   // ------------------ NEW STATE: track top bar visibility ------------------
-  const [topBarVisible, setTopBarVisible] = useState(true); 
+  const [topBarVisible, setTopBarVisible] = useState(true); // Added state for top bar visibility
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 785);
@@ -55,11 +55,12 @@ const Header = () => {
 
   return (
     <header className={`${styles.header} ${visible ? styles.show : styles.hide}`}>
+      {/* Pass onClose prop to TopToggleBar */}
       <TopToggleBar onClose={() => setTopBarVisible(false)} /> 
 
       <div
         className={styles.headerContent}
-        style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }}
+        style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }} // Adjust padding based on top bar visibility
       >
         <Link to="/" className={styles.logo} onClick={handleLinkClick}>
           <img src={Logo} alt="Small Sided Logo" />

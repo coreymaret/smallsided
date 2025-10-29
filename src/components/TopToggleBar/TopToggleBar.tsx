@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import styles from "./TopToggleBar.module.scss";
 import { X, AlertCircle, Info, Star } from "lucide-react";
 
-const TopToggleBar: React.FC = () => {
+// Define the props interface for the component
+interface TopToggleBarProps {
+  onClose?: () => void; // Add the optional onClose prop
+}
+
+const TopToggleBar: React.FC<TopToggleBarProps> = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   const messages = [
@@ -19,6 +24,7 @@ const TopToggleBar: React.FC = () => {
   const handleClose = () => {
     setIsVisible(false);
     localStorage.setItem("topBarClosed", "true");
+    if (onClose) onClose(); // Call onClose when close button is clicked
   };
 
   if (!isVisible) return null;
