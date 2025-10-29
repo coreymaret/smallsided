@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./TopToggleBar.module.scss";
 import { X, AlertCircle, Glasses, Star } from "lucide-react";
 
-// Define the props interface for the component
 interface TopToggleBarProps {
-  onClose?: () => void; // Add the optional onClose prop
+  onClose?: () => void; // Optional onClose prop
 }
 
 const TopToggleBar: React.FC<TopToggleBarProps> = ({ onClose }) => {
@@ -24,7 +23,7 @@ const TopToggleBar: React.FC<TopToggleBarProps> = ({ onClose }) => {
   const handleClose = () => {
     setIsVisible(false);
     localStorage.setItem("topBarClosed", "true");
-    if (onClose) onClose(); // Call onClose when close button is clicked
+    if (onClose) onClose();
   };
 
   if (!isVisible) return null;
@@ -33,21 +32,21 @@ const TopToggleBar: React.FC<TopToggleBarProps> = ({ onClose }) => {
     <div className={styles.topToggleBar}>
       <div className={styles.content}>
         <div className={styles.textSlider}>
+          {/* Render messages twice for seamless loop */}
           {messages.map((m, i) => (
             <div key={i} className={styles.line}>
               {m.icon}
               <span>{m.text}</span>
             </div>
           ))}
-          {/* Only duplicate the first line for smooth loop */}
-          <div key="dup-0" className={styles.line}>
-            {messages[0].icon}
-            <span>{messages[0].text}</span>
-          </div>
+          {messages.map((m, i) => (
+            <div key={`dup-${i}`} className={styles.line}>
+              {m.icon}
+              <span>{m.text}</span>
+            </div>
+          ))}
         </div>
       </div>
-
-      {/* The button is inside the toggle bar now */}
       <button className={styles.closeButton} onClick={handleClose} aria-label="Close">
         <X size={18} />
       </button>
