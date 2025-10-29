@@ -3,35 +3,71 @@
   top: 0;
   left: 0;
   width: 100%;
+  height: 2rem; /* visible height */
   background-color: #15141a;
   color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
   font-family: "Inter", sans-serif;
-  z-index: 3000; // ensure above header
-  border-bottom: .5px solid #98ed66;
+  z-index: 3000;
+  border-bottom: 0.5px solid #98ed66;
+
+  display: flex;               /* Align children horizontally */
+  justify-content: space-between; /* Space between text and button */
+  align-items: center;         /* Vertically center the content */
+  padding: 0 1rem;             /* Padding for spacing */
 }
 
 .content {
+  position: relative; /* for absolute child */
+  overflow: hidden;
+  height: 100%; /* show only one line */
+  flex-grow: 1; /* Allow content to take remaining space */
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-align: center;
+  justify-content: center; /* Center the text horizontally */
+}
+
+.textSlider {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  animation: scrollSlide 9s infinite; /* 3 lines × 3s pause each */
+}
+
+@keyframes scrollSlide {
+  0% { transform: translateX(-50%) translateY(0); }        /* line 1 */
+  30% { transform: translateX(-50%) translateY(0); }       /* pause 3s */
+  33% { transform: translateX(-50%) translateY(-2rem); }   /* slide to line 2 */
+  63% { transform: translateX(-50%) translateY(-2rem); }   /* pause 3s */
+  66% { transform: translateX(-50%) translateY(-4rem); }   /* slide to line 3 */
+  96% { transform: translateX(-50%) translateY(-4rem); }   /* pause 3s */
+  100% { transform: translateX(-50%) translateY(0); }      /* slide back to line 1 */
+}
+
+.line {
+  height: 2rem; /* same as container */
+  display: flex;
+  align-items: center; /* vertical center icon + text */
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  color: #fff;
 }
 
 .closeButton {
-  position: absolute;
-  right: 1rem;
   background: none;
   border: none;
-  color: #98ed66;
+  color: #ffffff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: opacity 0.2s ease;
-
-  &:hover { opacity: 0.7; }
+}
+  
+.closeButton:hover {
+  opacity: 0.7;
 }

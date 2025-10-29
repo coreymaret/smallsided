@@ -55,17 +55,30 @@ const Header = () => {
 
   return (
     <header className={`${styles.header} ${visible ? styles.show : styles.hide}`}>
-      {/* ------------------ PASS ONCLOSE CALLBACK ------------------ */}
       <TopToggleBar onClose={() => setTopBarVisible(false)} /> 
 
       <div
         className={styles.headerContent}
-        // ------------------ DYNAMIC PADDING BASED ON TOP BAR ------------------
-        style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }} 
+        style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }}
       >
         <Link to="/" className={styles.logo} onClick={handleLinkClick}>
           <img src={Logo} alt="Small Sided Logo" />
         </Link>
+
+        {/* ------------------ MOVED NAV INSIDE .headerContent ------------------ */}
+        <nav
+          ref={navRef}
+          className={`${styles["main-nav"]} ${isOpen ? styles.open : ""}`}
+          style={isMobile ? { maxHeight: isOpen ? `${navHeight}px` : 0 } : {}}
+        >
+          <ul>
+            <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
+            <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
+            <li><Link to="/services" onClick={handleLinkClick}>Services</Link></li>
+            <li><Link to="/work" onClick={handleLinkClick}>Work</Link></li>
+            <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
+          </ul>
+        </nav>
 
         {isMobile && (
           <div
@@ -78,21 +91,6 @@ const Header = () => {
           </div>
         )}
       </div>
-
-      {/* ------------------ MOVE NAV OUTSIDE .headerContent FOR MOBILE ------------------ */}
-      <nav
-        ref={navRef}
-        className={`${styles["main-nav"]} ${isOpen ? styles.open : ""}`}
-        style={isMobile ? { maxHeight: isOpen ? `${navHeight}px` : 0 } : {}}
-      >
-        <ul>
-          <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
-          <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
-          <li><Link to="/services" onClick={handleLinkClick}>Services</Link></li>
-          <li><Link to="/work" onClick={handleLinkClick}>Work</Link></li>
-          <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
-        </ul>
-      </nav>
     </header>
   );
 };
