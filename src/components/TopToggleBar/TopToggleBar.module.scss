@@ -32,24 +32,25 @@
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
-  animation: scrollSlide 9s infinite !important; /* Add !important here */
+  animation: scrollSlide 9s linear infinite; /* Use linear for smooth looping */
 }
 
 :global {
   @keyframes scrollSlide {
     0% { transform: translateX(-50%) translateY(0); }
-    30% { transform: translateX(-50%) translateY(0); }
-    33% { transform: translateX(-50%) translateY(-2rem); }
-    63% { transform: translateX(-50%) translateY(-2rem); }
-    66% { transform: translateX(-50%) translateY(-4rem); }
-    96% { transform: translateX(-50%) translateY(-4rem); }
+    25% { transform: translateX(-50%) translateY(0); }
+    30% { transform: translateX(-50%) translateY(-2rem); }
+    55% { transform: translateX(-50%) translateY(-2rem); }
+    60% { transform: translateX(-50%) translateY(-4rem); }
+    85% { transform: translateX(-50%) translateY(-4rem); }
+    90% { transform: translateX(-50%) translateY(0); }
     100% { transform: translateX(-50%) translateY(0); }
   }
 
   /* Mobile adjustments */
   @media (max-width: 768px) {
     .textSlider {
-      animation: scrollSlideMobile 9s infinite !important; /* Force mobile animation */
+      animation: scrollSlideMobile 9s linear infinite !important; /* Force mobile animation */
     }
 
     @keyframes scrollSlideMobile {

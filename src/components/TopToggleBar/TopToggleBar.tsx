@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./TopToggleBar.module.scss";
-import { X, AlertCircle, Info, Star } from "lucide-react";
+import { X, AlertCircle, Glasses, Star } from "lucide-react";
 
 // Define the props interface for the component
 interface TopToggleBarProps {
@@ -12,7 +12,7 @@ const TopToggleBar: React.FC<TopToggleBarProps> = ({ onClose }) => {
 
   const messages = [
     { icon: <AlertCircle size={18} color="#98ED66" />, text: "Small field. Big impact." },
-    { icon: <Info size={18} color="#98ED66" />, text: "Zone 1-aged education." },
+    { icon: <Glasses size={18} color="#98ED66" />, text: "Zone 1-aged education." },
     { icon: <Star size={18} color="#98ED66" />, text: "An informational blog." },
   ];
 
