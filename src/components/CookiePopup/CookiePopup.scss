@@ -2,16 +2,18 @@
   from {
     opacity: 0;
     transform: translate(-50%, 100%);
+    backdrop-filter: blur(4px);
   }
   to {
     opacity: 1;
     transform: translate(-50%, 0);
+    backdrop-filter: blur(4px);
   }
 }
 
 .popup-cookies {
   position: fixed;
-  bottom: 2rem;
+  bottom: 3rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3001;
@@ -19,8 +21,8 @@
   animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 
   .content {
-    background: rgba(128, 128, 128, 0.5);
-    backdrop-filter: blur(12px);
+    background: rgba(6, 6, 6, .6);
+    backdrop-filter: blur(4px);
     border-radius: 0;
     padding: 16px 24px;
     box-shadow: none;
@@ -42,10 +44,10 @@
       cursor: pointer;
       font-size: 16px;
       color: #ffffff;
-      text-decoration: none;
+      text-decoration: underline dotted #98ED66;
       white-space: nowrap;
+      text-underline-offset: 8px;
       font-weight: 400;
-
       &.active {
         color: #ffffff;
       }
