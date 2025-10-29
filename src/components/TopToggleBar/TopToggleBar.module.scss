@@ -35,15 +35,18 @@
   animation: scrollSlide 9s infinite; /* 3 lines × 3s pause each */
 }
 
-@keyframes scrollSlide {
-  0% { transform: translateX(-50%) translateY(0); }        /* line 1 */
-  30% { transform: translateX(-50%) translateY(0); }       /* pause 3s */
-  33% { transform: translateX(-50%) translateY(-2rem); }   /* slide to line 2 */
-  63% { transform: translateX(-50%) translateY(-2rem); }   /* pause 3s */
-  66% { transform: translateX(-50%) translateY(-4rem); }   /* slide to line 3 */
-  96% { transform: translateX(-50%) translateY(-4rem); }   /* pause 3s */
-  100% { transform: translateX(-50%) translateY(0); }      /* slide back to line 1 */
+:global {
+  @keyframes scrollSlide {
+    0% { transform: translateX(-50%) translateY(0); }
+    30% { transform: translateX(-50%) translateY(0); }
+    33% { transform: translateX(-50%) translateY(-2rem); }
+    63% { transform: translateX(-50%) translateY(-2rem); }
+    66% { transform: translateX(-50%) translateY(-4rem); }
+    96% { transform: translateX(-50%) translateY(-4rem); }
+    100% { transform: translateX(-50%) translateY(0); }
+  }
 }
+
 
 .line {
   height: 2rem; /* same as container */
