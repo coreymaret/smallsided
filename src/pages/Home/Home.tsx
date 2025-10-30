@@ -1,21 +1,55 @@
-import Carousel from '../../components/Carousel/Carousel';
+import styles from "./Home.module.scss";
+
 
 const Home = () => {
   return (
-    <div className="home">
-      <section className="hero">
-        {/* Your hero section content */}
-      </section>
-      
-      <section className="carousel-section">
-        <Carousel />
-      </section>
-      
-      <section className="other-content">
-        {/* Other home page content */}
-      </section>
+    <div className={styles.homePage}>
+    <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h2>Home</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
     </div>
   );
-};
+}
 
 export default Home;
