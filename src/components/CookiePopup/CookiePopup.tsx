@@ -3,6 +3,7 @@ import './CookiePopup.scss';
 
 export default function CookiePopup() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     const cookieConsent = localStorage.getItem('cookieConsent');
@@ -33,13 +34,20 @@ export default function CookiePopup() {
       expiry: expiryTime
     };
     localStorage.setItem('cookieConsent', JSON.stringify(consentData));
-    setIsVisible(false);
+    
+    // Trigger closing animation
+    setIsClosing(true);
+    
+    // Wait for animation to complete before hiding
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 500); // Match this to your animation duration
   };
 
   if (!isVisible) return null;
 
   return (
-    <div className="popup-cookies">
+    <div className={`popup-cookies ${isClosing ? 'closing' : ''}`}>
       <div className="content">
         <p>This website uses cookies.</p>
         <span className="link active" onClick={handleAccept}>

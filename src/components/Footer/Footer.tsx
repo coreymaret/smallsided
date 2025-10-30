@@ -45,11 +45,11 @@ const Footer = () => {
           <div className={styles.footerSection}>
             <h4>Services</h4>
             <ul>
-              <li><a href="#">Player Education</a></li>
-              <li><a href="#">Parent Education</a></li>
-              <li><a href="#">Coach Education</a></li>
-              <li><a href="#">Consulting</a></li>
-              <li><a href="#">Resources</a></li>
+              <li><Link to="/PlayerEducation" onClick={handleLinkClick}>Player Education</Link></li>
+              <li><Link to="/ParentEducation" onClick={handleLinkClick}>Parent Education</Link></li>
+              <li><Link to="/CoachEducation" onClick={handleLinkClick}>Coach Education</Link></li>
+              <li><Link to="Consulting" onClick={handleLinkClick}>Consulting</Link></li>
+              <li><Link to="Resources" onClick={handleLinkClick}>Resources</Link></li>
             </ul>
           </div>
         </div>
