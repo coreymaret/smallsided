@@ -3,11 +3,13 @@
     opacity: 0;
     transform: translate(-50%, 100%);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
   to {
     opacity: 1;
     transform: translate(-50%, 0);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
 }
 
@@ -21,8 +23,9 @@
   animation: slideUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 
   .content {
-    background: rgba(6, 6, 6, .6);
+    background: rgba(6, 6, 6, .8);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border-radius: 0;
     padding: 16px 24px;
     box-shadow: none;
@@ -44,7 +47,9 @@
       cursor: pointer;
       font-size: 16px;
       color: #ffffff;
-      text-decoration: underline dotted #98ED66;
+      text-decoration-line: underline;
+      text-decoration-style: dotted;
+      text-decoration-color: #98ED66;
       white-space: nowrap;
       text-underline-offset: 8px;
       font-weight: 400;
@@ -55,6 +60,13 @@
       &:hover {
         opacity: 0.8;
       }
+
+      @supports not (text-decoration-style: dotted) {
+  .link {
+    border-bottom: 1px dotted #98ED66;
+    text-decoration: none;
+  }
+}
     }
   }
 }
