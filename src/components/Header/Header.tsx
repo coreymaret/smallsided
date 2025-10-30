@@ -7,8 +7,6 @@ import TopToggleBar from "../TopToggleBar/TopToggleBar";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 785);
-  const navRef = useRef<HTMLElement | null>(null);
-  const [navHeight, setNavHeight] = useState(0);
 
   const [topBarVisible, setTopBarVisible] = useState(true);
 
@@ -36,18 +34,14 @@ const Header = () => {
         setTopBarVisible(true);
       }
     }
-
-    if (navRef.current && isMobile) {
-      setNavHeight(navRef.current.scrollHeight);
-    }
-  }, [isOpen, isMobile]);
+  }, []); // Remove the navRef logic from this useEffect
 
   const handleLinkClick = () => {
     if (isMobile) setIsOpen(false);
   };
 
   const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollY = useRef(0);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -58,24 +52,24 @@ const Header = () => {
 
       if (nearBottom) {
         setVisible(true);
-      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      } else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
         setVisible(false);
       } else {
         setVisible(true);
       }
 
-      setLastScrollY(currentScrollY);
+      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   return (
-  <header 
-    className={`${styles.header} ${visible ? styles.show : styles.hide}`}
-  >
-    {topBarVisible && <TopToggleBar onClose={() => setTopBarVisible(false)} />}
+    <header 
+      className={`${styles.header} ${visible ? styles.show : styles.hide}`}
+    >
+      {topBarVisible && <TopToggleBar onClose={() => setTopBarVisible(false)} />}
 
       <div
         className={styles.headerContent}
@@ -88,13 +82,7 @@ const Header = () => {
         </Link>
 
         <nav
-          ref={navRef}
-          className={`${styles["main-nav"]} ${isOpen ? styles.open : ""}`}
-          style={{
-            maxHeight: isOpen ? `${navHeight}px` : 0,
-            top: topBarVisible ? "6rem" : "4rem",
-          }}
-        >
+          className={`${styles["main-nav"]} ${isOpen ? styles.open : ""}`}>
           <ul>
             <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
             <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
