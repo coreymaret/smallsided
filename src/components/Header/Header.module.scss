@@ -80,42 +80,57 @@
 
 .main-nav {
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
+  transition: right 0.3s ease; // smooth slide
 
   @media (max-width: 48.99rem) {
-    position: fixed;      // <-- changed from absolute
-    top: 4rem;            // <-- offset below TopToggleBar
-    left: 0;
-    width: 100vw;         // <-- full viewport width
+    position: fixed;
+    top: 0;
+    right: -100vw;          // start off-screen to the right
+    width: 100vw;           // full width
+    height: 100dvh;         // full dynamic viewport height (fixes mobile footer issue)
     background-color: #15141a;
-    z-index: 900;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  // vertically center links
+    align-items: center;      // horizontally center links
+    padding: 2rem;
+    transition: right 0.3s ease;
   }
 
   ul {
     display: flex;
     flex-direction: column;
     list-style: none;
-    gap: 1rem;
+    gap: 2rem;
     margin: 0;
     padding: 0;
 
     li a {
       display: block;
-      font-size: 16px;
-      font-weight: 400;
+      font-size: 1.5rem;
+      font-weight: 500;
       color: #ffffff;
       text-decoration: none;
-      padding: 0.5rem 1rem;
-      letter-spacing: 0.05rem;
-      transition: color 0.2s ease;
+      padding: 1rem 2rem;
+      border-radius: 0.25rem;
+      transition: color 0.2s ease, background 0.2s ease;
       cursor: pointer;
 
-      &:hover { color: #98ED66; }
-      &:active { color: #98ED66; }
+      &:hover {
+        color: #98ED66;
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+      &:active {
+        color: #98ED66;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
     }
   }
 
-  &.open { max-height: 100vh; }
+  &.open {
+    right: 0; // slide fully into view
+  }
 }
 
 @media (min-width: 49rem) {
