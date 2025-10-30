@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
 import styles from './Footer.module.scss';
 import Logo from "../../assets/logo.svg";
 
@@ -12,9 +12,9 @@ const Footer = () => {
           <p>Small field. Big impact.</p>
           <div className={styles.socialLinks}>
             <a href="#" aria-label="Facebook"><Facebook size={20} /></a>
-            <a href="#" aria-label="Twitter"><Twitter size={20} /></a>
             <a href="#" aria-label="Instagram"><Instagram size={20} /></a>
-            <a href="#" aria-label="LinkedIn"><Linkedin size={20} /></a>
+            <a href="#" aria-label="Youtube"><Youtube size={20} /></a>
+            <a href="#" aria-label="Twitter"><Twitter size={20} /></a>
           </div>
         </div>
 

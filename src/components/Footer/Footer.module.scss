@@ -105,6 +105,22 @@
   @media (min-width: 768px) {
     align-items: flex-start;  // Add this to reset on tablet
   }
+  .contactItem {
+    cursor: pointer;
+      color: #ffffff;
+      text-decoration-line: underline;
+      text-decoration-style: dotted;
+      text-decoration-color: #98ED66;
+      white-space: nowrap;
+      text-underline-offset: 8px;
+      &.active {
+        color: #ffffff;
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+  }
 }
 
 .contactItem {
