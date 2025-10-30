@@ -17,6 +17,21 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
+    if (isMobile && isOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`;
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
+  }, [isMobile, isOpen]);
+
+  useEffect(() => {
     // Check localStorage for top bar visibility on reload
     const topBarState = localStorage.getItem("topBarClosed");
     if (topBarState) {
@@ -34,7 +49,7 @@ const Header = () => {
         setTopBarVisible(true);
       }
     }
-  }, []); // Remove the navRef logic from this useEffect
+  }, []);
 
   const handleLinkClick = () => {
     if (isMobile) setIsOpen(false);
@@ -82,7 +97,8 @@ const Header = () => {
         </Link>
 
         <nav
-          className={`${styles["main-nav"]} ${isOpen ? styles.open : ""}`}>
+          className={`${styles["main-nav"]} ${isOpen ? styles.open : ""}`}
+        >
           <ul>
             <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
             <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
