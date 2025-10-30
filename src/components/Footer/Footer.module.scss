@@ -188,3 +188,28 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
 }
+
+  @media (max-width: 48.99rem) {
+  .contactItem {
+    a {
+      cursor: pointer;
+      color: #ffffff;
+      text-decoration: none;  // Remove text-decoration entirely
+      padding-bottom: 7px;  // Mimics text-underline-offset: 8px
+      white-space: nowrap;
+      
+      &:visited {
+        color: #ffffff;
+        border-bottom-color: #98ED66;  // Keep green on visited
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &.active {
+        color: #ffffff;
+      }
+    }
+  }
+}
