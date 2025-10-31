@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BellRing } from "lucide-react";
 import styles from "./Subscribe.module.scss";
+import subscribeBG from "../../assets/subscribeBG.png";
 
 const Subscribe = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +17,10 @@ const Subscribe = () => {
 
   return (
     <section className={styles["subscribe-cta"]}>
-      <div className={styles["subscribe-card"]}>
+      <div
+        className={styles["subscribe-card"]}
+        style={{ backgroundImage: `url(${subscribeBG})` }}
+      >
         <div className={styles["subscribe-container"]}>
           <div className={styles["subscribe-content"]}>
             <div className={styles["subscribe-title-wrapper"]}>
