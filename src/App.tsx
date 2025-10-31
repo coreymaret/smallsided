@@ -7,6 +7,15 @@ import About from './pages/About/About';
 import Services from './pages/Services/Services';
 import Work from './pages/Work/Work';
 import Contact from './pages/Contact/Contact';
+import PlayerEducation from './pages/PlayerEducation/PlayerEducation';
+import ParentEducation from './pages/ParentEducation/ParentEducation';
+import CoachEducation from './pages/CoachEducation/CoachEducation';
+import Consulting from './pages/Consulting/Consulting';
+import Resources from './pages/Resources/Resources';
+import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
+import TOS from './pages/TOS/TOS';
+import CookiePolicy from './pages/CookiePolicy/CookiePolicy';
+import Subscribe from './components/Subscribe/Subscribe';
 
 
 const App = () => {
@@ -22,8 +31,17 @@ const App = () => {
           <Route path="/services" element={<Services />} />
           <Route path="/work" element={<Work />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/PlayerEducation" element={<PlayerEducation />} />
+          <Route path="/ParentEducation" element={<ParentEducation />} />
+          <Route path="/CoachEducation" element={<CoachEducation />} />
+          <Route path="/Consulting" element={<Consulting />} />
+          <Route path="/Resources" element={<Resources />} />
+          <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+          <Route path="/TOS" element={<TOS />} />
+          <Route path="/CookiePolicy" element={<CookiePolicy />} />
         </Routes>
       </main>
+      <Subscribe />
       <Footer />
       <CookiePopup />
     </>

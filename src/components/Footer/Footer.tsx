@@ -48,8 +48,8 @@ const Footer = () => {
               <li><Link to="/PlayerEducation" onClick={handleLinkClick}>Player Education</Link></li>
               <li><Link to="/ParentEducation" onClick={handleLinkClick}>Parent Education</Link></li>
               <li><Link to="/CoachEducation" onClick={handleLinkClick}>Coach Education</Link></li>
-              <li><Link to="Consulting" onClick={handleLinkClick}>Consulting</Link></li>
-              <li><Link to="Resources" onClick={handleLinkClick}>Resources</Link></li>
+              <li><Link to="/Consulting" onClick={handleLinkClick}>Consulting</Link></li>
+              <li><Link to="/Resources" onClick={handleLinkClick}>Resources</Link></li>
             </ul>
           </div>
         </div>
@@ -59,7 +59,7 @@ const Footer = () => {
           <div className={styles.contactInfo}>
             <div className={styles.contactItem}>
               <MapPin size={18} />
-              <a href="https://www.google.com/maps/search/?api=1&query=123+Small+Sided+Way+Tampa+FL+33617" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.google.com/maps/search/?api=1&query=123+Small+Sided+Way+Tampa+FL+33617" rel="noopener noreferrer">
                 <span>123 Small Sided Way, Tampa, FL 33617</span>
               </a>
             </div>
