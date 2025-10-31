@@ -190,6 +190,11 @@
   width: 10rem;
   height: auto;
   margin-bottom: 1rem;
+  @media (max-width: 48.99rem) { // mobile breakpoint
+    display: block;
+    margin: 0 auto 1rem; // center horizontally on mobile
+  }
+  
 }
 
 .linksContainer {
