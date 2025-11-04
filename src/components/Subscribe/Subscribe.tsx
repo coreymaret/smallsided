@@ -1,18 +1,30 @@
 import { useState } from "react";
-import { BellRing } from "lucide-react";
+import { BellRing, AlertCircle, Smile } from "lucide-react"; // ✅ Added AlertCircle here
 import styles from "./Subscribe.module.scss";
 import subscribeBG from "../../assets/subscribeBG.png";
 
 const Subscribe = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [error, setError] = useState(""); // ✅ Already present
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+
+    // ✅ Custom validation logic (unchanged)
+    if (!email.trim()) {
+      setError("Please enter your email address.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     // Mock success
     setStatus("success");
     setEmail("");
+    setError("");
   };
 
   return (
@@ -33,15 +45,18 @@ const Subscribe = () => {
             </p>
           </div>
 
-          <form className={styles["subscribe-form"]} onSubmit={handleSubmit}>
+          {/* ✅ noValidate disables Chrome’s tooltip */}
+          <form className={styles["subscribe-form"]} onSubmit={handleSubmit} noValidate>
             <div className={styles["input-wrapper"]}>
               <input
                 type="email"
                 className={styles["subscribe-input"]}
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError("");
+                }}
                 disabled={status === "success"}
               />
               <button
@@ -53,14 +68,33 @@ const Subscribe = () => {
               </button>
             </div>
 
+            {/* ✅ Added AlertCircle icon to the left of the error text */}
+            {error && (
+              <p className={`${styles["subscribe-message"]} ${styles.error}`}>
+                <AlertCircle
+                  size={16}
+                  style={{ marginRight: "6px", verticalAlign: "middle" }}
+                />
+                {error}
+              </p>
+            )}
+
             {status === "success" && (
               <p className={`${styles["subscribe-message"]} ${styles.success}`}>
+                <Smile
+                  size={16}
+                  style={{ marginRight: "6px", verticalAlign: "middle" }}
+                />
                 Thanks for subscribing! Check your inbox.
               </p>
             )}
 
             {status === "error" && (
               <p className={`${styles["subscribe-message"]} ${styles.error}`}>
+                <AlertCircle
+                  size={16}
+                  style={{ marginRight: "6px", verticalAlign: "middle" }}
+                />
                 Something went wrong. Please try again.
               </p>
             )}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Cookie } from 'lucide-react';
 import './CookiePopup.scss';
 
 export default function CookiePopup() {
@@ -14,34 +15,28 @@ export default function CookiePopup() {
       const currentTime = new Date().getTime();
       
       if (currentTime < expiryTime) {
-        // Consent is still valid
         setIsVisible(false);
       } else {
-        // Consent expired, remove it and show popup
         localStorage.removeItem('cookieConsent');
         setIsVisible(true);
       }
     } else {
-      // No consent found, show popup
       setIsVisible(true);
     }
   }, []);
 
   const handleAccept = () => {
-    const expiryTime = new Date().getTime() + (48 * 60 * 60 * 1000); // 48 hours in milliseconds
+    const expiryTime = new Date().getTime() + (48 * 60 * 60 * 1000);
     const consentData = {
       accepted: true,
       expiry: expiryTime
     };
     localStorage.setItem('cookieConsent', JSON.stringify(consentData));
     
-    // Trigger closing animation
     setIsClosing(true);
-    
-    // Wait for animation to complete before hiding
     setTimeout(() => {
       setIsVisible(false);
-    }, 500); // Match this to your animation duration
+    }, 500);
   };
 
   if (!isVisible) return null;
@@ -49,7 +44,10 @@ export default function CookiePopup() {
   return (
     <div className={`popup-cookies ${isClosing ? 'closing' : ''}`}>
       <div className="content">
-        <p>This website uses cookies.</p>
+        <p>
+          <Cookie size={16} style={{ marginRight: '8px', verticalAlign: 'middle', color: '#98ED66' }} />
+          This website uses cookies.
+        </p>
         <span className="link active" onClick={handleAccept}>
           Okay
         </span>
