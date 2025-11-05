@@ -126,6 +126,11 @@ const Header = () => {
               <li>
                 <Link to="/contact" onClick={handleLinkClick}>Contact</Link>
               </li>
+              <li className={styles.ctaItem}>
+                <Link to="/get-started" onClick={handleLinkClick} className={styles.ctaButton}>
+                  Get Started
+                </Link>
+              </li>
             </ul>
           </div>
 
