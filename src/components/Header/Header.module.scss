@@ -9,7 +9,7 @@
   width: 100%;
   transform: translateY(0);
   opacity: 1;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   z-index: 1000;
 
   &.hide { transform: translateY(-100%); opacity: 0; }
@@ -80,31 +80,31 @@
     z-index: 1500;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     transform: translateY(100%);
     transition: none;
     pointer-events: none;
-    padding: 6rem 0 0 0;
+    padding: 0;
 
     .linksSection {
       flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem 0;
+      padding: 0;
 
       ul {
         display: block;
-        text-align: left;
+        text-align: center;
         list-style: none;
         padding: 0;
         margin: 0;
 
         li {
-          margin-bottom: 2rem;
+          margin-bottom: .5rem;
           &:last-child { margin-bottom: 0; }
 
           a {
@@ -117,13 +117,13 @@
             border-radius: 0.25rem;
             transform: translateY(30px);
             opacity: 0;
-            transition: transform 0.6s ease, opacity 0.6s ease;
+            transition: transform 0.5s ease, opacity 0.5s ease;
             &:hover { color: #98ed66; background-color: rgba(255,255,255,0.05); }
           }
         }
 
         .ctaItem {
-          margin-top: 2rem;
+          margin-top: 1rem;
 
           .ctaButton {
             font-size: 1.25rem;
@@ -131,8 +131,7 @@
             color: #15141a;
             background-color: #98ed66;
             text-align: center;
-            box-shadow: 0 4px 14px rgba(152, 237, 102, 0.3);
-            transition: transform 0.6s ease, opacity 0.6s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.5s ease, opacity 0.5s ease, background-color 0.3s ease;
 
             &:hover {
               color: #15141a;
@@ -145,6 +144,10 @@
     }
 
     .socialSection {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
       padding: 2rem 2rem calc(2rem + env(safe-area-inset-bottom)) 2rem;
       display: flex;
       gap: 2rem;
@@ -152,9 +155,7 @@
       align-items: center;
       transform: translateY(100px);
       opacity: 0;
-      transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
-      flex-shrink: 0;
-      margin-top: auto;
+      transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
 
       a {
         color: #fff;
@@ -171,19 +172,19 @@
 
     &.open { 
       transform: translateY(0);
-      transition: transform 0.8s ease-in-out;
+      transition: transform 0.5s ease-in-out;
       pointer-events: auto;
       
       .linksSection ul li a { 
         transform: translateY(0); 
         opacity: 1; 
       }
-      .linksSection ul li:nth-child(1) a { transition-delay: 0.2s; }
-      .linksSection ul li:nth-child(2) a { transition-delay: 0.4s; }
-      .linksSection ul li:nth-child(3) a { transition-delay: 0.6s; }
-      .linksSection ul li:nth-child(4) a { transition-delay: 0.8s; }
-      .linksSection ul li:nth-child(5) a { transition-delay: 1s; }
-      .linksSection ul li:nth-child(6) a { transition-delay: 1.2s; }
+      .linksSection ul li:nth-child(1) a { transition-delay: 0.1s; }
+      .linksSection ul li:nth-child(2) a { transition-delay: 0.2s; }
+      .linksSection ul li:nth-child(3) a { transition-delay: 0.3s; }
+      .linksSection ul li:nth-child(4) a { transition-delay: 0.4s; }
+      .linksSection ul li:nth-child(5) a { transition-delay: 0.5s; }
+      .linksSection ul li:nth-child(6) a { transition-delay: 0.6s; }
 
       .socialSection {
         transform: translateY(0);
@@ -194,7 +195,7 @@
 
     &.closing { 
       transform: translateY(-100%);
-      transition: transform 0.6s ease-in;
+      transition: transform 0.5s ease-in-out;
       pointer-events: none;
       
       .linksSection ul li a { 

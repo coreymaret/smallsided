@@ -90,7 +90,7 @@ const Header = () => {
         className={styles.headerContent}
         style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }}
       >
-        <Link to="/" className={styles.logo}>
+        <Link to="/" className={styles.logo} onClick={handleLinkClick}>
           <img src={Logo} alt="Small Sided Logo" />
         </Link>
 
