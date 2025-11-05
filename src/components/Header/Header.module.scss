@@ -75,23 +75,26 @@
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     background-color: #15141a;
     z-index: 1500;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    overflow: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     transform: translateY(100%);
     transition: none;
     pointer-events: none;
+    padding: 6rem 0 0 0;
 
     .linksSection {
-      flex: 1;
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding-bottom: 2rem;
+      padding: 2rem 0;
 
       ul {
         display: block;
@@ -122,7 +125,7 @@
     }
 
     .socialSection {
-      padding: 2rem 2rem 3rem 2rem;
+      padding: 2rem 2rem calc(2rem + env(safe-area-inset-bottom)) 2rem;
       display: flex;
       gap: 2rem;
       justify-content: center;
@@ -131,6 +134,7 @@
       opacity: 0;
       transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
       flex-shrink: 0;
+      margin-top: auto;
 
       a {
         color: #fff;
