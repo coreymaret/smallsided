@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Facebook, Instagram, Youtube, Twitter } from "lucide-react";
 import styles from "./Header.module.scss";
 import Logo from "../../assets/logo.svg";
 import TopToggleBar from "../TopToggleBar/TopToggleBar";
 
 const Header = () => {
-  const [menuState, setMenuState] = useState<"open" | "closing" | undefined>();
+  const [menuState, setMenuState] = useState<"open" | "closing" | "closed" | undefined>("closed");
   const isOpen = menuState === "open";
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 785);
@@ -74,7 +75,7 @@ const Header = () => {
   // Toggle menu
   const toggleMenu = () => {
     if (menuState === "open") setMenuState("closing");
-    else setMenuState("open"); // always opens from bottom
+    else setMenuState("open");
   };
 
   const handleLinkClick = () => {
@@ -99,29 +100,50 @@ const Header = () => {
               ? styles.open
               : menuState === "closing"
               ? styles.closing
+              : menuState === "closed"
+              ? styles.closed
               : ""
           }`}
           onTransitionEnd={() => {
-            if (menuState === "closing") setMenuState(undefined); // reset off bottom
+            if (menuState === "closing") setMenuState("closed");
           }}
         >
-          <ul>
-            <li>
-              <Link to="/" onClick={handleLinkClick}>Home</Link>
-            </li>
-            <li>
-              <Link to="/about" onClick={handleLinkClick}>About</Link>
-            </li>
-            <li>
-              <Link to="/services" onClick={handleLinkClick}>Services</Link>
-            </li>
-            <li>
-              <Link to="/work" onClick={handleLinkClick}>Work</Link>
-            </li>
-            <li>
-              <Link to="/contact" onClick={handleLinkClick}>Contact</Link>
-            </li>
-          </ul>
+          {/* Links Section */}
+          <div className={styles.linksSection}>
+            <ul>
+              <li>
+                <Link to="/" onClick={handleLinkClick}>Home</Link>
+              </li>
+              <li>
+                <Link to="/about" onClick={handleLinkClick}>About</Link>
+              </li>
+              <li>
+                <Link to="/services" onClick={handleLinkClick}>Services</Link>
+              </li>
+              <li>
+                <Link to="/work" onClick={handleLinkClick}>Work</Link>
+              </li>
+              <li>
+                <Link to="/contact" onClick={handleLinkClick}>Contact</Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social Media Section */}
+          <div className={styles.socialSection}>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+              <Facebook size={28} />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+              <Instagram size={28} />
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+              <Youtube size={28} />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <Twitter size={28} />
+            </a>
+          </div>
         </nav>
 
         {isMobile && (
