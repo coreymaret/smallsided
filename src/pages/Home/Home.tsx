@@ -1,4 +1,5 @@
 import styles from "./Home.module.scss";
+import Popup from '../../components/Popup/Popup'
 
 const Home = () => {
   return (
@@ -56,6 +57,7 @@ const Home = () => {
           sustainable tomorrow—one innovation at a time.
         </p>
       </section>
+      <Popup />
     </div>
   );
 };
