@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Popup.module.scss";
 import Logo from "../../assets/Logo.svg";
 
