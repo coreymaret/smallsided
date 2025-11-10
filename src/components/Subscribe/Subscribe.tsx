@@ -1,140 +1,132 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BellRing, AlertCircle, Smile } from "lucide-react";
-import ReCAPTCHA from "react-google-recaptcha";
 import styles from "./Subscribe.module.scss";
 import subscribeBG from "../../assets/subscribeBG.png";
 
-// Mailchimp JSONP endpoint
-const MAILCHIMP_JSONP =
-  "https://smallsided.us9.list-manage.com/subscribe/post-json?u=2558bfaca57f1f8d04039dde6&id=5d74a6b50e&f_id=006fd5e3f0";
-
-// Your v2 Checkbox site key
-const RECAPTCHA_SITE_KEY = "6LfIaQgsAAAAABKbMn3WCPBtZ1_LfqYNVsje3VQN";
+declare global {
+  interface Window {
+    grecaptcha: any;
+    onRecaptchaLoad: () => void;
+  }
+}
 
 const Subscribe = () => {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [error, setError] = useState("");
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const recaptchaRef = useRef<number | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
+  // Load reCAPTCHA script
   useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    window.onRecaptchaLoad = () => {
+      if (window.grecaptcha && formRef.current) {
+        recaptchaRef.current = window.grecaptcha.render("recaptcha-container", {
+          sitekey: "6LdkcAgsAAAAAHJJfTjEL3RaCIqhB4aO5keXHsVe", // ⚠️ Replace with your actual site key
+          size: "invisible",
+          callback: handleRecaptchaSuccess,
+        });
+      }
+    };
+
+    script.onload = () => {
+      if (window.grecaptcha) {
+        window.onRecaptchaLoad();
+      }
+    };
+
     return () => {
-      try {
-        recaptchaRef.current?.reset();
-      } catch {}
+      document.body.removeChild(script);
     };
   }, []);
 
-  const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-  const handleCaptchaChange = (token: string | null) => {
-    setRecaptchaToken(token);
-    setError("");
+  const handleRecaptchaSuccess = (token: string) => {
+    submitToMailchimp(token);
   };
 
-  const submitToMailchimpJsonp = (emailValue: string) =>
-    new Promise<{ result: string; msg?: string }>((resolve, reject) => {
-      const callbackName = `mc_callback_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
-      (window as any)[callbackName] = (data: any) => {
-        try {
-          delete (window as any)[callbackName];
-        } catch (e) {
-          (window as any)[callbackName] = undefined;
-        }
-        const el = document.getElementById(callbackName);
-        if (el) el.remove();
-        if (!data) reject(new Error("No response from Mailchimp"));
-        else resolve(data);
-      };
-
-      const params: Record<string, string> = {
-        EMAIL: emailValue,
-        c: callbackName,
-      };
-      const query = Object.entries(params)
-        .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
-        .join("&");
-
-      const script = document.createElement("script");
-      script.src = `${MAILCHIMP_JSONP}&${query}`;
-      script.id = callbackName;
-      script.async = true;
-      script.onerror = () => {
-        try {
-          delete (window as any)[callbackName];
-        } catch (e) {
-          (window as any)[callbackName] = undefined;
-        }
-        script.remove();
-        reject(new Error("Script load error"));
-      };
-
-      document.body.appendChild(script);
-    });
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (!email.trim()) {
-      setError("Please enter your email address.");
-      setStatus("error");
-      return;
-    }
-
-    if (!validateEmail(email.trim())) {
-      setError("Please enter a valid email address.");
-      setStatus("error");
-      return;
-    }
-
-    if (!recaptchaToken) {
-      setError("Please complete the reCAPTCHA.");
-      setStatus("error");
-      return;
-    }
-
-    setStatus("loading");
-
+  const submitToMailchimp = async (recaptchaToken: string) => {
     try {
-      // Step 1: Verify reCAPTCHA server-side via Netlify function
-      const verifyResp = await fetch("/.netlify/functions/verify-recaptcha", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: recaptchaToken }),
-      });
+      // Create form data for Mailchimp
+      const formData = new FormData();
+      formData.append("EMAIL", email);
+      formData.append("g-recaptcha-response", recaptchaToken);
 
-      const verifyData = await verifyResp.json();
+      // Submit to Mailchimp using JSONP to avoid CORS issues
+      const url = `https://smallsided.us9.list-manage.com/subscribe/post-json?u=2558bfaca57f1f8d04039dde6&id=5d74a6b50e&EMAIL=${encodeURIComponent(
+        email
+      )}&g-recaptcha-response=${recaptchaToken}&c=mailchimpCallback`;
 
-      if (!verifyData.success) {
-        setStatus("error");
-        setError("reCAPTCHA verification failed. Please try again.");
-        recaptchaRef.current?.reset();
-        setRecaptchaToken(null);
-        return;
-      }
+      // Create callback function
+      window.mailchimpCallback = (data: any) => {
+        setIsSubmitting(false);
+        
+        if (data.result === "success") {
+          setStatus("success");
+          setEmail("");
+          setError("");
+        } else {
+          setStatus("error");
+          // Extract error message from Mailchimp response
+          const errorMsg = data.msg || "Something went wrong. Please try again.";
+          setError(errorMsg.replace(/\d+ - /, "")); // Remove error code prefix
+        }
 
-      // Step 2: Submit to Mailchimp JSONP
-      const mcResp = await submitToMailchimpJsonp(email.trim());
-      if (mcResp && mcResp.result === "success") {
-        setStatus("success");
-        setError("");
-        setEmail("");
-        recaptchaRef.current?.reset();
-        setRecaptchaToken(null);
-      } else {
-        setStatus("error");
-        const raw = (mcResp && mcResp.msg) || "Subscription failed. Please try again.";
-        const stripped = raw.replace(/<\/?[^>]+(>|$)/g, "");
-        setError(stripped);
-      }
+        // Reset reCAPTCHA
+        if (recaptchaRef.current !== null) {
+          window.grecaptcha.reset(recaptchaRef.current);
+        }
+      };
+
+      // Create script tag for JSONP
+      const script = document.createElement("script");
+      script.src = url;
+      document.body.appendChild(script);
+      
+      // Clean up script after load
+      script.onload = () => {
+        document.body.removeChild(script);
+      };
     } catch (err) {
-      console.error("Error:", err);
+      setIsSubmitting(false);
       setStatus("error");
       setError("Something went wrong. Please try again.");
-      recaptchaRef.current?.reset();
-      setRecaptchaToken(null);
+      
+      // Reset reCAPTCHA
+      if (recaptchaRef.current !== null) {
+        window.grecaptcha.reset(recaptchaRef.current);
+      }
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setStatus("idle");
+
+    // Validation
+    if (!email.trim()) {
+      setError("Please enter your email address.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    // Execute invisible reCAPTCHA
+    setIsSubmitting(true);
+    if (recaptchaRef.current !== null && window.grecaptcha) {
+      window.grecaptcha.execute(recaptchaRef.current);
+    } else {
+      setError("reCAPTCHA not loaded. Please refresh the page.");
+      setIsSubmitting(false);
     }
   };
 
@@ -152,11 +144,17 @@ const Subscribe = () => {
             </div>
 
             <p className={styles["subscribe-description"]}>
-              Get the latest updates, exclusive content, and insights delivered straight to your inbox.
+              Get the latest updates, exclusive content, and insights delivered
+              straight to your inbox.
             </p>
           </div>
 
-          <form className={styles["subscribe-form"]} onSubmit={handleSubmit} noValidate>
+          <form
+            ref={formRef}
+            className={styles["subscribe-form"]}
+            onSubmit={handleSubmit}
+            noValidate
+          >
             <div className={styles["input-wrapper"]}>
               <input
                 type="email"
@@ -167,14 +165,14 @@ const Subscribe = () => {
                   setEmail(e.target.value);
                   setError("");
                 }}
-                disabled={status === "success" || status === "loading"}
+                disabled={status === "success" || isSubmitting}
               />
               <button
                 type="submit"
                 className={styles["subscribe-button"]}
-                disabled={status === "success" || status === "loading"}
+                disabled={status === "success" || isSubmitting}
               >
-                {status === "loading"
+                {isSubmitting
                   ? "Subscribing..."
                   : status === "success"
                   ? "Subscribed!"
@@ -182,33 +180,26 @@ const Subscribe = () => {
               </button>
             </div>
 
-            {/* reCAPTCHA */}
-            <div style={{ marginTop: 12 }}>
-              <ReCAPTCHA
-                ref={recaptchaRef}
-                sitekey={RECAPTCHA_SITE_KEY}
-                onChange={handleCaptchaChange}
-              />
-            </div>
+            {/* Hidden reCAPTCHA container */}
+            <div id="recaptcha-container"></div>
 
             {error && (
               <p className={`${styles["subscribe-message"]} ${styles.error}`}>
-                <AlertCircle size={16} style={{ marginRight: "6px", verticalAlign: "middle" }} />
+                <AlertCircle
+                  size={16}
+                  style={{ marginRight: "6px", verticalAlign: "middle" }}
+                />
                 {error}
               </p>
             )}
 
             {status === "success" && (
               <p className={`${styles["subscribe-message"]} ${styles.success}`}>
-                <Smile size={16} style={{ marginRight: "6px", verticalAlign: "middle" }} />
+                <Smile
+                  size={16}
+                  style={{ marginRight: "6px", verticalAlign: "middle" }}
+                />
                 Thanks for subscribing! Check your inbox.
-              </p>
-            )}
-
-            {status === "error" && error === "" && (
-              <p className={`${styles["subscribe-message"]} ${styles.error}`}>
-                <AlertCircle size={16} style={{ marginRight: "6px", verticalAlign: "middle" }} />
-                Something went wrong. Please try again.
               </p>
             )}
           </form>
@@ -217,5 +208,12 @@ const Subscribe = () => {
     </section>
   );
 };
+
+// Extend window type for JSONP callback
+declare global {
+  interface Window {
+    mailchimpCallback: (data: any) => void;
+  }
+}
 
 export default Subscribe;
