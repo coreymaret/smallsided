@@ -6,7 +6,7 @@ import subscribeBG from "../../assets/subscribeBG.png";
 declare global {
   interface Window {
     grecaptcha: any;
-    onRecaptchaLoad: () => void;
+    mailchimpCallback: (data: any) => void;
   }
 }
 
@@ -16,43 +16,36 @@ const Subscribe = () => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const recaptchaRef = useRef<number | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [recaptchaReady, setRecaptchaReady] = useState(false);
 
-  // Load reCAPTCHA script
+  // Wait for reCAPTCHA to load and render it
   useEffect(() => {
-    console.log("🔵 [reCAPTCHA] Loading script...");
-    const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-
-    window.onRecaptchaLoad = () => {
-      console.log("🟢 [reCAPTCHA] Script loaded, attempting to render...");
-      if (window.grecaptcha && formRef.current) {
+    console.log("🔵 [Component] Mounted, checking for reCAPTCHA...");
+    
+    const checkRecaptcha = () => {
+      if (window.grecaptcha && window.grecaptcha.render) {
+        console.log("✅ [reCAPTCHA] Available, rendering...");
+        
         try {
-          recaptchaRef.current = window.grecaptcha.render("recaptcha-container", {
-            sitekey: "YOUR_RECAPTCHA_SITE_KEY", // ⚠️ Replace with your actual site key
-            size: "invisible",
-            callback: handleRecaptchaSuccess,
-          });
-          console.log("✅ [reCAPTCHA] Rendered successfully with ID:", recaptchaRef.current);
+          if (recaptchaRef.current === null) {
+            recaptchaRef.current = window.grecaptcha.render("recaptcha-container", {
+              sitekey: "6LdkcAgsAAAAAHJJfTjEL3RaCIqhB4aO5keXHsVe", // ⚠️ Replace with your actual site key
+              size: "invisible",
+              callback: handleRecaptchaSuccess,
+            });
+            console.log("✅ [reCAPTCHA] Rendered with ID:", recaptchaRef.current);
+            setRecaptchaReady(true);
+          }
         } catch (err) {
-          console.error("❌ [reCAPTCHA] Render failed:", err);
+          console.error("❌ [reCAPTCHA] Render error:", err);
         }
+      } else {
+        console.log("⏳ [reCAPTCHA] Not ready yet, retrying...");
+        setTimeout(checkRecaptcha, 100);
       }
     };
 
-    script.onload = () => {
-      console.log("🟢 [reCAPTCHA] Script tag loaded");
-      if (window.grecaptcha) {
-        window.onRecaptchaLoad();
-      }
-    };
-
-    return () => {
-      document.body.removeChild(script);
-    };
+    checkRecaptcha();
   }, []);
 
   const handleRecaptchaSuccess = (token: string) => {
@@ -60,82 +53,73 @@ const Subscribe = () => {
     submitToMailchimp(token);
   };
 
-  const submitToMailchimp = async (recaptchaToken: string) => {
+  const submitToMailchimp = (recaptchaToken: string) => {
     console.log("🔵 [Mailchimp] Starting submission for:", email);
     
-    try {
-      // Construct the JSONP URL
-      const url = `https://smallsided.us9.list-manage.com/subscribe/post-json?u=2558bfaca57f1f8d04039dde6&id=5d74a6b50e&EMAIL=${encodeURIComponent(
-        email
-      )}&g-recaptcha-response=${recaptchaToken}&c=mailchimpCallback`;
+    const url = `https://smallsided.us9.list-manage.com/subscribe/post-json?u=2558bfaca57f1f8d04039dde6&id=5d74a6b50e&EMAIL=${encodeURIComponent(
+      email
+    )}&g-recaptcha-response=${recaptchaToken}&c=mailchimpCallback`;
 
-      console.log("🔵 [Mailchimp] Request URL:", url);
+    console.log("🔵 [Mailchimp] Request URL:", url);
 
-      // Create callback function
-      window.mailchimpCallback = (data: any) => {
-        console.log("📥 [Mailchimp] Response received:", JSON.stringify(data, null, 2));
-        
-        setIsSubmitting(false);
-        
-        if (data.result === "success") {
-          console.log("✅ [Mailchimp] Subscription successful!");
-          setStatus("success");
-          setEmail("");
-          setError("");
-        } else {
-          console.log("❌ [Mailchimp] Subscription failed:", data.msg);
-          setStatus("error");
-          // Extract error message from Mailchimp response
-          const errorMsg = data.msg || "Something went wrong. Please try again.";
-          setError(errorMsg.replace(/\d+ - /, "")); // Remove error code prefix
-        }
-
-        // Reset reCAPTCHA
-        if (recaptchaRef.current !== null) {
-          console.log("🔄 [reCAPTCHA] Resetting...");
-          window.grecaptcha.reset(recaptchaRef.current);
-        }
-      };
-
-      // Create script tag for JSONP
-      const script = document.createElement("script");
-      script.src = url;
+    window.mailchimpCallback = (data: any) => {
+      console.log("📥 [Mailchimp] Response received:", JSON.stringify(data, null, 2));
       
-      script.onerror = () => {
-        console.error("❌ [Mailchimp] Script load failed");
-        setIsSubmitting(false);
+      setIsSubmitting(false);
+      
+      if (data.result === "success") {
+        console.log("✅ [Mailchimp] Subscription successful!");
+        setStatus("success");
+        setEmail("");
+        setError("");
+      } else {
+        console.log("❌ [Mailchimp] Subscription failed:", data.msg);
         setStatus("error");
-        setError("Network error. Please try again.");
-      };
-      
-      document.body.appendChild(script);
-      
-      // Clean up script after load
-      script.onload = () => {
-        console.log("🟢 [Mailchimp] Script loaded successfully");
-        document.body.removeChild(script);
-      };
-    } catch (err) {
-      console.error("❌ [Mailchimp] Exception:", err);
+        const errorMsg = data.msg || "Something went wrong. Please try again.";
+        setError(errorMsg.replace(/\d+ - /, "").replace(/<[^>]*>/g, ""));
+      }
+
+      if (recaptchaRef.current !== null) {
+        console.log("🔄 [reCAPTCHA] Resetting...");
+        window.grecaptcha.reset(recaptchaRef.current);
+      }
+    };
+
+    const script = document.createElement("script");
+    script.src = url;
+    
+    script.onerror = () => {
+      console.error("❌ [Mailchimp] Script load failed");
       setIsSubmitting(false);
       setStatus("error");
-      setError("Something went wrong. Please try again.");
+      setError("Network error. Please try again.");
       
-      // Reset reCAPTCHA
       if (recaptchaRef.current !== null) {
         window.grecaptcha.reset(recaptchaRef.current);
       }
-    }
+    };
+    
+    document.body.appendChild(script);
+    
+    script.onload = () => {
+      console.log("🟢 [Mailchimp] Script loaded");
+      setTimeout(() => {
+        if (script.parentNode) {
+          document.body.removeChild(script);
+        }
+      }, 100);
+    };
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("🔵 [Form] Submit triggered for email:", email);
+    console.log("🔵 [Form] reCAPTCHA ready:", recaptchaReady);
+    console.log("🔵 [Form] recaptchaRef.current:", recaptchaRef.current);
     
     setError("");
     setStatus("idle");
 
-    // Validation
     if (!email.trim()) {
       console.log("⚠️ [Validation] Empty email");
       setError("Please enter your email address.");
@@ -149,22 +133,20 @@ const Subscribe = () => {
 
     console.log("✅ [Validation] Email valid");
 
-    // Execute invisible reCAPTCHA
+    if (!recaptchaReady || recaptchaRef.current === null) {
+      console.error("❌ [reCAPTCHA] Not ready");
+      setError("Please wait a moment and try again.");
+      return;
+    }
+
     setIsSubmitting(true);
-    if (recaptchaRef.current !== null && window.grecaptcha) {
+    
+    try {
       console.log("🔵 [reCAPTCHA] Executing challenge...");
-      try {
-        window.grecaptcha.execute(recaptchaRef.current);
-      } catch (err) {
-        console.error("❌ [reCAPTCHA] Execute failed:", err);
-        setError("reCAPTCHA error. Please refresh the page.");
-        setIsSubmitting(false);
-      }
-    } else {
-      console.error("❌ [reCAPTCHA] Not loaded or not initialized");
-      console.log("   - recaptchaRef.current:", recaptchaRef.current);
-      console.log("   - window.grecaptcha:", window.grecaptcha);
-      setError("reCAPTCHA not loaded. Please refresh the page.");
+      window.grecaptcha.execute(recaptchaRef.current);
+    } catch (err) {
+      console.error("❌ [reCAPTCHA] Execute failed:", err);
+      setError("reCAPTCHA error. Please refresh the page.");
       setIsSubmitting(false);
     }
   };
@@ -189,7 +171,6 @@ const Subscribe = () => {
           </div>
 
           <form
-            ref={formRef}
             className={styles["subscribe-form"]}
             onSubmit={handleSubmit}
             noValidate
@@ -209,7 +190,7 @@ const Subscribe = () => {
               <button
                 type="submit"
                 className={styles["subscribe-button"]}
-                disabled={status === "success" || isSubmitting}
+                disabled={status === "success" || isSubmitting || !recaptchaReady}
               >
                 {isSubmitting
                   ? "Subscribing..."
@@ -219,7 +200,6 @@ const Subscribe = () => {
               </button>
             </div>
 
-            {/* Hidden reCAPTCHA container */}
             <div id="recaptcha-container"></div>
 
             {error && (
@@ -247,12 +227,5 @@ const Subscribe = () => {
     </section>
   );
 };
-
-// Extend window type for JSONP callback
-declare global {
-  interface Window {
-    mailchimpCallback: (data: any) => void;
-  }
-}
 
 export default Subscribe;
