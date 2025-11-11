@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./Popup.module.scss";
-import Logo from "../../assets/Logo.svg";
+import Logo from "../../assets/logo.svg";
 
 declare global {
   interface Window {
