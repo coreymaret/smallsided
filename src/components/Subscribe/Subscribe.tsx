@@ -10,7 +10,7 @@ declare global {
 }
 
 const Subscribe = () => {
-  console.log("🚀 SUBSCRIBE COMPONENT LOADED - VERSION 2.0");
+  alert("Subscribe component loaded!");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [error, setError] = useState("");
