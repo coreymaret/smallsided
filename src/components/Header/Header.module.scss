@@ -1,96 +1,96 @@
 .header {
-  display: block;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #15141a;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  transform: translateY(0);
-  opacity: 1;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  z-index: 1000;
+  display: block; // Makes the header a block-level element (full width by default)
+  justify-content: space-between; // Aligns children with space between them (effective if display is flex)
+  align-items: center; // Vertically aligns children in the center (effective if display is flex)
+  background-color: #15141a; // Dark background color for the header
+  position: fixed; // Fixes the header at a specific position on the viewport
+  top: 0; // Aligns the top of the header to the top of the viewport
+  left: 0; // Aligns the left of the header to the left of the viewport
+  width: 100%; // Makes the header span the full width of the viewport
+  transform: translateY(0); // Initial vertical position (no translation)
+  opacity: 1; // Fully visible
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; // Smooth animation for transform & opacity
+  z-index: 1000; // Puts the header above other elements with lower z-index
 
-  &.hide { transform: translateY(-100%); opacity: 0; }
-  &.show { transform: translateY(0); opacity: 1; }
+  &.hide { transform: translateY(-100%); opacity: 0; } // Moves header out of view and hides it
+  &.show { transform: translateY(0); opacity: 1; } // Moves header back into view
 }
 
 .headerContent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1rem;
-  background-color: #15141a;
-  position: relative;
-  z-index: 2000;
-  padding-top: 3rem;
+  display: flex; // Makes the content a flex container
+  justify-content: space-between; // Spreads children across available space
+  align-items: center; // Vertically centers children
+  padding: 1rem 1rem; // Padding inside the header
+  background-color: #15141a; // Repeats header background
+  position: relative; // Establishes a stacking context for z-index
+  z-index: 2000; // Higher stacking than header itself
+  padding-top: 3rem; // Adds extra top padding for spacing
 }
 
 .logo {
-  position: relative;
-  z-index: 3000;
-  
+  position: relative; // Allows z-index manipulation
+  z-index: 3000; // Ensure logo stays on top
+
   img { 
-    width: 10rem; 
-    height: auto; 
+    width: 10rem; // Base width of the logo
+    height: auto; // Maintains aspect ratio
   }
 }
 
-@media (min-width: 49rem) { .logo img { width: 12rem; } }
-@media (min-width: 64rem) { .logo img { width: 15rem; } }
+@media (min-width: 49rem) { .logo img { width: 12rem; } } // Slightly larger logo on medium screens
+@media (min-width: 64rem) { .logo img { width: 15rem; } } // Even larger logo on large screens
 
 .hamburger {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.25rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  cursor: pointer;
-  position: relative;
-  z-index: 3000;
+  display: flex; // Flex container for hamburger lines
+  flex-direction: column; // Stack lines vertically
+  justify-content: center; // Center lines vertically in container
+  gap: 0.25rem; // Small gap between lines
+  width: 1.5rem; // Width of hamburger icon
+  height: 1.5rem; // Height of hamburger icon
+  cursor: pointer; // Pointer cursor on hover
+  position: relative; // For z-index control
+  z-index: 3000; // On top of other header elements
 
   span {
-    background-color: #fff;
-    display: block;
-    height: 0.2rem;
-    width: 100%;
-    border-radius: 1px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    transform-origin: center;
+    background-color: #fff; // White line color
+    display: block; // Block display for sizing
+    height: 0.2rem; // Thickness of line
+    width: 100%; // Full width of parent
+    border-radius: 1px; // Slightly rounded edges
+    transition: transform 0.3s ease, opacity 0.3s ease; // Smooth animation for rotations & fading
+    transform-origin: center; // Set origin for rotation to center
   }
 
   &.active {
-    span:nth-child(1) { transform: rotate(45deg) translate(0.3rem, 0.3rem); }
-    span:nth-child(2) { opacity: 0; }
-    span:nth-child(3) { transform: rotate(-45deg) translate(0.35rem, -0.35rem); }
+    span:nth-child(1) { transform: rotate(45deg) translate(0.3rem, 0.3rem); } // Rotate top line for X
+    span:nth-child(2) { opacity: 0; } // Hide middle line
+    span:nth-child(3) { transform: rotate(-45deg) translate(0.35rem, -0.35rem); } // Rotate bottom line for X
   }
 }
 
 .main-nav {
-  @media (max-width: 48.99rem) {
-    position: fixed;
+  @media (max-width: 48.99rem) { // Mobile menu styles
+    position: fixed; // Overlay menu
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    background-color: #15141a;
-    z-index: 1500;
+    width: 100vw; // Full viewport width
+    height: 100vh; // Full viewport height
+    height: 100dvh; // Safe viewport height for mobile
+    background-color: #15141a; // Dark menu background
+    z-index: 1500; // Below header content
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    transform: translateY(100%);
-    transition: none;
-    pointer-events: none;
+    flex-direction: column; // Stack menu items vertically
+    justify-content: center; // Center vertically
+    align-items: center; // Center horizontally
+    overflow-y: auto; // Scrollable if content overflows
+    -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+    transform: translateY(100%); // Start menu offscreen
+    transition: none; // Disable animation initially
+    pointer-events: none; // Prevent interaction until open
     padding: 0;
 
     .linksSection {
-      flex: 0 0 auto;
+      flex: 0 0 auto; // Do not grow or shrink
       display: flex;
       align-items: center;
       justify-content: center;
@@ -98,45 +98,45 @@
 
       ul {
         display: block;
-        text-align: center;
-        list-style: none;
+        text-align: center; // Center menu items
+        list-style: none; // Remove default bullets
         padding: 0;
         margin: 0;
 
         li {
-          margin-bottom: .5rem;
-          &:last-child { margin-bottom: 0; }
+          margin-bottom: .5rem; // Spacing between links
+          &:last-child { margin-bottom: 0; } // Remove margin on last item
 
           a {
             display: block;
-            font-size: 1.5rem;
+            font-size: 1.5rem; // Larger font for mobile
             font-weight: 500;
             color: #fff;
-            text-decoration: none;
+            text-decoration: none; // Remove underline
             padding: 0.5rem 2rem;
-            border-radius: 0.25rem;
-            transform: translateY(30px);
-            opacity: 0;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-            &:hover { color: #98ed66; background-color: rgba(255,255,255,0.05); }
+            border-radius: 0.25rem; // Rounded corners
+            transform: translateY(30px); // Slide animation start
+            opacity: 0; // Start hidden
+            transition: transform 0.5s ease, opacity 0.5s ease; // Smooth reveal animation
+            &:hover { color: #98ed66; background-color: rgba(255,255,255,0.05); } // Hover effect
           }
         }
 
-        .ctaItem {
+        .ctaItem { // Call-to-action button container
           margin-top: 1rem;
 
           .ctaButton {
             font-size: 1.25rem;
             font-weight: 600;
             color: #15141a;
-            background-color: #98ed66;
+            background-color: #98ed66; // CTA green
             text-align: center;
             transition: transform 0.5s ease, opacity 0.5s ease, background-color 0.3s ease;
 
             &:hover {
               color: #15141a;
-              background-color: #87d955;
-              box-shadow: 0 6px 20px rgba(152, 237, 102, 0.4);
+              background-color: #87d955; // Darker green on hover
+              box-shadow: 0 6px 20px rgba(152, 237, 102, 0.4); // Hover glow effect
             }
           }
         }
@@ -144,18 +144,18 @@
     }
 
     .socialSection {
-      position: absolute;
+      position: absolute; // Stick to bottom
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 2rem 2rem calc(2rem + env(safe-area-inset-bottom)) 2rem;
+      padding: 2rem 2rem calc(2rem + env(safe-area-inset-bottom)) 2rem; // Safe padding for mobile
       display: flex;
       gap: 1rem;
       justify-content: center;
       align-items: center;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+      transform: translateY(100px); // Start offscreen
+      opacity: 0; // Hidden initially
+      transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out; // Smooth reveal
 
       a {
         display: flex;
@@ -164,27 +164,27 @@
         width: 2.5rem;
         height: 2.5rem;
         background-color: #2a2930;
-        border-radius: 50%;
+        border-radius: 50%; // Circular icons
         color: #ffffff;
         transition: background-color 0.2s ease, color 0.2s ease;
 
         &:hover {
-          background-color: #98ed66;
-          color: #15141a;
+          background-color: #98ed66; // Green on hover
+          color: #15141a; // Dark text on hover
         }
       }
     }
 
-    &.open { 
-      transform: translateY(0);
+    &.open { // When menu is opened
+      transform: translateY(0); // Slide in
       transition: transform 0.5s ease-in-out;
-      pointer-events: auto;
-      
+      pointer-events: auto; // Allow interaction
+
       .linksSection ul li a { 
-        transform: translateY(0); 
-        opacity: 1; 
+        transform: translateY(0); // Slide into place
+        opacity: 1; // Fully visible
       }
-      .linksSection ul li:nth-child(1) a { transition-delay: 0.1s; }
+      .linksSection ul li:nth-child(1) a { transition-delay: 0.1s; } // Staggered animation
       .linksSection ul li:nth-child(2) a { transition-delay: 0.2s; }
       .linksSection ul li:nth-child(3) a { transition-delay: 0.3s; }
       .linksSection ul li:nth-child(4) a { transition-delay: 0.4s; }
@@ -192,39 +192,39 @@
       .linksSection ul li:nth-child(6) a { transition-delay: 0.6s; }
 
       .socialSection {
-        transform: translateY(0);
+        transform: translateY(0); // Slide social icons into view
         opacity: 1;
-        transition-delay: 0.6s;
+        transition-delay: 0.6s; // Delay for smooth animation
       }
     }
 
-    &.closing { 
-      transform: translateY(-100%);
+    &.closing { // Menu is closing animation
+      transform: translateY(-100%); // Slide out
       transition: transform 0.5s ease-in-out;
-      pointer-events: none;
-      
+      pointer-events: none; // Disable interaction
+
       .linksSection ul li a { 
-        transform: translateY(-20px); 
-        opacity: 0; 
+        transform: translateY(-20px); // Slide links up
+        opacity: 0; // Hide links
         transition: transform 0.5s ease-in, opacity 0.5s ease-in;
         transition-delay: 0s; 
       }
 
       .socialSection {
-        transform: translateY(100px);
+        transform: translateY(100px); // Slide social icons down
         opacity: 0;
         transition-delay: 0s;
       }
     }
 
-    &.closed { 
+    &.closed { // Fully closed menu state
       transform: translateY(100%);
-      transition: none;
-      pointer-events: none;
+      transition: none; // No animation
+      pointer-events: none; // Disable interaction
     }
   }
 
-  @media (min-width: 49rem) {
+  @media (min-width: 49rem) { // Desktop menu
     position: static;
     display: flex;
     align-items: center;
@@ -233,8 +233,8 @@
     .linksSection {
       ul { 
         display: flex; 
-        flex-direction: row; 
-        gap: 2rem; 
+        flex-direction: row; // Horizontal links
+        gap: 2rem; // Space between links
         list-style: none;
         padding: 0;
         margin: 0;
@@ -248,33 +248,33 @@
             transition: color 0.3s ease;
             
             &:hover {
-              color: #98ed66;
+              color: #98ed66; // Green hover
             }
           }
         }
 
         .ctaItem {
-          display: none;
+          display: none; // Hide CTA button on desktop
         }
       }
     }
 
     .socialSection {
-      display: none;
+      display: none; // Hide social icons on desktop
     }
   }
 }
 
-@media (min-width: 64rem) {
+@media (min-width: 64rem) { // Large desktop adjustments
   .headerContent { 
-    padding: 1rem 2rem; 
+    padding: 1rem 2rem; // More horizontal padding
   }
   
   .main-nav .linksSection ul { 
-    gap: 2rem; 
+    gap: 2rem; // Maintain spacing between links
     
     li a { 
-      font-size: 1.125rem; 
+      font-size: 1.125rem; // Slightly larger text
     }
   }
 }

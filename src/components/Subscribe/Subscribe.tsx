@@ -1,72 +1,105 @@
 import { useState, useEffect } from "react";
-import { BellRing, AlertCircle, Smile } from "lucide-react";
-import styles from "./Subscribe.module.scss";
-import subscribeBG from "../../assets/subscribeBG.png";
+// React state + lifecycle hooks
 
+import { BellRing, AlertCircle, Smile } from "lucide-react";
+// Icons used in the component UI
+
+import styles from "./Subscribe.module.scss";
+// CSS module for styling
+
+import subscribeBG from "../../assets/subscribeBG.png";
+// Background image for the subscription card
+
+
+// Extend the window interface so TypeScript knows Mailchimp will call this global function
 declare global {
   interface Window {
     mailchimpCallback: (data: any) => void;
   }
 }
 
+
 const Subscribe = () => {
+  // The email value typed by the user
   const [email, setEmail] = useState("");
+
+  // Subscription state: idle → success or error
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+
+  // Holds validation or API error messages
   const [error, setError] = useState("");
+
+  // Tracks whether the request to Mailchimp is currently running
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Reset form after success
+
+  // ---------------------------------------------------------
+  // Reset the success message after 5 seconds
+  // ---------------------------------------------------------
   useEffect(() => {
     if (status === "success") {
       const timer = setTimeout(() => {
         setStatus("idle");
-      }, 5000); // Reset after 5 seconds
-
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [status]);
 
+
+  // ---------------------------------------------------------
+  // Submit the email to Mailchimp via JSONP (script injection)
+  // ---------------------------------------------------------
   const submitToMailchimp = () => {
     console.log("🔵 [Mailchimp] Starting submission for:", email);
-    
+
+    // Build the Mailchimp JSONP endpoint URL
     const url = `https://smallsided.us9.list-manage.com/subscribe/post-json?u=2558bfaca57f1f8d04039dde6&id=5d74a6b50e&EMAIL=${encodeURIComponent(
       email
     )}&c=mailchimpCallback`;
 
     console.log("🔵 [Mailchimp] Request URL:", url);
 
+    // Mailchimp will call this global callback with its response
     window.mailchimpCallback = (data: any) => {
       console.log("📥 [Mailchimp] Response received:", JSON.stringify(data, null, 2));
-      
+
+      // Form request is done
       setIsSubmitting(false);
-      
+
       if (data.result === "success") {
         console.log("✅ [Mailchimp] Subscription successful!");
         setStatus("success");
-        setEmail("");
-        setError("");
+        setEmail("");   // Clear form
+        setError("");   // Clear errors
       } else {
         console.log("❌ [Mailchimp] Subscription failed:", data.msg);
         setStatus("error");
+
+        // Clean up Mailchimp's error message (removes digits + HTML)
         const errorMsg = data.msg || "Something went wrong. Please try again.";
         setError(errorMsg.replace(/\d+ - /, "").replace(/<[^>]*>/g, ""));
       }
     };
 
+    // Create a script tag to dynamically load Mailchimp JSONP response
     const script = document.createElement("script");
     script.src = url;
-    
+
+    // If the script fails to load, treat it as a network error
     script.onerror = () => {
       console.error("❌ [Mailchimp] Script load failed");
       setIsSubmitting(false);
       setStatus("error");
       setError("Network error. Please try again.");
     };
-    
+
+    // Add to page so it executes
     document.body.appendChild(script);
-    
+
+    // Remove script after it loads to avoid clutter
     script.onload = () => {
       console.log("🟢 [Mailchimp] Script loaded");
+
       setTimeout(() => {
         if (script.parentNode) {
           document.body.removeChild(script);
@@ -75,18 +108,25 @@ const Subscribe = () => {
     };
   };
 
+
+  // ---------------------------------------------------------
+  // Validate user input then call Mailchimp submission
+  // ---------------------------------------------------------
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("🔵 [Form] Submit triggered for email:", email);
-    
-    setError("");
+
+    setError(""); 
     setStatus("idle");
 
+    // Empty email validation
     if (!email.trim()) {
       console.log("⚠️ [Validation] Empty email");
       setError("Please enter your email address.");
       return;
     }
+
+    // Basic email pattern check
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       console.log("⚠️ [Validation] Invalid email format");
       setError("Please enter a valid email address.");
@@ -94,10 +134,16 @@ const Subscribe = () => {
     }
 
     console.log("✅ [Validation] Email valid");
+
+    // Begin request
     setIsSubmitting(true);
     submitToMailchimp();
   };
 
+
+  // ---------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------
   return (
     <section className={styles["subscribe-cta"]}>
       <div
@@ -105,6 +151,8 @@ const Subscribe = () => {
         style={{ backgroundImage: `url(${subscribeBG})` }}
       >
         <div className={styles["subscribe-container"]}>
+          
+          {/* Heading + description */}
           <div className={styles["subscribe-content"]}>
             <div className={styles["subscribe-title-wrapper"]}>
               <BellRing className={styles["subscribe-icon"]} />
@@ -117,6 +165,7 @@ const Subscribe = () => {
             </p>
           </div>
 
+          {/* Subscription form */}
           <form
             className={styles["subscribe-form"]}
             onSubmit={handleSubmit}
@@ -130,23 +179,25 @@ const Subscribe = () => {
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                  setError("");
+                  setError(""); // clear error as user types
                 }}
                 disabled={status === "success" || isSubmitting}
               />
+
               <button
                 type="submit"
                 className={styles["subscribe-button"]}
                 disabled={status === "success" || isSubmitting}
               >
                 {isSubmitting
-                  ? "Subscribing..."
+                  ? "Subscribing..." // during request
                   : status === "success"
-                  ? "Subscribed!"
-                  : "Subscribe"}
+                  ? "Subscribed!"   // after success
+                  : "Subscribe"}    // default
               </button>
             </div>
 
+            {/* Error message */}
             {error && (
               <p className={`${styles["subscribe-message"]} ${styles.error}`}>
                 <AlertCircle
@@ -157,6 +208,7 @@ const Subscribe = () => {
               </p>
             )}
 
+            {/* Success message */}
             {status === "success" && (
               <p className={`${styles["subscribe-message"]} ${styles.success}`}>
                 <Smile

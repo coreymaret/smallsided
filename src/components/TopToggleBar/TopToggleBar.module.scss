@@ -1,82 +1,83 @@
 .topToggleBar {
-  position: fixed;
+  position: fixed;                 /* Stays fixed at top of viewport */
   top: 0;
   left: 0;
-  width: 100%;
-  height: 2rem;
-  background-color: #15141a;
-  color: #ffffff;
+  width: 100%;                     /* Full width */
+  height: 2rem;                    /* Small bar height */
+  background-color: #15141a;       /* Dark background */
+  color: #ffffff;                  /* White text */
   font-family: "Inter", sans-serif;
-  z-index: 3000;
-  border-bottom: 0.5px solid #98ed66;
-  margin: 0px;
+  z-index: 3000;                   /* On top of almost everything */
+  border-bottom: 0.5px solid #98ed66; /* Subtle green line */
+  margin: 0;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
+  display: flex;                   /* Flex layout for items */
+  justify-content: space-between;  /* Left/right spacing */
+  align-items: center;             /* Center items vertically */
+  padding: 0 1rem;                 /* Horizontal padding */
 }
 
 .content {
-  position: relative;
-  overflow: hidden;
-  height: 100%;
-  flex-grow: 1;
+  position: relative;              /* Needed for absolutely positioned slider inside */
+  overflow: hidden;                /* Hide overflowing slider content */
+  height: 100%;                    /* Match parent height (2rem) */
+  flex-grow: 1;                     /* Take remaining horizontal space */
   display: flex;
-  justify-content: center;
+  justify-content: center;         /* Center content horizontally */
 }
 
 .textSlider {
-  position: absolute;
+  position: absolute;              /* Positioned within .content */
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
+  left: 50%;                       /* Center horizontally */
+  transform: translateX(-50%);     /* Adjust for true centering */
+  display: flex;                   /* Stack items vertically */
   flex-direction: column;
-  animation: scrollSlide 12s linear infinite;
+  animation: scrollSlide 12s linear infinite; /* Continuous vertical scroll */
 }
 
+/* Global animations (keyframes) */
 :global {
   @keyframes scrollSlide {
-    0% { transform: translateX(-50%) translateY(0); }
+    0%   { transform: translateX(-50%) translateY(0); }
     16.66% { transform: translateX(-50%) translateY(0); }
     33.33% { transform: translateX(-50%) translateY(-2rem); }
-    50% { transform: translateX(-50%) translateY(-2rem); }
+    50%    { transform: translateX(-50%) translateY(-2rem); }
     66.66% { transform: translateX(-50%) translateY(-4rem); }
     83.33% { transform: translateX(-50%) translateY(-4rem); }
-    100% { transform: translateX(-50%) translateY(-6rem); }
+    100%   { transform: translateX(-50%) translateY(-6rem); }
   }
 
   @media (max-width: 768px) {
     .textSlider {
-      animation: scrollSlide 12s linear infinite !important;
+      animation: scrollSlide 12s linear infinite !important; /* Ensure mobile still animates */
     }
   }
 }
 
 .line {
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
+  height: 2rem;                    /* Matches bar height */
+  display: flex;                   /* Inline content flexed */
+  align-items: center;             /* Vertically center text/icons */
+  justify-content: center;         /* Horizontally center items */
+  gap: 0.4rem;                     /* Space between items */
   margin: 0;
   padding: 0;
-  white-space: nowrap;
-  color: #fff;
+  white-space: nowrap;             /* Prevent text wrapping */
+  color: #fff;                     /* Text color */
 }
 
 .closeButton {
-  background: none;
+  background: none;                /* Remove default button styles */
   border: none;
   color: #ffffff;
-  cursor: pointer;
-  display: flex;
+  cursor: pointer;                 /* Pointer on hover */
+  display: flex;                   /* Align inner icon/text */
   align-items: center;
   justify-content: center;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease;  /* Smooth hover effect */
 }
 
 .closeButton:hover {
-  opacity: 0.7;
+  opacity: 0.7;                    /* Slight fade on hover */
 }

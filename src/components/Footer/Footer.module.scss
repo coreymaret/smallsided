@@ -1,73 +1,76 @@
 .footer {
-  background-color: #15141a;
-  color: #ffffff;
-  padding: 3rem 1rem 1rem;
-  font-family: "Inter", sans-serif;
-  width:100%;
-  margin:0px;
+  background-color: #15141a;       /* Dark footer background */
+  color: #ffffff;                  /* Default text color */
+  padding: 3rem 1rem 1rem;         /* Extra top padding for spacing */
+  font-family: "Inter", sans-serif; /* Font family for footer text */
+  width: 100%;                     /* Full width of the viewport */
+  margin: 0px;                     /* Remove default margin */
 }
 
 .footerContent {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0 0 2rem 0;
-  border-bottom: 1px solid #2a2930;
-  text-align:center;
+  display: grid;                   /* Use grid layout for sections inside footer */
+  grid-template-columns: 1fr;      /* Mobile: single column */
+  gap: 2rem;                       /* Space between grid items */
+  max-width: 100%;                  /* Ensure no overflow beyond container */
+  margin: 0 auto;                  /* Center the content horizontally */
+  padding: 0 0 2rem 0;             /* Padding below the content */
+  border-bottom: 1px solid #2a2930; /* Divider line separating content from footer bottom */
+  text-align: center;              /* Center text for mobile */
 
   @media (min-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-    text-align:left;
+    grid-template-columns: repeat(2, 1fr); /* Tablet: 2 columns */
+    text-align: left;                      /* Align text left on larger screens */
   }
 
   @media (min-width: 1024px) {
-    grid-template-columns: 2fr 1fr 1.5fr;  // Changed from 2fr 1fr 1fr 1.5fr (3 columns instead of 4)
+    grid-template-columns: 2fr 1fr 1.5fr;  /* Desktop: 3 sections, different widths */
   }
 }
 
 .footerSection {
+  /* Headings */
   h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #98ED66;
+    font-size: 1.5rem;              /* Large heading size */
+    font-weight: 700;               /* Bold */
+    margin-bottom: 1rem;            /* Space below heading */
+    color: #98ED66;                 /* Accent green color */
   }
 
   h4 {
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: 1.125rem;            /* Slightly smaller heading */
+    font-weight: 600;               /* Semi-bold */
     margin-bottom: 1rem;
-    color: #ffffff;
+    color: #ffffff;                 /* White text */
   }
 
+  /* Descriptive text */
   p {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: #b8b8b8;
-    margin-bottom: 1.5rem;
+    font-size: 0.9rem;              /* Slightly smaller text for description */
+    line-height: 1.6;               /* Better readability */
+    color: #b8b8b8;                 /* Light gray text */
+    margin-bottom: 1.5rem;          /* Space after paragraph */
   }
 
+  /* Link lists */
   ul {
-    list-style: none;
+    list-style: none;               /* Remove default bullets */
     padding: 0;
     margin: 0;
 
     li {
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.75rem;      /* Space between list items */
 
       a {
-        color: #ffffff;
-        text-decoration: none;
-        font-size: 0.9rem;
-        transition: color 0.2s ease;
+        color: #ffffff;            /* Default link color */
+        text-decoration: none;     /* Remove underline */
+        font-size: 0.9rem;         /* Slightly smaller text */
+        transition: color 0.2s ease; /* Smooth color change on hover */
 
         &:hover {
-          color: #98ED66;
+          color: #98ED66;          /* Green accent on hover */
         }
         &:active {
-          color: #98ED66;
+          color: #98ED66;          /* Active state matches hover */
         }
       }
     }
@@ -75,156 +78,166 @@
 }
 
 .socialLinks {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
+  display: flex;                    /* Horizontal layout for social icons */
+  gap: 1rem;                        /* Space between icons */
+  justify-content: center;          /* Center icons on mobile */
 
-    @media (min-width: 768px) {
-    justify-content: flex-start;  // Add this to reset on tablet
+  @media (min-width: 768px) {
+    justify-content: flex-start;    /* Align left on tablet+ */
   }
+
   a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
+    display: flex;                   /* Make links flexible boxes */
+    align-items: center;             /* Center icons vertically */
+    justify-content: center;         /* Center icons horizontally */
+    width: 2.5rem;                   /* Fixed size for circular icons */
     height: 2.5rem;
-    background-color: #2a2930;
-    border-radius: 50%;
-    color: #ffffff;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    background-color: #2a2930;       /* Dark background for icons */
+    border-radius: 50%;              /* Circular shape */
+    color: #ffffff;                  /* White icon color */
+    transition: background-color 0.2s ease, color 0.2s ease; /* Smooth hover effects */
 
     &:hover {
-      background-color: #98ED66;
-      color: #15141a;
+      background-color: #98ED66;     /* Green background on hover */
+      color: #15141a;                /* Dark text on hover */
     }
   }
 }
 
 .contactInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items:center;
+  display: flex;                     /* Flex layout for contact items */
+  flex-direction: column;            /* Stack items vertically on mobile */
+  gap: 1rem;                         /* Space between items */
+  align-items: center;               /* Center on mobile */
+
   @media (min-width: 768px) {
-    align-items: flex-start;  // Add this to reset on tablet
+    align-items: flex-start;         /* Left align on larger screens */
+
     .contactItem a {
-      color:#ffffff;
+      color: #ffffff;                /* White text for links */
+
       &.visited {
-        color:#ffffff;
+        color: #ffffff;              /* Prevent default purple for visited links */
       }
     }
   }
-  .contactItem {
-    cursor: pointer;
-      color: #ffffff;
-      text-decoration-line: underline;
-      text-decoration-style: dotted;
-      text-decoration-color: #98ED66;
-      white-space: nowrap;
-      text-underline-offset: 8px;
-      &.active {
-        color: #ffffff;
-      }
 
-      &:hover {
-        opacity: 0.8;
-      }
+  /* Underlined dotted text links */
+  .contactItem {
+    cursor: pointer;                 /* Pointer cursor on hover */
+    color: #ffffff;                  /* White text */
+    text-decoration-line: underline; /* Underline text */
+    text-decoration-style: dotted;   /* Dotted underline */
+    text-decoration-color: #98ED66;  /* Green underline */
+    white-space: nowrap;             /* Prevent line breaks */
+    text-underline-offset: 8px;      /* Offset underline for spacing */
+
+    &.active {
+      color: #ffffff;                /* Keep color same when active */
+    }
+
+    &:hover {
+      opacity: 0.8;                  /* Slight fade effect on hover */
+    }
   }
 }
 
 .contactItem {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: #b8b8b8;
-  font-size: 0.9rem;
+  display: flex;                     /* Flex layout for icon + text */
+  align-items: center;               /* Align items vertically */
+  gap: 0.75rem;                      /* Space between icon and text */
+  color: #b8b8b8;                    /* Gray text */
+  font-size: 0.9rem;                 /* Small text */
 
   svg {
-    flex-shrink: 0;
-    color: #98ED66;
+    flex-shrink: 0;                  /* Prevent icon from shrinking */
+    color: #98ED66;                  /* Green accent for icons */
   }
 }
 
 .footerBottom {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 1.5rem 0 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.875rem;
-  color: #b8b8b8;
+  max-width: 100%;                   /* Full width container */
+  margin: 0 auto;                    /* Center horizontally */
+  padding: 1.5rem 0 0;               /* Top padding */
+  display: flex;                     /* Flex container */
+  flex-direction: column;            /* Stack vertically on mobile */
+  align-items: center;               /* Center content */
+  gap: 1rem;                         /* Space between items */
+  font-size: 0.875rem;               /* Smaller text */
+  color: #b8b8b8;                    /* Gray text */
 
   @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: row;             /* Horizontal layout on tablet+ */
+    justify-content: space-between;  /* Space between left and right content */
   }
 
   p {
-    margin: 0;
+    margin: 0;                        /* Remove default paragraph margin */
   }
 }
 
 .footerLinks {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  display: flex;                      /* Horizontal layout for footer links */
+  align-items: center;                 /* Align vertically */
+  gap: 0.75rem;                        /* Space between links */
 
   a {
-    color: #b8b8b8;
-    text-decoration: none;
-    transition: color 0.2s ease;
+    color: #b8b8b8;                    /* Default link color */
+    text-decoration: none;              /* Remove underline */
+    transition: color 0.2s ease;       /* Smooth hover effect */
 
     &:hover {
-      color: #98ED66;
+      color: #98ED66;                  /* Green hover effect */
     }
   }
 
   span {
-    color: #2a2930;
+    color: #2a2930;                     /* Divider pipe color */
   }
 }
 
 .footerLogo {
-  width: 10rem;
-  height: auto;
-  margin-bottom: 1rem;
-  @media (max-width: 48.99rem) { // mobile breakpoint
+  width: 10rem;                        /* Set logo width */
+  height: auto;                        /* Maintain aspect ratio */
+  margin-bottom: 1rem;                 /* Space below logo */
+
+  @media (max-width: 48.99rem) {       /* Mobile-specific styles */
     display: block;
-    margin: 0 auto 1rem; // center horizontally on mobile
+    margin: 0 auto 1rem;               /* Center logo horizontally */
   }
-  
 }
 
 .linksContainer {
-  display: grid;
+  display: grid;                       /* Two-column layout for quick links */
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  gap: 2rem;                            /* Space between columns */
 }
 
-  @media (max-width: 48.99rem) {
+/* -----------------------------------------------------------
+   MOBILE-SPECIFIC OVERRIDES FOR CONTACT LINKS
+   Removes dotted underline + replaces with simpler styling
+   ----------------------------------------------------------- */
+@media (max-width: 48.99rem) {
   .contactItem {
     a {
-      cursor: pointer;
-      color: #ffffff;
-      text-decoration: none;  // Remove text-decoration entirely
-      padding-bottom: 7px;  // Mimics text-underline-offset: 8px
-      white-space: nowrap;
-      
+      cursor: pointer;                  /* Pointer on mobile */
+      color: #ffffff;                   /* White text */
+      text-decoration: none;            /* Remove underline */
+      padding-bottom: 7px;              /* Simulate underline offset */
+      white-space: nowrap;               /* Prevent wrapping */
+
       &:visited {
-        color: #ffffff;
-        border-bottom-color: #98ED66;  // Keep green on visited
+        color: #ffffff;                 /* Keep white on visited */
+        border-bottom-color: #98ED66;   /* Accent color for consistency */
       }
 
       &:hover {
-        opacity: 0.8;
+        opacity: 0.8;                   /* Slight fade on hover */
       }
 
       &.active {
-        color: #ffffff;
+        color: #ffffff;                  /* Maintain white for active state */
       }
     }
   }
 }
-

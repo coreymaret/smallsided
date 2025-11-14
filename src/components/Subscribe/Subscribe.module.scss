@@ -1,48 +1,48 @@
 .subscribe-cta {
-  //background-color: #15141a;
-  padding: 2rem 1rem;
-  width: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  //background-color: #15141a;     /* Optional: dark background for the section */
+  padding: 2rem 1rem;             /* Vertical & horizontal padding */
+  width: 100%;                     /* Full width of parent container */
+  margin: 0;                       /* Reset margin */
+  display: flex;                   /* Flex container to center content */
+  justify-content: center;         /* Center horizontally */
+  align-items: center;             /* Center vertically */
 
-  @media (min-width: 49rem) {
-    padding: 5rem 2rem;
+  @media (min-width: 49rem) {      /* Tablet+ */
+    padding: 5rem 2rem;            /* More generous padding on larger screens */
   }
 
-  @media (min-width: 64rem) {
-    padding: 2rem 2rem;
+  @media (min-width: 64rem) {      /* Desktop+ */
+    padding: 2rem 2rem;            /* Adjust padding for layout balance */
   }
 }
 
 .subscribe-card {
-  position: relative; /* allow overlay positioning */
-  background-color: #15141a;
-  background-image: url("././src/assets/subscribeBG.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 1rem;
-  //border: 1px solid #2a2930;
-  padding: 3rem 1.5rem;
-  width: 100%;
-  max-width: 56rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  text-align: center;
-  overflow: hidden;
+  position: relative;              /* Allows overlay pseudo-element positioning */
+  background-color: #15141a;       /* Dark fallback background */
+  background-image: url("././src/assets/subscribeBG.png"); /* Hero background */
+  background-size: cover;           /* Cover entire container */
+  background-position: center;      /* Center the background image */
+  background-repeat: no-repeat;     /* Prevent tiling */
+  border-radius: 1rem;              /* Rounded corners */
+  //border: 1px solid #2a2930;      /* Optional border */
+  padding: 3rem 1.5rem;             /* Inner spacing */
+  width: 100%;                      /* Full width up to max-width */
+  max-width: 56rem;                 /* Limit width for large screens */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+  text-align: center;               /* Centered text content */
+  overflow: hidden;                 /* Prevent overflow from pseudo-element or content */
 
-  /* overlay on top of the image (but beneath content) */
+  /* Overlay on top of background image (beneath content) */
   &::before {
     content: "";
     position: absolute;
-    inset: 0; /* top:0; right:0; bottom:0; left:0; */
-    background-color: rgba(0, 0, 0, 0.4); /* adjust 0.45 to taste (0.2 - 0.7) */
-    z-index: 1;
-    pointer-events: none; /* don't block clicks */
+    inset: 0;                       /* top:0; right:0; bottom:0; left:0 */
+    background-color: rgba(0, 0, 0, 0.4); /* Darken background image */
+    z-index: 1;                     /* Behind content */
+    pointer-events: none;           /* Don't block clicks */
   }
 
-  /* ensure all direct children render above the overlay */
+  /* Ensure all direct children render above overlay */
   > * {
     position: relative;
     z-index: 2;
@@ -50,106 +50,106 @@
 }
 
 .subscribe-container {
-  max-width: 42rem;
-  margin: 0 auto;
-  text-align: center;
+  max-width: 42rem;                 /* Limit width of inner content */
+  margin: 0 auto;                   /* Center horizontally */
+  text-align: center;               /* Center text */
 }
 
 .subscribe-content {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.5rem;            /* Space below content */
 
   @media (min-width: 49rem) {
-    margin-bottom: 3rem;
+    margin-bottom: 3rem;            /* More space on larger screens */
   }
 }
 
 .subscribe-title-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  display: flex;                    /* Flex container for icon + title */
+  align-items: center;              /* Vertically center icon and text */
+  justify-content: center;          /* Horizontally center */
+  gap: 0.75rem;                     /* Space between icon & title */
+  margin-bottom: 1rem;              /* Space below wrapper */
 }
 
 .subscribe-icon {
   width: 2rem;
   height: 2rem;
-  color: #98ed66;
-  flex-shrink: 0;
-  margin-right: 1rem;
+  color: #98ed66;                   /* Accent green */
+  flex-shrink: 0;                   /* Prevent icon shrinking */
+  margin-right: 1rem;               /* Space after icon */
 }
 
 .subscribe-title {
   font-family: 'Inter', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #98ED66;
+  font-size: 2rem;                  /* Default title size */
+  font-weight: 700;                 /* Bold */
+  color: #98ED66;                   /* Green accent */
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.2;                 /* Tighter spacing for title */
 
   @media (min-width: 49rem) {
-    font-size: 2.5rem;
+    font-size: 2.5rem;              /* Tablet */
   }
 
   @media (min-width: 64rem) {
-    font-size: 3rem;
+    font-size: 3rem;                /* Desktop */
   }
 }
 
 .subscribe-description {
   font-family: 'Inter', sans-serif;
-  font-size: 1rem;
+  font-size: 1rem;                  /* Regular text */
   font-weight: 400;
-  color: #ffffff;
+  color: #ffffff;                   /* White text */
   margin: 0;
-  line-height: 1.6;
-  max-width: 42rem;
-  margin: 0 auto;
+  line-height: 1.6;                 /* Comfortable readability */
+  max-width: 42rem;                 /* Limit width */
+  margin: 0 auto;                   /* Center horizontally */
 
   @media (min-width: 49rem) {
-    font-size: 1.125rem;
+    font-size: 1.125rem;            /* Slightly larger on tablet */
   }
 }
 
 .subscribe-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: center;
+  display: flex;                    /* Flex container for form elements */
+  flex-direction: column;           /* Stack vertically */
+  gap: 1rem;                        /* Space between elements */
+  align-items: center;              /* Center inputs/buttons */
 }
 
 .input-wrapper {
-  display: flex;
-  flex-direction: column;
+  display: flex;                    /* Flex container for input + button */
+  flex-direction: column;           /* Stack vertically by default */
   gap: 1rem;
   width: 100%;
-  max-width: 32rem;
+  max-width: 32rem;                 /* Limit width of form */
 
   @media (min-width: 49rem) {
-    flex-direction: row;
-    gap: 0.75rem;
+    flex-direction: row;            /* Side-by-side on tablet+ */
+    gap: 0.75rem;                   /* Smaller gap horizontally */
   }
 }
 
 .subscribe-input {
-  flex: 1;
+  flex: 1;                          /* Fill available width */
   padding: 1rem 1.25rem;
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
-  color: #ffffff;
-  background-color: #15141a;
-  border: 1px solid #2a2930;
+  color: #ffffff;                   /* Text color */
+  background-color: #15141a;        /* Dark input background */
+  border: 1px solid #2a2930;        /* Subtle border */
   border-radius: 0.5rem;
   outline: none;
   transition: border-color 0.2s ease, background-color 0.2s ease;
 
   &::placeholder {
-    color: #6b6b78;
+    color: #6b6b78;                 /* Placeholder text color */
   }
 
   &:focus {
-    border-color: #98ED66;
-    background-color: rgba(31, 30, 36, 0.9);
+    border-color: #98ED66;          /* Accent border on focus */
+    background-color: rgba(31, 30, 36, 0.9); /* Slight highlight */
   }
 
   &:disabled {
@@ -158,7 +158,7 @@
   }
 
   @media (min-width: 49rem) {
-    padding: 0.875rem 1.25rem;
+    padding: 0.875rem 1.25rem;      /* Slightly smaller on tablet */
   }
 }
 
@@ -167,20 +167,20 @@
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 600;
-  color: #15141a;
-  background-color: #98ED66;
+  color: #15141a;                   /* Text contrast */
+  background-color: #98ED66;        /* Theme green */
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
-  white-space: nowrap;
+  white-space: nowrap;              /* Prevent button text wrapping */
 
   &:hover:not(:disabled) {
-    background-color: #7dd24f;
+    background-color: #7dd24f;      /* Slightly darker green on hover */
   }
 
   &:active:not(:disabled) {
-    transform: scale(0.98);
+    transform: scale(0.98);         /* Button press effect */
   }
 
   &:disabled {
@@ -195,18 +195,18 @@
 
 .subscribe-message {
   font-family: 'Inter', sans-serif;
-  font-size: 0.875rem;
+  font-size: 0.875rem;              /* Small feedback text */
   margin: 0;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
 
   &.success {
-    color: #98ED66;
-    background-color: rgba(152, 237, 102, 0.1);
+    color: #98ED66;                 /* Green text for success */
+    background-color: rgba(152, 237, 102, 0.1); /* Subtle green bg */
   }
 
   &.error {
-    color: #ff6b6b;
-    background-color: rgba(255, 107, 107, 0.1);
+    color: #ff6b6b;                 /* Red text for errors */
+    background-color: rgba(255, 107, 107, 0.1); /* Subtle red bg */
   }
 }

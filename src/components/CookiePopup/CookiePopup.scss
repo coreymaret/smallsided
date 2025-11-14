@@ -1,89 +1,111 @@
+/* -----------------------------------------------------------
+   Animation: Slide the popup upward into view
+   ----------------------------------------------------------- */
 @keyframes slideUp {
   from {
-    opacity: 0;
-    transform: translate(-50%, 100%);
-    backdrop-filter: blur(4px);
+    opacity: 0;                          /* start invisible */
+    transform: translate(-50%, 100%);    /* start below the screen, centered */
+    backdrop-filter: blur(4px);          /* keep blur effect consistent */
     -webkit-backdrop-filter: blur(4px);
   }
   to {
-    opacity: 1;
-    transform: translate(-50%, 0);
+    opacity: 1;                          /* become fully visible */
+    transform: translate(-50%, 0);       /* move to final position */
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
   }
 }
 
+/* -----------------------------------------------------------
+   Animation: Slide the popup downward when closing
+   ----------------------------------------------------------- */
 @keyframes slideDown {
   from {
-    opacity: 1;
-    transform: translate(-50%, 0);
+    opacity: 1;                          /* fully visible */
+    transform: translate(-50%, 0);       /* starting at final position */
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
   }
   to {
-    opacity: 0;
-    transform: translate(-50%, 100%);
-    backdrop-filter: blur(0px);
+    opacity: 0;                          /* fade out */
+    transform: translate(-50%, 100%);    /* move back downward */
+    backdrop-filter: blur(0px);          /* remove blur for smooth fade */
     -webkit-backdrop-filter: blur(0px);
   }
 }
 
+/* -----------------------------------------------------------
+   Main popup container
+   Fixed at bottom center of the screen
+   ----------------------------------------------------------- */
 .popup-cookies {
   position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3001;
-  width: fit-content;
+  bottom: 1.5rem;                        /* distance above bottom */
+  left: 50%;                             /* center horizontally */
+  transform: translateX(-50%);           /* truly center */
+  z-index: 3001;                         /* very high to appear above UI */
+  width: fit-content;                    /* shrink to content width */
+
+  /* Default entry animation */
   animation: slideUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 
+  /* When closing: apply reverse animation */
   &.closing {
     animation: slideDown 0.5s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
   }
 
+  /* ---------------------------------------------------------
+     Inner content box
+     --------------------------------------------------------- */
   .content {
-    background: rgba(6, 6, 6, .6);
-    backdrop-filter: blur(4px);
+    background: rgba(6, 6, 6, .6);        /* semi-transparent dark background */
+    backdrop-filter: blur(4px);           /* frosted glass blur */
     -webkit-backdrop-filter: blur(4px);
-    border-radius: 0;
-    padding: 16px 24px;
-    box-shadow: none;
-    display: flex;
-    align-items: center;
-    gap: 24px;
+    border-radius: 0;                      /* no rounded corners */
+    padding: 16px 24px;                    /* inner spacing */
+    box-shadow: none;                      /* no shadow */
+    display: flex;                         /* horizontal layout */
+    align-items: center;                   /* vertically center items */
+    gap: 24px;                             /* spacing between text + button */
     width: fit-content;
-    flex-wrap: nowrap;
+    flex-wrap: nowrap;                     /* prevent breaking lines */
 
+    /* Cookie text */
     p {
       margin: 0;
       font-size: 16px;
       color: #ffffff;
       font-weight: 400;
-      white-space: nowrap;
+      white-space: nowrap;                /* keep text on 1 line */
     }
 
+    /* “Okay” link styling */
     .link {
       cursor: pointer;
       font-size: 16px;
       color: #ffffff;
-      text-decoration-line: underline;
-      text-decoration-style: dotted;
-      text-decoration-color: #98ED66;
-      white-space: nowrap;
-      text-underline-offset: 8px;
+      text-decoration-line: underline;     /* underline only the link */
+      text-decoration-style: dotted;       /* dotted underline aesthetic */
+      text-decoration-color: #98ED66;      /* underline color */
+      white-space: nowrap;                 /* single-line text */
+      text-underline-offset: 8px;          /* spacing between text + underline */
       font-weight: 400;
+
       &.active {
         color: #ffffff;
       }
 
       &:hover {
-        opacity: 0.8;
+        opacity: 0.8;                      /* subtle hover fade */
       }
 
+      /* -----------------------------------------------------
+         Fallback for browsers that do NOT support dotted underline
+         ----------------------------------------------------- */
       @supports not (text-decoration-style: dotted) {
         .link {
-          border-bottom: 1px dotted #98ED66;
-          text-decoration: none;
+          border-bottom: 1px dotted #98ED66;  /* manually create dotted line */
+          text-decoration: none;              /* remove built-in underline */
         }
       }
     }
