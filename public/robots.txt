@@ -1,6 +1,6 @@
 # Disallow all crawlers
 User-agent: *
-Disallow: /
+Disallow:
 
 # Sitemap location
 Sitemap: https://www.example.com/sitemap.xml
