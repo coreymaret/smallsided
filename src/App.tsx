@@ -16,6 +16,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 import TOS from './pages/TOS/TOS';
 import CookiePolicy from './pages/CookiePolicy/CookiePolicy';
 import Subscribe from './components/Subscribe/Subscribe';
+import NotFound from './pages/NotFound/NotFound';
 
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/TOS" element={<TOS />} />
           <Route path="/CookiePolicy" element={<CookiePolicy />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Subscribe />
