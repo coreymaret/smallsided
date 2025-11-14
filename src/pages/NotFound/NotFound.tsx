@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import lottie from 'lottie-web';
 import styles from './NotFound.module.scss';
+import animationData from '/public/NotFound.json';
 
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
@@ -16,8 +17,7 @@ const NotFound: React.FC = () => {
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        // Replace this path with your actual Lottie JSON file
-        path: '../../public/NotFound.json'
+        animationData: animationData
       });
     }
 
