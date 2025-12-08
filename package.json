@@ -12,6 +12,7 @@
     "generate-favicons": "node generate-favicons.js"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.20.7",
     "fs": "^0.0.1-security",
     "lottie-web": "^5.13.0",
     "lucide-react": "^0.548.0",
