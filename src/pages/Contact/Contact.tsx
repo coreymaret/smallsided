@@ -144,7 +144,7 @@ const Contact: React.FC = () => {
           <MapPin className={styles.contactIcon} size={32} />
           <div className={styles.contactInfo}>
             <h3>Address</h3>
-            <p>123 Main Street, Suite 400, San Francisco, CA 94102</p>
+            <p>123 Small Sided Way, Tampa, FL 33617</p>
           </div>
         </div>
         
@@ -152,7 +152,7 @@ const Contact: React.FC = () => {
           <Phone className={styles.contactIcon} size={32} />
           <div className={styles.contactInfo}>
             <h3>Phone</h3>
-            <p>+(111) 111-1111</p>
+            <p>(727) 4-SOCCER</p>
           </div>
         </div>
         
