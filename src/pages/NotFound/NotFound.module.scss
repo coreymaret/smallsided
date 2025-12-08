@@ -1,71 +1,89 @@
+// Main container for the 404 page layout
 .notFoundContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  width: 100%;
-  background-color: #f8f9fa;
+  display: flex;                // Center content using flexbox
+  justify-content: center;      // Horizontally center items
+  align-items: center;          // Vertically center items
+  min-height: 100vh;            // Full viewport height
+  width: 100%;                  // Take full width
+  background-color: #f8f9fa;    // Light gray background
 }
 
+// Wrapper for all page content
 .content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 2rem;
+  display: flex;                // Flex container
+  flex-direction: column;       // Stack items vertically
+  align-items: center;          // Center items horizontally
+  justify-content: center;      // Center items vertically
+  text-align: center;           // Center text
+  padding: 2rem;                // Space around content
 }
 
+// Container that holds the Lottie animation
 .animationWrapper {
-  width: 300px;
-  height: 300px;
-  max-width: 90vw;
-  max-height: 50vh;
-  margin-bottom: 2rem;
+  width: 300px;                 // Base width for animation box
+  height: 300px;                // Base height for animation box
+  max-width: 90vw;              // Responsive width limit
+  max-height: 50vh;             // Responsive height limit
+  margin-bottom: 2rem;          // Space below animation
 }
 
+// Main page heading (e.g., "Oops!")
 .heading {
-  font-size: 3rem;
-  font-weight: 700;
-  margin: 0 0 1rem 0;
-  color: #333;
+  font-size: 3rem;              // Large font size
+  font-weight: 700;             // Bold text
+  margin: 0 0 1rem 0;           // Bottom margin only
+  color: #333;                  // Dark gray text
 }
 
+// Subheading text ("Something went wrong")
 .subheading {
-  font-size: 1.5rem;
-  font-weight: 400;
-  margin: 0 0 2rem 0;
-  color: #666;
+  font-size: 1.5rem;            // Medium font size
+  font-weight: 400;             // Regular weight
+  margin: 0 0 2rem 0;           // Bottom margin
+  color: #666;                  // Medium gray text
 }
 
+// Styles applied to both buttons
 .goBackButton {
-  padding: 0.875rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #98ED66;
-  background-color: #15141A;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  padding: 0.875rem 2rem;       // Inner spacing
+  font-size: 1rem;              // Base font size
+  font-weight: 600;             // Semi-bold text
+  color: #98ED66;               // Light green text color
+  background-color: #15141A;    // Dark background color
+  border: none;                 // Removes default border
+  border-radius: 8px;           // Rounded corners
+  cursor: pointer;              // Cursor becomes a pointer
+  transition: background-color 0.3s ease, transform 0.2s ease; // Smooth hover/active effects
 
+  // Hover state (when the mouse moves over the button)
   &:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
+    background-color: #0056b3;  // Changes background color
+    transform: translateY(-2px); // Slight lift effect
   }
 
+  // Active state (when button is pressed)
   &:active {
-    transform: translateY(0);
+    transform: translateY(0);   // Removes the lift effect
   }
 
+  // Focus state (when selected via keyboard or click)
   &:focus {
-    outline: 2px solid #0056b3;
-    outline-offset: 2px;
+    outline: 2px solid #0056b3; // Highlight for accessibility
+    outline-offset: 2px;        // Space between outline and button
   }
 }
 
+// Error text displayed under animation if loading fails
 .error {
-  color: #dc3545;
-  font-size: 0.875rem;
-  margin-top: 1rem;
+  color: #dc3545;               // Red text for errors
+  font-size: 0.875rem;          // Small font size
+  margin-top: 1rem;             // Space above the error message
+}
+
+// Wrapper for the two buttons displayed side by side
+.buttonRow {
+  display: flex;                // Place buttons in a row
+  gap: 1rem;                    // Space between the two buttons
+  justify-content: center;      // Center them horizontally
+  margin-top: 1rem;             // Spacing above the buttons
 }

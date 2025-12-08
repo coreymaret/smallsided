@@ -1,0 +1,254 @@
+// Contact.module.scss
+
+.contactContainer {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+  margin-top: 100px;
+}
+
+.contactLeft {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background-color: #f8f9fa;
+
+  @media (min-width: 768px) {
+    padding: 3rem;
+  }
+}
+
+.leftContent {
+  max-width: 500px;
+  width: 100%;
+}
+
+.decorativeLine {
+  width: 60px;
+  height: 4px;
+  background-color: #98ED66;
+  margin-bottom: 1.5rem;
+
+  @media (min-width: 768px) {
+    width: 80px;
+    height: 5px;
+    margin-bottom: 2rem;
+  }
+}
+
+.contactLeft h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+
+  @media (min-width: 768px) {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #6b7280;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  margin-bottom: 2rem;
+
+  @media (min-width: 768px) {
+    font-size: 1.125rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+.contactForm {
+  width: 100%;
+}
+
+.formRow {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  .inputGroup {
+    flex: 1;
+  }
+}
+
+.inputGroup {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.floatingLabel {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  color: #6b7280;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+  padding: 0 0.25rem;
+
+  &.active {
+    top: -0.625rem;
+    font-size: 0.75rem;
+    color: #15141a;
+    font-weight: 500;
+  }
+}
+
+.input {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  transition: border-color 0.3s ease;
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #15141a;
+  }
+
+  &:focus + .floatingLabel,
+  &:not(:placeholder-shown) + .floatingLabel {
+    top: -0.625rem;
+    font-size: 0.75rem;
+    color: #15141a;
+    font-weight: 500;
+  }
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  color: #ffffff;
+  background-color: #15141a;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #2a2930;
+  }
+
+  &:active {
+    background-color: #1a1920;
+  }
+}
+
+.contactRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+  gap: 2.5rem;
+  background-color: #15141a;
+}
+
+.contactRow {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.contactIcon {
+  color: #98ED66;
+  background-color: transparent;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.contactInfo {
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: #ffffff;
+    line-height: 1.6;
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: #2a2930;
+    text-underline-offset: 8px;
+    display: inline-block;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.socialIcons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.socialIcon {
+  color: #98ED66;
+  background-color: #2a2930;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+
+  &:hover {
+    background-color: #98ED66;
+    color: #15141a;
+  }
+}
+
+@media (max-width: 768px) {
+  .contactContainer {
+    flex-direction: column;
+  }
+
+  .contactLeft {
+    padding: 2rem;
+
+    h1 {
+      font-size: 2.5rem;
+    }
+  }
+
+  .contactRight {
+    padding: 2rem;
+    gap: 2rem;
+  }
+}
