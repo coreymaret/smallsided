@@ -193,7 +193,7 @@ const Subscribe = () => {
                   ? "Subscribing..." // during request
                   : status === "success"
                   ? "Subscribed!"   // after success
-                  : "Subscribe"}    // default
+                  : "Subscribe" /* default */}
               </button>
             </div>
 
