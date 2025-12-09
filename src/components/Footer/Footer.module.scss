@@ -183,7 +183,7 @@
 
   a {
     color: #b8b8b8;                    /* Default link color */
-    text-decoration: none;              /* Remove underline */
+    text-decoration: underline;              /* Remove underline */
     transition: color 0.2s ease;       /* Smooth hover effect */
 
     &:hover {
