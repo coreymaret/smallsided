@@ -191,6 +191,7 @@ const Header = () => {
               <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
               <li><Link to="/services" onClick={handleLinkClick}>Services</Link></li>
               <li><Link to="/work" onClick={handleLinkClick}>Work</Link></li>
+              <li><Link to="/blog" onClick={handleLinkClick}>Blog</Link></li>
               <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
 
               {/* Call-to-action button in menu */}

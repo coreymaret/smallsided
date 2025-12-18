@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import CookiePopup from './components/CookiePopup/CookiePopup'
@@ -17,13 +18,15 @@ import TOS from './pages/TOS/TOS';
 import CookiePolicy from './pages/CookiePolicy/CookiePolicy';
 import Subscribe from './components/Subscribe/Subscribe';
 import NotFound from './pages/NotFound/NotFound';
+import Blog from './pages/Blog/Blog';
+import BlogPost from './components/Blog/BlogPost'
 
 
 const App = () => {
   const location = useLocation();
 
   return (
-    <>
+    <HelmetProvider>
       <Header />
       <main className="main-content">
         <Routes location={location} key={location.pathname}>
@@ -41,12 +44,14 @@ const App = () => {
           <Route path="/TOS" element={<TOS />} />
           <Route path="/CookiePolicy" element={<CookiePolicy />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
         </Routes>
       </main>
       <Subscribe />
       <Footer />
       <CookiePopup />
-    </>
+    </HelmetProvider>
   );
 };
 

@@ -21,10 +21,73 @@ export default defineConfig({
   /**
    * PLUGINS
    * -------
-   * Plugins extend Vite’s core features.
+   * Plugins extend Vite's core features.
    * The `react()` plugin adds React Fast Refresh (instant state-preserving reloads)
    * and support for JSX/TSX syntax.
    */
   plugins: [react()],
-})
 
+  /**
+   * ASSETS INCLUDE
+   * --------------
+   * Tell Vite to treat markdown files (.md) as static assets that can be
+   * imported or fetched. This is necessary for the blog system to load
+   * markdown blog posts dynamically.
+   */
+  assetsInclude: ['**/*.md'],
+
+  /**
+   * RESOLVE
+   * -------
+   * Configure module resolution options, including polyfills for Node.js APIs
+   * that are used by dependencies but don't exist in the browser.
+   */
+  resolve: {
+    alias: {
+      // Polyfill Buffer for browser usage (needed by gray-matter)
+      buffer: 'buffer/'
+    }
+  },
+
+  /**
+   * DEFINE
+   * ------
+   * Define global constants that will be replaced during build.
+   * This provides a global Buffer implementation for gray-matter.
+   */
+  define: {
+    'global': 'globalThis',
+  },
+
+  /**
+   * BUILD OPTIONS
+   * -------------
+   * Configuration for the production build process.
+   */
+  build: {
+    /**
+     * ROLLUP OPTIONS
+     * --------------
+     * Vite uses Rollup under the hood for bundling in production.
+     * These options are passed directly to Rollup.
+     */
+    rollupOptions: {
+      output: {
+        /**
+         * MANUAL CHUNKS
+         * -------------
+         * Split code into separate chunks for better caching.
+         * Vendor libraries that don't change often are separated so browsers
+         * can cache them independently from your application code.
+         * 
+         * - react-vendor: Core React libraries
+         * - markdown-vendor: Markdown parsing and rendering libraries for the blog
+         */
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'markdown-vendor': ['react-markdown', 'rehype-highlight', 'remark-gfm']
+        }
+      }
+    }
+  }
+})
