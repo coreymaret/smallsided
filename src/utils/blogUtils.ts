@@ -1,6 +1,5 @@
 // src/utils/blogUtils.ts
 
-import matter from 'gray-matter';
 import type { BlogPostMetadata } from '../types/blog';
 
 // Import the generated posts index
@@ -12,49 +11,30 @@ export const getAllPosts = (): BlogPostMetadata[] => {
 };
 
 export const getPostBySlug = async (slug: string) => {
-  console.log('Looking for slug:', slug);
-  console.log('Available posts:', postsIndex);
-  
   const post = (postsIndex as BlogPostMetadata[]).find(p => p.slug === slug);
   
   if (!post) {
-    console.error('Post not found in index');
     return null;
   }
 
-  console.log('Found post:', post);
-
   try {
-    // Try multiple possible paths
-    const possiblePaths = [
-      `/src/content/blog/${post.fileName}`,
-      `../content/blog/${post.fileName}`,
-      `/content/blog/${post.fileName}`
-    ];
-
-    let rawContent = null;
-
-    for (const path of possiblePaths) {
-      try {
-        console.log('Trying path:', path);
-        const response = await fetch(path);
-        if (response.ok) {
-          rawContent = await response.text();
-          successPath = path;
-          console.log('Successfully loaded from:', path);
-          break;
-        }
-      } catch (e) {
-        console.log('Failed path:', path);
-      }
-    }
-
-    if (!rawContent) {
-      throw new Error('Could not load markdown file from any path');
-    }
+    // Import markdown files directly - Vite will handle this at build time
+    const modules = import.meta.glob('../content/blog/*.md', { as: 'raw' });
+    const path = `../content/blog/${post.fileName}`;
     
-    // Parse the markdown to separate frontmatter from content
-    const { content } = matter(rawContent);
+    if (!modules[path]) {
+      console.error('Markdown file not found:', path);
+      console.error('Available modules:', Object.keys(modules));
+      return null;
+    }
+
+    // Load the raw markdown content
+    const rawContent = await modules[path]();
+    
+    // Extract content after frontmatter (simple approach)
+    // Split by --- and take everything after the second ---
+    const parts = rawContent.split('---');
+    const content = parts.length >= 3 ? parts.slice(2).join('---').trim() : rawContent;
     
     return {
       ...post,
