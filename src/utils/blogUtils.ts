@@ -33,7 +33,6 @@ export const getPostBySlug = async (slug: string) => {
     ];
 
     let rawContent = null;
-    let successPath = null;
 
     for (const path of possiblePaths) {
       try {

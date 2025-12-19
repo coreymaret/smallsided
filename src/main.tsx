@@ -1,5 +1,7 @@
+// src/main.tsx
 import { Buffer } from 'buffer';
-window.Buffer = Buffer;
+// attach Buffer to the browser global
+;(window as any).Buffer = Buffer;
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
