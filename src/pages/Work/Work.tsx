@@ -4,7 +4,7 @@ const Work = () => (
   <>
     <SEO
         title="Work | Small Sided"
-        description="Learn about Small Sided and our mission to transform soccer training."
+        description="WORK DESCRIPTION. Learn about Small Sided and our mission to transform soccer training."
         type="website"
         url="/about"
       />

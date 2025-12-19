@@ -126,11 +126,18 @@
   .contactItem {
     cursor: pointer;                 /* Pointer cursor on hover */
     color: #ffffff;                  /* White text */
+
+    a {
+      text-decoration: none;
+    }
+
+    span {
     text-decoration-line: underline; /* Underline text */
     text-decoration-style: dotted;   /* Dotted underline */
     text-decoration-color: #98ED66;  /* Green underline */
     white-space: nowrap;             /* Prevent line breaks */
     text-underline-offset: 8px;      /* Offset underline for spacing */
+    }
 
     &.active {
       color: #ffffff;                /* Keep color same when active */
