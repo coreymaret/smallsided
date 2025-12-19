@@ -2,7 +2,7 @@
 title: "This is another post"
 date: "2025-12-18"
 description: "Lorem ipsum dolorat."
-slug: "this-is-another-post"
+slug: "this-is-cleanother-post"
 author: "Admin"
 tags: ["tactical"]
 featured: false

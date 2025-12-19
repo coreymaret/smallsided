@@ -1,8 +1,16 @@
 import styles from "./Home.module.scss";
 import Popup from '../../components/Popup/Popup'
+import SEO from '../../components/Blog/SEO';
 
 const Home = () => {
   return (
+    <>
+    <SEO
+        title="Small Sided | Small field. Big impact."
+        description="Learn about Small Sided and our mission to transform soccer training."
+        type="website"
+        url="/about"
+      />
     <div className={styles.homePage}>
       <section className={styles.homeSection}>
         <h1>Welcome to GreenTech Insights</h1>
@@ -59,6 +67,7 @@ const Home = () => {
       </section>
       <Popup />
     </div>
+    </>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MapPin, Phone, Mail, ThumbsUp, Facebook, Instagram, Youtube, Twitter } from 'lucide-react';
 import styles from './Contact.module.scss';
 import ContactMap from './ContactMap'; // import the map component
+import SEO from '../../components/Blog/SEO';
 
 const Contact: React.FC = () => {
   const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -22,6 +23,12 @@ const Contact: React.FC = () => {
 
   return (
     <>
+      <SEO
+        title="Contact | Small Sided"
+        description="Learn about Small Sided and our mission to transform soccer training."
+        type="website"
+        url="/about"
+      />
       <div className={styles.contactContainer}>
         {/* LEFT COLUMN */}
         <div className={styles.contactLeft}>

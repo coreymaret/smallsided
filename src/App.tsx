@@ -19,7 +19,8 @@ import CookiePolicy from './pages/CookiePolicy/CookiePolicy';
 import Subscribe from './components/Subscribe/Subscribe';
 import NotFound from './pages/NotFound/NotFound';
 import Blog from './pages/Blog/Blog';
-import BlogPost from './components/Blog/BlogPost'
+import BlogPost from './components/Blog/BlogPost';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
 
   return (
     <HelmetProvider>
+      <ScrollToTop />
       <Header />
       <main className="main-content">
         <Routes location={location} key={location.pathname}>
