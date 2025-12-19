@@ -10,43 +10,13 @@
       gtag('js', new Date());
       gtag('config', 'G-6RDDRZT1DN');
     </script>
-    <!-- Replace placeholders:
-    https://www.example.com/ → your site URL
-    og-image.jpg / twitter-image.jpg → your social images (1200x630px recommended)
-    @YourTwitterHandle → your Twitter handle
-    Google / Bing / Yandex verification codes
-    GA4 G-XXXXXXXXXX with your tracking ID
-    Logo URL in JSON-LD schema
-    Favicons / PWA: Make sure all images referenced exist in /public.
-    Social Images: Use simple branding and a consistent style; ensure they are at least 1200x630px for Open Graph and Twitter large card.
-    Structured Data: Helps Google understand your website and can enable rich results in search.
 
-    This <head> is full-stack ready for:
-    SEO & indexing
-    Social sharing (Facebook, LinkedIn, Twitter)
-    Mobile home screen / PWA support
-    Analytics & webmaster tools
-    Performance & accessibility-->
-
-    <!-- Title -->
-    <title>Small Sided | Small field. Big impact.</title>
-
-    <!-- ==========================
-        Basic HTML & SEO
-        ========================== -->
+    <!-- Basic HTML (required) -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Small field. Big impact.">
-    <meta name="keywords" content="soccer, small sided, sports, training, leagues, adult, youth, pickup">
-    <meta name="author" content="Small Sided">
-    <meta name="robots" content="index, follow">
-    <meta name="googlebot" content="index, follow">
-    <link rel="canonical" href="https://www.smallsided.com/">
 
-    <!-- ==========================
-        Favicons / App Icons / PWA
-        ========================== -->
+    <!-- Favicons / App Icons / PWA -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
     <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
@@ -56,58 +26,7 @@
     <meta name="msapplication-TileColor" content="#15141a">
     <meta name="msapplication-TileImage" content="/favicon-144x144.png">
 
-    <!-- ==========================
-        Open Graph (Facebook / LinkedIn)
-        ========================== -->
-    <meta property="og:title" content="Small Sided">
-    <meta property="og:description" content="Small field. Big impact.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.smallsided.com/">
-    <meta property="og:image" content="https://www.smallsided.com/og-image.jpg">
-    <meta property="og:image:alt" content="Small Sided Logo">
-    <meta property="og:site_name" content="Small Sided">
-
-    <!-- ==========================
-        Twitter Card
-        ========================== -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Small Sided">
-    <meta name="twitter:description" content="Small field. Big impact.">
-    <meta name="twitter:image" content="https://www.smallsided.com/twitter-image.jpg">
-    <meta name="twitter:image:alt" content="Small Sided Logo">
-    <meta name="twitter:site" content="@YourTwitterHandle">
-    <meta name="twitter:creator" content="@YourTwitterHandle">
-
-    <!-- ==========================
-        Structured Data (JSON-LD)
-        ========================== -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Small Sided",
-      "url": "https://www.smallsided.com/",
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Small Sided",
-      "url": "https://www.smallsided.com",
-      "logo": "https://www.smallsided.com/logo.png",
-      "sameAs": [
-        "https://www.facebook.com/SmallSided",
-        "https://twitter.com/SmallSided",
-        "https://www.instagram.com/SmallSided"
-      ]
-    }
-    </script>
-
-    <!-- ==========================
-        Misc / Performance / Accessibility
-        ========================== -->
+    <!-- Performance / Accessibility -->
     <meta name="color-scheme" content="light dark">
     <meta name="referrer" content="no-referrer-when-downgrade">
     <meta name="format-detection" content="telephone=no">
@@ -115,23 +34,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="//www.google-analytics.com">
 
-    <!-- Optional: alternate languages -->
-    <link rel="alternate" hreflang="en" href="https://www.smallsided.com/">
-    <link rel="alternate" hreflang="es" href="https://www.smallsided.com/es/">
-
-    <!-- ==========================
-        Analytics / Verification
-        ========================== -->
-    <!-- Google Site Verification -->
-    <meta name="google-site-verification" content="your-google-verification-code">
-
-    <!-- Bing Webmaster Verification -->
-    <meta name="msvalidate.01" content="your-bing-verification-code">
-
-    <!-- Yandex Webmaster -->
-    <meta name="yandex-verification" content="your-yandex-verification-code">
-
+    <!-- Syntax Highlighting for Blog -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+    <!-- 
+      NOTE: All SEO meta tags (title, description, keywords, OG tags, Twitter cards, 
+      canonical, robots, structured data) are now managed by react-helmet-async 
+      on a per-page basis. Do not add them here as they will conflict.
+    -->
   </head>
 
   <body>

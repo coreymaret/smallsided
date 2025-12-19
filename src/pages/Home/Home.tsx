@@ -1,16 +1,13 @@
 import styles from "./Home.module.scss";
 import Popup from '../../components/Popup/Popup'
 import SEO from '../../components/Blog/SEO';
+import { getSEOConfig } from '../../config/seo';
 
 const Home = () => {
+  const seo = getSEOConfig('home');
   return (
     <>
-    <SEO
-        title="Small Sided | Small field. Big impact."
-        description="Learn about Small Sided and our mission to transform soccer training."
-        type="website"
-        url="/about"
-      />
+    <SEO {...seo} />
     <div className={styles.homePage}>
       <section className={styles.homeSection}>
         <h1>Welcome to GreenTech Insights</h1>

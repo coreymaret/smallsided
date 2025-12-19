@@ -1,15 +1,12 @@
 import styles from "./About.module.scss";
 import SEO from '../../components/Blog/SEO';
+import { getSEOConfig } from '../../config/seo';
 
 const About = () => {
+  const seo = getSEOConfig('about');
   return (
     <>
-    <SEO
-        title="About Us | Small Sided"
-        description="Learn about Small Sided and our mission to transform soccer training."
-        type="website"
-        url="/about"
-      />
+    <SEO {...seo} />
     <div className={styles.aboutPage}>
     <h2>About</h2>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
