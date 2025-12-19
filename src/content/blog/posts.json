@@ -11,5 +11,30 @@
     ],
     "featured": true,
     "fileName": "2025-12-18-getting-started.md"
+  },
+  {
+    "title": "This is another post",
+    "date": "2025-12-18",
+    "description": "Lorem ipsum dolorat.",
+    "slug": "this-is-another-post",
+    "author": "Admin",
+    "tags": [
+      "tactical"
+    ],
+    "featured": false,
+    "fileName": "2025-12-18-this-is-another-post.md"
+  },
+  {
+    "title": "This is an earlier post",
+    "date": "2025-12-17",
+    "description": "Earlier post.",
+    "slug": "this-is-an-earlier-post",
+    "author": "Admin",
+    "tags": [
+      "technical",
+      "physical"
+    ],
+    "featured": false,
+    "fileName": "2025-12-17-this-is-an-earlier-post.md"
   }
 ]
