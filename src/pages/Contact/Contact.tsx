@@ -3,6 +3,7 @@ import { MapPin, Phone, Mail, ThumbsUp, Facebook, Instagram, Youtube, Twitter } 
 import styles from './Contact.module.scss';
 import ContactMap from './ContactMap'; // import the map component
 import SEO from '../../components/Blog/SEO';
+import ContactAccordion from '../../components/ContactAccordion/ContactAccordion';
 
 const Contact: React.FC = () => {
   const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -162,6 +163,7 @@ const Contact: React.FC = () => {
 <div className={styles.contactMapWrapper}>
   <ContactMap />
 </div>
+<ContactAccordion />
     </>
   );
 };
