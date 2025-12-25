@@ -4,7 +4,7 @@ date: "2025-12-17"
 description: "Earlier post."
 slug: "this-is-an-earlier-post"
 author: "Admin"
-tags: ["technical", "physical"]
+tags: ["technical", "physical", "announcement", "welcome"]
 featured: false
 ---
 

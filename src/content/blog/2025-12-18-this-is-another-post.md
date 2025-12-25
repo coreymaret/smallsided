@@ -4,7 +4,7 @@ date: "2025-12-18"
 description: "Lorem ipsum dolorat."
 slug: "this-is-cleanother-post"
 author: "Admin"
-tags: ["tactical"]
+tags: ["tactical", "announcement", "welcome"]
 featured: false
 ---
 

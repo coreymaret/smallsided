@@ -19,7 +19,9 @@
     "slug": "this-is-cleanother-post",
     "author": "Admin",
     "tags": [
-      "tactical"
+      "tactical",
+      "announcement",
+      "welcome"
     ],
     "featured": false,
     "fileName": "2025-12-18-this-is-another-post.md"
@@ -32,7 +34,9 @@
     "author": "Admin",
     "tags": [
       "technical",
-      "physical"
+      "physical",
+      "announcement",
+      "welcome"
     ],
     "featured": false,
     "fileName": "2025-12-17-this-is-an-earlier-post.md"

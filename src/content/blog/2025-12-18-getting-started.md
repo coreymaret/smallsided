@@ -10,7 +10,7 @@ featured: true
 
 Small-sided games have revolutionized youth soccer development over the past two decades. By reducing the number of players on the field, young athletes gain more touches on the ball, make more decisions, and develop faster than traditional 11v11 formats. Research consistently shows that players in small-sided games experience significantly more technical actions and tactical scenarios per session.
 
-<div class="table-wrapper">
+<div class="toc">
 
 ### Table of Contents
 
@@ -22,13 +22,13 @@ Small-sided games have revolutionized youth soccer development over the past two
 
 </div>
 
-## Why Small-Sided Games Matter {#why-ssg}
+## Why Small-Sided Games Matter
 
 Traditional 11v11 soccer on full-sized fields can be overwhelming for young players. In a typical youth game, a single player might only touch the ball 10-15 times in an entire match. This limited engagement severely restricts skill development and can lead to boredom and disengagement.
 
 Small-sided games solve this problem by creating environments where every player is constantly involved. In a 4v4 game, players might touch the ball 40-60 times per session. This increased engagement accelerates learning and keeps young players motivated and excited about the sport.
 
-## Age-Appropriate Formats {#age-formats}
+## Age-Appropriate Formats
 
 Different age groups benefit from different small-sided formats. Here's a breakdown of recommended structures by age:
 
@@ -39,7 +39,7 @@ Different age groups benefit from different small-sided formats. Here's a breakd
 | U11-U12 | 7v7 | 55x80 yards | 6x18 feet |
 | U13-U14 | 9v9 | 70x100 yards | 7x21 feet |
 
-## Key Benefits for Development {#benefits}
+## Key Benefits for Development
 
 ### Technical Development
 
@@ -62,13 +62,13 @@ Research shows that players in small-sided games maintain higher heart rates and
 
 More touches and involvement mean more confidence. Players who might fade into the background in 11v11 become key contributors in small-sided formats. This builds self-esteem and a love for the game that lasts a lifetime.
 
-## Implementation Strategies {#implementation}
+## Implementation Strategies
 
 Successfully implementing small-sided games requires thoughtful planning. Coaches should consider field dimensions, rest periods, and game duration carefully. Most experts recommend 15-20 minute games with built-in water breaks, especially for younger age groups.
 
 Modifying rules can enhance specific learning objectives. For example, restricting touches can improve quick decision-making, while removing offside encourages players to use the full depth of the field. The key is maintaining the fun and competitive nature of the game while targeting developmental goals.
 
-## Research and Evidence {#research}
+## Research and Evidence
 
 Multiple studies have validated the effectiveness of small-sided games. A 2018 study published in the Journal of Sports Sciences found that players in 4v4 formats had 135% more touches than those playing 11v11. Another study showed that small-sided games produced 260% more goals, providing more opportunities to practice finishing under match conditions.
 
