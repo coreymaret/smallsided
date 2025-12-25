@@ -4,9 +4,6 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 4rem 2rem;
-  margin-top: 160px;
-  margin-left: 1rem;
-  margin-right: 1rem;
 }
 
 .blog-page-loading {
@@ -124,3 +121,8 @@
     margin-bottom: 2rem;
   }
 }
+@media (max-width: 48.99rem) {
+    .blog-page-header {
+      margin-left: .25rem;
+      margin-right: .25rem;
+    }}

@@ -66,7 +66,7 @@ export default function Accordion() {
 
   return (
     <div className={styles.accordionContainer}>
-      <h2 className={styles.accordionHeading}>Frequently Asked Questions</h2>
+      <h2 className={styles.accordionHeading}>FAQs</h2>
       <div className={styles.accordionWrapper}>
         {accordionData.map((item, index) => (
           <AccordionItem

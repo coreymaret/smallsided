@@ -80,9 +80,6 @@ const BlogPost: React.FC = () => {
 
       <article className="blog-post">
         <header className="blog-post-header">
-          <Link to="/blog" className="blog-post-back-link">
-            ← Back to Blog
-          </Link>
 
           <h1 className="blog-post-title">{post.title}</h1>
 

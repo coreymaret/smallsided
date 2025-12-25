@@ -1,6 +1,61 @@
+# -----------------------------
+# NETLIFY BUILD CONFIGURATION
+# -----------------------------
+
 [build]
+  # The command Netlify runs to build your site.
+  # This is executed in the Netlify CI environment on every deploy.
+  #
+  # In this case:
+  # - npm installs dependencies
+  # - then runs the "build" script from package.json
+  #
+  # Example from package.json:
+  # "scripts": {
+  #   "build": "vite build"
+  # }
+  #
+  # Netlify expects this command to produce static files
+  # that can be served to users.
   command = "npm run build"
+
+  # The directory that Netlify will deploy to production.
+  #
+  # After the build command finishes, Netlify looks here
+  # for the final output files (HTML, JS, CSS, assets).
+  #
+  # Common values:
+  # - "dist" (Vite, Astro, Vue, React w/ Vite)
+  # - "build" (Create React App)
+  # - "public" (custom setups)
+  #
+  # IMPORTANT:
+  # If this folder name does not match your build output,
+  # your site will deploy but appear blank or 404.
   publish = "dist"
 
+# -------------------------------------
+# BUILD ENVIRONMENT CONFIGURATION
+# -------------------------------------
+
 [build.environment]
+  # Netlify automatically scans environment variables
+  # during builds to detect exposed secrets (API keys, tokens).
+  #
+  # Vite exposes client-side environment variables that start
+  # with VITE_ to the browser by design.
+  #
+  # This line tells Netlify:
+  # "Do NOT fail the build if you see this key."
+  #
+  # Use this ONLY for keys that are:
+  # - Intended to be public
+  # - Restricted by domain, referrer, or usage limits
+  #
+  # In this case:
+  # VITE_GOOGLE_MAPS_KEY is expected to be used in frontend JS,
+  # so Netlify's secret scanner is intentionally bypassed.
+  #
+  # ⚠️ WARNING:
+  # Never omit scanning for private server-side keys.
   SECRETS_SCAN_OMIT_KEYS = "VITE_GOOGLE_MAPS_KEY"
