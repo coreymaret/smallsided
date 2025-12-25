@@ -13,13 +13,13 @@ const AccordionItem = ({ title, content, isOpen, onToggle }: AccordionItemProps)
   return (
     <div 
       className={`${styles.accordionItem} ${isOpen ? styles.open : ''}`}
-      style={{ borderRadius: '1rem' }}
+      style={{ borderRadius: '.5rem' }}
     >
       <button
         onClick={onToggle}
         className={styles.accordionButton}
         style={{
-          borderRadius: isOpen ? '1rem 1rem 0 0' : '1rem'
+          borderRadius: isOpen ? '.5rem .5rem 0 0' : '.5rem'
         }}
       >
         <span className={styles.accordionTitle}>{title}</span>
