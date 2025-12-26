@@ -14,11 +14,11 @@ Small-sided games have revolutionized youth soccer development over the past two
 
 ### Table of Contents
 
-1. [Why Small-Sided Games Matter](#why-ssg)
-2. [Age-Appropriate Formats](#age-formats)
-3. [Key Benefits for Development](#benefits)
-4. [Implementation Strategies](#implementation)
-5. [Research and Evidence](#research)
+1. [Why Small-Sided Games Matter](#why-small-sided-games-matter)
+2. [Age-Appropriate Formats](#age-appropriate-formats)
+3. [Key Benefits for Development](#key-benefits-for-development)
+4. [Implementation Strategies](#implementation-strategies)
+5. [Research and Evidence](#research-and-evidence)
 
 </div>
 

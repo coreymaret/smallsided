@@ -8,7 +8,7 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
-import { Twitter, Linkedin, Facebook, Link as LinkIcon } from 'lucide-react';
+import { Twitter, Linkedin, Facebook, Link as LinkIcon, Check } from 'lucide-react';
 import { getPostBySlug, getAllPosts } from '../../utils/blogUtils';
 import type { BlogPost as BlogPostType } from '../../types/blog';
 import SEO from '../Blog/SEO';
@@ -141,21 +141,38 @@ const BlogPost: React.FC = () => {
 
       <article className="blog-post">
         <div className="floating-share">
-          <button onClick={() => handleShare('twitter')}>
-            <Twitter size={22} />
+          <button 
+            className="share-button share-twitter"
+            onClick={() => handleShare('twitter')}
+            aria-label="Share on Twitter"
+          >
+            <Twitter size={20} />
           </button>
-          <button onClick={() => handleShare('linkedin')}>
-            <Linkedin size={22} />
+          <button 
+            className="share-button share-linkedin"
+            onClick={() => handleShare('linkedin')}
+            aria-label="Share on LinkedIn"
+          >
+            <Linkedin size={20} />
           </button>
-          <button onClick={() => handleShare('facebook')}>
-            <Facebook size={22} />
+          <button 
+            className="share-button share-facebook"
+            onClick={() => handleShare('facebook')}
+            aria-label="Share on Facebook"
+          >
+            <Facebook size={20} />
           </button>
-          <button onClick={handleCopyLink}>
-            <LinkIcon size={22} />
+          <button 
+            className="share-button share-link"
+            onClick={handleCopyLink}
+            aria-label="Copy link"
+          >
+            {copied ? <Check size={20} /> : <LinkIcon size={20} />}
           </button>
         </div>
 
         <header className="blog-post-header">
+
           <h1 className="blog-post-title">{post.title}</h1>
 
           <div className="blog-post-meta">
@@ -189,13 +206,7 @@ const BlogPost: React.FC = () => {
                 <div style={{ overflowX: 'auto', display: 'flex', justifyContent: 'center' }}>
                   <table>{children}</table>
                 </div>
-              ),
-              a: ({ node, ...props }) => {
-                if ((node as any)?.properties?.href && (node as any)?.parent?.properties?.className?.includes('toc')) {
-                  return <a {...props} style={{ color: '#15141a' }} />;
-                }
-                return <a {...props} />;
-              }
+              )
             }}
           >
             {post.content || ''}
@@ -227,7 +238,7 @@ const BlogPost: React.FC = () => {
               <Facebook size={18} /> Facebook
             </button>
             <button className="share-button-large share-link" onClick={handleCopyLink}>
-              <LinkIcon size={18} /> {copied ? 'Copied!' : 'Copy Link'}
+              {copied ? <Check size={18} /> : <LinkIcon size={18} />} {copied ? 'Copied!' : 'Copy Link'}
             </button>
           </div>
         </div>
