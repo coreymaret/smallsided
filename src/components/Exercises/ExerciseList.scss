@@ -28,7 +28,7 @@
 .exercise-card {
   background: #fff;
   border: 2px solid #15141a;
-  border-radius: 1.5rem;
+  border-radius: 0.5rem;
   overflow: hidden;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(21, 20, 26, 0.08);
@@ -36,7 +36,6 @@
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 24px rgba(21, 20, 26, 0.15);
-    border-color: #98ED66;
   }
 }
 
@@ -44,10 +43,23 @@
   text-decoration: none;
   color: inherit;
   display: block;
-  padding: 2rem;
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.exercise-card-image {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, #98ED66 0%, #15141a 100%);
+  flex-shrink: 0;
+}
+
+.exercise-card-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .exercise-card-header {
@@ -80,27 +92,6 @@
   flex-shrink: 0;
 }
 
-.exercise-card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.875rem;
-  color: rgba(21, 20, 26, 0.7);
-  margin-bottom: 1rem;
-}
-
-.exercise-card-meta-item {
-  strong {
-    font-weight: 600;
-    color: #15141a;
-  }
-}
-
-.exercise-card-separator {
-  color: rgba(21, 20, 26, 0.3);
-}
-
 .exercise-card-description {
   color: rgba(21, 20, 26, 0.8);
   font-size: 1rem;
@@ -109,42 +100,36 @@
   flex-grow: 1;
 }
 
-.exercise-card-details {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+.exercise-card-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
   margin-bottom: 1.25rem;
   padding: 1rem;
   background: rgba(152, 237, 102, 0.05);
   border-radius: 0.5rem;
-  font-size: 0.875rem;
 }
 
-.exercise-card-detail {
-  color: rgba(21, 20, 26, 0.7);
-
-  .detail-label {
-    font-weight: 600;
-    color: #15141a;
-  }
-}
-
-.exercise-card-tags {
+.meta-grid-item {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1.25rem;
-}
+  color: rgba(21, 20, 26, 0.8);
+  font-size: 0.875rem;
+  font-weight: 500;
 
-.exercise-card-tag {
-  background: #15141a;
-  color: #98ED66;
-  padding: 0.375rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  .meta-icon {
+    color: #15141a;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    background: none !important;
+    border-radius: 0 !important;
+  }
+
+  span {
+    line-height: 1.4;
+  }
 }
 
 .exercise-card-read-more {
@@ -158,7 +143,6 @@
   transition: all 0.3s ease;
 
   .exercise-card:hover & {
-    color: #98ED66;
     gap: 0.75rem;
   }
 }

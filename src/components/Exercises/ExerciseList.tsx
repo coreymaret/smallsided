@@ -1,6 +1,7 @@
 // src/components/exercises/ExerciseList.tsx
 
 import { Link } from 'react-router-dom';
+import { Users, UserPlus, Clock, MapPin, Gauge, RefreshCcw } from 'lucide-react';
 import type { ExerciseMetadata } from '../../types/exercises'
 import './ExerciseList.scss';
 
@@ -22,54 +23,51 @@ const ExerciseList: React.FC<ExerciseListProps> = ({ exercises }) => {
       {exercises.map((exercise) => (
         <article key={exercise.slug} className="exercise-card">
           <Link to={`/exercises/${exercise.slug}`} className="exercise-card-link">
-            <div className="exercise-card-header">
-              <h2 className="exercise-card-title">{exercise.title}</h2>
-              {exercise.featured && (
-                <span className="exercise-card-badge">Featured</span>
-              )}
-            </div>
-            
-            <div className="exercise-card-meta">
-              <span className="exercise-card-meta-item">
-                <strong>Age:</strong> {exercise.ageGroup}
-              </span>
-              <span className="exercise-card-separator">•</span>
-              <span className="exercise-card-meta-item">
-                <strong>Players:</strong> {exercise.playersRequired}
-              </span>
-              <span className="exercise-card-separator">•</span>
-              <span className="exercise-card-meta-item">
-                <strong>Time:</strong> {exercise.exerciseTime}
-              </span>
+            <div className="exercise-card-image">
+              {/* Placeholder image - replace with actual image later */}
             </div>
 
-            <p className="exercise-card-description">{exercise.description}</p>
-
-            <div className="exercise-card-details">
-              <span className="exercise-card-detail">
-                <span className="detail-label">Location:</span> {exercise.fieldLocation}
-              </span>
-              <span className="exercise-card-detail">
-                <span className="detail-label">Phase:</span> {exercise.phaseOfPlay}
-              </span>
-              <span className="exercise-card-detail">
-                <span className="detail-label">Difficulty:</span> {exercise.difficulty}
-              </span>
-            </div>
-
-            {exercise.tags.length > 0 && (
-              <div className="exercise-card-tags">
-                {exercise.tags.map((tag) => (
-                  <span key={tag} className="exercise-card-tag">
-                    {tag}
-                  </span>
-                ))}
+            <div className="exercise-card-content">
+              <div className="exercise-card-header">
+                <h2 className="exercise-card-title">{exercise.title}</h2>
+                {exercise.featured && (
+                  <span className="exercise-card-badge">Featured</span>
+                )}
               </div>
-            )}
 
-            <span className="exercise-card-read-more">
-              View exercise →
-            </span>
+              <p className="exercise-card-description">{exercise.description}</p>
+
+              <div className="exercise-card-meta-grid">
+                <div className="meta-grid-item">
+                  <Users size={16} className="meta-icon" />
+                  <span>{exercise.ageGroup}</span>
+                </div>
+                <div className="meta-grid-item">
+                  <UserPlus size={16} className="meta-icon" />
+                  <span>{exercise.playersRequired}</span>
+                </div>
+                <div className="meta-grid-item">
+                  <Clock size={16} className="meta-icon" />
+                  <span>{exercise.exerciseTime}</span>
+                </div>
+                <div className="meta-grid-item">
+                  <MapPin size={16} className="meta-icon" />
+                  <span>{exercise.fieldLocation}</span>
+                </div>
+                <div className="meta-grid-item">
+                  <Gauge size={16} className="meta-icon" />
+                  <span>{exercise.difficulty}</span>
+                </div>
+                <div className="meta-grid-item">
+                  <RefreshCcw size={16} className="meta-icon" />
+                  <span>{exercise.phaseOfPlay}</span>
+                </div>
+              </div>
+
+              <span className="exercise-card-read-more">
+                View exercise →
+              </span>
+            </div>
           </Link>
         </article>
       ))}
