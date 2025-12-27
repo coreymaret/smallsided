@@ -1,0 +1,579 @@
+// src/components/exercises/ExerciseDetail.scss
+
+.exercise-detail {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  margin-top: 160px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #98ED66;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+  background: #15141a;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid #15141a;
+  margin-bottom: 2rem;
+
+  &:hover {
+    color: #fff;
+    border-color: #98ED66;
+  }
+}
+
+.exercise-loading,
+.exercise-error {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+.exercise-spinner {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.5rem;
+  border: 4px solid rgba(21, 20, 26, 0.1);
+  border-top-color: #98ED66;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.exercise-error {
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #15141a;
+    font-weight: 700;
+  }
+
+  p {
+    color: rgba(21, 20, 26, 0.6);
+    margin-bottom: 2rem;
+    font-size: 1.125rem;
+  }
+}
+
+.exercise-header {
+  margin-bottom: 3rem;
+}
+
+.exercise-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #15141a;
+  margin-bottom: 1.5rem;
+}
+
+// Meta Container
+.exercise-meta-container {
+  background: #fff;
+  border: 2px solid #15141a;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  margin-bottom: 3rem;
+}
+
+.meta-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1 1 calc(33.333% - 1rem);
+  min-width: 200px;
+}
+
+.meta-icon {
+  width: 40px;
+  height: 40px;
+  background: #15141a;
+  color: #98ED66;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.meta-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.meta-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(21, 20, 26, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.meta-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #15141a;
+}
+
+// Accordion Styles
+.accordionContainer {
+  background: #fff;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.accordionHeading {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #15141a;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.accordionWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.accordionItem {
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.accordionButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #f3f4f6;
+  color: #15141a;
+  border-radius: 0.5rem;
+
+  .accordionItem.open & {
+    background-color: #15141a;
+    color: #98ED66;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+  &:hover:not(.accordionItem.open &) {
+    background-color: #e5e7eb;
+  }
+}
+
+.accordionTitleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.accordionTitle {
+  font-weight: 500;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.chevron {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+
+  &.rotate {
+    transform: rotate(180deg);
+  }
+}
+
+.accordionContent {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease, padding 0.4s ease;
+
+  &.expanded {
+    max-height: 100rem;
+    opacity: 1;
+  }
+}
+
+.accordionContentInner {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  background-color: #f9fafb;
+  border-radius: 0 0 0.5rem 0.5rem;
+
+  p {
+    color: #374151;
+    margin: 0.5rem 0;
+  }
+
+  ul, ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+    color: #374151;
+  }
+
+  li {
+    margin: 0.5rem 0;
+  }
+
+  strong {
+    color: #15141a;
+  }
+
+  // Subsection icons for Objective
+  h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #15141a;
+    font-weight: 700;
+    margin-top: 1rem;
+    font-size: 1rem;
+
+    &::before {
+      content: "→";
+      color: #98ED66;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+  }
+
+  // Bold subsections in Setup and Progressions
+  p strong:first-child {
+    display: block;
+    color: #15141a;
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  // Setup items with icons - matching Coaching Points style exactly
+  .setup-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: rgba(152, 237, 102, 0.05);
+    border-radius: 0.5rem;
+
+    .setup-icon {
+      width: 28px;
+      height: 28px;
+      background: #15141a;
+      color: #98ED66;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .setup-content {
+      flex: 1;
+
+      p {
+        margin: 0;
+      }
+
+      strong {
+        display: inline;
+        color: #15141a;
+        font-weight: 700;
+      }
+
+      ul {
+        margin: 0.5rem 0 0 0;
+        padding-left: 1.5rem;
+      }
+
+      li {
+        margin: 0.25rem 0;
+      }
+    }
+  }
+
+  // Coaching Points - styled numbers
+  ol > li {
+    position: relative;
+    list-style: none;
+    counter-increment: coaching-point;
+    margin: 0 0 0.75rem 0 !important;
+    padding: 0.75rem 1rem !important;
+    background: rgba(152, 237, 102, 0.05);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    &::before {
+      content: counter(coaching-point);
+      width: 28px;
+      height: 28px;
+      background: #15141a;
+      color: #98ED66;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    // Override default paragraph margins inside list items
+    p {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    strong {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+
+  ol {
+    counter-reset: coaching-point;
+    padding-left: 0 !important;
+    margin: 0 !important;
+  }
+
+  // Progressions - use exact same styling as Coaching Points
+  .progressions-list {
+    counter-reset: coaching-point;
+    padding-left: 0;
+    margin: 0;
+
+    li {
+      position: relative;
+      list-style: none;
+      counter-increment: coaching-point;
+      margin-left: 0;
+      padding: 0.75rem 1rem;
+      background: rgba(152, 237, 102, 0.05);
+      border-radius: 0.5rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      &::before {
+        content: counter(coaching-point);
+        width: 28px;
+        height: 28px;
+        background: #15141a;
+        color: #98ED66;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.875rem;
+        flex-shrink: 0;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      strong {
+        display: inline;
+        color: #15141a;
+        font-weight: 700;
+      }
+    }
+  }
+
+  // Table styling
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  th, td {
+    border: 2px solid rgba(21, 20, 26, 0.1);
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+
+  th {
+    background: #15141a;
+    color: #b4ff80;
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+
+  td {
+    color: #374151;
+  }
+}
+
+// Content Section
+.content-section {
+  background: #fff;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #15141a;
+  margin-bottom: 1.5rem;
+}
+
+.section-content {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #15141a;
+
+  p {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Share Section (EXACT same styling as content-section)
+.share-section {
+  background: #fff;
+  border: 2px solid #15141a;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto 3rem auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.share-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #15141a;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+.share-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.share-button-large {
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid #15141a;
+  background: #fff;
+  color: #15141a;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: #15141a;
+    color: #98ED66;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(21, 20, 26, 0.2);
+  }
+}
+
+// Exercise Footer
+.exercise-footer {
+  text-align: center;
+  padding: 2rem;
+  margin-top: 2rem;
+
+  .back-link {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .exercise-title {
+    font-size: 2rem;
+  }
+
+  .meta-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .meta-item {
+    flex: unset;
+    min-width: unset;
+  }
+
+  .accordionContainer {
+    padding: 1.5rem;
+  }
+
+  .content-section {
+    padding: 1.5rem;
+  }
+
+  .share-section {
+    padding: 2rem 1.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .share-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

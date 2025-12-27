@@ -5,7 +5,7 @@ import Footer from './components/Footer/Footer';
 import CookiePopup from './components/CookiePopup/CookiePopup'
 import Home from './pages/Home/Home';
 import About from './pages/About/About';
-import Services from './pages/Services/Services';
+import Exercises from './pages/Exercises/Exercises';
 import Work from './pages/Work/Work';
 import Contact from './pages/Contact/Contact';
 import PlayerEducation from './pages/PlayerEducation/PlayerEducation';
@@ -13,6 +13,7 @@ import ParentEducation from './pages/ParentEducation/ParentEducation';
 import CoachEducation from './pages/CoachEducation/CoachEducation';
 import Consulting from './pages/Consulting/Consulting';
 import Resources from './pages/Resources/Resources';
+import ExerciseDetail from './components/Exercises/ExerciseDetail';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 import TOS from './pages/TOS/TOS';
 import CookiePolicy from './pages/CookiePolicy/CookiePolicy';
@@ -34,7 +35,8 @@ const App = () => {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
+          <Route path="/exercises" element={<Exercises />} />
+          <Route path="/exercises/:slug" element={<ExerciseDetail />} />
           <Route path="/work" element={<Work />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/PlayerEducation" element={<PlayerEducation />} />
