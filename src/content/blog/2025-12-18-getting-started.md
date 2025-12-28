@@ -4,6 +4,7 @@ date: "2025-12-18"
 description: "Welcome to our blog! Learn what we'll be covering and how to stay updated."
 slug: "getting-started"
 author: "Admin"
+authorImage: ""
 tags: ["announcement", "welcome"]
 featured: true
 ---

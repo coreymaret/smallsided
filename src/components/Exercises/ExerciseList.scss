@@ -27,15 +27,16 @@
 
 .exercise-card {
   background: #fff;
-  border: 2px solid #15141a;
+  border: 2px solid rgba(21, 20, 26, 0.1);
   border-radius: 0.5rem;
   overflow: hidden;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(21, 20, 26, 0.08);
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(21, 20, 26, 0.15);
+    box-shadow: 0 20px 40px rgba(21, 20, 26, 0.15);
+    border-color: #15141a;
+    transform: translateY(-8px);
   }
 }
 
@@ -51,7 +52,6 @@
 .exercise-card-image {
   width: 100%;
   height: 200px;
-  background: linear-gradient(135deg, #98ED66 0%, #15141a 100%);
   flex-shrink: 0;
 }
 

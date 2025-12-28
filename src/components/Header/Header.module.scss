@@ -119,6 +119,11 @@
             opacity: 0;
             transition: transform 0.5s ease, opacity 0.5s ease;
             &:hover { color: #98ed66; background-color: rgba(255,255,255,0.05); }
+            
+            // Active link styling for mobile
+            &.active {
+              color: #98ed66;
+            }
           }
         }
 
@@ -248,6 +253,11 @@
             transition: color 0.3s ease;
             
             &:hover {
+              color: #98ed66;
+            }
+
+            // Active link styling for desktop
+            &.active {
               color: #98ed66;
             }
           }

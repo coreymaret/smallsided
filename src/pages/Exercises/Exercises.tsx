@@ -37,13 +37,6 @@ const Exercises = () => {
       />
 
       <div className="exercises-page">
-        <div className="exercises-hero">
-          <h1 className="exercises-title">Tactical Sessions</h1>
-          <p className="exercises-description">
-            Comprehensive training exercises designed to develop intelligent, technical players through structured, age-appropriate sessions.
-          </p>
-        </div>
-
         {loading ? (
           <div className="exercises-loading">
             <div className="exercises-spinner"></div>

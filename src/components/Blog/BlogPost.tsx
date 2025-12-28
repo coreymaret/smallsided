@@ -8,7 +8,7 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
-import { Twitter, Linkedin, Facebook, Link as LinkIcon, Check } from 'lucide-react';
+import { Twitter, Linkedin, Facebook, Link as LinkIcon, Check, ArrowLeft } from 'lucide-react';
 import { getPostBySlug, getAllPosts } from '../../utils/blogUtils';
 import type { BlogPost as BlogPostType } from '../../types/blog';
 import SEO from '../Blog/SEO';
@@ -172,13 +172,33 @@ const BlogPost: React.FC = () => {
         </div>
 
         <header className="blog-post-header">
-
           <h1 className="blog-post-title">{post.title}</h1>
 
           <div className="blog-post-meta">
             <time dateTime={post.date}>{formatDate(post.date)}</time>
             <span className="blog-post-separator">•</span>
-            <span className="blog-post-author">{post.author}</span>
+            <div className="blog-post-author-wrapper">
+              {post.authorImage ? (
+                <div className="blog-post-author-avatar">
+                  <img 
+                    src={post.authorImage} 
+                    alt={post.author}
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const fallback = e.currentTarget.parentElement?.nextElementSibling;
+                      if (fallback) (fallback as HTMLElement).style.display = 'flex';
+                    }}
+                  />
+                </div>
+              ) : null}
+              <div 
+                className="blog-post-author-fallback"
+                style={{ display: post.authorImage ? 'none' : 'flex' }}
+              >
+                {post.author.charAt(0).toUpperCase()}
+              </div>
+              <span className="blog-post-author">{post.author}</span>
+            </div>
           </div>
 
           {post.tags.length > 0 && (
@@ -274,7 +294,8 @@ const BlogPost: React.FC = () => {
 
         <footer className="blog-post-footer">
           <Link to="/blog" className="blog-post-footer-link">
-            ← Back to all posts
+            <ArrowLeft size={20} />
+            Back to all posts
           </Link>
         </footer>
       </article>

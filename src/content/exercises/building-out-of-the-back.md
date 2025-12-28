@@ -2,6 +2,7 @@
 title: "Building Out of the Back"
 slug: "building-out-of-the-back"
 description: "Develop players' ability to build possession from the defensive third through structured patterns and intelligent decision-making."
+heroImage: ""
 ageGroup: "U12-U16"
 playersRequired: "8-11 Players"
 exerciseTime: "20-25 Min"

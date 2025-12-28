@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 // React hooks for state, DOM references, and lifecycle behavior
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 // Used for internal navigation without reloading the page
 
 import { Facebook, Instagram, Youtube, Twitter } from "lucide-react";
@@ -18,6 +18,9 @@ import TopToggleBar from "../TopToggleBar/TopToggleBar";
 
 
 const Header = () => {
+  // Get current location to determine active link
+  const location = useLocation();
+
   // Tracks the state of the mobile menu: open → closing → closed
   const [menuState, setMenuState] =
     useState<"open" | "closing" | "closed" | undefined>("closed");
@@ -144,6 +147,15 @@ const Header = () => {
   };
 
 
+  // Helper function to check if a link is active
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return location.pathname === "/";
+    }
+    return location.pathname.startsWith(path);
+  };
+
+
   // -----------------------------
   // RENDER
   // -----------------------------
@@ -187,12 +199,60 @@ const Header = () => {
           {/* ----------------------------- */}
           <div className={styles.linksSection}>
             <ul>
-              <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
-              <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
-              <li><Link to="/exercises" onClick={handleLinkClick}>Exercises</Link></li>
-              <li><Link to="/work" onClick={handleLinkClick}>Work</Link></li>
-              <li><Link to="/blog" onClick={handleLinkClick}>Blog</Link></li>
-              <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
+              <li>
+                <Link 
+                  to="/" 
+                  onClick={handleLinkClick}
+                  className={isActive("/") ? styles.active : ""}
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/about" 
+                  onClick={handleLinkClick}
+                  className={isActive("/about") ? styles.active : ""}
+                >
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/exercises" 
+                  onClick={handleLinkClick}
+                  className={isActive("/exercises") ? styles.active : ""}
+                >
+                  Exercises
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/work" 
+                  onClick={handleLinkClick}
+                  className={isActive("/work") ? styles.active : ""}
+                >
+                  Work
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/blog" 
+                  onClick={handleLinkClick}
+                  className={isActive("/blog") ? styles.active : ""}
+                >
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/contact" 
+                  onClick={handleLinkClick}
+                  className={isActive("/contact") ? styles.active : ""}
+                >
+                  Contact
+                </Link>
+              </li>
 
               {/* Call-to-action button in menu */}
               <li className={styles.ctaItem}>

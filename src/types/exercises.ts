@@ -12,6 +12,7 @@ export interface ExerciseMetadata {
   difficulty: string;
   tags: string[];
   featured?: boolean;
+  heroImage?: string;
 }
 
 export interface Exercise extends ExerciseMetadata {

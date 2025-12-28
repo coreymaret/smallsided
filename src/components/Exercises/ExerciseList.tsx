@@ -23,8 +23,18 @@ const ExerciseList: React.FC<ExerciseListProps> = ({ exercises }) => {
       {exercises.map((exercise) => (
         <article key={exercise.slug} className="exercise-card">
           <Link to={`/exercises/${exercise.slug}`} className="exercise-card-link">
-            <div className="exercise-card-image">
-              {/* Placeholder image - replace with actual image later */}
+            <div 
+              className="exercise-card-image"
+              style={{
+                backgroundImage: exercise.heroImage 
+                  ? `url(${exercise.heroImage})`
+                  : 'linear-gradient(135deg, #98ED66 0%, #15141a 100%)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            >
+              {/* Placeholder gradient shown when no heroImage is provided */}
             </div>
 
             <div className="exercise-card-content">

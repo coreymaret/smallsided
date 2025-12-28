@@ -23,6 +23,7 @@ const ExerciseDetail: React.FC = () => {
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const loadExercise = async () => {
@@ -49,6 +50,20 @@ const ExerciseDetail: React.FC = () => {
 
     loadExercise();
   }, [slug]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.scrollY;
+      const trackLength = documentHeight - windowHeight;
+      const progress = (scrollTop / trackLength) * 100;
+      setScrollProgress(Math.min(progress, 100));
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const shareUrl = window.location.href;
   const shareTitle = exercise?.title || '';
@@ -118,6 +133,13 @@ const ExerciseDetail: React.FC = () => {
         tags={exercise.tags}
       />
 
+      <div className="reading-progress-bar">
+        <div
+          className="reading-progress-fill"
+          style={{ width: `${scrollProgress}%` }}
+        ></div>
+      </div>
+
       <article className="exercise-detail">
         <div className="floating-share">
           <button 
@@ -151,8 +173,23 @@ const ExerciseDetail: React.FC = () => {
         </div>
 
         <div className="container">
+          <div 
+            className="exercise-hero-image"
+            style={{
+              backgroundImage: exercise.heroImage 
+                ? `url(${exercise.heroImage})`
+                : 'linear-gradient(135deg, #98ED66 0%, #15141a 100%)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            {/* Placeholder gradient shown when no heroImage is provided */}
+          </div>
+          
           <header className="exercise-header">
             <h1 className="exercise-title">{exercise.title}</h1>
+            <p className="exercise-description">{exercise.description}</p>
           </header>
 
           {/* Meta Information */}
