@@ -55,12 +55,12 @@ const ExerciseList: React.FC<ExerciseListProps> = ({ exercises }) => {
                   <span>{exercise.fieldLocation}</span>
                 </div>
                 <div className="meta-grid-item">
-                  <Gauge size={16} className="meta-icon" />
-                  <span>{exercise.difficulty}</span>
-                </div>
-                <div className="meta-grid-item">
                   <RefreshCcw size={16} className="meta-icon" />
                   <span>{exercise.phaseOfPlay}</span>
+                </div>
+                <div className="meta-grid-item">
+                  <Gauge size={16} className="meta-icon" />
+                  <span>{exercise.difficulty}</span>
                 </div>
               </div>
 
