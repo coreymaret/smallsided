@@ -146,11 +146,6 @@
     transform: translateX(4px);
   }
 
-  &::after {
-    content: '→';
-    transition: transform 0.3s ease;
-  }
-
   .blog-card-link:hover &::after {
     transform: translateX(4px);
   }

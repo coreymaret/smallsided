@@ -5,7 +5,7 @@ import { getAllExercises } from '../../utils/exerciseUtils';
 import type { ExerciseMetadata } from '../../types/exercises';
 import ExerciseList from '../../components/Exercises/ExerciseList'
 import SEO from '../../components/Blog/SEO';
-import './Exercises.module.scss';
+import styles from './Exercises.module.scss';
 
 const Exercises = () => {
   const [exercises, setExercises] = useState<ExerciseMetadata[]>([]);
@@ -26,6 +26,15 @@ const Exercises = () => {
     loadExercises();
   }, []);
 
+  if (loading) {
+    return (
+      <div className={styles['exercises-page-loading']}>
+        <div className={styles['exercises-page-spinner']}></div>
+        <p>Loading exercises...</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <SEO
@@ -36,15 +45,15 @@ const Exercises = () => {
         keywords="soccer training, tactical exercises, youth development, coaching drills"
       />
 
-      <div className="exercises-page">
-        {loading ? (
-          <div className="exercises-loading">
-            <div className="exercises-spinner"></div>
-            <p>Loading exercises...</p>
-          </div>
-        ) : (
-          <ExerciseList exercises={exercises} />
-        )}
+      <div className={styles['exercises-page']}>
+        <header className={styles['exercises-page-header']}>
+          <h1 className={styles['exercises-page-title']}>Exercises</h1>
+          <p className={styles['exercises-page-description']}>
+            Professional training exercises designed to develop intelligent, technical players
+          </p>
+        </header>
+
+        <ExerciseList exercises={exercises} />
       </div>
     </>
   );
