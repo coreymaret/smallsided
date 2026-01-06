@@ -8,6 +8,26 @@
   position: relative;
 }
 
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.blog-post-hero-image {
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 1rem;
+  margin-bottom: 3rem;
+
+  &.gradient-fallback {
+    background: linear-gradient(135deg, #98ED66 0%, #15141a 100%);
+  }
+}
+
 // Reading Progress Bar
 .reading-progress-bar {
   position: fixed;
@@ -64,7 +84,6 @@
 
 .blog-post-header {
   margin-bottom: 4rem;
-  padding: 0 2rem;
 }
 
 .blog-post-title {
@@ -192,12 +211,12 @@
   background: #fff;
   border-radius: 1.5rem;
   padding: 3rem;
-  margin: 0 2rem;
   box-shadow: 0 10px 30px rgba(21, 20, 26, 0.1);
   border: 1px solid rgba(21, 20, 26, 0.1);
   font-size: 1.125rem;
   line-height: 1.8;
   color: #15141a;
+  margin-bottom: 2rem;
 
   h1, h2, h3, h4, h5, h6 {
     color: #15141a;
@@ -375,7 +394,7 @@
   background: #fff;
   border-radius: 1.5rem;
   padding: 2.5rem;
-  margin: 2rem 2rem 0 2rem;
+  margin-bottom: 2rem;
   border: 2px solid #15141a;
   display: flex;
   gap: 2rem;
@@ -417,7 +436,7 @@
 // Share Section (Bottom)
 .share-section {
   padding: 2.5rem;
-  margin: 2rem 2rem 0 2rem;
+  margin-bottom: 2rem;
   background: #fff;
   border-radius: 1.5rem;
   border: 2px solid #15141a;
@@ -467,8 +486,7 @@
 
 // Related Posts Carousel
 .related-posts {
-  padding: 3rem 2rem;
-  margin-top: 2rem;
+  padding: 3rem 0;
 }
 
 .related-posts-title {
@@ -593,7 +611,7 @@
 
 .blog-post-footer {
   margin-top: 1rem;
-  padding: 3rem 2rem 2rem 2rem;
+  padding: 3rem 0 2rem 0;
   display: flex;
   justify-content: center;
 }
@@ -629,8 +647,17 @@
     padding: 0;
   }
 
-  .blog-post-header {
+  .container {
     padding: 0 1rem;
+  }
+
+  .blog-post-hero-image {
+    height: 250px;
+    margin-bottom: 2rem;
+  }
+
+  .blog-post-header {
+    padding: 0;
   }
 
   .blog-post-title {
@@ -640,7 +667,6 @@
   .blog-post-content {
     font-size: 1rem;
     padding: 2rem 1.5rem;
-    margin: 0 1rem;
 
     h1 { font-size: 2rem; }
     h2 { font-size: 1.75rem; }
@@ -651,12 +677,10 @@
   .author-box {
     flex-direction: column;
     text-align: center;
-    margin: 2rem 1rem 0 1rem;
     padding: 2rem 1.5rem;
   }
 
   .share-section {
-    margin: 2rem 1rem 0 1rem;
     padding: 2rem 1.5rem;
   }
 
@@ -665,7 +689,7 @@
   }
 
   .related-posts {
-    padding: 2rem 1rem;
+    padding: 2rem 0;
   }
 
   .related-post-card {
@@ -673,6 +697,6 @@
   }
 
   .blog-post-footer {
-    padding: 2rem 1rem 1rem 1rem;
+    padding: 2rem 0 1rem 0;
   }
 }

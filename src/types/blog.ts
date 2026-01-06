@@ -7,6 +7,7 @@ export interface BlogPost {
   slug: string;
   author: string;
   authorImage?: string;
+  heroImage?: string;
   tags: string[];
   featured?: boolean;
   content?: string;
@@ -19,6 +20,7 @@ export interface BlogPostMetadata {
   slug: string;
   author: string;
   authorImage?: string;
+  heroImage?: string;
   tags: string[];
   featured?: boolean;
   fileName: string;

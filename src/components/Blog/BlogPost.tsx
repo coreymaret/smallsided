@@ -140,6 +140,21 @@ const BlogPost: React.FC = () => {
       </div>
 
       <article className="blog-post">
+        <div className="container">
+          <div 
+            className="blog-post-hero-image"
+            style={{
+              backgroundImage: post.heroImage 
+                ? `url(${post.heroImage})`
+                : 'linear-gradient(135deg, #98ED66 0%, #15141a 100%)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            {/* Placeholder gradient shown when no heroImage is provided */}
+          </div>
+
         <div className="floating-share">
           <button 
             className="share-button share-twitter"
@@ -298,6 +313,7 @@ const BlogPost: React.FC = () => {
             Back to all posts
           </Link>
         </footer>
+        </div>
       </article>
     </>
   );

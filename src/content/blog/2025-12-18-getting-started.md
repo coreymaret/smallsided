@@ -5,6 +5,7 @@ description: "Welcome to our blog! Learn what we'll be covering and how to stay 
 slug: "getting-started"
 author: "Admin"
 authorImage: ""
+heroImage: ""
 tags: ["announcement", "welcome"]
 featured: true
 ---
