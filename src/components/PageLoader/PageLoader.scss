@@ -1,0 +1,53 @@
+// PageLoader styles matching your site's design
+.page-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+
+  &__spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(152, 237, 102, 0.2); // #98ED66 with opacity
+    border-top-color: #98ED66; // Your brand green
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  &__text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #98ED66;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+    margin: 0;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Optional: Add a fade-in effect when content loads
+.page-fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
