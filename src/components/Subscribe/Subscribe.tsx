@@ -148,7 +148,10 @@ const Subscribe = () => {
     <section className={styles["subscribe-cta"]}>
       <div
         className={styles["subscribe-card"]}
-        style={{ backgroundImage: `url(${subscribeBG})` }}
+        style={{ 
+          backgroundImage: `url(${subscribeBG})`,
+          minHeight: '400px' // ⬅️ ADDED: Prevents layout shift by reserving space
+        }}
       >
         <div className={styles["subscribe-container"]}>
           
