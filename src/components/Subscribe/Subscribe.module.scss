@@ -7,6 +7,8 @@
   justify-content: center;         /* Center horizontally */
   align-items: center;             /* Center vertically */
   min-height: 500px;               /* ⬅️ ADDED: Reserve space to prevent layout shift */
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
 
   @media (min-width: 49rem) {      /* Tablet+ */
     padding: 5rem 2rem;            /* More generous padding on larger screens */
