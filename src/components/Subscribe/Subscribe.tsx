@@ -7,7 +7,7 @@ import { BellRing, AlertCircle, Smile } from "lucide-react";
 import styles from "./Subscribe.module.scss";
 // CSS module for styling
 
-import subscribeBG from "../../assets/subscribeBG.png";
+import subscribeBG from "../../assets/subscribeBG.webp";
 // Background image for the subscription card
 
 

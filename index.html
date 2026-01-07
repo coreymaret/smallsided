@@ -60,13 +60,18 @@
     <script type="module" src="/src/main.tsx"></script>
 
     <!-- Google tag (gtag.js) - Moved to bottom for better performance -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6RDDRZT1DN"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-6RDDRZT1DN', {
-        'send_page_view': false // Don't auto-send, we'll control this
+      // Load GA after page is interactive
+      window.addEventListener('load', function() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-6RDDRZT1DN';
+        document.head.appendChild(script);
+        
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6RDDRZT1DN');
       });
     </script>
   </body>
