@@ -19,11 +19,6 @@ const Home = () => {
           empower individuals and businesses to make a positive impact on the
           planet.
         </p>
-        <img
-          src="https://assets.simpleviewinc.com/simpleview/image/upload/c_limit,q_75,w_1200/v1/crm/longmontco/1491560_761317023883082_638057255_o0-4647af1e5056b36_4647b001-5056-b365-ab91253e533ad2d0.jpg"
-          alt="Solar Panels"
-        />
-
         <h2>Harnessing Renewable Energy</h2>
         <p>
           Renewable energy is no longer a future concept—it’s happening now.
@@ -41,11 +36,6 @@ const Home = () => {
           products, and provides actionable insights so you can make informed
           choices that benefit both you and the planet.
         </p>
-        <img
-          src="https://www.thesummitathleticclub.com/wp-content/uploads/2023/11/Summit-soccer-court.jpg"
-          alt="Electric Car Charging"
-        />
-
         <h2>Community & Impact</h2>
         <p>
           Change happens when people come together. GreenTech Insights highlights

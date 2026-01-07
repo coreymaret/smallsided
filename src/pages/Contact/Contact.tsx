@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Phone, Mail, ThumbsUp, Facebook, Instagram, Youtube, Twitter } from 'lucide-react';
 import styles from './Contact.module.scss';
-import ContactMap from './ContactMap'; // import the map component
+import ContactMap from './ContactMap';
 import SEO from '../../components/Blog/SEO';
 import ContactAccordion from '../../components/ContactAccordion/ContactAccordion';
 
@@ -15,12 +15,31 @@ const Contact: React.FC = () => {
     message: ''
   });
 
+  // Lazy load reCAPTCHA script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://www.google.com/recaptcha/api.js';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup: remove script when component unmounts
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
+
   const handleFocus = (field: string) => setFocusedField(field);
   const handleBlur = (field: string) => {
     if (!formData[field as keyof typeof formData]) setFocusedField(null);
   };
   const handleChange = (field: string, value: string) => setFormData(prev => ({ ...prev, [field]: value }));
-  const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); console.log('Form submitted:', formData); };
+  const handleSubmit = (e: React.FormEvent) => { 
+    e.preventDefault(); 
+    console.log('Form submitted:', formData); 
+  };
 
   return (
     <>
@@ -160,10 +179,10 @@ const Contact: React.FC = () => {
       </div>
 
       {/* GOOGLE MAP BELOW FLEXBOX */}
-<div className={styles.contactMapWrapper}>
-  <ContactMap />
-</div>
-<ContactAccordion />
+      <div className={styles.contactMapWrapper}>
+        <ContactMap />
+      </div>
+      <ContactAccordion />
     </>
   );
 };

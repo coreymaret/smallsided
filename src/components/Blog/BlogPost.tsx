@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
+import MarkdownRenderer from '../MarkdownRenderer/MarkdownRenderer';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
@@ -228,7 +228,8 @@ const BlogPost: React.FC = () => {
         </header>
 
         <div className="blog-post-content">
-          <ReactMarkdown
+          <MarkdownRenderer
+            content={post.content || ''}
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[
               rehypeRaw,
@@ -243,9 +244,7 @@ const BlogPost: React.FC = () => {
                 </div>
               )
             }}
-          >
-            {post.content || ''}
-          </ReactMarkdown>
+          />
         </div>
 
         <div className="author-box">
