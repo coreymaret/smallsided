@@ -21,6 +21,15 @@ html, body {
   overflow-x: hidden;        /* Prevent horizontal scrolling */
 }
 
+// Reserve space for fixed header to prevent CLS
+body {
+  padding-top: 112px;
+  
+  @media (max-width: 768px) {
+    padding-top: 96px; // Adjust for mobile if different
+  }
+}
+
 /*---------------------------------------------
   Custom Scrollbar Styling (Webkit browsers)
 ---------------------------------------------*/

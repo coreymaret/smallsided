@@ -27,6 +27,11 @@
   // Ensure Subscribe doesn't cause shift
   body {
     position: relative;
+    padding-top: 112px;
+
+    @media (max-width: 768px) {
+    padding-top: 96px; // Adjust for mobile if different
+    }
   }
   
   // Reserve minimum space for content to prevent collapse
