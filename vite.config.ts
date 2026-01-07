@@ -60,11 +60,89 @@ export default defineConfig({
   },
 
   /**
+   * ESBUILD OPTIONS
+   * ---------------
+   * Configure esbuild for transformation and minification.
+   * These options apply during both dev and build.
+   */
+  esbuild: {
+    // Remove console.log and debugger statements in production
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
+  },
+
+  /**
    * BUILD OPTIONS
    * -------------
    * Configuration for the production build process.
    */
   build: {
+    /**
+     * OUTPUT DIRECTORY
+     * ----------------
+     * Where the production build files will be placed.
+     */
+    outDir: 'dist',
+
+    /**
+     * SOURCE MAPS
+     * -----------
+     * Disable source maps in production to reduce bundle size.
+     * Set to true only if you need to debug production builds.
+     */
+    sourcemap: false,
+
+    /**
+     * MINIFICATION
+     * ------------
+     * Use 'esbuild' (fastest) or 'terser' (smaller output, slightly slower).
+     * esbuild is recommended for speed, terser for maximum compression.
+     */
+    minify: 'esbuild', // or 'terser' for 5-10% smaller bundles
+
+    /**
+     * ESBUILD OPTIONS
+     * ---------------
+     * Configure esbuild for both dev and build.
+     * Note: drop options for console removal are set at the top level.
+     */
+
+    /**
+     * TERSER OPTIONS (if using minify: 'terser')
+     * ------------------------------------------
+     * Uncomment this section if you switch to terser.
+     * Terser produces slightly smaller bundles but is slower.
+     */
+    // terserOptions: {
+    //   compress: {
+    //     drop_console: true,
+    //     drop_debugger: true,
+    //     pure_funcs: ['console.log', 'console.info', 'console.debug'],
+    //     passes: 2, // Multiple passes for better compression
+    //   },
+    //   mangle: {
+    //     safari10: true, // Work around Safari 10 bugs
+    //   },
+    //   format: {
+    //     comments: false, // Remove all comments
+    //   },
+    // },
+
+    /**
+     * CSS MINIFICATION
+     * ----------------
+     * CSS is automatically minified in production builds.
+     * This is handled by esbuild or lightningcss by default.
+     */
+    cssMinify: true,
+
+    /**
+     * CHUNK SIZE WARNING
+     * ------------------
+     * Warn if chunks exceed this size (in kB).
+     * Helps identify bundles that might be too large.
+     */
+    chunkSizeWarningLimit: 1000,
+
     /**
      * ROLLUP OPTIONS
      * --------------
@@ -93,12 +171,56 @@ export default defineConfig({
          * 
          * - react-vendor: Core React libraries
          * - markdown-vendor: Markdown parsing and rendering libraries for the blog
+         * - ui-vendor: UI component libraries (lucide-react icons)
          */
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'markdown-vendor': ['react-markdown', 'rehype-highlight', 'remark-gfm']
-        }
-      }
-    }
-  }
+          'markdown-vendor': ['react-markdown', 'rehype-highlight', 'remark-gfm'],
+          'ui-vendor': ['lucide-react'],
+        },
+
+        /**
+         * COMPACT OUTPUT
+         * --------------
+         * Generate more compact output by removing unnecessary whitespace.
+         */
+        compact: true,
+      },
+
+      /**
+       * TREESHAKING
+       * -----------
+       * Remove unused code. This is enabled by default but explicitly set here.
+       */
+      treeshake: {
+        moduleSideEffects: 'no-external',
+        propertyReadSideEffects: false,
+        tryCatchDeoptimization: false,
+      },
+    },
+
+    /**
+     * REPORT COMPRESSED SIZE
+     * ----------------------
+     * Show gzipped sizes in build output (useful for optimization).
+     * Set to false to speed up builds slightly.
+     */
+    reportCompressedSize: true,
+
+    /**
+     * ASSETSDIR
+     * ---------
+     * Directory (relative to outDir) where assets will be placed.
+     */
+    assetsDir: 'assets',
+  },
+
+  /**
+   * OPTIMIZE DEPS
+   * -------------
+   * Pre-bundle dependencies for faster dev server startup.
+   */
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', 'buffer'],
+  },
 })
