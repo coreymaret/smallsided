@@ -35,7 +35,8 @@ const App = () => {
     <HelmetProvider>
       <ScrollToTop />
       <Header />
-      <main className="main-content">
+      <main className="main-content" style={{ minHeight: '100vh' }}>
+        {/* ⬆️ ADDED: minHeight reserves space to prevent Subscribe from shifting */}
         {/* Suspense boundary catches lazy-loaded components while they load */}
         <Suspense fallback={<PageLoader />}>
           <Routes location={location} key={location.pathname}>
