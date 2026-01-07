@@ -24,6 +24,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://www.google.com">
     <link rel="dns-prefetch" href="//www.google-analytics.com">
+    <link rel="preload" as="image" href="/assets/subscribeBG.webp" fetchpriority="high">
 
     <!-- Syntax Highlighting for Blog -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
@@ -61,8 +62,12 @@
 
     <!-- Google tag (gtag.js) - Moved to bottom for better performance -->
     <script>
-      // Load GA after page is interactive
-      window.addEventListener('load', function() {
+      let gaLoaded = false;
+      
+      function loadGA() {
+        if (gaLoaded) return;
+        gaLoaded = true;
+        
         var script = document.createElement('script');
         script.async = true;
         script.src = 'https://www.googletagmanager.com/gtag/js?id=G-6RDDRZT1DN';
@@ -72,6 +77,14 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-6RDDRZT1DN');
+      }
+      
+      // Load after 3 seconds
+      setTimeout(loadGA, 3000);
+      
+      // OR load on first user interaction
+      ['click', 'scroll', 'keypress'].forEach(event => {
+        document.addEventListener(event, loadGA, { once: true });
       });
     </script>
   </body>

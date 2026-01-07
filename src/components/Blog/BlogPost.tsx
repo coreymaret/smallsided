@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import MarkdownRenderer from '../MarkdownRenderer/MarkdownRenderer';
-import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeRaw from 'rehype-raw';
@@ -233,7 +232,6 @@ const BlogPost: React.FC = () => {
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[
               rehypeRaw,
-              rehypeHighlight,
               rehypeSlug,
               [rehypeAutolinkHeadings, { behavior: 'wrap' }]
             ]}
