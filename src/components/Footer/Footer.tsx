@@ -27,7 +27,13 @@ const Footer = () => {
         
         {/* == LEFT SECTION: Logo + tagline + social icons == */}
         <div className={styles.footerSection}>
-          <img src={Logo} alt="Small Sided Logo" className={styles.footerLogo} />
+          <img 
+            src={Logo} 
+            alt="Small Sided Logo" 
+            className={styles.footerLogo}
+            width="150"
+            height="33"
+          />
           <p>Small field. Big impact.</p>
 
           {/* Social media icons linking to external pages */}
@@ -71,7 +77,7 @@ const Footer = () => {
 
           {/* Quick Links column */}
           <div className={styles.footerSection}>
-            <h4>Quick Links</h4>
+            <h3>Quick Links</h3>
             <ul>
               {/* Internal links to pages; scrolls to top on click */}
               <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
@@ -84,7 +90,7 @@ const Footer = () => {
 
           {/* Services column */}
           <div className={styles.footerSection}>
-            <h4>Services</h4>
+            <h3>Services</h3>
             <ul>
               <li><Link to="/PlayerEducation" onClick={handleLinkClick}>Player Education</Link></li>
               <li><Link to="/ParentEducation" onClick={handleLinkClick}>Parent Education</Link></li>
@@ -99,7 +105,7 @@ const Footer = () => {
 
         {/* == RIGHT SECTION: Contact details == */}
         <div className={styles.footerSection}>
-          <h4>Contact Us</h4>
+          <h3>Contact Us</h3>
 
           <div className={styles.contactInfo}>
 

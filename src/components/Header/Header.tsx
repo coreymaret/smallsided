@@ -175,7 +175,12 @@ const Header = () => {
       >
         {/* Logo (click scrolls to top + closes menu if mobile) */}
         <Link to="/" className={styles.logo} onClick={handleLinkClick}>
-          <img src={Logo} alt="Small Sided Logo" />
+          <img 
+            src={Logo} 
+            alt="Small Sided Logo"
+            width="180"
+            height="40"
+          />
         </Link>
 
         {/* Navigation menu with dynamic animation classes */}
@@ -271,24 +276,44 @@ const Header = () => {
           {/* Social Media Icons            */}
           {/* ----------------------------- */}
           <div className={styles.socialSection}>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-              <Facebook size={28} />
+            <a 
+              href="https://facebook.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="Visit our Facebook page"
+            >
+              <Facebook size={28} aria-hidden="true" />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-              <Instagram size={28} />
+            <a 
+              href="https://instagram.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="Visit our Instagram page"
+            >
+              <Instagram size={28} aria-hidden="true" />
             </a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
-              <Youtube size={28} />
+            <a 
+              href="https://youtube.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="Visit our YouTube channel"
+            >
+              <Youtube size={28} aria-hidden="true" />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-              <Twitter size={28} />
+            <a 
+              href="https://twitter.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="Visit our Twitter page"
+            >
+              <Twitter size={28} aria-hidden="true" />
             </a>
           </div>
         </nav>
 
         {/* Hamburger button for mobile view */}
         {isMobile && (
-          <div
+          <button
             className={`${styles.hamburger} ${isOpen ? styles.active : ""}`}
             onClick={toggleMenu}
             aria-label={isOpen ? "Close menu" : "Open menu"}
@@ -296,7 +321,7 @@ const Header = () => {
             <span></span>
             <span></span>
             <span></span>
-          </div>
+          </button>
         )}
       </div>
     </header>

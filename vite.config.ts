@@ -175,7 +175,8 @@ export default defineConfig({
          */
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'markdown-vendor': ['react-markdown', 'rehype-highlight', 'remark-gfm'],
+          'markdown-vendor': ['react-markdown'],
+          'markdown-plugins': ['rehype-highlight', 'remark-gfm', 'rehype-slug', 'rehype-autolink-headings', 'rehype-raw'],
           'ui-vendor': ['lucide-react'],
         },
 

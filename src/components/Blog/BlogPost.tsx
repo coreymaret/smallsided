@@ -197,6 +197,8 @@ const BlogPost: React.FC = () => {
                   <img 
                     src={post.authorImage} 
                     alt={post.author}
+                    width="40"
+                    height="40"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                       const fallback = e.currentTarget.parentElement?.nextElementSibling;
