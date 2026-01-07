@@ -3,9 +3,16 @@
   padding: 1rem;
   min-height: calc(100vh - 6rem); // Ensures footer stays at bottom
   
-  // ⬇️ ADDED: Prevent layout shift from lazy content loading
-  contain: layout style; // Isolate layout calculations
-  will-change: contents; // Hint browser that content will change
+  // Prevent layout shift from lazy content loading
+  contain: layout style;
+  will-change: contents;
+  
+  // ⬇️ ADDED: Force GPU acceleration to prevent micro-shifts
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  
+  // ⬇️ ADDED: Extra padding to ensure enough space reserved
+  padding-bottom: 2rem;
 }
 
 @media (min-width: 49rem) {
@@ -15,7 +22,7 @@
   }
 }
 
-// ⬇️ ADDED: Additional safeguard for Subscribe section
+// Additional safeguards for Subscribe section
 :global {
   // Ensure Subscribe doesn't cause shift
   body {
@@ -32,5 +39,22 @@
   // Make Subscribe section use CSS containment
   section[class*="subscribe"] {
     contain: layout style paint;
+    // ⬇️ ADDED: Prevent sub-pixel shifts
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  // ⬇️ ADDED: Prevent Footer shifts
+  footer {
+    contain: layout style paint;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  // ⬇️ ADDED: Prevent Header shifts
+  header {
+    contain: layout style paint;
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 }
