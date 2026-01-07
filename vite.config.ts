@@ -165,17 +165,21 @@ export default defineConfig({
         /**
          * MANUAL CHUNKS
          * -------------
-         * Split code into separate chunks for better caching.
+         * Split code into separate chunks for better caching and lazy loading.
          * Vendor libraries that don't change often are separated so browsers
          * can cache them independently from your application code.
          * 
-         * - react-vendor: Core React libraries
-         * - markdown-vendor: Markdown parsing and rendering libraries for the blog
+         * - react-vendor: Core React libraries (always loaded)
+         * - markdown-core: Just react-markdown (loaded only on blog pages via React.lazy)
+         * - markdown-plugins: Rehype/remark plugins (loaded only when markdown renders)
          * - ui-vendor: UI component libraries (lucide-react icons)
+         * 
+         * This reduces unused JavaScript by ~24KB since markdown plugins are only
+         * loaded when actually rendering blog posts, not on every page.
          */
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'markdown-vendor': ['react-markdown'],
+          'markdown-core': ['react-markdown'],
           'markdown-plugins': ['rehype-highlight', 'remark-gfm', 'rehype-slug', 'rehype-autolink-headings', 'rehype-raw'],
           'ui-vendor': ['lucide-react'],
         },
