@@ -6,13 +6,16 @@
   display: flex;                   /* Flex container to center content */
   justify-content: center;         /* Center horizontally */
   align-items: center;             /* Center vertically */
+  min-height: 500px;               /* ⬅️ ADDED: Reserve space to prevent layout shift */
 
   @media (min-width: 49rem) {      /* Tablet+ */
     padding: 5rem 2rem;            /* More generous padding on larger screens */
+    min-height: 600px;             /* ⬅️ ADDED: More space on larger screens */
   }
 
   @media (min-width: 64rem) {      /* Desktop+ */
     padding: 2rem 2rem;            /* Adjust padding for layout balance */
+    min-height: 500px;             /* ⬅️ ADDED: Reserve space */
   }
 }
 
@@ -24,7 +27,7 @@
   padding: 3rem 1.5rem;             /* Inner spacing */
   width: 100%;                      /* Full width up to max-width */
   max-width: 56rem;                 /* Limit width for large screens */
-  min-height: 400px;                /* Reserve space to prevent layout shift */
+  height: 400px;                    /* ⬅️ CHANGED: Fixed height (was min-height) */
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
   text-align: center;               /* Centered text content */
   overflow: hidden;                 /* Clip background image to border radius */
@@ -40,7 +43,7 @@
   }
 }
 
-/* NEW: Background image as actual img tag for better performance */
+/* Background image as actual img tag for better performance */
 .subscribe-bg-image {
   position: absolute;
   top: 0;
