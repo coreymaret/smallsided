@@ -74,6 +74,17 @@ export default defineConfig({
     rollupOptions: {
       output: {
         /**
+         * FILE NAMING WITH HASHES (for cache busting)
+         * -------------------------------------------
+         * Add content hashes to filenames so browsers know when files change.
+         * This allows us to cache files for 1 year safely (via _headers file).
+         * When you update your code, the hash changes, forcing a fresh download.
+         */
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+
+        /**
          * MANUAL CHUNKS
          * -------------
          * Split code into separate chunks for better caching.
