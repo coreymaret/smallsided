@@ -35,29 +35,120 @@
 
   <body>
     <div id="root">
-      <!-- Loading skeleton to prevent layout shift -->
-      <div style="min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; background-color: #15141a; color: #fff;">
-        <!-- Header skeleton with exact dimensions to prevent CLS -->
-        <header style="height: 112px; display: flex; align-items: center; padding: 0 2rem; background-color: #15141a;">
-          <!-- Reserve space for logo - exact dimensions prevent layout shift -->
-          <div style="width: 160px; height: 40px; background: rgba(255, 255, 255, 0.05); border-radius: 4px;"></div>
+      <!-- OPTIMIZED: Minimal skeleton to prevent layout shift -->
+      <div style="
+        min-height: 100vh;
+        background-color: #15141a;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+        display: flex;
+        flex-direction: column;
+      ">
+        <!-- Header skeleton - matches actual header -->
+        <header style="
+          height: 112px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          padding: 0 2rem;
+          background-color: #15141a;
+        ">
+          <!-- Logo placeholder -->
+          <div style="width: 160px; height: 40px;"></div>
         </header>
         
         <!-- Main content skeleton -->
-        <main style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 112px);">
-          <div style="text-align: center; padding: 20px; max-width: 600px;">
-            <h1 style="margin: 0 0 10px 0; font-size: 2rem; font-weight: 600; letter-spacing: -0.02em;">Smallsided</h1>
-            <div style="margin: 16px auto; width: 40px; height: 40px; border: 3px solid rgba(255, 255, 255, 0.1); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-            <p style="margin: 16px 0 0 0; opacity: 0.6; font-size: 0.875rem;">Loading...</p>
+        <main style="
+          flex: 1;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          padding: 3rem 2rem;
+          max-width: 1200px;
+          width: 100%;
+          margin: 0 auto;
+          box-sizing: border-box;
+        ">
+          <div style="
+            width: 100%;
+            max-width: 800px;
+          ">
+            <!-- Page title skeleton -->
+            <div style="
+              width: 60%;
+              height: 2.5rem;
+              background: rgba(255, 255, 255, 0.03);
+              border-radius: 4px;
+              margin-bottom: 1rem;
+            "></div>
+            
+            <!-- Subtitle skeleton -->
+            <div style="
+              width: 50%;
+              height: 1.75rem;
+              background: rgba(255, 255, 255, 0.03);
+              border-radius: 4px;
+              margin-bottom: 2rem;
+            "></div>
+            
+            <!-- Content paragraphs skeleton -->
+            <div style="
+              width: 100%;
+              height: 1rem;
+              background: rgba(255, 255, 255, 0.03);
+              border-radius: 4px;
+              margin-bottom: 0.75rem;
+            "></div>
+            <div style="
+              width: 95%;
+              height: 1rem;
+              background: rgba(255, 255, 255, 0.03);
+              border-radius: 4px;
+              margin-bottom: 0.75rem;
+            "></div>
+            <div style="
+              width: 98%;
+              height: 1rem;
+              background: rgba(255, 255, 255, 0.03);
+              border-radius: 4px;
+              margin-bottom: 2rem;
+            "></div>
+            
+            <!-- Loading spinner -->
+            <div style="
+              display: flex;
+              justify-content: center;
+              padding: 2rem 0;
+            ">
+              <div style="
+                width: 40px;
+                height: 40px;
+                border: 3px solid rgba(255, 255, 255, 0.1);
+                border-top-color: #fff;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+              "></div>
+            </div>
           </div>
         </main>
       </div>
     </div>
 
-    <!-- Add simple spin animation for loader -->
+    <!-- Spin animation for loader -->
     <style>
       @keyframes spin {
         to { transform: rotate(360deg); }
+      }
+      
+      /* Ensure smooth transition when React takes over */
+      #root {
+        min-height: 100vh;
+      }
+      
+      body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
       }
     </style>
 
