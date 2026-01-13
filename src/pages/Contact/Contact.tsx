@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { MapPin, Phone, Mail, ThumbsUp, Facebook, Instagram, Youtube, Twitter } from 'lucide-react';
 import styles from './Contact.module.scss';
-import ContactMap from './ContactMap';
 import SEO from '../../components/Blog/SEO';
 import ContactAccordion from '../../components/ContactAccordion/ContactAccordion';
+
+// Lazy load the map component - only loads when user scrolls to it
+const ContactMap = lazy(() => import('./ContactMap'));
 
 const Contact: React.FC = () => {
   const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -15,7 +17,7 @@ const Contact: React.FC = () => {
     message: ''
   });
 
-  // Lazy load reCAPTCHA script
+  // Lazy load reCAPTCHA script only when needed
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://www.google.com/recaptcha/api.js';
@@ -45,9 +47,9 @@ const Contact: React.FC = () => {
     <>
       <SEO
         title="Contact | Small Sided"
-        description="Learn about Small Sided and our mission to transform soccer training."
+        description="Get in touch with Small Sided. We typically respond within 24 hours during business days."
         type="website"
-        url="/about"
+        url="/contact"
       />
       <div className={styles.contactContainer}>
         {/* LEFT COLUMN */}
@@ -178,10 +180,26 @@ const Contact: React.FC = () => {
         </div>
       </div>
 
-      {/* GOOGLE MAP BELOW FLEXBOX */}
+      {/* GOOGLE MAP BELOW FLEXBOX - Now lazy loaded! */}
       <div className={styles.contactMapWrapper}>
-        <ContactMap />
+        <Suspense fallback={
+          <div style={{
+            width: '100%',
+            height: '450px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#15141a',
+            color: '#fff',
+            fontSize: '1rem'
+          }}>
+            Loading map...
+          </div>
+        }>
+          <ContactMap />
+        </Suspense>
       </div>
+      
       <ContactAccordion />
     </>
   );

@@ -21,14 +21,11 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     <meta name="format-detection" content="telephone=no">
     
-    <!-- Optimized Font Loading - Self-hosted via npm instead of Google Fonts -->
-    <!-- Install: npm install @fontsource/inter -->
-    <!-- Then import in main.tsx: import '@fontsource/inter/400.css' -->
+    <!-- Fonts are self-hosted via @fontsource/inter (imported in main.tsx) -->
     
-    <!-- IMPROVED: Resource hints for third-party resources -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-
+    <!-- Resource hints for Mailchimp (Subscribe component) -->
+    <link rel="dns-prefetch" href="https://smallsided.us9.list-manage.com">
+    
     <!-- 
       NOTE: All SEO meta tags (title, description, keywords, OG tags, Twitter cards, 
       canonical, robots, structured data) are now managed by react-helmet-async 
@@ -38,7 +35,7 @@
 
   <body>
     <div id="root">
-      <!-- IMPROVED: Better loading skeleton to prevent layout shift -->
+      <!-- Loading skeleton to prevent layout shift -->
       <div style="min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; background-color: #15141a; color: #fff;">
         <!-- Header skeleton with exact dimensions to prevent CLS -->
         <header style="height: 112px; display: flex; align-items: center; padding: 0 2rem; background-color: #15141a;">
@@ -77,53 +74,38 @@
     <!-- React App -->
     <script type="module" src="/src/main.tsx"></script>
 
-    <!-- IMPROVED: Google Analytics with error handling -->
+    <!-- Google Analytics - Lazy loaded after 3 seconds or on first interaction -->
+    <!-- Note: Console error when blocked by ad blocker is expected and harmless -->
     <script>
-      let gaLoaded = false;
-      
-      function loadGA() {
-        if (gaLoaded) return;
-        gaLoaded = true;
+      (function() {
+        var loaded = false;
         
-        // Create and configure the script
-        var script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-6RDDRZT1DN';
+        function load() {
+          if (loaded) return;
+          loaded = true;
+          
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-6RDDRZT1DN';
+          
+          s.onload = function() {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-6RDDRZT1DN', {
+              'anonymize_ip': true
+            });
+          };
+          
+          document.head.appendChild(s);
+        }
         
-        // IMPROVED: Add error handling for when GA is blocked
-        script.onerror = function() {
-          // Silently fail if blocked by ad blocker
-          // This prevents console errors in Lighthouse
-          if (typeof console !== 'undefined' && console.debug) {
-            console.debug('Analytics blocked by user preference or extension');
-          }
-        };
-        
-        script.onload = function() {
-          // Only initialize if script loaded successfully
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-6RDDRZT1DN', {
-            // Prevent errors if dataLayer is not properly initialized
-            'send_page_view': true,
-            'anonymize_ip': true // Privacy-friendly
-          });
-        };
-        
-        document.head.appendChild(script);
-      }
-      
-      // Load after 3 seconds OR on first user interaction (whichever comes first)
-      var gaTimer = setTimeout(loadGA, 3000);
-      
-      // Load on first user interaction (and clear the timer)
-      ['click', 'scroll', 'keypress', 'touchstart'].forEach(function(event) {
-        document.addEventListener(event, function() {
-          clearTimeout(gaTimer);
-          loadGA();
-        }, { once: true, passive: true });
-      });
+        // Load after 3 seconds or on interaction
+        setTimeout(load, 3000);
+        ['click', 'scroll', 'keypress', 'touchstart'].forEach(function(e) {
+          document.addEventListener(e, load, { once: true, passive: true });
+        });
+      })();
     </script>
   </body>
 </html>

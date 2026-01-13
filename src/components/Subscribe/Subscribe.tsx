@@ -152,8 +152,8 @@ const Subscribe = () => {
           src={subscribeBG}
           alt=""
           className={styles["subscribe-bg-image"]}
-          fetchPriority="high"
-          loading="eager"
+          loading="lazy"
+          decoding="async"
           width="896"
           height="400"
         />

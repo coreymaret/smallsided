@@ -261,34 +261,52 @@ export default defineConfig({
          * IMPROVED: Better code splitting strategy
          */
         manualChunks: (id) => {
-          // Vendor chunks for better caching
           if (id.includes('node_modules')) {
-            // Core React libraries (always needed)
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
-              return 'react-vendor';
+            // React core (always needed)
+            if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler')) {
+              return 'react-core';
             }
             
-            // Markdown core (lazy loaded on blog pages)
-            if (id.includes('react-markdown')) {
-              return 'markdown-core';
+            // React Router (always needed)
+            if (id.includes('react-router')) {
+              return 'react-router';
             }
             
-            // Markdown plugins (lazy loaded with markdown)
-            if (id.includes('rehype') || id.includes('remark') || id.includes('unified')) {
-              return 'markdown-plugins';
+            // Google Maps (ONLY Contact page)
+            if (id.includes('google-maps') || id.includes('@react-google-maps')) {
+              return 'google-maps';
             }
             
-            // Syntax highlighting (lazy loaded on code blocks)
-            if (id.includes('highlight.js')) {
+            // Lottie (ONLY if used)
+            if (id.includes('lottie')) {
+              return 'lottie';
+            }
+            
+            // Markdown & Blog (ONLY blog pages)
+            if (id.includes('react-markdown') || 
+                id.includes('gray-matter') ||
+                id.includes('rehype') || 
+                id.includes('remark') ||
+                id.includes('unified')) {
+              return 'markdown';
+            }
+            
+            // Highlight.js (ONLY code blocks)
+            if (id.includes('highlight')) {
               return 'highlight';
             }
             
-            // UI components
+            // Lucide icons (UI library)
             if (id.includes('lucide-react')) {
-              return 'ui-vendor';
+              return 'lucide';
             }
             
-            // Everything else goes into common vendor chunk
+            // React Helmet (SEO)
+            if (id.includes('react-helmet')) {
+              return 'seo';
+            }
+            
+            // Everything else
             return 'vendor';
           }
         },
