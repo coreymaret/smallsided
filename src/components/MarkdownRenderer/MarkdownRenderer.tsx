@@ -1,5 +1,4 @@
-// src/components/MarkdownRenderer/MarkdownRenderer.tsx
-
+import 'highlight.js/styles/github-dark.css';
 import { lazy, Suspense } from 'react';
 import type { Components } from 'react-markdown';
 import type { PluggableList } from 'unified';

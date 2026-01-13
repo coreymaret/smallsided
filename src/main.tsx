@@ -1,4 +1,6 @@
-// src/main.tsx
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
 import { Buffer } from 'buffer';
 // attach Buffer to the browser global
 ;(window as any).Buffer = Buffer;

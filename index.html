@@ -20,14 +20,17 @@
     <meta name="color-scheme" content="light dark">
     <meta name="referrer" content="no-referrer-when-downgrade">
     <meta name="format-detection" content="telephone=no">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    <link rel="dns-prefetch" href="https://www.google.com">
-    <link rel="dns-prefetch" href="//www.google-analytics.com">
-
-    <!-- Syntax Highlighting for Blog -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    
+    <!-- Optimized Font Loading - Self-hosted via npm instead of Google Fonts -->
+    <!-- Install: npm install @fontsource/inter -->
+    <!-- Then import in main.tsx: import '@fontsource/inter/400.css' -->
+    
+    <!-- IMPROVED: Resource hints for third-party resources -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- IMPROVED: Preload critical assets -->
+    <link rel="preload" href="/assets/logo.svg" as="image" type="image/svg+xml">
 
     <!-- 
       NOTE: All SEO meta tags (title, description, keywords, OG tags, Twitter cards, 
@@ -38,19 +41,31 @@
 
   <body>
     <div id="root">
-      <div style="min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #15141a; color: #fff;">
-        <!-- Fake header to prevent layout shift -->
-        <div style="height: 112px; background-color: #15141a;"></div>
+      <!-- IMPROVED: Better loading skeleton to prevent layout shift -->
+      <div style="min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; background-color: #15141a; color: #fff;">
+        <!-- Header skeleton with exact dimensions to prevent CLS -->
+        <header style="height: 112px; display: flex; align-items: center; padding: 0 2rem; background-color: #15141a;">
+          <!-- Reserve space for logo - exact dimensions prevent layout shift -->
+          <div style="width: 160px; height: 40px; background: rgba(255, 255, 255, 0.05); border-radius: 4px;"></div>
+        </header>
         
-        <!-- Loading content -->
-        <div style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 112px);">
-          <div style="text-align: center; padding: 20px;">
-            <h1 style="margin: 0 0 10px 0; font-size: 2rem;">Smallsided</h1>
-            <p style="margin: 0; opacity: 0.7;">Loading...</p>
+        <!-- Main content skeleton -->
+        <main style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 112px);">
+          <div style="text-align: center; padding: 20px; max-width: 600px;">
+            <h1 style="margin: 0 0 10px 0; font-size: 2rem; font-weight: 600; letter-spacing: -0.02em;">Smallsided</h1>
+            <div style="margin: 16px auto; width: 40px; height: 40px; border: 3px solid rgba(255, 255, 255, 0.1); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <p style="margin: 16px 0 0 0; opacity: 0.6; font-size: 0.875rem;">Loading...</p>
           </div>
-        </div>
+        </main>
       </div>
     </div>
+
+    <!-- Add simple spin animation for loader -->
+    <style>
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
 
     <!-- Noscript fallback -->
     <noscript>
@@ -65,7 +80,7 @@
     <!-- React App -->
     <script type="module" src="/src/main.tsx"></script>
 
-    <!-- Google tag (gtag.js) - Moved to bottom for better performance -->
+    <!-- IMPROVED: Google Analytics with error handling -->
     <script>
       let gaLoaded = false;
       
@@ -73,23 +88,44 @@
         if (gaLoaded) return;
         gaLoaded = true;
         
+        // Create and configure the script
         var script = document.createElement('script');
         script.async = true;
         script.src = 'https://www.googletagmanager.com/gtag/js?id=G-6RDDRZT1DN';
-        document.head.appendChild(script);
         
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-6RDDRZT1DN');
+        // IMPROVED: Add error handling for when GA is blocked
+        script.onerror = function() {
+          // Silently fail if blocked by ad blocker
+          // This prevents console errors in Lighthouse
+          if (typeof console !== 'undefined' && console.debug) {
+            console.debug('Analytics blocked by user preference or extension');
+          }
+        };
+        
+        script.onload = function() {
+          // Only initialize if script loaded successfully
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-6RDDRZT1DN', {
+            // Prevent errors if dataLayer is not properly initialized
+            'send_page_view': true,
+            'anonymize_ip': true // Privacy-friendly
+          });
+        };
+        
+        document.head.appendChild(script);
       }
       
-      // Load after 3 seconds
-      setTimeout(loadGA, 3000);
+      // Load after 3 seconds OR on first user interaction (whichever comes first)
+      var gaTimer = setTimeout(loadGA, 3000);
       
-      // OR load on first user interaction
-      ['click', 'scroll', 'keypress'].forEach(event => {
-        document.addEventListener(event, loadGA, { once: true });
+      // Load on first user interaction (and clear the timer)
+      ['click', 'scroll', 'keypress', 'touchstart'].forEach(function(event) {
+        document.addEventListener(event, function() {
+          clearTimeout(gaTimer);
+          loadGA();
+        }, { once: true, passive: true });
       });
     </script>
   </body>
