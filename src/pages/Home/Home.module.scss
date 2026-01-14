@@ -120,6 +120,7 @@ html {
   line-height: 1;
   margin-bottom: 12px;
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .statLabel {
@@ -344,8 +345,7 @@ html {
 
   .statNumber {
     font-size: 2.25rem;
-    word-break: break-word;
-    overflow-wrap: break-word;
+    white-space: nowrap;
   }
 
   .statLabel {
