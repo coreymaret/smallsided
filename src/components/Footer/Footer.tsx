@@ -144,8 +144,6 @@ const Footer = () => {
 
       {/* == BOTTOM DISCLAIMER BAR == */}
       <div className={styles.footerBottom}>
-        <p>&copy; 2025 Small Sided. All rights reserved.</p>
-
         {/* Additional links: Privacy, Terms, Cookies */}
         <div className={styles.footerLinks}>
           <Link to="/PrivacyPolicy" onClick={handleLinkClick}>Privacy Policy</Link>
@@ -154,6 +152,8 @@ const Footer = () => {
           <span>|</span>
           <Link to="/CookiePolicy" onClick={handleLinkClick}>Cookie Policy</Link>
         </div>
+
+        <p>&copy; {new Date().getFullYear()} Small Sided. All rights reserved.</p>
       </div>
 
     </footer>

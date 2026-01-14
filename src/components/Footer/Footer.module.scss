@@ -131,6 +131,7 @@
   svg {
     flex-shrink: 0;
     color: #98ED66;
+    align-self: center;
   }
 
   a {
@@ -153,6 +154,7 @@
     white-space: nowrap;
     text-underline-offset: 8px;
     color: #ffffff;
+    margin-bottom: 8px;
   }
 }
 
@@ -233,7 +235,10 @@
     }
 
     span {
-      text-decoration: none;
+      text-decoration-line: underline;
+      text-decoration-style: dotted;
+      text-decoration-color: #98ED66;
+      text-underline-offset: 8px;
     }
   }
 }
