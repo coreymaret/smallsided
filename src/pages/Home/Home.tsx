@@ -4,6 +4,7 @@ import SEO from '../../components/Blog/SEO';
 import { getSEOConfig } from '../../config/seo';
 import { useEffect, useRef, useState } from 'react';
 import { Trophy, Target, Users, Lightbulb, TrendingUp, Award, ArrowDownRight } from 'lucide-react';
+import ReviewSection from '../../components/Reviews/ReviewSection';
 
 // TODO: Update these image import paths to match your actual image locations
 import iso1Image from '../../assets/images/home-sections/iso1.png';
@@ -256,7 +257,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-
+<ReviewSection />
       {/* Row 3 */}
       <section className={styles.heroSection}>
         <div className={styles.imageColumn}>
