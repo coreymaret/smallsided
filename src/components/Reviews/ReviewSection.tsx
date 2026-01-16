@@ -211,14 +211,42 @@ const ReviewsSection = () => {
           </div>
 
           <div className="carousel-dots">
-            {reviews.map((_, index) => (
-              <button
-                key={index}
-                className={`dot ${currentIndex === index ? 'active' : ''}`}
-                onClick={() => goToSlide(index)}
-                aria-label={`Go to review ${index + 1}`}
+            <svg 
+              width={reviews.length * 20} 
+              height={20}
+              style={{ overflow: 'visible' }}
+            >
+              {/* Render static background dots */}
+              {reviews.map((_, index) => {
+                return (
+                  <circle
+                    key={`dot-${index}`}
+                    cx={index * 20 + 10}
+                    cy={10}
+                    r={4}
+                    fill="#d3d3d3"
+                    opacity={0.6}
+                    style={{
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => goToSlide(index)}
+                  />
+                );
+              })}
+              
+              {/* Animated liquid blob that moves between dots */}
+              <circle
+                cx={currentIndex * 20 + 10}
+                cy={10}
+                r={5}
+                fill="#98ED66"
+                opacity={1}
+                style={{
+                  transition: 'cx 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95)',
+                  pointerEvents: 'none'
+                }}
               />
-            ))}
+            </svg>
           </div>
         </div>
       </div>

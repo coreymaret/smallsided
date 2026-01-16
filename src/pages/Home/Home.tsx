@@ -5,6 +5,7 @@ import { getSEOConfig } from '../../config/seo';
 import { useEffect, useRef, useState } from 'react';
 import { Trophy, Target, Users, Lightbulb, TrendingUp, Award, ArrowDownRight } from 'lucide-react';
 import ReviewSection from '../../components/Reviews/ReviewSection';
+import PricingSection from '../../components/PricingSection/PricingSection';
 
 // TODO: Update these image import paths to match your actual image locations
 import iso1Image from '../../assets/images/home-sections/iso1.png';
@@ -217,7 +218,7 @@ const Home = () => {
           <a href="#" className={styles.ctaButton}>Learn More</a>
         </div>
       </section>
-
+<PricingSection />
       {/* Row 1 */}
       <section id="row1" className={styles.heroSection}>
         <div className={styles.imageColumn}>
@@ -257,7 +258,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-<ReviewSection />
       {/* Row 3 */}
       <section className={styles.heroSection}>
         <div className={styles.imageColumn}>
@@ -297,7 +297,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-
+      <ReviewSection />
       <Popup />
     </div>
     </>
