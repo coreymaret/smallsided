@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Trophy, Target, Users, Lightbulb, TrendingUp, Award, ArrowDownRight } from 'lucide-react';
 import ReviewSection from '../../components/Reviews/ReviewSection';
 import PricingSection from '../../components/PricingSection/PricingSection';
+import Booking from '../../components/Booking/Booking';
 
 // TODO: Update these image import paths to match your actual image locations
 import iso1Image from '../../assets/images/home-sections/iso1.png';
@@ -219,6 +220,7 @@ const Home = () => {
         </div>
       </section>
 <PricingSection />
+<Booking />
       {/* Row 1 */}
       <section id="row1" className={styles.heroSection}>
         <div className={styles.imageColumn}>
