@@ -24,6 +24,114 @@ const Booking: React.FC = () => {
     billingZip: ''
   });
 
+  const [validationErrors, setValidationErrors] = useState<{
+    email?: string;
+    phone?: string;
+    cardNumber?: string;
+    cardExpiry?: string;
+    cardCVV?: string;
+    billingZip?: string;
+  }>({});
+
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleCloseBanner = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setShowSuccessAnimation(false);
+      setIsClosing(false);
+    }, 400); // Match the animation duration
+  };
+
+  // Validation functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    const digitsOnly = phone.replace(/\D/g, '');
+    return digitsOnly.length === 10;
+  };
+
+  const validateCardNumber = (cardNumber: string): boolean => {
+    const digitsOnly = cardNumber.replace(/\D/g, '');
+    return digitsOnly.length === 16;
+  };
+
+  const validateCardExpiry = (expiry: string): boolean => {
+    const digitsOnly = expiry.replace(/\D/g, '');
+    if (digitsOnly.length !== 4) return false;
+    
+    const month = parseInt(digitsOnly.slice(0, 2));
+    const year = parseInt(digitsOnly.slice(2, 4));
+    const currentYear = new Date().getFullYear() % 100;
+    const currentMonth = new Date().getMonth() + 1;
+    
+    if (month < 1 || month > 12) return false;
+    if (year < currentYear) return false;
+    if (year === currentYear && month < currentMonth) return false;
+    
+    return true;
+  };
+
+  const validateZipCode = (zip: string): boolean => {
+    const digitsOnly = zip.replace(/\D/g, '');
+    return digitsOnly.length === 5;
+  };
+
+  const validateCVV = (cvv: string): boolean => {
+    const digitsOnly = cvv.replace(/\D/g, '');
+    return digitsOnly.length === 3;
+  };
+
+  const validateStep3Fields = (): boolean => {
+    const errors: typeof validationErrors = {};
+    let isValid = true;
+
+    if (!validateEmail(formData.email)) {
+      errors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    if (!validatePhone(formData.phone)) {
+      errors.phone = 'Phone number must be 10 digits';
+      isValid = false;
+    }
+
+    setValidationErrors(errors);
+    return isValid;
+  };
+
+  const validateStep4Fields = (): boolean => {
+    const errors: typeof validationErrors = {};
+    let isValid = true;
+
+    if (!validateCardNumber(formData.cardNumber)) {
+      errors.cardNumber = 'Card number must be 16 digits';
+      isValid = false;
+    }
+
+    if (!validateCardExpiry(formData.cardExpiry)) {
+      errors.cardExpiry = 'Invalid expiry date (MM/YY)';
+      isValid = false;
+    }
+
+    if (!validateCVV(formData.cardCVV)) {
+      errors.cardCVV = 'CVV must be 3 digits';
+      isValid = false;
+    }
+
+    if (!validateZipCode(formData.billingZip)) {
+      errors.billingZip = 'ZIP code must be 5 digits';
+      isValid = false;
+    }
+
+    setValidationErrors(errors);
+    return isValid;
+  };
+
   const [timeSlotsPage, setTimeSlotsPage] = useState(0);
   const SLOTS_PER_PAGE = 6;
 
@@ -42,18 +150,39 @@ const Booking: React.FC = () => {
       available: boolean;
       price: number;
     }> = [];
-    const times = ['12:00', '12:30', '1:00', '1:30', '2:00', '2:30', '3:00', '3:30', '4:00', '4:30', 
+    const times = ['11:00', '11:30', '12:00', '12:30', '1:00', '1:30', '2:00', '2:30', '3:00', '3:30', '4:00', '4:30', 
                    '5:00', '5:30', '6:00', '6:30', '7:00', '7:30', '8:00', '8:30', '9:00', '9:30', 
                    '10:00', '10:30', '11:00'];
     
     times.forEach((time, index) => {
+      let period = 'PM';
+      let hourValue = 12;
+      
+      // Handle 11:00 AM and 11:30 AM (first two slots)
+      if (index === 0) {
+        period = 'AM';
+        hourValue = 11;
+      } else if (index === 1) {
+        period = 'AM';
+        hourValue = 11;
+      } else if (index === 2) {
+        // 12:00 PM
+        hourValue = 12;
+      } else if (index < 24) {
+        // Rest of PM times
+        hourValue = Math.floor((index - 2) / 2) + 12;
+      } else {
+        // Last slot (11:00 PM)
+        hourValue = 23;
+      }
+      
       slots.push({
         id: String(index + 1),
-        time: `${time} PM`,
-        hourValue: index === 0 ? 12 : (index < 22 ? Math.floor(index / 2) + 12 : 23),
+        time: `${time} ${period}`,
+        hourValue: hourValue,
         minuteValue: index % 2 === 0 ? 0 : 30,
         available: ![3, 7].includes(index),
-        price: index < 8 ? 80 : (index < 16 ? 100 : 120)
+        price: index < 10 ? 80 : (index < 18 ? 100 : 120)
       });
     });
     
@@ -112,7 +241,25 @@ const Booking: React.FC = () => {
     return new Date(parseInt(year), parseInt(month), 0).getDate();
   };
 
-  const days = Array.from({ length: getDaysInMonth(formData.month, formData.year || String(currentYear)) }, (_, i) => i + 1);
+  // Generate days array, filtering out past dates if it's the current month/year
+  const getAvailableDays = () => {
+    const totalDays = getDaysInMonth(formData.month, formData.year || String(currentYear));
+    const allDays = Array.from({ length: totalDays }, (_, i) => i + 1);
+    
+    // If current month and year, filter out past dates
+    const selectedYear = parseInt(formData.year) || currentYear;
+    const selectedMonth = parseInt(formData.month);
+    
+    if (selectedYear === currentYear && selectedMonth === currentMonth) {
+      // Only show dates from today onwards
+      return allDays.filter(day => day >= currentDay);
+    }
+    
+    // For future months, show all days
+    return allDays;
+  };
+
+  const days = getAvailableDays();
   const years = Array.from({ length: 3 }, (_, i) => currentYear + i);
 
   const isDateValid = () => {
@@ -133,12 +280,24 @@ const Booking: React.FC = () => {
     const newFormData = { ...formData, [field]: value };
     
     if (field === 'month' || field === 'year') {
+      const selectedYear = parseInt(field === 'year' ? value : formData.year || String(currentYear));
+      const selectedMonth = parseInt(field === 'month' ? value : formData.month);
+      const selectedDay = parseInt(formData.day);
+      
+      // Check if month exceeds days in month
       const daysInMonth = getDaysInMonth(
         field === 'month' ? value : formData.month,
-        field === 'year' ? value : formData.year
+        field === 'year' ? value : (formData.year || String(currentYear))
       );
-      if (parseInt(formData.day) > daysInMonth) {
+      if (selectedDay > daysInMonth) {
         newFormData.day = String(daysInMonth);
+      }
+      
+      // If switching to current month/year, check if selected day is in the past
+      if (selectedYear === currentYear && selectedMonth === currentMonth) {
+        if (selectedDay < currentDay) {
+          newFormData.day = ''; // Clear day selection if it's in the past
+        }
       }
     }
     
@@ -152,27 +311,153 @@ const Booking: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    
+    // Clear validation errors when fields become valid
+    if (name === 'email' && validateEmail(value)) {
+      setValidationErrors(prev => ({ ...prev, email: undefined }));
+    }
+    
+    if (name === 'cardCVV' && validateCVV(value)) {
+      setValidationErrors(prev => ({ ...prev, cardCVV: undefined }));
+    }
+    
+    if (name === 'billingZip' && validateZipCode(value)) {
+      setValidationErrors(prev => ({ ...prev, billingZip: undefined }));
+    }
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, '');
+    const oldValue = formData.phone;
+    const newValue = e.target.value;
+    
+    // If user is deleting (new value is shorter), allow it
+    if (newValue.length < oldValue.length) {
+      // Just strip formatting and let them delete
+      let digitsOnly = newValue.replace(/\D/g, '');
+      
+      // Format the remaining digits
+      let formatted = digitsOnly;
+      if (digitsOnly.length >= 1) {
+        if (digitsOnly.length <= 3) {
+          formatted = digitsOnly;
+        } else if (digitsOnly.length <= 6) {
+          formatted = `(${digitsOnly.slice(0, 3)}) ${digitsOnly.slice(3)}`;
+        } else {
+          formatted = `(${digitsOnly.slice(0, 3)}) ${digitsOnly.slice(3, 6)}-${digitsOnly.slice(6, 10)}`;
+        }
+      }
+      
+      setFormData({ ...formData, phone: formatted });
+      
+      // Clear validation error if phone is now valid
+      if (validatePhone(formatted)) {
+        setValidationErrors(prev => ({ ...prev, phone: undefined }));
+      }
+      return;
+    }
+    
+    // Otherwise, normal input - strip non-digits and format
+    let value = newValue.replace(/\D/g, '');
     
     if (value.length > 10) {
       value = value.slice(0, 10);
     }
     
     let formatted = value;
-    if (value.length >= 3) {
-      formatted = `(${value.slice(0, 3)})`;
-      if (value.length > 3) {
-        formatted += ` ${value.slice(3, 6)}`;
-      }
-      if (value.length > 6) {
-        formatted += `-${value.slice(6, 10)}`;
+    if (value.length >= 1) {
+      if (value.length <= 3) {
+        formatted = value;
+      } else if (value.length <= 6) {
+        formatted = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+      } else {
+        formatted = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
       }
     }
     
     setFormData({ ...formData, phone: formatted });
+    
+    // Clear validation error if phone is now valid
+    if (validatePhone(formatted)) {
+      setValidationErrors(prev => ({ ...prev, phone: undefined }));
+    }
+  };
+
+  const handleCardExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    
+    // If user manually types a slash after single digit (e.g., "3/")
+    if (input.includes('/')) {
+      const parts = input.split('/');
+      let month = parts[0].replace(/\D/g, '');
+      let year = parts[1] ? parts[1].replace(/\D/g, '') : '';
+      
+      // Add leading zero to single digit month
+      if (month.length === 1) {
+        month = '0' + month;
+      }
+      
+      // Limit month to 2 digits and year to 2 digits
+      month = month.slice(0, 2);
+      year = year.slice(0, 2);
+      
+      const formatted = year ? `${month}/${year}` : `${month}/`;
+      setFormData({ ...formData, cardExpiry: formatted });
+      
+      // Clear validation error if format is now valid
+      if (validateCardExpiry(formatted)) {
+        setValidationErrors(prev => ({ ...prev, cardExpiry: undefined }));
+      }
+      return;
+    }
+    
+    // Normal flow - no slash yet
+    let value = input.replace(/\D/g, ''); // Remove all non-digits
+    
+    if (value.length > 4) {
+      value = value.slice(0, 4); // Limit to 4 digits (MMYY)
+    }
+    
+    let formatted = value;
+    if (value.length >= 3) {
+      formatted = `${value.slice(0, 2)}/${value.slice(2)}`; // Add slash after MM
+    }
+    
+    setFormData({ ...formData, cardExpiry: formatted });
+    
+    // Clear validation error if format is now valid
+    if (validateCardExpiry(formatted)) {
+      setValidationErrors(prev => ({ ...prev, cardExpiry: undefined }));
+    }
+  };
+
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ''); // Remove all non-digits
+    
+    if (value.length > 16) {
+      value = value.slice(0, 16); // Limit to 16 digits
+    }
+    
+    let formatted = value;
+    if (value.length > 4) {
+      formatted = `${value.slice(0, 4)}-`;
+      if (value.length > 8) {
+        formatted += `${value.slice(4, 8)}-`;
+        if (value.length > 12) {
+          formatted += `${value.slice(8, 12)}-${value.slice(12)}`;
+        } else {
+          formatted += value.slice(8);
+        }
+      } else {
+        formatted += value.slice(4);
+      }
+    }
+    
+    setFormData({ ...formData, cardNumber: formatted });
+    
+    // Clear validation error if card number is now valid
+    if (validateCardNumber(formatted)) {
+      setValidationErrors(prev => ({ ...prev, cardNumber: undefined }));
+    }
   };
 
   const canProceed = () => {
@@ -195,6 +480,19 @@ const Booking: React.FC = () => {
   };
 
   const handleNext = () => {
+    // Clear previous validation errors
+    setValidationErrors({});
+    
+    // Validate Step 3 (Contact Information)
+    if (step === 3 && !validateStep3Fields()) {
+      return; // Don't proceed if validation fails
+    }
+    
+    // Validate Step 4 (Payment Information)
+    if (step === 4 && !validateStep4Fields()) {
+      return; // Don't proceed if validation fails
+    }
+    
     if (canProceed() && step < 4) {
       setCompletedSteps(prev => new Set([...prev, step]));
       const nextStep = step + 1;
@@ -203,11 +501,15 @@ const Booking: React.FC = () => {
         setMaxStepReached(nextStep);
       }
       
-      // Scroll to top of booking container
-      const container = document.getElementById('booking-container');
-      if (container) {
-        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      // Scroll to top of booking container with slight delay for render
+      setTimeout(() => {
+        const container = document.getElementById('booking-container');
+        if (container) {
+          const yOffset = -20; // 20px above the container
+          const y = container.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 50);
     }
   };
 
@@ -215,11 +517,15 @@ const Booking: React.FC = () => {
     if (step > 1) {
       setStep(step - 1);
       
-      // Scroll to top of booking container
-      const container = document.getElementById('booking-container');
-      if (container) {
-        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      // Scroll to top of booking container with slight delay for render
+      setTimeout(() => {
+        const container = document.getElementById('booking-container');
+        if (container) {
+          const yOffset = -20; // 20px above the container
+          const y = container.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 50);
     }
   };
 
@@ -227,16 +533,27 @@ const Booking: React.FC = () => {
     if (clickedStep <= maxStepReached) {
       setStep(clickedStep);
       
-      // Scroll to top of booking container
-      const container = document.getElementById('booking-container');
-      if (container) {
-        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      // Scroll to top of booking container with slight delay for render
+      setTimeout(() => {
+        const container = document.getElementById('booking-container');
+        if (container) {
+          const yOffset = -20; // 20px above the container
+          const y = container.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 50);
     }
   };
 
   const handleSubmit = () => {
-    alert('Booking submitted! Check console for details.');
+    // Validate Step 4 fields before allowing submission
+    if (!validateStep4Fields()) {
+      return; // Don't submit if validation fails
+    }
+    
+    // Show success animation
+    setShowSuccessAnimation(true);
+    
     console.log('Booking submitted:', formData, 'Total:', calculateTotal());
   };
 
@@ -251,6 +568,128 @@ const Booking: React.FC = () => {
 
   return (
     <div className={styles.booking}>
+      {/* Success Banner - Option 4 with Close */}
+      {showSuccessAnimation && (
+        <>
+          {/* Backdrop overlay - click to close */}
+          <div 
+            className={`${styles.bannerBackdrop} ${isClosing ? styles.backdropClosing : ''}`}
+            onClick={handleCloseBanner}
+          ></div>
+          
+          <div 
+            className={`${styles.successBanner} ${isClosing ? styles.closing : ''}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              className={styles.closeButton}
+              onClick={handleCloseBanner}
+              aria-label="Close notification"
+            >
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round"/>
+              </svg>
+            </button>
+            
+            <div className={styles.bannerHeader}>
+              <div className={styles.bannerIcon}>
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                  <circle cx="12" cy="12" r="10" fill="none" stroke="white" strokeWidth="2"/>
+                  <path 
+                    d="M9 12l2 2 4-4"
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <div className={styles.bannerText}>
+                <h3 className={styles.bannerTitle}>Booking Confirmed!</h3>
+                <p className={styles.bannerSubtitle}>Your field reservation has been successfully processed</p>
+              </div>
+            </div>
+            
+            <div className={styles.bannerDetails}>
+              <div className={styles.detailsGrid}>
+                <div className={styles.detailItem}>
+                  <svg className={styles.detailIcon} viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <div className={styles.detailContent}>
+                    <span className={styles.detailLabel}>Field</span>
+                    <span className={styles.detailValue}>{getSelectedField()?.name}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.detailItem}>
+                  <svg className={styles.detailIcon} viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <path d="M16 2v4M8 2v4M3 10h18"/>
+                  </svg>
+                  <div className={styles.detailContent}>
+                    <span className={styles.detailLabel}>Date</span>
+                    <span className={styles.detailValue}>{getFormattedDate()}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.detailItem}>
+                  <svg className={styles.detailIcon} viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                  </svg>
+                  <div className={styles.detailContent}>
+                    <span className={styles.detailLabel}>Time</span>
+                    <span className={styles.detailValue}>{getSelectedTimeSlot()?.time}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.detailItem}>
+                  <svg className={styles.detailIcon} viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+                  </svg>
+                  <div className={styles.detailContent}>
+                    <span className={styles.detailLabel}>Duration</span>
+                    <span className={styles.detailValue}>{formData.duration} hour{formData.duration > 1 ? 's' : ''}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.detailItem}>
+                  <svg className={styles.detailIcon} viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                  <div className={styles.detailContent}>
+                    <span className={styles.detailLabel}>Players</span>
+                    <span className={styles.detailValue}>{formData.players}</span>
+                  </div>
+                </div>
+                
+                <div className={styles.detailItem}>
+                  <svg className={styles.detailIcon} viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                  <div className={styles.detailContent}>
+                    <span className={styles.detailLabel}>Total Paid</span>
+                    <span className={styles.detailValue}>${calculateTotal()}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className={styles.emailNotice}>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                <span>Confirmation email sent to {formData.email}</span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       <div className={styles.bookingHeader}>
         <h2 className={styles.bookingTitle}>Book Your Field</h2>
         <p className={styles.bookingSubtitle}>Reserve your time slot in just a few simple steps</p>
@@ -557,11 +996,14 @@ const Booking: React.FC = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="Email Address"
-                      className={styles.input}
+                      className={`${styles.input} ${validationErrors.email ? styles.inputError : ''}`}
                     />
                     <label className={`${styles.floatingLabel} ${formData.email ? styles.active : ''}`}>
                       Email Address *
                     </label>
+                    {validationErrors.email && (
+                      <span className={styles.errorMessage}>{validationErrors.email}</span>
+                    )}
                   </div>
 
                   <div className={styles.inputGroup}>
@@ -571,11 +1013,14 @@ const Booking: React.FC = () => {
                       value={formData.phone}
                       onChange={handlePhoneChange}
                       placeholder="Phone Number"
-                      className={styles.input}
+                      className={`${styles.input} ${validationErrors.phone ? styles.inputError : ''}`}
                     />
                     <label className={`${styles.floatingLabel} ${formData.phone ? styles.active : ''}`}>
                       Phone Number *
                     </label>
+                    {validationErrors.phone && (
+                      <span className={styles.errorMessage}>{validationErrors.phone}</span>
+                    )}
                   </div>
 
                   <div className={styles.inputGroup}>
@@ -660,14 +1105,17 @@ const Booking: React.FC = () => {
                         type="text"
                         name="cardNumber"
                         value={formData.cardNumber}
-                        onChange={handleInputChange}
+                        onChange={handleCardNumberChange}
                         placeholder="Card Number"
                         maxLength={19}
-                        className={styles.input}
+                        className={`${styles.input} ${validationErrors.cardNumber ? styles.inputError : ''}`}
                       />
                       <label className={`${styles.floatingLabel} ${formData.cardNumber ? styles.active : ''}`}>
                         Card Number *
                       </label>
+                      {validationErrors.cardNumber && (
+                        <span className={styles.errorMessage}>{validationErrors.cardNumber}</span>
+                      )}
                     </div>
 
                     <div className={styles.formRow}>
@@ -676,14 +1124,17 @@ const Booking: React.FC = () => {
                           type="text"
                           name="cardExpiry"
                           value={formData.cardExpiry}
-                          onChange={handleInputChange}
+                          onChange={handleCardExpiryChange}
                           placeholder="Expiry Date"
                           maxLength={5}
-                          className={styles.input}
+                          className={`${styles.input} ${validationErrors.cardExpiry ? styles.inputError : ''}`}
                         />
                         <label className={`${styles.floatingLabel} ${formData.cardExpiry ? styles.active : ''}`}>
                           Expiry (MM/YY) *
                         </label>
+                        {validationErrors.cardExpiry && (
+                          <span className={styles.errorMessage}>{validationErrors.cardExpiry}</span>
+                        )}
                       </div>
 
                       <div className={styles.inputGroup}>
@@ -693,12 +1144,15 @@ const Booking: React.FC = () => {
                           value={formData.cardCVV}
                           onChange={handleInputChange}
                           placeholder="CVV"
-                          maxLength={4}
-                          className={styles.input}
+                          maxLength={3}
+                          className={`${styles.input} ${validationErrors.cardCVV ? styles.inputError : ''}`}
                         />
                         <label className={`${styles.floatingLabel} ${formData.cardCVV ? styles.active : ''}`}>
                           CVV *
                         </label>
+                        {validationErrors.cardCVV && (
+                          <span className={styles.errorMessage}>{validationErrors.cardCVV}</span>
+                        )}
                       </div>
                     </div>
 
@@ -710,11 +1164,14 @@ const Booking: React.FC = () => {
                         onChange={handleInputChange}
                         placeholder="Billing ZIP Code"
                         maxLength={10}
-                        className={styles.input}
+                        className={`${styles.input} ${validationErrors.billingZip ? styles.inputError : ''}`}
                       />
                       <label className={`${styles.floatingLabel} ${formData.billingZip ? styles.active : ''}`}>
                         Billing ZIP Code *
                       </label>
+                      {validationErrors.billingZip && (
+                        <span className={styles.errorMessage}>{validationErrors.billingZip}</span>
+                      )}
                     </div>
 
                     <div className={styles.securityNotice}>
