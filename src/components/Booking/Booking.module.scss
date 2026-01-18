@@ -385,7 +385,8 @@
       background: #f8f9fa;
     }
 
-    &:checked {
+    &:checked,
+    &:hover {
       background: #98ED66;
       color: #15141a;
     }
@@ -431,7 +432,8 @@
     color: #15141a;
     padding: 0.5rem;
 
-    &:checked {
+    &:checked,
+    &:hover {
       background: #98ED66;
       color: #15141a;
     }
@@ -443,6 +445,11 @@
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  min-height: 280px; // Fixed height for 2 rows to prevent jumping
+  
+  @media (max-width: 767px) {
+    min-height: 560px; // Adjust for mobile (1 column layout)
+  }
 }
 
 .timeSlot {
@@ -515,59 +522,47 @@
 // Pagination
 .pagination {
   display: flex;
+  justify-content: center;
   align-items: center;
+  margin-top: 40px;
+  
+  svg {
+    display: block;
+    overflow: visible;
+  }
+
+  circle {
+    cursor: pointer;
+  }
+}
+
+.paginationControls {
+  display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .paginationButton {
   padding: 0.75rem 1.5rem;
-  border: 1px solid rgba(21, 20, 26, 0.15);
+  border: 2px solid #15141a;
   border-radius: 8px;
   font-family: 'Inter', sans-serif;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #15141a;
-  background: #f8f9fa;
+  background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover:not(:disabled) {
-    border-color: rgba(21, 20, 26, 0.4);
-    background: #ffffff;
+    background: #15141a;
+    color: #98ED66;
   }
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.3;
     cursor: not-allowed;
-  }
-}
-
-.paginationDots {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.paginationDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(21, 20, 26, 0.2);
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
-
-  &:hover {
-    background: rgba(21, 20, 26, 0.4);
-  }
-
-  &.active {
-    width: 24px;
-    border-radius: 4px;
-    background: #98ED66;
   }
 }
 

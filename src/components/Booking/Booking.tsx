@@ -420,7 +420,29 @@ const Booking: React.FC = () => {
                   </select>
                 </div>
 
-                <div className={styles.timeSlots}>
+                <div 
+                  className={styles.timeSlots}
+                  onTouchStart={(e) => {
+                    const touch = e.touches[0];
+                    const startX = touch.clientX;
+                    const handleTouchMove = (e: TouchEvent) => {
+                      const touch = e.touches[0];
+                      const diff = startX - touch.clientX;
+                      if (Math.abs(diff) > 50) {
+                        if (diff > 0 && timeSlotsPage < getTotalPages() - 1) {
+                          setTimeSlotsPage(timeSlotsPage + 1);
+                        } else if (diff < 0 && timeSlotsPage > 0) {
+                          setTimeSlotsPage(timeSlotsPage - 1);
+                        }
+                        document.removeEventListener('touchmove', handleTouchMove);
+                      }
+                    };
+                    document.addEventListener('touchmove', handleTouchMove);
+                    document.addEventListener('touchend', () => {
+                      document.removeEventListener('touchmove', handleTouchMove);
+                    }, { once: true });
+                  }}
+                >
                   {getPaginatedTimeSlots().map((slot) => {
                     const isSelected = formData.timeSlot === slot.id;
                     return (
@@ -439,31 +461,62 @@ const Booking: React.FC = () => {
                 </div>
 
                 {getTotalPages() > 1 && (
-                  <div className={styles.pagination}>
-                    <button
-                      className={styles.paginationButton}
-                      onClick={() => setTimeSlotsPage(Math.max(0, timeSlotsPage - 1))}
-                      disabled={timeSlotsPage === 0}
-                    >
-                      Previous
-                    </button>
-                    <div className={styles.paginationDots}>
-                      {Array.from({ length: getTotalPages() }).map((_, index) => (
-                        <button
-                          key={index}
-                          className={`${styles.paginationDot} ${timeSlotsPage === index ? styles.active : ''}`}
-                          onClick={() => setTimeSlotsPage(index)}
+                  <>
+                    <div className={styles.pagination}>
+                      <svg 
+                        width={getTotalPages() * 20} 
+                        height={20}
+                        style={{ overflow: 'visible' }}
+                      >
+                        {/* Render static background dots */}
+                        {Array.from({ length: getTotalPages() }).map((_, index) => {
+                          return (
+                            <circle
+                              key={`dot-${index}`}
+                              cx={index * 20 + 10}
+                              cy={10}
+                              r={4}
+                              fill="#d3d3d3"
+                              opacity={0.6}
+                              style={{
+                                cursor: 'pointer'
+                              }}
+                              onClick={() => setTimeSlotsPage(index)}
+                            />
+                          );
+                        })}
+                        
+                        {/* Animated liquid blob that moves between dots */}
+                        <circle
+                          cx={timeSlotsPage * 20 + 10}
+                          cy={10}
+                          r={5}
+                          fill="#98ED66"
+                          opacity={1}
+                          style={{
+                            transition: 'cx 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95)',
+                            pointerEvents: 'none'
+                          }}
                         />
-                      ))}
+                      </svg>
                     </div>
-                    <button
-                      className={styles.paginationButton}
-                      onClick={() => setTimeSlotsPage(Math.min(getTotalPages() - 1, timeSlotsPage + 1))}
-                      disabled={timeSlotsPage === getTotalPages() - 1}
-                    >
-                      Next
-                    </button>
-                  </div>
+                    <div className={styles.paginationControls}>
+                      <button
+                        className={styles.paginationButton}
+                        onClick={() => setTimeSlotsPage(Math.max(0, timeSlotsPage - 1))}
+                        disabled={timeSlotsPage === 0}
+                      >
+                        Previous
+                      </button>
+                      <button
+                        className={styles.paginationButton}
+                        onClick={() => setTimeSlotsPage(Math.min(getTotalPages() - 1, timeSlotsPage + 1))}
+                        disabled={timeSlotsPage === getTotalPages() - 1}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
