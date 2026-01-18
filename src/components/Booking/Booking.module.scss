@@ -693,6 +693,7 @@
   transition: all 0.3s ease;
   background: #f8f9fa;
   padding: 0 0.25rem;
+  white-space: nowrap;
 
   &.active {
     top: -0.625rem;
