@@ -7,6 +7,8 @@ import { Trophy, Target, Users, Lightbulb, TrendingUp, Award, ArrowDownRight } f
 import ReviewSection from '../../components/Reviews/ReviewSection';
 import PricingSection from '../../components/PricingSection/PricingSection';
 import Booking from '../../components/Booking/Booking';
+import HomeSlider from '../../components/HomeSlider/HomeSlider';
+import LeagueTable from '../../components/LeagueTable/LeagueTable';
 
 // TODO: Update these image import paths to match your actual image locations
 import iso1Image from '../../assets/images/home-sections/iso1.png';
@@ -88,6 +90,7 @@ const Home = () => {
     <>
     <SEO {...seo} />
     <div className={styles.homePage}>
+      <HomeSlider />
       {/* Intro Hero Section */}
       <section className={styles.introHero}>
         <div className={styles.imageColumn}>
@@ -107,7 +110,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
       {/* Animated Statistics Section */}
       <section ref={statsRef} className={styles.statsSection}>
         <div className={styles.statColumn}>
@@ -221,6 +223,7 @@ const Home = () => {
       </section>
 <PricingSection />
 <Booking />
+<LeagueTable />
       {/* Row 1 */}
       <section id="row1" className={styles.heroSection}>
         <div className={styles.imageColumn}>
