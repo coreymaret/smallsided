@@ -9,6 +9,7 @@ import PricingSection from '../../components/PricingSection/PricingSection';
 import Booking from '../../components/Booking/Booking';
 import HomeSlider from '../../components/HomeSlider/HomeSlider';
 import LeagueTable from '../../components/LeagueTable/LeagueTable';
+import PickupReservation from '../../components/PickupReservation/PickupReservation';
 
 // TODO: Update these image import paths to match your actual image locations
 import iso1Image from '../../assets/images/home-sections/iso1.png';
@@ -224,6 +225,7 @@ const Home = () => {
 <PricingSection />
 <Booking />
 <LeagueTable />
+<PickupReservation />
       {/* Row 1 */}
       <section id="row1" className={styles.heroSection}>
         <div className={styles.imageColumn}>
