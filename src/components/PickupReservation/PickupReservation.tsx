@@ -14,75 +14,68 @@ interface PickupGame {
   pricePerPlayer: number;
 }
 
-// Mock data - replace with API call
-const MOCK_GAMES: PickupGame[] = [
-  {
-    id: '1',
-    date: '2026-01-20',
-    time: '6:00 PM - 7:30 PM',
-    location: 'Central Sports Complex',
-    format: '7v7',
-    spotsTotal: 14,
-    spotsAvailable: 5,
-    skillLevel: 'Intermediate',
-    pricePerPlayer: 15
-  },
-  {
-    id: '2',
-    date: '2026-01-20',
-    time: '7:30 PM - 9:00 PM',
-    location: 'Central Sports Complex',
-    format: '5v5',
-    spotsTotal: 10,
-    spotsAvailable: 2,
-    skillLevel: 'Advanced',
-    pricePerPlayer: 18
-  },
-  {
-    id: '3',
-    date: '2026-01-22',
-    time: '6:00 PM - 7:30 PM',
-    location: 'Riverside Fields',
-    format: '7v7',
-    spotsTotal: 14,
-    spotsAvailable: 8,
-    skillLevel: 'Beginner',
-    pricePerPlayer: 12
-  },
-  {
-    id: '4',
-    date: '2026-01-22',
-    time: '7:30 PM - 9:00 PM',
-    location: 'Riverside Fields',
-    format: '5v5',
-    spotsTotal: 10,
-    spotsAvailable: 10,
-    skillLevel: 'Intermediate',
-    pricePerPlayer: 15
-  },
-  {
-    id: '5',
-    date: '2026-01-24',
-    time: '6:00 PM - 7:30 PM',
-    location: 'Central Sports Complex',
-    format: '7v7',
-    spotsTotal: 14,
-    spotsAvailable: 7,
-    skillLevel: 'All Levels',
-    pricePerPlayer: 15
-  },
-  {
-    id: '6',
-    date: '2026-01-25',
-    time: '10:00 AM - 11:30 AM',
-    location: 'Riverside Fields',
-    format: '5v5',
-    spotsTotal: 10,
-    spotsAvailable: 4,
-    skillLevel: 'Intermediate',
-    pricePerPlayer: 15
+// Generate mock games with dynamic dates
+const generateMockGames = (): PickupGame[] => {
+  const today = new Date();
+  const games: PickupGame[] = [];
+  
+  // Generate games for the next 14 days
+  for (let dayOffset = 0; dayOffset < 14; dayOffset++) {
+    const gameDate = new Date(today);
+    gameDate.setDate(today.getDate() + dayOffset);
+    const dateString = gameDate.toISOString().split('T')[0];
+    
+    // Add 2-3 games per day with varying times and formats
+    if (dayOffset % 2 === 0) {
+      // 7v7 Evening game
+      games.push({
+        id: `game-${dayOffset}-1`,
+        date: dateString,
+        time: '6:00 PM - 7:30 PM',
+        location: 'Central Sports Complex',
+        format: '7v7',
+        spotsTotal: 14,
+        spotsAvailable: Math.floor(Math.random() * 8) + 3, // 3-10 spots available
+        skillLevel: ['Beginner', 'Intermediate', 'Advanced'][Math.floor(Math.random() * 3)],
+        pricePerPlayer: 15
+      });
+    }
+    
+    if (dayOffset % 3 === 0) {
+      // 5v5 Late evening game
+      games.push({
+        id: `game-${dayOffset}-2`,
+        date: dateString,
+        time: '7:30 PM - 9:00 PM',
+        location: dayOffset % 2 === 0 ? 'Central Sports Complex' : 'Riverside Fields',
+        format: '5v5',
+        spotsTotal: 10,
+        spotsAvailable: Math.floor(Math.random() * 6) + 2, // 2-7 spots available
+        skillLevel: ['Intermediate', 'Advanced', 'All Levels'][Math.floor(Math.random() * 3)],
+        pricePerPlayer: 18
+      });
+    }
+    
+    // Weekend morning games
+    if (gameDate.getDay() === 6 || gameDate.getDay() === 0) {
+      games.push({
+        id: `game-${dayOffset}-3`,
+        date: dateString,
+        time: '10:00 AM - 11:30 AM',
+        location: 'Riverside Fields',
+        format: '7v7',
+        spotsTotal: 14,
+        spotsAvailable: Math.floor(Math.random() * 10) + 4, // 4-13 spots available
+        skillLevel: 'All Levels',
+        pricePerPlayer: 15
+      });
+    }
   }
-];
+  
+  return games;
+};
+
+const MOCK_GAMES: PickupGame[] = generateMockGames();
 
 const PickupReservation: React.FC = () => {
   const [selectedWeek, setSelectedWeek] = useState(0);
