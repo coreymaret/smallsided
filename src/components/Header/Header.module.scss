@@ -12,6 +12,18 @@
   opacity: 1;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   z-index: 1000;
+  
+  // Ensure solid background to hide menu content
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #15141a;
+    z-index: -1;
+  }
 
   &.hide { transform: translateY(-100%); opacity: 0; }
   &.show { transform: translateY(0); opacity: 1; }
@@ -26,6 +38,18 @@
   position: relative;
   z-index: 2000;
   padding-top: 3rem;
+  
+  // Ensure background extends fully to cover scrolling content
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #15141a;
+    z-index: -1;
+  }
 }
 
 .logo {
