@@ -1,153 +1,161 @@
 import { useState, useRef, useEffect } from "react";
-// React hooks for state, DOM references, and lifecycle behavior
-
 import { Link, useLocation } from "react-router-dom";
-// Used for internal navigation without reloading the page
-
-import { Facebook, Instagram, Youtube, Twitter } from "lucide-react";
-// Social media icon components
-
+import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, Tent, ChevronDown } from "lucide-react";
 import styles from "./Header.module.scss";
-// CSS modules for scoped header styling
-
 import Logo from "../../assets/logo.svg";
-// Logo image
-
 import TopToggleBar from "../TopToggleBar/TopToggleBar";
-// A dismissible top bar displayed above the header
-
 
 const Header = () => {
-  // Get current location to determine active link
   const location = useLocation();
-
-  // Tracks the state of the mobile menu: open → closing → closed
-  const [menuState, setMenuState] =
-    useState<"open" | "closing" | "closed" | undefined>("closed");
-
-  // Boolean for convenience (menu is fully open)
+  const [menuState, setMenuState] = useState<"open" | "closing" | "closed" | undefined>("closed");
   const isOpen = menuState === "open";
-
-  // Track if the screen is mobile width (<785px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 785);
-
-  // Tracks whether the top toggle bar should be visible
   const [topBarVisible, setTopBarVisible] = useState(true);
-
-  // Stores last known scroll position (mutable via useRef without rerenders)
   const lastScrollY = useRef<number>(0);
-
-  // Controls whether the entire header is visible (shown/hidden on scroll)
   const [visible, setVisible] = useState(true);
+  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [menuAnimationComplete, setMenuAnimationComplete] = useState(false);
+  const [servicesAnimationComplete, setServicesAnimationComplete] = useState(false);
+  const megaMenuTimeoutRef = useRef<number | null>(null);
 
-
-  // -----------------------------
-  // Window resize listener
-  // -----------------------------
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 785);
-
     window.addEventListener("resize", handleResize);
-
-    // Cleanup on unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
-  // -----------------------------
-  // Lock body scroll when mobile menu is open
-  // -----------------------------
   useEffect(() => {
     if (isMobile && isOpen) {
-      // Prevent the background from scrolling while menu is open
+      // Calculate scrollbar width before hiding it
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      
       document.body.style.overflow = "hidden";
       document.body.style.position = "fixed";
       document.body.style.width = "100%";
       document.body.style.height = "100%";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      
+      // Also add padding to header to prevent shift
+      const headerElement = document.querySelector('header');
+      if (headerElement) {
+        (headerElement as HTMLElement).style.paddingRight = `${scrollbarWidth}px`;
+      }
     } else {
-      // Reset body styles when menu closes
       document.body.style.overflow = "";
       document.body.style.position = "";
       document.body.style.width = "";
       document.body.style.height = "";
+      document.body.style.paddingRight = "";
+      
+      // Reset header padding
+      const headerElement = document.querySelector('header');
+      if (headerElement) {
+        (headerElement as HTMLElement).style.paddingRight = "";
+      }
+      
+      // Close services submenu when mobile menu closes
+      if (isMobile) {
+        setMobileServicesOpen(false);
+      }
     }
   }, [isMobile, isOpen]);
 
-
-  // -----------------------------
-  // Load top bar visibility from localStorage
-  // -----------------------------
   useEffect(() => {
     const topBarState = localStorage.getItem("topBarClosed");
-
     if (topBarState) {
       try {
         const data = JSON.parse(topBarState);
         const now = Date.now();
         const fortyEightHours = 48 * 60 * 60 * 1000;
-
-        // If dismissed within last 48 hours → keep hidden
         if (now - data.timestamp < fortyEightHours)
           setTopBarVisible(!data.closed);
         else
           setTopBarVisible(true);
-
       } catch {
-        // If JSON parsing fails, show the bar
         setTopBarVisible(true);
       }
     }
   }, []);
 
-
-  // -----------------------------
-  // Auto-hide header on scroll down, show on scroll up
-  // -----------------------------
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
       const windowHeight = window.innerHeight;
       const documentHeight = document.body.scrollHeight;
-
-      // Keep header visible when near bottom of page
-      const nearBottom =
-        documentHeight - (currentScrollY + windowHeight) < 200;
+      const nearBottom = documentHeight - (currentScrollY + windowHeight) < 200;
 
       if (nearBottom) setVisible(true);
       else if (currentScrollY > lastScrollY.current && currentScrollY > 100)
-        // Hide header when scrolling down past 100px
         setVisible(false);
       else
-        // Show header when scrolling up
         setVisible(true);
 
       lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    // Cleanup
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-  // -----------------------------
-  // Toggle mobile menu open/close
-  // -----------------------------
   const toggleMenu = () => {
-    if (menuState === "open") setMenuState("closing");
-    else setMenuState("open");
+    if (menuState === "open") {
+      setMenuState("closing");
+      setMenuAnimationComplete(false);
+    } else {
+      setMenuState("open");
+      // Enable hover effects after the longest animation completes (0.7s + 0.5s animation + 0.1s buffer)
+      setTimeout(() => {
+        setMenuAnimationComplete(true);
+      }, 1300);
+    }
   };
 
-
-  // When clicking a link, close menu on mobile
   const handleLinkClick = () => {
     if (isMobile && isOpen) setMenuState("closing");
+    setMegaMenuOpen(false);
+    setMobileServicesOpen(false);
   };
 
+  const toggleMobileServices = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (mobileServicesOpen) {
+      setMobileServicesOpen(false);
+      setServicesAnimationComplete(false);
+    } else {
+      setMobileServicesOpen(true);
+      // Enable hover effects after the longest animation completes (0.25s + 0.4s animation + 0.1s buffer)
+      setTimeout(() => {
+        setServicesAnimationComplete(true);
+      }, 750);
+    }
+  };
 
-  // Helper function to check if a link is active
+  const handleServicesMouseEnter = () => {
+    if (!isMobile) {
+      if (megaMenuTimeoutRef.current) {
+        clearTimeout(megaMenuTimeoutRef.current);
+      }
+      setMegaMenuOpen(true);
+    }
+  };
+
+  const handleServicesMouseLeave = () => {
+    // Don't close immediately - let handleMegaMenuMouseLeave handle it
+  };
+
+  const handleMegaMenuMouseEnter = () => {
+    if (!isMobile) {
+      setMegaMenuOpen(true);
+    }
+  };
+
+  const handleMegaMenuMouseLeave = () => {
+    if (!isMobile) {
+      setMegaMenuOpen(false);
+    }
+  };
+
   const isActive = (path: string) => {
     if (path === "/") {
       return location.pathname === "/";
@@ -155,35 +163,48 @@ const Header = () => {
     return location.pathname.startsWith(path);
   };
 
+  const serviceItems = [
+    {
+      title: "Field Rentals",
+      path: "/services/field-rentals",
+      icon: Calendar,
+      description: "Book premium small-sided fields"
+    },
+    {
+      title: "Leagues",
+      path: "/services/leagues",
+      icon: Trophy,
+      description: "Join competitive small-sided leagues"
+    },
+    {
+      title: "Pickup",
+      path: "/services/pickup",
+      icon: Users,
+      description: "Drop-in games and open play"
+    },
+    {
+      title: "Birthday Parties",
+      path: "/services/birthday-parties",
+      icon: Cake,
+      description: "Unforgettable soccer celebrations"
+    },
+    {
+      title: "Camps",
+      path: "/services/camps",
+      icon: Tent,
+      description: "Skill development programs"
+    }
+  ];
 
-  // -----------------------------
-  // RENDER
-  // -----------------------------
   return (
-    <header
-      className={`${styles.header} ${visible ? styles.show : styles.hide}`}
-    >
-      {/* Optional top-of-page bar */}
-      {topBarVisible && (
-        <TopToggleBar onClose={() => setTopBarVisible(false)} />
-      )}
+    <header className={`${styles.header} ${visible ? styles.show : styles.hide}`}>
+      {topBarVisible && <TopToggleBar onClose={() => setTopBarVisible(false)} />}
 
-      <div
-        className={styles.headerContent}
-        // Pushes header down when top bar visible so layout doesn't overlap
-        style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }}
-      >
-        {/* Logo (click scrolls to top + closes menu if mobile) */}
+      <div className={styles.headerContent} style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }}>
         <Link to="/" className={styles.logo} onClick={handleLinkClick}>
-          <img 
-            src={Logo} 
-            alt="Small Sided Logo"
-            width="180"
-            height="40"
-          />
+          <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
         </Link>
 
-        {/* Navigation menu with dynamic animation classes */}
         <nav
           className={`${styles["main-nav"]} ${
             menuState === "open"
@@ -194,124 +215,144 @@ const Header = () => {
               ? styles.closed
               : ""
           }`}
+          data-hover-enabled={menuAnimationComplete ? "true" : "false"}
           onTransitionEnd={() => {
-            // After closing animation finishes → set to fully closed state
             if (menuState === "closing") setMenuState("closed");
           }}
         >
-          {/* ----------------------------- */}
-          {/* Internal Navigation Links     */}
-          {/* ----------------------------- */}
           <div className={styles.linksSection}>
             <ul>
               <li>
-                <Link 
-                  to="/" 
-                  onClick={handleLinkClick}
-                  className={isActive("/") ? styles.active : ""}
-                >
+                <Link to="/" onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>
                   Home
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/about" 
-                  onClick={handleLinkClick}
-                  className={isActive("/about") ? styles.active : ""}
-                >
+                <Link to="/about" onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>
                   About
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/exercises" 
-                  onClick={handleLinkClick}
-                  className={isActive("/exercises") ? styles.active : ""}
-                >
+                <Link to="/exercises" onClick={handleLinkClick} className={isActive("/exercises") ? styles.active : ""}>
                   Exercises
                 </Link>
               </li>
-              <li>
-                <Link 
-                  to="/work" 
-                  onClick={handleLinkClick}
-                  className={isActive("/work") ? styles.active : ""}
-                >
-                  Work
-                </Link>
+              <li
+                className={styles.servicesItem}
+                onMouseEnter={handleServicesMouseEnter}
+                onMouseLeave={handleServicesMouseLeave}
+              >
+                {isMobile ? (
+                  <>
+                    <button
+                      className={styles.servicesToggle}
+                      onClick={toggleMobileServices}
+                    >
+                      <span>Services</span>
+                      <ChevronDown 
+                        size={20} 
+                        className={`${styles.chevron} ${mobileServicesOpen ? styles.chevronOpen : ''}`}
+                      />
+                    </button>
+                    
+                    {/* Mobile Mega Menu Cards */}
+                    <div 
+                      className={`${styles.mobileServiceCards} ${mobileServicesOpen ? styles.mobileServiceCardsOpen : ''}`}
+                      data-hover-enabled={servicesAnimationComplete ? "true" : "false"}
+                    >
+                      {serviceItems.map((item, index) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={styles.mobileServiceCard}
+                          onClick={handleLinkClick}
+                          style={{ transitionDelay: mobileServicesOpen ? `${index * 0.05}s` : '0s' }}
+                        >
+                          <div className={styles.mobileServiceIcon}>
+                            <item.icon size={24} />
+                          </div>
+                          <div className={styles.mobileServiceText}>
+                            <h3>{item.title}</h3>
+                            <p>{item.description}</p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/services"
+                      onClick={handleLinkClick}
+                      className={isActive("/services") ? styles.active : ""}
+                    >
+                      Services
+                    </Link>
+                    
+                    {/* Desktop Mega Menu */}
+                    <div
+                      className={`${styles.megaMenu} ${megaMenuOpen ? styles.megaMenuOpen : ""}`}
+                      onMouseEnter={handleMegaMenuMouseEnter}
+                      onMouseLeave={handleMegaMenuMouseLeave}
+                    >
+                      <div className={styles.megaMenuContent}>
+                        {serviceItems.map((item, index) => (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className={styles.megaMenuItem}
+                            onClick={handleLinkClick}
+                            style={{ transitionDelay: `${index * 0.05}s` }}
+                          >
+                            <div className={styles.megaMenuIcon}>
+                              <item.icon size={24} />
+                            </div>
+                            <div className={styles.megaMenuText}>
+                              <h3>{item.title}</h3>
+                              <p>{item.description}</p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
               </li>
               <li>
-                <Link 
-                  to="/blog" 
-                  onClick={handleLinkClick}
-                  className={isActive("/blog") ? styles.active : ""}
-                >
+                <Link to="/blog" onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>
                   Blog
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/contact" 
-                  onClick={handleLinkClick}
-                  className={isActive("/contact") ? styles.active : ""}
-                >
+                <Link to="/contact" onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>
                   Contact
                 </Link>
               </li>
 
-              {/* Call-to-action button in menu */}
               <li className={styles.ctaItem}>
-                <Link
-                  to="/get-started"
-                  onClick={handleLinkClick}
-                  className={styles.ctaButton}
-                >
+                <Link to="/get-started" onClick={handleLinkClick} className={styles.ctaButton}>
                   Get Started
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* ----------------------------- */}
-          {/* Social Media Icons            */}
-          {/* ----------------------------- */}
           <div className={styles.socialSection}>
-            <a 
-              href="https://facebook.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label="Visit our Facebook page"
-            >
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Visit our Facebook page">
               <Facebook size={28} aria-hidden="true" />
             </a>
-            <a 
-              href="https://instagram.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label="Visit our Instagram page"
-            >
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Visit our Instagram page">
               <Instagram size={28} aria-hidden="true" />
             </a>
-            <a 
-              href="https://youtube.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label="Visit our YouTube channel"
-            >
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="Visit our YouTube channel">
               <Youtube size={28} aria-hidden="true" />
             </a>
-            <a 
-              href="https://twitter.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label="Visit our Twitter page"
-            >
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Visit our Twitter page">
               <Twitter size={28} aria-hidden="true" />
             </a>
           </div>
         </nav>
 
-        {/* Hamburger button for mobile view */}
         {isMobile && (
           <button
             className={`${styles.hamburger} ${isOpen ? styles.active : ""}`}
@@ -329,4 +370,3 @@ const Header = () => {
 };
 
 export default Header;
-// Exporting so this component can be used throughout the app
