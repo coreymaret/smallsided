@@ -74,6 +74,12 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
+      // Don't hide header when mobile menu is open
+      if (isOpen) {
+        setVisible(true);
+        return;
+      }
+
       const currentScrollY = window.scrollY;
       const windowHeight = window.innerHeight;
       const documentHeight = document.body.scrollHeight;
@@ -90,7 +96,7 @@ const Header = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isOpen]);
 
   const toggleMenu = () => {
     if (menuState === "open") {
