@@ -197,14 +197,114 @@ const Header = () => {
   ];
 
   return (
-    <header className={`${styles.header} ${visible ? styles.show : styles.hide}`}>
-      {topBarVisible && <TopToggleBar onClose={() => setTopBarVisible(false)} />}
+    <>
+      <header 
+        className={`${styles.header} ${visible ? styles.show : styles.hide}`}
+      >
+        {topBarVisible && <TopToggleBar onClose={() => setTopBarVisible(false)} />}
 
-      <div className={styles.headerContent} style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }}>
-        <Link to="/" className={styles.logo} onClick={handleLinkClick}>
-          <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
-        </Link>
+        <div className={styles.headerContent} style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }}>
+          <Link to="/" className={styles.logo} onClick={handleLinkClick}>
+            <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
+          </Link>
 
+          {/* Desktop Nav - inside header */}
+          {!isMobile && (
+            <nav className={styles["main-nav"]}>
+              <div className={styles.linksSection}>
+                <ul>
+                  <li>
+                    <Link to="/" onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about" onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>
+                      About
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/exercises" onClick={handleLinkClick} className={isActive("/exercises") ? styles.active : ""}>
+                      Exercises
+                    </Link>
+                  </li>
+                  <li
+                    className={styles.servicesItem}
+                    onMouseEnter={handleServicesMouseEnter}
+                    onMouseLeave={handleServicesMouseLeave}
+                  >
+                    <Link
+                      to="/services"
+                      onClick={handleLinkClick}
+                      className={isActive("/services") ? styles.active : ""}
+                    >
+                      Services
+                    </Link>
+                    
+                    {/* Desktop Mega Menu */}
+                    <div
+                      className={`${styles.megaMenu} ${megaMenuOpen ? styles.megaMenuOpen : ""}`}
+                      onMouseEnter={handleMegaMenuMouseEnter}
+                      onMouseLeave={handleMegaMenuMouseLeave}
+                    >
+                      <div className={styles.megaMenuContent}>
+                        {serviceItems.map((item, index) => (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className={styles.megaMenuItem}
+                            onClick={handleLinkClick}
+                            style={{ transitionDelay: `${index * 0.05}s` }}
+                          >
+                            <div className={styles.megaMenuIcon}>
+                              <item.icon size={24} />
+                            </div>
+                            <div className={styles.megaMenuText}>
+                              <h3>{item.title}</h3>
+                              <p>{item.description}</p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <Link to="/blog" onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>
+                      Contact
+                    </Link>
+                  </li>
+
+                  <li className={styles.ctaItem}>
+                    <Link to="/get-started" onClick={handleLinkClick} className={styles.ctaButton}>
+                      Get Started
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          )}
+
+          {isMobile && (
+            <button
+              className={`${styles.hamburger} ${isOpen ? styles.active : ""}`}
+              onClick={toggleMenu}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          )}
+        </div>
+      </header>
+
+      {/* Mobile Nav - outside header */}
+      {isMobile && (
         <nav
           className={`${styles["main-nav"]} ${
             menuState === "open"
@@ -215,6 +315,7 @@ const Header = () => {
               ? styles.closed
               : ""
           }`}
+          style={{ paddingTop: topBarVisible ? "120px" : "80px" }}
           data-hover-enabled={menuAnimationComplete ? "true" : "false"}
           onTransitionEnd={() => {
             if (menuState === "closing") setMenuState("closed");
@@ -352,20 +453,8 @@ const Header = () => {
             </a>
           </div>
         </nav>
-
-        {isMobile && (
-          <button
-            className={`${styles.hamburger} ${isOpen ? styles.active : ""}`}
-            onClick={toggleMenu}
-            aria-label={isOpen ? "Close menu" : "Open menu"}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        )}
-      </div>
-    </header>
+      )}
+    </>
   );
 };
 

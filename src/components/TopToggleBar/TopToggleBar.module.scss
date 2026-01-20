@@ -7,7 +7,7 @@
   background-color: #15141a;       /* Dark background */
   color: #ffffff;                  /* White text */
   font-family: "Inter", sans-serif;
-  z-index: 3000;                   /* On top of almost everything */
+  z-index: 2500;                   /* Below logo/hamburger (3000) but above nav (999) */
   border-bottom: 0.5px solid #98ed66; /* Subtle green line */
   margin: 0;
 
@@ -76,6 +76,8 @@
   align-items: center;
   justify-content: center;
   transition: opacity 0.2s ease;  /* Smooth hover effect */
+  z-index: 2501;                   /* Slightly above the bar itself */
+  position: relative;
 }
 
 .closeButton:hover {
