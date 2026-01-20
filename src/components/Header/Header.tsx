@@ -31,9 +31,6 @@ const Header = () => {
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       
       document.body.style.overflow = "hidden";
-      document.body.style.position = "fixed";
-      document.body.style.width = "100%";
-      document.body.style.height = "100%";
       document.body.style.paddingRight = `${scrollbarWidth}px`;
       
       // Also add padding to header to prevent shift
@@ -43,9 +40,6 @@ const Header = () => {
       }
     } else {
       document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.width = "";
-      document.body.style.height = "";
       document.body.style.paddingRight = "";
       
       // Reset header padding
