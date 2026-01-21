@@ -249,7 +249,6 @@
       .linksSection ul li:nth-child(1) a { transition-delay: 0.1s, 0.1s, 0.1s; }
       .linksSection ul li:nth-child(2) a { transition-delay: 0.2s, 0.2s, 0.2s; }
       .linksSection ul li:nth-child(3) a { transition-delay: 0.3s, 0.3s, 0.3s; }
-      .linksSection ul li:nth-child(4) a, 
       .linksSection ul li:nth-child(4) button { transition-delay: 0.4s, 0.4s, 0.4s; }
       .linksSection ul li:nth-child(5) a { transition-delay: 0.5s, 0.5s, 0.5s; }
       .linksSection ul li:nth-child(6) a { transition-delay: 0.6s, 0.6s, 0.6s; }
@@ -352,6 +351,23 @@
 // Services item with mega menu
 .servicesItem {
   position: relative;
+}
+
+// Desktop Services Label (non-clickable)
+.servicesLabel {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: default;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: #98ed66;
+  }
+
+  &.active {
+    color: #98ed66;
+  }
 }
 
 // Desktop Mega Menu
@@ -668,6 +684,10 @@
     li a { 
       font-size: 1.125rem;
     }
+  }
+
+  .servicesLabel {
+    font-size: 1.125rem;
   }
 
   .megaMenu {

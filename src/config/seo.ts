@@ -46,7 +46,7 @@ export const seoConfig: Record<string, PageSEO> = {
   },
 
   services: {
-    title: 'Our Services | Small Sided',
+    title: 'Services | Small Sided',
     description: 'Explore Small Sided\'s comprehensive soccer services: player development programs, coaching education, leagues, and consulting for clubs and organizations.',
     keywords: 'soccer services, soccer training programs, soccer leagues, soccer consulting, coaching education',
     url: '/services',
@@ -109,40 +109,47 @@ export const seoConfig: Record<string, PageSEO> = {
     }
   },
 
-  playerEducation: {
-    title: 'Player Education | Small Sided',
-    description: 'Elevate your game with Small Sided\'s player education programs. Technical training, tactical awareness, and mental skills development for all ages.',
-    keywords: 'soccer player training, youth soccer development, soccer skills training, individual soccer coaching, soccer technical training',
-    url: '/PlayerEducation'
-  },
+  fieldRental: {
+  title: 'Field Rental | Small Sided',
+  description: 'Rent premium small-sided soccer fields for parties, events, training sessions, and pickup games. Flexible scheduling and competitive rates for hourly field rentals.',
+  keywords: 'soccer field rental, small sided field rental, soccer party venue, soccer field hire, indoor soccer rental, outdoor soccer field, soccer event space, hourly field rental',
+  url: '/field-rental'
+},
 
-  parentEducation: {
-    title: 'Parent Education | Small Sided',
-    description: 'Empower soccer parents with knowledge. Learn how to support your young athlete\'s development, navigate youth soccer, and foster a positive sports experience.',
-    keywords: 'soccer parent education, youth soccer parents, supporting young athletes, soccer parent resources',
-    url: '/ParentEducation'
-  },
+  birthdayParties: {
+  title: 'Birthday Parties | Small Sided',
+  description: 'Host unforgettable soccer birthday parties at Small Sided. Fun games, professional coaching, and hassle-free party packages for kids of all ages and skill levels.',
+  keywords: 'soccer birthday party, kids soccer party, youth soccer birthday, soccer party venue, children soccer party, soccer party packages, sports birthday party',
+  url: '/birthday-parties'
+},
 
-  coachEducation: {
-    title: 'Coach Education | Small Sided',
-    description: 'Professional development for soccer coaches. Learn small-sided game methodology, session planning, player development strategies, and coaching best practices.',
-    keywords: 'soccer coach education, coaching certification, soccer coaching courses, small sided coaching, coach development',
-    url: '/CoachEducation'
-  },
+  leagues: {
+  title: 'Soccer Leagues | Small Sided',
+  description: 'Join competitive and recreational small-sided soccer leagues for adults and youth. Year-round seasons, flexible divisions, and organized play in a fun, inclusive environment.',
+  keywords: 'soccer leagues, small sided soccer league, adult soccer league, youth soccer league, recreational soccer, competitive soccer league, indoor soccer league, coed soccer league',
+  url: '/leagues'
+},
 
-  consulting: {
-    title: 'Soccer Consulting | Small Sided',
-    description: 'Expert soccer consulting for clubs, organizations, and facilities. Program design, curriculum development, staff training, and operational optimization.',
-    keywords: 'soccer consulting, club consulting, soccer program development, soccer curriculum design, soccer operations consulting',
-    url: '/Consulting'
-  },
+pickup: {
+  title: 'Pickup Soccer | Small Sided',
+  description: 'Drop in for pickup soccer games anytime. No commitment required. Meet new players, stay active, and enjoy casual small-sided soccer in a welcoming community.',
+  keywords: 'pickup soccer, drop in soccer, casual soccer games, open play soccer, pickup games, soccer near me, recreational soccer, adult pickup soccer',
+  url: '/pickup'
+},
 
-  resources: {
-    title: 'Resources | Small Sided',
-    description: 'Free soccer resources for players, parents, and coaches. Training guides, educational articles, drills, and expert tips to improve your soccer knowledge.',
-    keywords: 'soccer resources, free soccer training, soccer drills, coaching resources, soccer education materials',
-    url: '/Resources'
-  },
+camps: {
+  title: 'Camps | Small Sided',
+  description: 'Intensive soccer camps and specialized training programs for players of all ages. Skill development, tactical training, and expert coaching to elevate your game.',
+  keywords: 'soccer camps, soccer training programs, youth soccer camp, soccer skills camp, soccer clinic, soccer academy, technical training, soccer development program',
+  url: '/camps-and-training'
+},
+
+training: {
+  title: 'Training | Small Sided',
+  description: 'Intensive soccer camps and specialized training programs for players of all ages. Skill development, tactical training, and expert coaching to elevate your game.',
+  keywords: 'soccer camps, soccer training programs, youth soccer camp, soccer skills camp, soccer clinic, soccer academy, technical training, soccer development program',
+  url: '/camps-and-training'
+},
 
   blog: {
     title: 'Blog | Small Sided',

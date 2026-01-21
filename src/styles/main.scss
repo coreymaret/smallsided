@@ -5,6 +5,16 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  ::selection {
+  background-color: #98ed66;
+  color: #15141a; /* optional - changes the text color */
+}
+
+/* For Firefox compatibility */
+::-moz-selection {
+  background-color: #98ed66;
+  color: #15141a;
+}
 }
 
 html, body {

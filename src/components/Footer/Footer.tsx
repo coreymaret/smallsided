@@ -83,7 +83,7 @@ const Footer = () => {
               <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
               <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
               <li><Link to="/services" onClick={handleLinkClick}>Services</Link></li>
-              <li><Link to="/work" onClick={handleLinkClick}>Work</Link></li>
+              <li><Link to="/blog" onClick={handleLinkClick}>Blog</Link></li>
               <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
             </ul>
           </div>
@@ -92,11 +92,12 @@ const Footer = () => {
           <div className={styles.footerSection}>
             <h3 className={styles.footerHeading}>Services</h3>
             <ul>
-              <li><Link to="/PlayerEducation" onClick={handleLinkClick}>Player Education</Link></li>
-              <li><Link to="/ParentEducation" onClick={handleLinkClick}>Parent Education</Link></li>
-              <li><Link to="/CoachEducation" onClick={handleLinkClick}>Coach Education</Link></li>
-              <li><Link to="/Consulting" onClick={handleLinkClick}>Consulting</Link></li>
-              <li><Link to="/Resources" onClick={handleLinkClick}>Resources</Link></li>
+              <li><Link to="/services/field-rental" onClick={handleLinkClick}>Field Rental</Link></li>
+              <li><Link to="/services/leagues" onClick={handleLinkClick}>Leagues</Link></li>
+              <li><Link to="/services/pickup" onClick={handleLinkClick}>Pickup</Link></li>
+              <li><Link to="/services/birthday-parties" onClick={handleLinkClick}>Birthday Parties</Link></li>
+              <li><Link to="/services/camps" onClick={handleLinkClick}>Camps</Link></li>
+              <li><Link to="/services/training" onClick={handleLinkClick}>Training</Link></li>
             </ul>
           </div>
 
@@ -131,8 +132,8 @@ const Footer = () => {
             {/* Email (click-to-email) */}
             <div className={styles.contactItem}>
               <Mail size={18} />
-              <a href="mailto:admin@smallsided.com">
-                <span>admin@smallsided.com</span>
+              <a href="mailto:hello@smallsided.com">
+                <span>hello@smallsided.com</span>
               </a>
             </div>
 
@@ -153,7 +154,7 @@ const Footer = () => {
           <Link to="/CookiePolicy" onClick={handleLinkClick}>Cookie Policy</Link>
         </div>
 
-        <p>&copy; {new Date().getFullYear()} Small Sided. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Small Sided, LLC. All rights reserved.</p>
       </div>
 
     </footer>

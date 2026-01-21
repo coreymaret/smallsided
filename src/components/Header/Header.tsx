@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, Tent, ChevronDown } from "lucide-react";
+import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, ChevronDown,ChartNoAxesCombined, Smile } from "lucide-react";
 import styles from "./Header.module.scss";
 import Logo from "../../assets/logo.svg";
 import TopToggleBar from "../TopToggleBar/TopToggleBar";
@@ -166,7 +166,7 @@ const Header = () => {
   const serviceItems = [
     {
       title: "Field Rentals",
-      path: "/services/field-rentals",
+      path: "/services/field-rental",
       icon: Calendar,
       description: "Book premium small-sided fields"
     },
@@ -191,7 +191,13 @@ const Header = () => {
     {
       title: "Camps",
       path: "/services/camps",
-      icon: Tent,
+      icon: Smile,
+      description: "Skill development programs"
+    },
+    {
+      title: "Training",
+      path: "/services/training",
+      icon: ChartNoAxesCombined,
       description: "Skill development programs"
     }
   ];
@@ -223,23 +229,14 @@ const Header = () => {
                       About
                     </Link>
                   </li>
-                  <li>
-                    <Link to="/exercises" onClick={handleLinkClick} className={isActive("/exercises") ? styles.active : ""}>
-                      Exercises
-                    </Link>
-                  </li>
                   <li
                     className={styles.servicesItem}
                     onMouseEnter={handleServicesMouseEnter}
                     onMouseLeave={handleServicesMouseLeave}
                   >
-                    <Link
-                      to="/services"
-                      onClick={handleLinkClick}
-                      className={isActive("/services") ? styles.active : ""}
-                    >
+                    <span className={`${styles.servicesLabel} ${isActive("/services") ? styles.active : ""}`}>
                       Services
-                    </Link>
+                    </span>
                     
                     {/* Desktop Mega Menu */}
                     <div
@@ -338,86 +335,41 @@ const Header = () => {
                   Exercises
                 </Link>
               </li>
-              <li
-                className={styles.servicesItem}
-                onMouseEnter={handleServicesMouseEnter}
-                onMouseLeave={handleServicesMouseLeave}
-              >
-                {isMobile ? (
-                  <>
-                    <button
-                      className={styles.servicesToggle}
-                      onClick={toggleMobileServices}
-                    >
-                      <span>Services</span>
-                      <ChevronDown 
-                        size={20} 
-                        className={`${styles.chevron} ${mobileServicesOpen ? styles.chevronOpen : ''}`}
-                      />
-                    </button>
-                    
-                    {/* Mobile Mega Menu Cards */}
-                    <div 
-                      className={`${styles.mobileServiceCards} ${mobileServicesOpen ? styles.mobileServiceCardsOpen : ''}`}
-                      data-hover-enabled={servicesAnimationComplete ? "true" : "false"}
-                    >
-                      {serviceItems.map((item, index) => (
-                        <Link
-                          key={item.path}
-                          to={item.path}
-                          className={styles.mobileServiceCard}
-                          onClick={handleLinkClick}
-                          style={{ transitionDelay: mobileServicesOpen ? `${index * 0.05}s` : '0s' }}
-                        >
-                          <div className={styles.mobileServiceIcon}>
-                            <item.icon size={24} />
-                          </div>
-                          <div className={styles.mobileServiceText}>
-                            <h3>{item.title}</h3>
-                            <p>{item.description}</p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <>
+              <li className={styles.servicesItem}>
+                <button
+                  className={styles.servicesToggle}
+                  onClick={toggleMobileServices}
+                >
+                  <span>Services</span>
+                  <ChevronDown 
+                    size={20} 
+                    className={`${styles.chevron} ${mobileServicesOpen ? styles.chevronOpen : ''}`}
+                  />
+                </button>
+                
+                {/* Mobile Mega Menu Cards */}
+                <div 
+                  className={`${styles.mobileServiceCards} ${mobileServicesOpen ? styles.mobileServiceCardsOpen : ''}`}
+                  data-hover-enabled={servicesAnimationComplete ? "true" : "false"}
+                >
+                  {serviceItems.map((item, index) => (
                     <Link
-                      to="/services"
+                      key={item.path}
+                      to={item.path}
+                      className={styles.mobileServiceCard}
                       onClick={handleLinkClick}
-                      className={isActive("/services") ? styles.active : ""}
+                      style={{ transitionDelay: mobileServicesOpen ? `${index * 0.05}s` : '0s' }}
                     >
-                      Services
-                    </Link>
-                    
-                    {/* Desktop Mega Menu */}
-                    <div
-                      className={`${styles.megaMenu} ${megaMenuOpen ? styles.megaMenuOpen : ""}`}
-                      onMouseEnter={handleMegaMenuMouseEnter}
-                      onMouseLeave={handleMegaMenuMouseLeave}
-                    >
-                      <div className={styles.megaMenuContent}>
-                        {serviceItems.map((item, index) => (
-                          <Link
-                            key={item.path}
-                            to={item.path}
-                            className={styles.megaMenuItem}
-                            onClick={handleLinkClick}
-                            style={{ transitionDelay: `${index * 0.05}s` }}
-                          >
-                            <div className={styles.megaMenuIcon}>
-                              <item.icon size={24} />
-                            </div>
-                            <div className={styles.megaMenuText}>
-                              <h3>{item.title}</h3>
-                              <p>{item.description}</p>
-                            </div>
-                          </Link>
-                        ))}
+                      <div className={styles.mobileServiceIcon}>
+                        <item.icon size={24} />
                       </div>
-                    </div>
-                  </>
-                )}
+                      <div className={styles.mobileServiceText}>
+                        <h3>{item.title}</h3>
+                        <p>{item.description}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </li>
               <li>
                 <Link to="/blog" onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>
