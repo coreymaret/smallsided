@@ -12,7 +12,7 @@ import LeagueTable from '../../components/LeagueTable/LeagueTable';
 import PickupReservation from '../../components/PickupReservation/PickupReservation';
 
 // TODO: Update these image import paths to match your actual image locations
-import iso1Image from '../../assets/images/home-sections/iso1.png';
+import iso1Image from '../../assets/images/home-sections/iso1.webp';
 
 const Home = () => {
   const seo = getSEOConfig('home');
