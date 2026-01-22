@@ -1,4 +1,760 @@
-.cookiePolicyPage {
-  margin-top: 6rem; /* adjust based on header height */
-  padding: 3rem;
+.cookiesPolicy {
+  min-height: 100vh;
+  background: #f8f9fa;
+  margin-top: 5rem;
+}
+
+.hero {
+  background: linear-gradient(135deg, #15141a 0%, #2a2833 100%);
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+
+  .heroContent {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .iconWrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: rgba(152, 237, 102, 0.1);
+    border-radius: 50%;
+    margin-bottom: 24px;
+  }
+
+  .heroIcon {
+    width: 40px;
+    height: 40px;
+    color: #98ed66;
+  }
+
+  h1 {
+    font-size: 48px;
+    margin: 0 0 16px 0;
+    font-weight: 700;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    margin: 0 0 24px 0;
+    opacity: 0.9;
+  }
+
+  .lastUpdated {
+    font-size: 14px;
+    opacity: 0.7;
+    margin: 0;
+  }
+}
+
+.tabContainer {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tabs {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 8px;
+  padding: 0 20px;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #98ed66;
+    border-radius: 2px;
+  }
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  .tabIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    color: #15141a;
+    background: rgba(152, 237, 102, 0.05);
+  }
+
+  &.active {
+    color: #15141a;
+    border-bottom-color: #98ed66;
+
+    .tabIcon {
+      color: #98ed66;
+    }
+  }
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.tabContent {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section {
+  margin-bottom: 60px;
+
+  h2 {
+    font-size: 32px;
+    color: #15141a;
+    margin: 0 0 24px 0;
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: 24px;
+    color: #15141a;
+    margin: 24px 0 16px 0;
+    font-weight: 600;
+  }
+
+  h4 {
+    font-size: 18px;
+    color: #15141a;
+    margin: 20px 0 12px 0;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #4b5563;
+    margin: 0 0 16px 0;
+  }
+
+  .intro {
+    font-size: 18px;
+    color: #6b7280;
+    margin-bottom: 32px;
+  }
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .cardIcon {
+    width: 48px;
+    height: 48px;
+    background: rgba(152, 237, 102, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      color: #98ed66;
+    }
+  }
+
+  h3 {
+    font-size: 20px;
+    margin: 0 0 12px 0;
+  }
+
+  p {
+    font-size: 15px;
+    color: #6b7280;
+    margin: 0;
+  }
+}
+
+.styledList {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+
+  li {
+    padding: 16px 20px 16px 48px;
+    position: relative;
+    margin-bottom: 8px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #15141a;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transform: translateX(4px);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background: #98ed66;
+      border-radius: 50%;
+    }
+  }
+}
+
+.cookieTypesList {
+  display: grid;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.cookieTypeCard {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #98ed66;
+
+  .cookieTypeHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+
+    h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+  }
+
+  .requiredBadge {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .cookieTypeDescription {
+    color: #6b7280;
+    margin-bottom: 20px;
+  }
+
+  .cookieTypeDetails {
+    display: grid;
+    gap: 12px;
+  }
+
+  .detailRow {
+    display: flex;
+    gap: 12px;
+    font-size: 15px;
+
+    .detailLabel {
+      font-weight: 600;
+      color: #15141a;
+      min-width: 100px;
+    }
+
+    .detailValue {
+      color: #6b7280;
+    }
+  }
+}
+
+.comparisonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.comparisonCard {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  h3 {
+    margin: 0 0 16px 0;
+    color: #15141a;
+  }
+
+  p {
+    margin-bottom: 16px;
+  }
+
+  .exampleTag {
+    display: inline-block;
+    background: rgba(152, 237, 102, 0.1);
+    color: #15141a;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
+.thirdPartyList {
+  display: grid;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.thirdPartyCard {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  .serviceName {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+
+    .serviceIcon {
+      width: 32px;
+      height: 32px;
+      color: #98ed66;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+  }
+
+  .serviceDetails {
+    display: grid;
+    gap: 16px;
+  }
+
+  .serviceRow {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+
+    .serviceLabel {
+      font-weight: 600;
+      color: #15141a;
+      min-width: 120px;
+      font-size: 15px;
+    }
+
+    .serviceValue {
+      color: #6b7280;
+      font-size: 15px;
+      flex: 1;
+    }
+
+    .cookieCode {
+      background: #f3f4f6;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: 'Monaco', monospace;
+      font-size: 13px;
+      color: #15141a;
+    }
+
+    .optOutLink {
+      color: #98ed66;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #7acc4d;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.highlightBox {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #98ed66;
+  margin-top: 32px;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  h4 {
+    color: #15141a;
+    margin-top: 24px;
+  }
+}
+
+.notificationBox {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 24px;
+  margin-top: 32px;
+
+  .notificationIcon {
+    width: 48px;
+    height: 48px;
+    color: #98ed66;
+    flex-shrink: 0;
+  }
+
+  .notificationContent {
+    flex: 1;
+
+    h3 {
+      margin-top: 0;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+  }
+
+  .notificationDetails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+
+    span {
+      font-size: 14px;
+      color: #6b7280;
+
+      strong {
+        color: #15141a;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.manageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.manageCard {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  h3 {
+    margin-top: 0;
+  }
+
+  .browserList,
+  .impactList {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0 0;
+
+    li {
+      padding: 12px 0;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 15px;
+      color: #4b5563;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      strong {
+        color: #15141a;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.optOutGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.optOutCard {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-align: center;
+
+  .optOutIcon {
+    width: 48px;
+    height: 48px;
+    color: #98ed66;
+    margin: 0 auto 16px;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  .optOutButton {
+    display: inline-block;
+    background: #98ed66;
+    color: #15141a;
+    padding: 12px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 16px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #7acc4d;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(152, 237, 102, 0.3);
+    }
+  }
+
+  .dntInfo {
+    background: #f3f4f6;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 16px;
+  }
+}
+
+.accordionList {
+  margin-top: 32px;
+}
+
+.accordionItem {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.accordionHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #15141a;
+  text-align: left;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: rgba(152, 237, 102, 0.05);
+  }
+
+  &.active {
+    background: rgba(152, 237, 102, 0.1);
+
+    .accordionIcon {
+      transform: rotate(180deg);
+      color: #98ed66;
+    }
+  }
+
+  .accordionIcon {
+    width: 20px;
+    height: 20px;
+    color: #6b7280;
+    transition: transform 0.3s ease, color 0.3s ease;
+    flex-shrink: 0;
+  }
+}
+
+.accordionContent {
+  padding: 0 24px 24px 24px;
+  animation: slideDown 0.3s ease;
+
+  p {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.7;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contactSection {
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  padding: 60px 20px;
+  margin-top: 60px;
+
+  .contactContent {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+
+    h2 {
+      font-size: 32px;
+      color: #15141a;
+      margin: 0 0 16px 0;
+    }
+
+    p {
+      font-size: 16px;
+      color: #6b7280;
+      margin: 0 0 32px 0;
+    }
+  }
+
+  .contactInfo {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .contactMethod {
+    font-size: 15px;
+    color: #4b5563;
+
+    strong {
+      color: #15141a;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 60px 20px;
+
+    h1 {
+      font-size: 36px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+    }
+  }
+
+  .tabs {
+    justify-content: flex-start;
+  }
+
+  .section {
+    h2 {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-size: 20px;
+    }
+  }
+
+  .cardGrid,
+  .comparisonGrid,
+  .manageGrid,
+  .optOutGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .notificationBox {
+    flex-direction: column;
+
+    .notificationIcon {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .notificationDetails {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contactInfo {
+    flex-direction: column;
+    gap: 16px;
+  }
 }
