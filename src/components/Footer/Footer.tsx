@@ -7,16 +7,24 @@ import styles from './Footer.module.scss';
 import Logo from "../../assets/logo.svg"; 
 // Importing the site logo image
 
-import { Link } from "react-router-dom"; 
+import { Link, useLocation } from "react-router-dom"; 
 // React Router link component for client-side navigation
 
 
 // Footer component
 const Footer = () => {
+  const location = useLocation();
 
   // Scroll to top of the page when clicking a link inside the footer
   const handleLinkClick = () => {
     window.scrollTo(0, 0);
+  };
+
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return location.pathname === "/";
+    }
+    return location.pathname.startsWith(path);
   };
 
   return (
@@ -80,11 +88,11 @@ const Footer = () => {
             <h3 className={styles.footerHeading}>Quick Links</h3>
             <ul>
               {/* Internal links to pages; scrolls to top on click */}
-              <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
-              <li><Link to="/about" onClick={handleLinkClick}>About</Link></li>
-              <li><Link to="/services" onClick={handleLinkClick}>Services</Link></li>
-              <li><Link to="/blog" onClick={handleLinkClick}>Blog</Link></li>
-              <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
+              <li><Link to="/" onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>Home</Link></li>
+              <li><Link to="/about" onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>About</Link></li>
+              <li><Link to="/services" onClick={handleLinkClick} className={isActive("/services") ? styles.active : ""}>Services</Link></li>
+              <li><Link to="/blog" onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>Blog</Link></li>
+              <li><Link to="/contact" onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>Contact</Link></li>
             </ul>
           </div>
 
@@ -92,12 +100,12 @@ const Footer = () => {
           <div className={styles.footerSection}>
             <h3 className={styles.footerHeading}>Services</h3>
             <ul>
-              <li><Link to="/services/field-rental" onClick={handleLinkClick}>Field Rental</Link></li>
-              <li><Link to="/services/leagues" onClick={handleLinkClick}>Leagues</Link></li>
-              <li><Link to="/services/pickup" onClick={handleLinkClick}>Pickup</Link></li>
-              <li><Link to="/services/birthday-parties" onClick={handleLinkClick}>Birthday Parties</Link></li>
-              <li><Link to="/services/camps" onClick={handleLinkClick}>Camps</Link></li>
-              <li><Link to="/services/training" onClick={handleLinkClick}>Training</Link></li>
+              <li><Link to="/services/field-rental" onClick={handleLinkClick} className={isActive("/services/field-rental") ? styles.active : ""}>Field Rental</Link></li>
+              <li><Link to="/services/leagues" onClick={handleLinkClick} className={isActive("/services/leagues") ? styles.active : ""}>Leagues</Link></li>
+              <li><Link to="/services/pickup" onClick={handleLinkClick} className={isActive("/services/pickup") ? styles.active : ""}>Pickup</Link></li>
+              <li><Link to="/services/birthday-parties" onClick={handleLinkClick} className={isActive("/services/birthday-parties") ? styles.active : ""}>Birthday Parties</Link></li>
+              <li><Link to="/services/camps" onClick={handleLinkClick} className={isActive("/services/camps") ? styles.active : ""}>Camps</Link></li>
+              <li><Link to="/services/training" onClick={handleLinkClick} className={isActive("/services/training") ? styles.active : ""}>Training</Link></li>
             </ul>
           </div>
 
@@ -147,11 +155,11 @@ const Footer = () => {
       <div className={styles.footerBottom}>
         {/* Additional links: Privacy, Terms, Cookies */}
         <div className={styles.footerLinks}>
-          <Link to="/PrivacyPolicy" onClick={handleLinkClick}>Privacy Policy</Link>
+          <Link to="/PrivacyPolicy" onClick={handleLinkClick} className={isActive("/PrivacyPolicy") ? styles.active : ""}>Privacy Policy</Link>
           <span>|</span>
-          <Link to="/TOS" onClick={handleLinkClick}>Terms of Service</Link>
+          <Link to="/TOS" onClick={handleLinkClick} className={isActive("/TOS") ? styles.active : ""}>Terms of Service</Link>
           <span>|</span>
-          <Link to="/CookiePolicy" onClick={handleLinkClick}>Cookie Policy</Link>
+          <Link to="/CookiePolicy" onClick={handleLinkClick} className={isActive("/CookiePolicy") ? styles.active : ""}>Cookie Policy</Link>
         </div>
 
         <p>&copy; {new Date().getFullYear()} Small Sided, LLC. All rights reserved.</p>

@@ -1,0 +1,129 @@
+/* Intro Hero Section */
+.introHero {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.introHero .imageColumn {
+  flex: 0 0 50%;
+  width: 50%;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.introHero .imageColumn img {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+}
+
+.introHero .imageColumn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(21,20,26,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridMove 30s linear infinite;
+}
+
+.introHero .textColumn {
+  flex: 0 0 50%;
+  width: 50%;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px;
+  box-sizing: border-box;
+}
+
+.textContent {
+  max-width: 520px;
+  width: 100%;
+}
+
+.heroTitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #15141a;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: #15141a;
+  font-weight: 400;
+  margin-bottom: 32px;
+}
+
+.ctaButton {
+  display: inline-block;
+  padding: 16px 32px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: transparent;
+  border: 2px solid;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #15141a;
+  border-color: #15141a;
+}
+
+.ctaButton:hover {
+  background-color: #15141a;
+  color: #98ED66;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(40px, 40px); }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .introHero {
+    flex-direction: column;
+  }
+
+  .introHero .textColumn,
+  .introHero .imageColumn {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .introHero .imageColumn {
+    order: 1;
+    padding: 40px 24px;
+  }
+
+  .introHero .textColumn {
+    order: 2;
+    padding: 40px 24px;
+  }
+
+  .imageColumn img {
+    width: 300px;
+    height: 300px;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+}

@@ -69,6 +69,9 @@
         &:active {
           color: #98ED66;
         }
+        &.active {
+          color: #98ED66;
+        }
       }
     }
   }
@@ -192,6 +195,9 @@
     &:hover {
       color: #98ED66;
     }
+    &.active {
+      color: #98ED66;
+    }
   }
 
   span {
@@ -204,7 +210,7 @@
   height: auto;
   margin-bottom: 1rem;
 
-  @media (max-width: 48.99rem) {
+  @media (max-width: 767px) {
     display: block;
     margin: 0 auto 1rem;
   }

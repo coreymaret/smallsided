@@ -249,7 +249,7 @@ const Header = () => {
                           <Link
                             key={item.path}
                             to={item.path}
-                            className={styles.megaMenuItem}
+                            className={`${styles.megaMenuItem} ${isActive(item.path) ? styles.active : ''}`}
                             onClick={handleLinkClick}
                             style={{ transitionDelay: `${index * 0.05}s` }}
                           >
@@ -330,11 +330,6 @@ const Header = () => {
                   About
                 </Link>
               </li>
-              <li>
-                <Link to="/exercises" onClick={handleLinkClick} className={isActive("/exercises") ? styles.active : ""}>
-                  Exercises
-                </Link>
-              </li>
               <li className={styles.servicesItem}>
                 <button
                   className={styles.servicesToggle}
@@ -356,7 +351,7 @@ const Header = () => {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={styles.mobileServiceCard}
+                      className={`${styles.mobileServiceCard} ${isActive(item.path) ? styles.active : ''}`}
                       onClick={handleLinkClick}
                       style={{ transitionDelay: mobileServicesOpen ? `${index * 0.05}s` : '0s' }}
                     >

@@ -1,17 +1,19 @@
 import styles from "./Leagues.module.scss";
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/Blog/SEO';
+import LeagueTable from '../../components/LeagueTable/LeagueTable';
+import RegisterLeague from '../../components/RegisterLeague/RegisterLeague';
+
+
 
 const Leagues = () => {
-  const seo = getSEOConfig('birthday-parties');
+  const seo = getSEOConfig('fieldRental');
   return (
     <>
     <SEO {...seo} />
     <div className={styles.leaguesPage}>
-        <h2>Leagues</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <RegisterLeague />
+      <LeagueTable />
     </div>
     </>
   );

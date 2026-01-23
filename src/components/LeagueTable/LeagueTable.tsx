@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
-import { Calendar, X } from 'lucide-react';
+import { Calendar, X, ChevronDown } from 'lucide-react';
 import styles from './LeagueTable.module.scss';
 
 // Generate mock teams for each group
 const generateTeams = (groupName: string, count: number) => {
   const teamNames: Record<string, string[]> = {
+    // Adult teams
     Men: ['Thunder FC', 'Lightning United', 'Phoenix Squad', 'Storm FC', 'Titans United', 'Warriors FC', 'Dragons United', 'Eagles FC'],
     Women: ['Victory FC', 'Diamond United', 'Phoenix FC', 'Thunder Squad', 'Lightning FC', 'Galaxy United', 'Stars FC', 'Comets United'],
     Coed: ['Unity FC', 'Fusion United', 'Harmony FC', 'Balance Squad', 'Synergy United', 'Alliance FC', 'Blend United', 'Together FC'],
     'Over 40': ['Veterans FC', 'Legends United', 'Classic FC', 'Vintage Squad', 'Experience United', 'Wisdom FC', 'Elite Squad', 'Prime FC'],
-    'Over 50': ['Golden FC', 'Masters United', 'Senior Squad', 'Platinum FC', 'Legacy United', 'Diamond FC', 'Silver Squad', 'Grand FC']
+    'Over 50': ['Golden FC', 'Masters United', 'Senior Squad', 'Platinum FC', 'Legacy United', 'Diamond FC', 'Silver Squad', 'Grand FC'],
+    // Youth teams
+    U8: ['Mini Thunder', 'Little Lightning', 'Junior Phoenix', 'Young Storm', 'Tiny Titans', 'Small Warriors', 'Baby Dragons', 'Kid Eagles'],
+    U10: ['Thunder Youth', 'Lightning Kids', 'Phoenix Juniors', 'Storm Youth', 'Titans Kids', 'Warriors Youth', 'Dragons Juniors', 'Eagles Kids'],
+    U12: ['Thunder Academy', 'Lightning Academy', 'Phoenix Academy', 'Storm Academy', 'Titans Academy', 'Warriors Academy', 'Dragons Academy', 'Eagles Academy'],
+    U14: ['Thunder Elite', 'Lightning Elite', 'Phoenix Elite', 'Storm Elite', 'Titans Elite', 'Warriors Elite', 'Dragons Elite', 'Eagles Elite'],
+    U16: ['Thunder Select', 'Lightning Select', 'Phoenix Select', 'Storm Select', 'Titans Select', 'Warriors Select', 'Dragons Select', 'Eagles Select'],
+    U18: ['Thunder Premier', 'Lightning Premier', 'Phoenix Premier', 'Storm Premier', 'Titans Premier', 'Warriors Premier', 'Dragons Premier', 'Eagles Premier']
   };
 
   return teamNames[groupName].slice(0, count).map((name, idx) => ({
@@ -60,12 +68,21 @@ const generateSchedule = (teamName: string, groupTeams: any[], mp: number) => {
   return matches.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
-const leagueData = {
+const adultLeagues = {
   Men: generateTeams('Men', 8),
   Women: generateTeams('Women', 8),
   Coed: generateTeams('Coed', 8),
   'Over 40': generateTeams('Over 40', 8),
   'Over 50': generateTeams('Over 50', 8)
+};
+
+const youthLeagues = {
+  U8: generateTeams('U8', 8),
+  U10: generateTeams('U10', 8),
+  U12: generateTeams('U12', 8),
+  U14: generateTeams('U14', 8),
+  U16: generateTeams('U16', 8),
+  U18: generateTeams('U18', 8)
 };
 
 interface Team {
@@ -81,14 +98,38 @@ interface Team {
   schedule?: any[];
 }
 
+type LeagueCategory = 'Adult' | 'Youth';
+
+type LeagueData = {
+  [key: string]: Team[];
+};
+
 const LeagueTable: React.FC = () => {
+  const [category, setCategory] = useState<LeagueCategory>('Adult');
   const [selectedGroup, setSelectedGroup] = useState<string>('Men');
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+
+  const currentLeagues: LeagueData = category === 'Adult' ? adultLeagues : youthLeagues;
+  const leagueGroups = Object.keys(currentLeagues);
+
+  const handleCategoryChange = (newCategory: LeagueCategory) => {
+    setCategory(newCategory);
+    setSelectedGroup(newCategory === 'Adult' ? 'Men' : 'U8');
+    setSelectedTeam(null);
+    setMobileDropdownOpen(false);
+  };
+
+  const handleGroupChange = (group: string) => {
+    setSelectedGroup(group);
+    setSelectedTeam(null);
+    setMobileDropdownOpen(false);
+  };
 
   const handleTeamClick = (team: Team) => {
     const schedule = generateSchedule(
       team.name,
-      leagueData[selectedGroup as keyof typeof leagueData],
+      currentLeagues[selectedGroup],
       team.mp
     );
     setSelectedTeam({ ...team, schedule });
@@ -104,21 +145,60 @@ const LeagueTable: React.FC = () => {
             View team standings and match schedules across all leagues
           </p>
         </div>
+
+        {/* Category Cards */}
+        <div className={styles.categoryCards}>
+          <button
+            onClick={() => handleCategoryChange('Adult')}
+            className={`${styles.categoryCard} ${category === 'Adult' ? styles.categoryCardActive : ''}`}
+          >
+            <div className={styles.categoryTitle}>Adult Leagues</div>
+            <div className={styles.categorySubtitle}>Men • Women • Coed • Over 40 • Over 50</div>
+          </button>
+          <button
+            onClick={() => handleCategoryChange('Youth')}
+            className={`${styles.categoryCard} ${category === 'Youth' ? styles.categoryCardActive : ''}`}
+          >
+            <div className={styles.categoryTitle}>Youth Leagues</div>
+            <div className={styles.categorySubtitle}>U8 • U10 • U12 • U14 • U16 • U18</div>
+          </button>
+        </div>
         
-        {/* League Group Tabs */}
-        <div className={styles.tabs}>
-          {Object.keys(leagueData).map(group => (
+        {/* League Group Tabs - Desktop */}
+        <div className={styles.tabsDesktop}>
+          {leagueGroups.map(group => (
             <button
               key={group}
-              onClick={() => {
-                setSelectedGroup(group);
-                setSelectedTeam(null);
-              }}
+              onClick={() => handleGroupChange(group)}
               className={`${styles.tab} ${selectedGroup === group ? styles.tabActive : ''}`}
             >
               {group}
             </button>
           ))}
+        </div>
+
+        {/* League Group Dropdown - Mobile */}
+        <div className={styles.tabsMobile}>
+          <button
+            onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+            className={styles.mobileDropdownButton}
+          >
+            <span>{selectedGroup}</span>
+            <ChevronDown className={`${styles.chevronIcon} ${mobileDropdownOpen ? styles.chevronIconOpen : ''}`} />
+          </button>
+          {mobileDropdownOpen && (
+            <div className={styles.mobileDropdownMenu}>
+              {leagueGroups.map(group => (
+                <button
+                  key={group}
+                  onClick={() => handleGroupChange(group)}
+                  className={`${styles.mobileDropdownItem} ${selectedGroup === group ? styles.mobileDropdownItemActive : ''}`}
+                >
+                  {group}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Two Column Layout */}
@@ -141,7 +221,7 @@ const LeagueTable: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {leagueData[selectedGroup as keyof typeof leagueData].map((team, index) => {
+                {currentLeagues[selectedGroup]?.map((team: Team, index: number) => {
                   const goalDiff = team.gf - team.ga;
                   
                   return (

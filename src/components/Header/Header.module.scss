@@ -12,6 +12,7 @@
   opacity: 1;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
 
   &.hide { transform: translateY(-100%); opacity: 0; }
   &.show { transform: translateY(0); opacity: 1; }
@@ -435,6 +436,20 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(152, 237, 102, 0.15);
   }
+
+  &.active {
+    background-color: #323139;
+    border-color: #98ed66;
+
+    .megaMenuIcon {
+      background-color: #98ed66;
+      color: #15141a;
+    }
+
+    .megaMenuText h3 {
+      color: #98ed66;
+    }
+  }
 }
 
 .megaMenuIcon {
@@ -599,6 +614,20 @@
     
     &:focus {
       outline: none;
+    }
+
+    &.active {
+      background-color: #323139 !important;
+      border-color: #98ed66 !important;
+
+      .mobileServiceIcon {
+        background-color: #98ed66;
+        color: #15141a;
+      }
+
+      .mobileServiceText h3 {
+        color: #98ed66;
+      }
     }
   }
   
