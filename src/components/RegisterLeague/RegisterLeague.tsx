@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Calendar, ChevronRight, Check, Trophy, Mail, Phone, User, Shield, CreditCard, Lock } from 'lucide-react';
+import { Users, Calendar, ChevronRight, Check, Trophy, Mail, User, Shield, CreditCard, Lock } from 'lucide-react';
 import styles from './RegisterLeague.module.scss';
 
 const RegisterLeague: React.FC = () => {
