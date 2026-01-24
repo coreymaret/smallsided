@@ -1,6 +1,7 @@
 import styles from "./Training.module.scss";
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/Blog/SEO';
+import PricingSection from '../../components/PricingSection/PricingSection';
 
 const Training = () => {
   const seo = getSEOConfig('training');
@@ -8,10 +9,7 @@ const Training = () => {
     <>
     <SEO {...seo} />
     <div className={styles.trainingPage}>
-        <h2>Training</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <PricingSection />
     </div>
     </>
   );

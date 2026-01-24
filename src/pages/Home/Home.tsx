@@ -3,14 +3,9 @@ import Popup from '../../components/Popup/Popup';
 import SEO from '../../components/Blog/SEO';
 import { getSEOConfig } from '../../config/seo';
 import ReviewSection from '../../components/Reviews/ReviewSection';
-import PricingSection from '../../components/PricingSection/PricingSection';
-import Booking from '../../components/Booking/Booking';
 import HomeSlider from '../../components/HomeSlider/HomeSlider';
-import LeagueTable from '../../components/LeagueTable/LeagueTable';
-import PickupReservation from '../../components/PickupReservation/PickupReservation';
 import IntroHero from '../../components/IntroHero/IntroHero';
 import StatSection from '../../components/StatSection/StatSection';
-import FeaturesSection from '../../components/FeaturesSection/FeaturesSection';
 import StatRow from '../../components/StatRow/StatRow';
 
 // Stat row data
@@ -52,12 +47,7 @@ const Home = () => {
         <HomeSlider />
         <IntroHero />
         <StatSection />
-        <FeaturesSection />
-        <PricingSection />
-        <Booking />
-        <LeagueTable />
-        <PickupReservation />
-        
+
         {statRowsData.map((row, index) => (
           <StatRow 
             key={index}
