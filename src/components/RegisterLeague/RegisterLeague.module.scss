@@ -273,6 +273,37 @@
   transition: color 0.3s ease;
 }
 
+// Gender Tabs
+.genderTabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.genderTab {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border: 2px solid rgba(21, 20, 26, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #15141a;
+  text-align: center;
+
+  &:hover {
+    border-color: rgba(21, 20, 26, 0.4);
+  }
+
+  &.selected {
+    border-color: #15141a;
+    background: #15141a;
+    color: #98ED66;
+  }
+}
+
 // League Options
 .leagueOptions {
   display: grid;

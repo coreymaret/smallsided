@@ -81,6 +81,39 @@
   transition: color 0.3s ease-in-out;
 }
 
+// Gender Tabs (for Youth leagues)
+.genderTabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.genderTab {
+  padding: 1rem;
+  background-color: #15141a;
+  border: 2px solid rgba(152, 237, 102, 0.3);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #f8f9fa;
+  text-align: center;
+
+  &:hover {
+    border-color: rgba(152, 237, 102, 0.6);
+    transform: translateY(-2px);
+  }
+}
+
+.genderTabActive {
+  background-color: #98ED66;
+  border-color: #98ED66;
+  color: #15141a;
+}
+
 // Tabs - Desktop
 .tabsDesktop {
   display: none;

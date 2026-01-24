@@ -7,9 +7,26 @@ const RegisterLeague: React.FC = () => {
   const [completedSteps, setCompletedSteps] = useState(new Set<number>());
   const [maxStepReached, setMaxStepReached] = useState(1);
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    category: string;
+    league: string;
+    youthGender: string;
+    teamName: string;
+    captainName: string;
+    email: string;
+    phone: string;
+    playerCount: number;
+    experienceLevel: string;
+    preferredDay: string;
+    additionalInfo: string;
+    cardNumber: string;
+    cardExpiry: string;
+    cardCVV: string;
+    billingZip: string;
+  }>({
     category: '', // 'Adult' or 'Youth'
     league: '',
+    youthGender: '', // 'Male' or 'Female' for youth leagues
     teamName: '',
     captainName: '',
     email: '',
@@ -103,7 +120,11 @@ const RegisterLeague: React.FC = () => {
   ];
 
   const handleCategorySelect = (category: string) => {
-    setFormData({ ...formData, category, league: '' });
+    setFormData({ ...formData, category, league: '', youthGender: '' });
+  };
+
+  const handleYouthGenderSelect = (gender: string) => {
+    setFormData({ ...formData, youthGender: gender, league: '' });
   };
 
   const handleLeagueSelect = (league: string) => {
@@ -258,9 +279,12 @@ const RegisterLeague: React.FC = () => {
     }
   };
 
-  const canProceed = () => {
+  const canProceed = (): boolean => {
     switch (step) {
       case 1:
+        if (formData.category === 'Youth') {
+          return formData.youthGender !== '' && formData.league !== '';
+        }
         return formData.category !== '' && formData.league !== '';
       case 2:
         return formData.teamName !== '' && formData.captainName !== '' && 
@@ -393,6 +417,13 @@ const RegisterLeague: React.FC = () => {
     console.log('Registration submitted:', formData);
   };
 
+  const getLeagueDisplayName = () => {
+    if (formData.category === 'Youth' && formData.youthGender) {
+      return `${formData.youthGender} ${formData.league}`;
+    }
+    return formData.league;
+  };
+
   return (
     <div className={styles.register}>
       {/* Success Banner */}
@@ -451,7 +482,7 @@ const RegisterLeague: React.FC = () => {
                   <Users className={styles.detailIcon} size={20} />
                   <div className={styles.detailContent}>
                     <span className={styles.detailLabel}>League</span>
-                    <span className={styles.detailValue}>{formData.category} - {formData.league}</span>
+                    <span className={styles.detailValue}>{formData.category} - {getLeagueDisplayName()}</span>
                   </div>
                 </div>
                 
@@ -582,7 +613,32 @@ const RegisterLeague: React.FC = () => {
                 </div>
               </div>
 
-              {formData.category && (
+              {formData.category === 'Youth' && (
+                <div className={styles.section}>
+                  <h3 className={styles.sectionTitle}>
+                    <div className={styles.iconCircle}>
+                      <Users size={20} />
+                    </div>
+                    Choose Gender
+                  </h3>
+                  <div className={styles.genderTabs}>
+                    <button
+                      onClick={() => handleYouthGenderSelect('Male')}
+                      className={`${styles.genderTab} ${formData.youthGender === 'Male' ? styles.selected : ''}`}
+                    >
+                      Male
+                    </button>
+                    <button
+                      onClick={() => handleYouthGenderSelect('Female')}
+                      className={`${styles.genderTab} ${formData.youthGender === 'Female' ? styles.selected : ''}`}
+                    >
+                      Female
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {formData.category && (formData.category === 'Adult' || formData.youthGender) && (
                 <div className={styles.section}>
                   <h3 className={styles.sectionTitle}>
                     <div className={styles.iconCircle}>
@@ -786,7 +842,7 @@ const RegisterLeague: React.FC = () => {
                       </div>
                       <div>
                         <strong>{formData.category} League</strong>
-                        <span>{formData.league} Division</span>
+                        <span>{getLeagueDisplayName()} Division</span>
                       </div>
                     </div>
                   </div>
