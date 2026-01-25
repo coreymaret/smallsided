@@ -420,14 +420,22 @@ const RegisterLeague: React.FC = () => {
   try {
     const mockPaymentIntent = { id: 'pi_' + Date.now(), status: 'succeeded' };
     
-    // Dynamically find the correct league based on user selection
-    const leagueName = formData.category === 'Youth' 
-      ? `${formData.league} ${formData.youthGender === 'Male' ? 'Boys' : 'Girls'}`
-      : formData.league === 'Men' ? 'Men\'s League'
-      : formData.league === 'Women' ? 'Women\'s League'
-      : formData.league === 'Coed' ? 'Coed League'
-      : formData.league === 'Over 40' ? 'Over 40 League'
-      : 'Over 50 League';
+    // Build league name based on user selection
+    let leagueName = '';
+    
+    if (formData.category === 'Youth') {
+      const gender = formData.youthGender === 'Male' ? 'Boys' : 'Girls';
+      leagueName = `${formData.league} ${gender}`;
+    } else {
+      // Adult leagues
+      if (formData.league === 'Men') leagueName = 'Men\'s League';
+      else if (formData.league === 'Women') leagueName = 'Women\'s League';
+      else if (formData.league === 'Coed') leagueName = 'Coed League';
+      else if (formData.league === 'Over 40') leagueName = 'Over 40 League';
+      else if (formData.league === 'Over 50') leagueName = 'Over 50 League';
+    }
+    
+    console.log('Looking for league:', leagueName); // DEBUG
     
     // Fetch the league from Supabase
     const { createClient } = await import('@supabase/supabase-js');
@@ -438,13 +446,16 @@ const RegisterLeague: React.FC = () => {
     
     const { data: league, error: leagueError } = await supabase
       .from('leagues')
-      .select('id')
+      .select('id, name')
       .eq('name', leagueName)
       .eq('season', 'Spring 2026')
       .single();
     
+    console.log('League found:', league); // DEBUG
+    console.log('League error:', leagueError); // DEBUG
+    
     if (leagueError || !league) {
-      throw new Error('League not found. Please contact support.');
+      throw new Error(`League not found: ${leagueName}. Please contact support.`);
     }
     
     const registrationData = {
@@ -462,10 +473,16 @@ const RegisterLeague: React.FC = () => {
       total_amount: formData.category === 'Youth' ? 100 : 150,
       stripe_payment_intent_id: mockPaymentIntent.id,
       waiver_signed: true,
-      hear_about_us: formData.additionalInfo,
+      hear_about_us: formData.additionalInfo || null,
+      additional_notes: null,
     };
     
-    const result: any = await api.createLeagueRegistration(registrationData);
+    console.log('Sending registration data:', registrationData); // DEBUG
+    
+    // @ts-ignore
+const result: any = await api.createLeagueRegistration(registrationData);
+    
+    console.log('Registration result:', result); // DEBUG
     
     if (result && result.success) {
       setShowSuccessAnimation(true);
