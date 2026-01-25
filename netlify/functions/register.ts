@@ -1,7 +1,4 @@
 import { Handler } from '@netlify/functions';
-import Stripe from 'stripe';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export const handler: Handler = async (event) => {
   const headers = {
@@ -10,7 +7,7 @@ export const handler: Handler = async (event) => {
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
 
-  // Handle CORS preflight
+  // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
@@ -29,42 +26,35 @@ export const handler: Handler = async (event) => {
   }
 
   try {
-    const body = event.body ? JSON.parse(event.body) : {};
-    const { amount } = body;
+    const data = JSON.parse(event.body || '{}');
 
-    // Validate amount (Stripe expects cents)
-    if (typeof amount !== 'number' || amount < 50) {
+    // 🔒 Basic validation
+    if (!data.email) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Invalid amount' }),
+        body: JSON.stringify({ error: 'Email is required' }),
       };
     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount),
-      currency: 'usd',
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    });
-
+    // ✅ For now: simulate successful registration
+    // (Later you can add DB, Supabase, Stripe customer, etc.)
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
-        clientSecret: paymentIntent.client_secret,
+        success: true,
+        message: 'Registration successful',
       }),
     };
   } catch (error) {
-    console.error('Error creating payment intent:', error);
+    console.error('Registration error:', error);
 
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: 'Failed to create payment intent',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        error: 'Registration failed',
       }),
     };
   }
