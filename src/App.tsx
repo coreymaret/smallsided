@@ -23,6 +23,7 @@ const Camps = lazy(() => import('./pages/Camps/Camps'));
 const Training = lazy(() => import('./pages/Training/Training'));
 const ExerciseDetail = lazy(() => import('./components/Exercises/ExerciseDetail'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy/PrivacyPolicy'));
+const GetStarted = lazy(() => import('./pages/GetStarted/GetStarted'));
 const TOS = lazy(() => import('./pages/TOS/TOS'));
 const CookiePolicy = lazy(() => import('./pages/CookiePolicy/CookiePolicy'));
 const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
@@ -55,6 +56,7 @@ const App = () => {
             <Route path="/services/camps" element={<Camps />} />
             <Route path="/services/training" element={<Training />} />
             <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+            <Route path="/get-started" element={<GetStarted />} />
             <Route path="/TOS" element={<TOS />} />
             <Route path="/CookiePolicy" element={<CookiePolicy />} />
             <Route path="*" element={<NotFound />} />

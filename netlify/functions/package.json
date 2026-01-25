@@ -1,0 +1,15 @@
+{
+  "name": "smallsided-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for Small Sided Soccer",
+  "private": true,
+  "dependencies": {
+    "@netlify/functions": "^2.8.2",
+    "@supabase/supabase-js": "^2.47.10",
+    "stripe": "^17.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}

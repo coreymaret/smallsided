@@ -15,6 +15,9 @@
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
     "@react-google-maps/api": "^2.20.7",
+    "@stripe/react-stripe-js": "^5.4.1",
+    "@stripe/stripe-js": "^8.6.4",
+    "@supabase/supabase-js": "^2.91.1",
     "buffer": "^6.0.3",
     "fs": "^0.0.1-security",
     "gray-matter": "^4.0.3",
