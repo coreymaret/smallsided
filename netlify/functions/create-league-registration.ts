@@ -110,7 +110,6 @@ export const handler: Handler = async (event) => {
         payment_status: 'paid',
         stripe_payment_intent_id: data.stripe_payment_intent_id,
         waiver_signed: data.waiver_signed,
-        waiver_signed_at: data.waiver_signed ? new Date().toISOString() : null,
         hear_about_us: data.hear_about_us || null,
       })
       .select()
