@@ -7,7 +7,7 @@ import styles from './AdminLogin.module.scss';
 
 type AdminUser = Database['public']['Tables']['admin_users']['Row'];
 
-export const AdminLogin = () => {
+const AdminLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -135,3 +135,5 @@ export const AdminLogin = () => {
     </div>
   );
 };
+
+export default AdminLogin;

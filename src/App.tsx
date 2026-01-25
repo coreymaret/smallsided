@@ -29,6 +29,9 @@ const CookiePolicy = lazy(() => import('./pages/CookiePolicy/CookiePolicy'));
 const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
 const Blog = lazy(() => import('./pages/Blog/Blog'));
 const BlogPost = lazy(() => import('./components/Blog/BlogPost'));
+const AdminLogin = lazy(() => import('./components/admin/AdminLogin'));
+const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
+const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard'));
 
 const App = () => {
   const location = useLocation();
@@ -62,6 +65,10 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+            </Route>
           </Routes>
         </Suspense>
       </main>

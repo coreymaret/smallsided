@@ -15,7 +15,7 @@ import styles from './AdminLayout.module.scss';
 
 type AdminUser = Database['public']['Tables']['admin_users']['Row'];
 
-export const AdminLayout = () => {
+const AdminLayout = () => {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState<AdminUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -142,3 +142,5 @@ export const AdminLayout = () => {
     </div>
   );
 };
+
+export default AdminLayout;
