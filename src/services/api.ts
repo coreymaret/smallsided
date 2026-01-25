@@ -43,12 +43,9 @@ class ApiService {
   private baseUrl: string;
 
   constructor() {
-    // In production, this will be your Netlify Functions URL
-    // Locally, it will be http://localhost:8888/.netlify/functions
-    this.baseUrl = import.meta.env.PROD 
-      ? '/.netlify/functions'
-      : 'http://localhost:8888/.netlify/functions';
-  }
+  // Use /api prefix which redirects to /.netlify/functions in netlify.toml
+  this.baseUrl = '/api';
+}
 
   // Generic fetch wrapper with error handling
   private async fetch<T>(
