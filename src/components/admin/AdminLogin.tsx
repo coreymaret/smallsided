@@ -31,17 +31,31 @@ const AdminLogin = () => {
       }
 
       // Verify user is an admin
-      const { data: adminUser, error: adminError } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('email', email)
-        .eq('is_active', true)
-        .single();
+      // Get the current session to verify we're authenticated
+const { data: { session } } = await supabase.auth.getSession();
 
-      if (adminError || !adminUser) {
-        await supabase.auth.signOut();
-        throw new Error('You do not have admin access');
-      }
+if (!session) {
+  throw new Error('Authentication failed');
+}
+
+// Verify user is an admin - use the authenticated session
+const { data: adminUser, error: adminError } = await supabase
+  .from('admin_users')
+  .select('*')
+  .eq('email', email)
+  .eq('is_active', true)
+  .maybeSingle();  // Use maybeSingle() instead of single()
+
+if (adminError) {
+  console.error('Admin check error:', adminError);
+  await supabase.auth.signOut();
+  throw new Error('Error checking admin access');
+}
+
+if (!adminUser) {
+  await supabase.auth.signOut();
+  throw new Error('You do not have admin access');
+}
 
       // Type assertion since we know the structure
       const admin = adminUser as AdminUser;
