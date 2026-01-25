@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Calendar, CalendarDays, Clock, Users, MapPin, ChevronRight, Check, CreditCard, Lock, Pointer } from 'lucide-react';
 import styles from './Booking.module.scss';
+import { api } from '../../services/api';
 
 const Booking: React.FC = () => {
   const [step, setStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set<number>());
   const [maxStepReached, setMaxStepReached] = useState(1);
+  const [isProcessing, setIsProcessing] = useState(false);
   
   const [formData, setFormData] = useState({
     field: '',
@@ -545,17 +547,48 @@ const Booking: React.FC = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // Validate Step 4 fields before allowing submission
-    if (!validateStep4Fields()) {
-      return; // Don't submit if validation fails
+  const handleSubmit = async () => {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  if (!validateStep4Fields()) {
+    return;
+  }
+  
+  setIsProcessing(true);
+  
+  try {
+    const mockPaymentIntent = { id: 'pi_' + Date.now(), status: 'succeeded' };
+    
+    const selectedTimeSlot = timeSlots.find(s => s.id === formData.timeSlot);
+    
+    const bookingData = {
+      booking_type: 'field_rental' as const,
+      customer_name: formData.name,
+      customer_email: formData.email,
+      customer_phone: formData.phone,
+      booking_date: `${formData.year}-${formData.month.padStart(2, '0')}-${formData.day.padStart(2, '0')}`,
+      start_time: selectedTimeSlot?.time || '',
+      end_time: selectedTimeSlot?.time || '',
+      field_id: formData.field,
+      participants: formData.players,
+      total_amount: calculateTotal(),
+      stripe_payment_intent_id: mockPaymentIntent.id,
+      special_requests: undefined,
+    };
+    
+    const result: any = await api.createBooking(bookingData);
+    
+    if (result && result.success) {
+      setShowSuccessAnimation(true);
+    } else {
+      throw new Error('Failed to save booking');
     }
-    
-    // Show success animation
-    setShowSuccessAnimation(true);
-    
-    console.log('Booking submitted:', formData, 'Total:', calculateTotal());
-  };
+  } catch (error) {
+    console.error('Booking error:', error);
+    alert(`Booking failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  } finally {
+    setIsProcessing(false);
+  }
+};
 
   const getSelectedField = () => fields.find(f => f.id === formData.field);
   const getSelectedTimeSlot = () => timeSlots.find(s => s.id === formData.timeSlot);
@@ -1219,12 +1252,13 @@ const Booking: React.FC = () => {
             </button>
           ) : (
             <button
-              className={`${styles.button} ${styles.buttonPrimary}`}
-              onClick={handleSubmit}
-            >
-              Confirm Booking
-              <Check size={20} />
-            </button>
+  className={`${styles.button} ${styles.buttonPrimary}`}
+  onClick={handleSubmit}
+  disabled={isProcessing}
+>
+  {isProcessing ? 'Processing...' : 'Confirm Booking'}
+  {!isProcessing && <Check size={20} />}
+</button>
           )}
         </div>
       </div>

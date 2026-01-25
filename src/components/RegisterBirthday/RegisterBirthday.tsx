@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, Users, ChevronRight, Check, CreditCard, Lock, Cake, Gift, PartyPopper } from 'lucide-react';
 import styles from './RegisterBirthday.module.scss';
+import { api } from '../../services/api';
 
 const BirthdayParties: React.FC = () => {
   const [step, setStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set<number>());
   const [maxStepReached, setMaxStepReached] = useState(1);
+  const [isProcessing, setIsProcessing] = useState(false);
   
   const [formData, setFormData] = useState({
     package: '',
@@ -487,14 +489,60 @@ const BirthdayParties: React.FC = () => {
     }
   };
 
-  const handleSubmit = () => {
-    if (!validateStep5Fields()) {
-      return;
-    }
+  const handleSubmit = async () => {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  if (!validateStep5Fields()) {
+    return;
+  }
+  
+  setIsProcessing(true);
+  
+  try {
+    // Mock payment for now (we'll add real Stripe later)
+    const mockPaymentIntent = {
+      id: 'pi_' + Date.now(),
+      status: 'succeeded'
+    };
     
-    setShowSuccessAnimation(true);
-    console.log('Birthday party booked:', formData, 'Total:', calculateTotal());
-  };
+    // Prepare booking data
+    const selectedPackage = packages.find(p => p.id === formData.package);
+    const selectedTimeSlot = timeSlots.find(s => s.id === formData.timeSlot);
+    
+    const bookingData = {
+      booking_type: 'birthday' as const,
+      customer_name: formData.parentName,
+      customer_email: formData.email,
+      customer_phone: formData.phone,
+      booking_date: `${formData.year}-${formData.month.padStart(2, '0')}-${formData.day.padStart(2, '0')}`,
+      start_time: selectedTimeSlot?.time || '',
+      end_time: selectedTimeSlot?.time || '',
+      participants: formData.guestCount,
+      total_amount: calculateTotal(),
+      stripe_payment_intent_id: mockPaymentIntent.id,
+      metadata: {
+        package: selectedPackage?.name,
+        child_name: formData.childName,
+        child_age: formData.childAge,
+        cake_preference: cakeOptions.find(c => c.value === formData.cakePreference)?.label,
+      },
+      special_requests: formData.specialRequests || undefined,
+    };
+    
+    // Save to database
+    const result: any = await api.createBooking(bookingData);
+    
+    if (result && result.success) {
+      setShowSuccessAnimation(true);
+    } else {
+      throw new Error('Failed to save booking');
+    }
+  } catch (error) {
+    console.error('Booking error:', error);
+    alert(`Booking failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
+  } finally {
+    setIsProcessing(false);
+  }
+};
 
   const getSelectedPackage = () => packages.find(p => p.id === formData.package);
   const getSelectedTimeSlot = () => timeSlots.find(s => s.id === formData.timeSlot);
@@ -1168,12 +1216,13 @@ const BirthdayParties: React.FC = () => {
             </button>
           ) : (
             <button
-              className={`${styles.button} ${styles.buttonPrimary}`}
-              onClick={handleSubmit}
-            >
-              Confirm Booking
-              <Check size={20} />
-            </button>
+  className={`${styles.button} ${styles.buttonPrimary}`}
+  onClick={handleSubmit}
+  disabled={isProcessing}
+>
+  {isProcessing ? 'Processing...' : 'Confirm Booking'}
+  {!isProcessing && <Check size={20} />}
+</button>
           )}
         </div>
       </div>

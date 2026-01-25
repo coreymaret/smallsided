@@ -7,6 +7,7 @@ const RegisterLeague: React.FC = () => {
   const [step, setStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set<number>());
   const [maxStepReached, setMaxStepReached] = useState(1);
+  const [isProcessing, setIsProcessing] = useState(false);
   
   const [formData, setFormData] = useState<{
     category: string;
@@ -408,15 +409,51 @@ const RegisterLeague: React.FC = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // Validate Step 4 fields before allowing submission
-    if (!validateStep4Fields()) {
-      return; // Don't submit if validation fails
-    }
+  const handleSubmit = async () => {
+  if (!validateStep4Fields()) {
+    return;
+  }
+  
+  setIsProcessing(true);
+  
+  try {
+    const mockPaymentIntent = { id: 'pi_' + Date.now(), status: 'succeeded' };
     
-    setShowSuccessAnimation(true);
-    console.log('Registration submitted:', formData);
-  };
+    // NOTE: You need to create a league in Supabase first and get its ID
+    const LEAGUE_ID = 'YOUR_LEAGUE_ID_HERE'; // TODO: Get from Supabase
+    
+    const registrationData = {
+      league_id: LEAGUE_ID,
+      team_name: formData.teamName,
+      team_experience: formData.experienceLevel,
+      captain_name: formData.captainName,
+      captain_email: formData.email,
+      captain_phone: formData.phone,
+      age_division: formData.category === 'Youth' 
+        ? `${formData.youthGender} ${formData.league}` 
+        : formData.league,
+      skill_level: formData.experienceLevel,
+      players: [{ name: formData.captainName }],
+      total_amount: 150,
+      stripe_payment_intent_id: mockPaymentIntent.id,
+      waiver_signed: true,
+      hear_about_us: formData.additionalInfo,
+    };
+    
+    const result: any = await api.createLeagueRegistration(registrationData);
+    
+    if (result && result.success) {
+      setShowSuccessAnimation(true);
+    } else {
+      throw new Error('Failed to save registration');
+    }
+  } catch (error) {
+    console.error('Registration error:', error);
+    alert(`Registration failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  } finally {
+    setIsProcessing(false);
+  }
+};
 
   const getLeagueDisplayName = () => {
     if (formData.category === 'Youth' && formData.youthGender) {
@@ -1042,12 +1079,13 @@ const RegisterLeague: React.FC = () => {
             </button>
           ) : (
             <button
-              className={`${styles.button} ${styles.buttonPrimary}`}
-              onClick={handleSubmit}
-            >
-              Submit Registration
-              <Check size={20} />
-            </button>
+  className={`${styles.button} ${styles.buttonPrimary}`}
+  onClick={handleSubmit}
+  disabled={isProcessing}
+>
+  {isProcessing ? 'Processing...' : 'Confirm Booking'}
+  {!isProcessing && <Check size={20} />}
+</button>
           )}
         </div>
       </div>

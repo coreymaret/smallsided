@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Users, Clock, MapPin, Trophy, ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './PickupReservation.module.scss';
+import { api } from '../../services/api';
 
 interface PickupGame {
   id: string;
@@ -392,30 +393,54 @@ const PickupReservation: React.FC = () => {
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  e.preventDefault();
+  
+  if (!validatePaymentForm()) {
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    const mockPaymentIntent = { id: 'pi_' + Date.now(), status: 'succeeded' };
     
-    if (!validatePaymentForm()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Booking:', { game: selectedGame, ...formData });
-      
-      // Store confirmed game and show success animation
+    const bookingData = {
+      booking_type: 'pickup' as const,
+      customer_name: formData.name,
+      customer_email: formData.email,
+      customer_phone: formData.phone,
+      booking_date: selectedGame?.date || '',
+      start_time: selectedGame?.time.split(' - ')[0] || '',
+      end_time: selectedGame?.time.split(' - ')[1] || '',
+      participants: formData.spots,
+      total_amount: (selectedGame?.pricePerPlayer || 0) * formData.spots,
+      stripe_payment_intent_id: mockPaymentIntent.id,
+      metadata: {
+        game_id: selectedGame?.id,
+        format: selectedGame?.format,
+        skill_level: selectedGame?.skillLevel,
+        location: selectedGame?.location,
+      },
+      special_requests: undefined,
+    };
+    
+    const result: any = await api.createBooking(bookingData);
+    
+    if (result && result.success) {
       setConfirmedGame(selectedGame);
       setShowSuccessAnimation(true);
       setSelectedGame(null);
-    } catch (error) {
-      console.error('Booking error:', error);
-      alert('There was an error processing your booking. Please try again.');
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      throw new Error('Failed to save booking');
     }
-  };
+  } catch (error) {
+    console.error('Booking error:', error);
+    alert('There was an error processing your booking. Please try again.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const getFormattedDate = (dateString: string): string => {
     const date = new Date(dateString);

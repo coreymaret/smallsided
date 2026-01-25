@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, Users, ChevronRight, Check, CreditCard, Lock, Trophy, Zap, Sun } from 'lucide-react';
 import styles from './RegisterCamps.module.scss';
+import { api } from '../../services/api';
 
 const RegisterCamps: React.FC = () => {
   const [step, setStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set<number>());
   const [maxStepReached, setMaxStepReached] = useState(1);
+  const [isProcessing, setIsProcessing] = useState(false);
   
   const [formData, setFormData] = useState({
     campType: '',
@@ -464,14 +466,56 @@ const RegisterCamps: React.FC = () => {
     }
   };
 
-  const handleSubmit = () => {
-    if (!validateStep4Fields()) {
-      return;
-    }
+  const handleSubmit = async () => {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  if (!validateStep4Fields()) {
+    return;
+  }
+  
+  setIsProcessing(true);
+  
+  try {
+    const mockPaymentIntent = { id: 'pi_' + Date.now(), status: 'succeeded' };
     
-    setShowSuccessAnimation(true);
-    console.log('Camp registration submitted:', formData, 'Total:', calculateTotal());
-  };
+    const selectedCamp = campTypes.find(c => c.id === formData.campType);
+    const selectedDate = getCampDates().find(d => d.id === formData.campDate);
+    
+    const bookingData = {
+      booking_type: 'camp' as const,
+      customer_name: formData.parentName,
+      customer_email: formData.email,
+      customer_phone: formData.phone,
+      booking_date: selectedDate?.date || '',
+      participants: 1,
+      total_amount: calculateTotal(),
+      stripe_payment_intent_id: mockPaymentIntent.id,
+      metadata: {
+        camp_type: selectedCamp?.name,
+        child_name: formData.childName,
+        child_age: formData.childAge,
+        skill_level: formData.skillLevel,
+        shirt_size: formData.shirtSize,
+        emergency_contact: formData.emergencyContact,
+        emergency_phone: formData.emergencyPhone,
+        medical_info: formData.medicalInfo,
+      },
+      special_requests: undefined,
+    };
+    
+    const result: any = await api.createBooking(bookingData);
+    
+    if (result && result.success) {
+      setShowSuccessAnimation(true);
+    } else {
+      throw new Error('Failed to save booking');
+    }
+  } catch (error) {
+    console.error('Booking error:', error);
+    alert(`Booking failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  } finally {
+    setIsProcessing(false);
+  }
+};
 
   const getSelectedCamp = () => campTypes.find(c => c.id === formData.campType);
   const getSelectedDate = () => {
@@ -1130,12 +1174,13 @@ const RegisterCamps: React.FC = () => {
             </button>
           ) : (
             <button
-              className={`${styles.button} ${styles.buttonPrimary}`}
-              onClick={handleSubmit}
-            >
-              Confirm Registration
-              <Check size={20} />
-            </button>
+  className={`${styles.button} ${styles.buttonPrimary}`}
+  onClick={handleSubmit}
+  disabled={isProcessing}
+>
+  {isProcessing ? 'Processing...' : 'Confirm Registration'}
+  {!isProcessing && <Check size={20} />}
+</button>
           )}
         </div>
       </div>
