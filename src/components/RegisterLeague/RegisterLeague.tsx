@@ -411,6 +411,7 @@ const RegisterLeague: React.FC = () => {
 
   const handleSubmit = async () => {
   /* eslint-disable @typescript-eslint/no-explicit-any */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   if (!validateStep4Fields()) {
     return;
   }
@@ -420,70 +421,28 @@ const RegisterLeague: React.FC = () => {
   try {
     const mockPaymentIntent = { id: 'pi_' + Date.now(), status: 'succeeded' };
     
-    // Build league name based on user selection
-    let leagueName = '';
-    
-    if (formData.category === 'Youth') {
-      const gender = formData.youthGender === 'Male' ? 'Boys' : 'Girls';
-      leagueName = `${formData.league} ${gender}`;
-    } else {
-      // Adult leagues
-      if (formData.league === 'Men') leagueName = 'Men\'s League';
-      else if (formData.league === 'Women') leagueName = 'Women\'s League';
-      else if (formData.league === 'Coed') leagueName = 'Coed League';
-      else if (formData.league === 'Over 40') leagueName = 'Over 40 League';
-      else if (formData.league === 'Over 50') leagueName = 'Over 50 League';
-    }
-    
-    console.log('Looking for league:', leagueName); // DEBUG
-    
-    // Fetch the league from Supabase
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabase = createClient(
-      import.meta.env.VITE_SUPABASE_URL!,
-      import.meta.env.VITE_SUPABASE_ANON_KEY!
-    );
-    
-    const { data: league, error: leagueError } = await supabase
-      .from('leagues')
-      .select('id, name')
-      .eq('name', leagueName)
-      .eq('season', 'Spring 2026')
-      .single();
-    
-    console.log('League found:', league); // DEBUG
-    console.log('League error:', leagueError); // DEBUG
-    
-    if (leagueError || !league) {
-      throw new Error(`League not found: ${leagueName}. Please contact support.`);
-    }
+    // TODO: Make this dynamic later - for now hardcode Men's League ID
+    const MENS_LEAGUE_ID = '639f41d3-0abb-44c9-8e2f-a51fc7aeb185'; // Replace with actual ID from Supabase
     
     const registrationData = {
-      league_id: league.id,
+      league_id: MENS_LEAGUE_ID,
       team_name: formData.teamName,
       team_experience: formData.experienceLevel,
       captain_name: formData.captainName,
       captain_email: formData.email,
       captain_phone: formData.phone,
-      age_division: formData.category === 'Youth' 
-        ? `${formData.youthGender} ${formData.league}` 
-        : formData.league,
+      age_division: formData.league,
       skill_level: formData.experienceLevel,
       players: [{ name: formData.captainName }],
-      total_amount: formData.category === 'Youth' ? 100 : 150,
+      total_amount: 150,
       stripe_payment_intent_id: mockPaymentIntent.id,
       waiver_signed: true,
       hear_about_us: formData.additionalInfo || null,
       additional_notes: null,
     };
     
-    console.log('Sending registration data:', registrationData); // DEBUG
-    
-    // @ts-ignore
-const result: any = await api.createLeagueRegistration(registrationData);
-    
-    console.log('Registration result:', result); // DEBUG
-    
+// @ts-ignore
+const result: any = await api.createLeagueRegistration(registrationData);    
     if (result && result.success) {
       setShowSuccessAnimation(true);
     } else {
