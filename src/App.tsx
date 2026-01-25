@@ -32,6 +32,12 @@ const BlogPost = lazy(() => import('./components/Blog/BlogPost'));
 const AdminLogin = lazy(() => import('./components/admin/AdminLogin'));
 const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
 const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard'));
+const AdminFieldRentals = lazy(() => import('./components/admin/AdminFieldRentals'));
+const AdminLeagues = lazy(() => import('./components/admin/AdminLeagues'));
+const AdminPickup = lazy(() => import('./components/admin/AdminPickup'));
+const AdminBirthdayParties = lazy(() => import('./components/admin/AdminBirthdayParties'));
+const AdminTraining = lazy(() => import('./components/admin/AdminTraining'));
+const AdminCamps = lazy(() => import('./components/admin/AdminCamps'));
 
 const App = () => {
   const location = useLocation();
@@ -67,7 +73,13 @@ const App = () => {
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminDashboard />} />
+            <Route index element={<AdminDashboard />} />
+            <Route path="field-rentals" element={<AdminFieldRentals />} />
+            <Route path="leagues" element={<AdminLeagues />} />
+            <Route path="pickup" element={<AdminPickup />} />
+            <Route path="birthday-parties" element={<AdminBirthdayParties />} />
+            <Route path="training" element={<AdminTraining />} />
+            <Route path="camps" element={<AdminCamps />} />
             </Route>
           </Routes>
         </Suspense>

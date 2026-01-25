@@ -2,15 +2,19 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { 
   LayoutDashboard, 
-  Calendar, 
-  Users, 
+  MapPin,
   Trophy, 
+  Users,
+  Cake,
+  Target,
+  Zap,
   LogOut,
   Menu,
   X
 } from 'lucide-react';
 import { getCurrentAdmin, signOut } from '../../lib/supabase';
 import type { Database } from '../../lib/database.types';
+import Logo from '../../assets/logo.svg';
 import styles from './AdminLayout.module.scss';
 
 type AdminUser = Database['public']['Tables']['admin_users']['Row'];
@@ -59,10 +63,12 @@ const AdminLayout = () => {
 
   const navItems = [
     { path: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-    { path: '/admin/bookings', label: 'Bookings', icon: Calendar },
+    { path: '/admin/field-rentals', label: 'Field Rentals', icon: MapPin },
     { path: '/admin/leagues', label: 'Leagues', icon: Trophy },
-    { path: '/admin/teams', label: 'Teams', icon: Users },
-    { path: '/admin/matches', label: 'Matches', icon: Calendar },
+    { path: '/admin/pickup', label: 'Pickup Games', icon: Users },
+    { path: '/admin/birthday-parties', label: 'Birthday Parties', icon: Cake },
+    { path: '/admin/training', label: 'Training', icon: Target },
+    { path: '/admin/camps', label: 'Camps', icon: Zap },
   ];
 
   return (
@@ -70,7 +76,7 @@ const AdminLayout = () => {
       {/* Sidebar */}
       <aside className={`${styles.sidebar} ${isMobileMenuOpen ? styles.open : ''}`}>
         <div className={styles.sidebarHeader}>
-          <h1 className={styles.logo}>Small Sided Admin</h1>
+          <img src={Logo} alt="Small Sided Logo" className={styles.logo} width="160" height="36" />
           <button 
             className={styles.mobileMenuClose}
             onClick={() => setIsMobileMenuOpen(false)}

@@ -97,7 +97,7 @@ const AdminLogin = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@smallsided.com"
+              placeholder="Enter your email"
               required
               disabled={isLoading}
             />
