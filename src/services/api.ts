@@ -43,8 +43,7 @@ class ApiService {
   private baseUrl: string;
 
   constructor() {
-  // Use /api prefix which redirects to /.netlify/functions in netlify.toml
-  this.baseUrl = '/api';
+  this.baseUrl = '/.netlify/functions';
 }
 
   // Generic fetch wrapper with error handling
