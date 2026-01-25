@@ -5,20 +5,15 @@ import {
   Calendar, 
   Users, 
   Trophy, 
-  Settings, 
   LogOut,
   Menu,
   X
 } from 'lucide-react';
-import { supabase, getCurrentAdmin, signOut } from '../../lib/supabase';
+import { getCurrentAdmin, signOut } from '../../lib/supabase';
+import type { Database } from '../../lib/database.types';
 import styles from './AdminLayout.module.scss';
 
-interface AdminUser {
-  id: string;
-  email: string;
-  full_name: string;
-  role: 'super_admin' | 'admin' | 'staff';
-}
+type AdminUser = Database['public']['Tables']['admin_users']['Row'];
 
 export const AdminLayout = () => {
   const navigate = useNavigate();

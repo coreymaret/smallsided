@@ -41,7 +41,6 @@ const RegisterTraining: React.FC = () => {
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [confirmationId, setConfirmationId] = useState('');
 
   const handleCloseBanner = () => {
     setIsClosing(true);
@@ -562,13 +561,12 @@ const RegisterTraining: React.FC = () => {
           skill_level: formData.skillLevel,
           focus_area: focusAreas.find(f => f.value === formData.focusArea)?.label,
         },
-        special_requests: formData.specialRequests || null,
+        special_requests: formData.specialRequests || undefined,
       };
       
-      const result = await api.createBooking(bookingData);
+      const result = await api.createBooking(bookingData) as { success: boolean; booking: { id: string } };
       
       if (result.success) {
-        setConfirmationId(result.booking.id);
         setShowSuccessAnimation(true);
       } else {
         throw new Error('Failed to save booking');

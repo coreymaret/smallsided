@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import type { Database } from '../../lib/database.types';
 import { Lock, Mail, AlertCircle } from 'lucide-react';
 import styles from './AdminLogin.module.scss';
+
+type AdminUser = Database['public']['Tables']['admin_users']['Row'];
 
 export const AdminLogin = () => {
   const navigate = useNavigate();
@@ -18,7 +21,7 @@ export const AdminLogin = () => {
 
     try {
       // Sign in with Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      const { error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -40,12 +43,15 @@ export const AdminLogin = () => {
         throw new Error('You do not have admin access');
       }
 
-      // Update last login time
-      await supabase
-        .from('admin_users')
-        .update({ last_login: new Date().toISOString() })
-        .eq('id', adminUser.id);
+      // Type assertion since we know the structure
+      const admin = adminUser as AdminUser;
 
+      // Update last login time
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase.from('admin_users') as any)
+        .update({ last_login: new Date().toISOString() })
+        .eq('id', admin.id);
+      
       // Redirect to admin dashboard
       navigate('/admin');
     } catch (err) {

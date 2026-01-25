@@ -3,59 +3,104 @@
 # -----------------------------
 
 [build]
-  # The command Netlify runs to build your site.
-  # This is executed in the Netlify CI environment on every deploy.
-  #
-  # In this case:
-  # - npm installs dependencies
-  # - then runs the "build" script from package.json
-  #
-  # Example from package.json:
-  # "scripts": {
-  #   "build": "vite build"
-  # }
-  #
-  # Netlify expects this command to produce static files
-  # that can be served to users.
+  # Build command for your React/Vite app
+  # Runs: npm run build (which executes vite build)
   command = "npm run build"
-
-  # The directory that Netlify will deploy to production.
-  #
-  # After the build command finishes, Netlify looks here
-  # for the final output files (HTML, JS, CSS, assets).
-  #
-  # Common values:
-  # - "dist" (Vite, Astro, Vue, React w/ Vite)
-  # - "build" (Create React App)
-  # - "public" (custom setups)
-  #
-  # IMPORTANT:
-  # If this folder name does not match your build output,
-  # your site will deploy but appear blank or 404.
+  
+  # Directory where built files are output
+  # Vite outputs to dist/ by default
   publish = "dist"
+  
+  # Directory containing serverless functions
+  functions = "netlify/functions"
 
 # -------------------------------------
 # BUILD ENVIRONMENT CONFIGURATION
 # -------------------------------------
 
 [build.environment]
-  # Netlify automatically scans environment variables
-  # during builds to detect exposed secrets (API keys, tokens).
+  # Node version for builds
+  NODE_VERSION = "18"
+  
+  # Netlify scans for exposed secrets during builds.
+  # This tells Netlify: "Don't fail the build for these public keys"
+  # 
+  # These keys are INTENDED to be public and are restricted by:
+  # - Domain restrictions (Google Maps)
+  # - Row Level Security (Supabase anon key)
+  # - Read-only permissions (Stripe publishable key)
   #
-  # Vite exposes client-side environment variables that start
-  # with VITE_ to the browser by design.
-  #
-  # This line tells Netlify:
-  # "Do NOT fail the build if you see this key."
-  #
-  # Use this ONLY for keys that are:
-  # - Intended to be public
-  # - Restricted by domain, referrer, or usage limits
-  #
-  # In this case:
-  # VITE_GOOGLE_MAPS_KEY is expected to be used in frontend JS,
-  # so Netlify's secret scanner is intentionally bypassed.
-  #
-  # ⚠️ WARNING:
-  # Never omit scanning for private server-side keys.
-  SECRETS_SCAN_OMIT_KEYS = "VITE_GOOGLE_MAPS_KEY"
+  # ⚠️ WARNING: Never add server-side secret keys here!
+  SECRETS_SCAN_OMIT_KEYS = "VITE_GOOGLE_MAPS_KEY,VITE_SUPABASE_ANON_KEY,VITE_STRIPE_PUBLISHABLE_KEY"
+
+# -------------------------------------
+# SERVERLESS FUNCTIONS CONFIGURATION
+# -------------------------------------
+
+[functions]
+  # Use esbuild for faster function bundling
+  node_bundler = "esbuild"
+  
+  # Set function timeout (max 26 seconds for Netlify Functions)
+  # Increase if you have long-running operations
+  function_timeout = 10
+
+# -------------------------------------
+# URL REDIRECTS
+# -------------------------------------
+
+# Cleaner API URLs: /api/create-booking → /.netlify/functions/create-booking
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true
+
+# SPA redirect - send all routes to index.html for React Router
+# This must be LAST so it doesn't override the /api/* redirect
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# -------------------------------------
+# SECURITY HEADERS
+# -------------------------------------
+
+# Custom headers for security (applied to all pages)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# -------------------------------------
+# CACHING HEADERS
+# -------------------------------------
+
+# Cache static assets aggressively (images, JS, CSS in /assets/)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Don't cache the main HTML file (ensures users get updates)
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# -------------------------------------
+# CORS HEADERS FOR API
+# -------------------------------------
+
+# CORS headers for serverless functions
+# Allows frontend to call backend functions
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, stripe-signature"

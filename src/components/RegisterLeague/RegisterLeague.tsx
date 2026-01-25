@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Users, Calendar, ChevronRight, Check, Trophy, Mail, User, Shield, CreditCard, Lock } from 'lucide-react';
 import styles from './RegisterLeague.module.scss';
+import { api } from '../../services/api';
 
 const RegisterLeague: React.FC = () => {
   const [step, setStep] = useState(1);
