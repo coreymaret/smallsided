@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import type { Database } from '../../lib/database.types';
 import { Lock, Mail, AlertCircle } from 'lucide-react';
 import styles from './AdminLogin.module.scss';
-
-type AdminUser = Database['public']['Tables']['admin_users']['Row'];
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -59,20 +56,6 @@ const AdminLogin = () => {
       }
 
       console.log('✅ Admin user found:', adminUser);
-
-      // Type assertion since we know the structure
-      const admin = adminUser as AdminUser;
-
-      // Update last login time
-      const { error: updateError } = await supabase
-        .from('admin_users')
-        .update({ last_login: new Date().toISOString() })
-        .eq('id', admin.id);
-
-      if (updateError) {
-        console.warn('⚠️ Could not update last_login:', updateError);
-      }
-      
       console.log('🎉 Login successful! Redirecting to /admin');
       
       // Redirect to admin dashboard
