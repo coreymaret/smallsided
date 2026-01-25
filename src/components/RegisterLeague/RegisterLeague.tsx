@@ -410,6 +410,7 @@ const RegisterLeague: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   if (!validateStep4Fields()) {
     return;
   }
@@ -419,11 +420,35 @@ const RegisterLeague: React.FC = () => {
   try {
     const mockPaymentIntent = { id: 'pi_' + Date.now(), status: 'succeeded' };
     
-    // NOTE: You need to create a league in Supabase first and get its ID
-    const LEAGUE_ID = 'YOUR_LEAGUE_ID_HERE'; // TODO: Get from Supabase
+    // Dynamically find the correct league based on user selection
+    const leagueName = formData.category === 'Youth' 
+      ? `${formData.league} ${formData.youthGender === 'Male' ? 'Boys' : 'Girls'}`
+      : formData.league === 'Men' ? 'Men\'s League'
+      : formData.league === 'Women' ? 'Women\'s League'
+      : formData.league === 'Coed' ? 'Coed League'
+      : formData.league === 'Over 40' ? 'Over 40 League'
+      : 'Over 50 League';
+    
+    // Fetch the league from Supabase
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      import.meta.env.VITE_SUPABASE_URL!,
+      import.meta.env.VITE_SUPABASE_ANON_KEY!
+    );
+    
+    const { data: league, error: leagueError } = await supabase
+      .from('leagues')
+      .select('id')
+      .eq('name', leagueName)
+      .eq('season', 'Spring 2026')
+      .single();
+    
+    if (leagueError || !league) {
+      throw new Error('League not found. Please contact support.');
+    }
     
     const registrationData = {
-      league_id: LEAGUE_ID,
+      league_id: league.id,
       team_name: formData.teamName,
       team_experience: formData.experienceLevel,
       captain_name: formData.captainName,
@@ -434,7 +459,7 @@ const RegisterLeague: React.FC = () => {
         : formData.league,
       skill_level: formData.experienceLevel,
       players: [{ name: formData.captainName }],
-      total_amount: 150,
+      total_amount: formData.category === 'Youth' ? 100 : 150,
       stripe_payment_intent_id: mockPaymentIntent.id,
       waiver_signed: true,
       hear_about_us: formData.additionalInfo,
