@@ -20,55 +20,65 @@ const AdminLogin = () => {
     setIsLoading(true);
 
     try {
+      console.log('🔐 Starting login for:', email);
+      
       // Sign in with Supabase Auth
-      const { error: authError } = await supabase.auth.signInWithPassword({
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
+
+      console.log('✅ Auth response:', { authData, authError });
 
       if (authError) {
         throw new Error(authError.message);
       }
 
+      console.log('👤 Checking admin status for:', email);
+
       // Verify user is an admin
-      // Get the current session to verify we're authenticated
-const { data: { session } } = await supabase.auth.getSession();
+      const { data: adminUser, error: adminError } = await supabase
+        .from('admin_users')
+        .select('*')
+        .eq('email', email)
+        .eq('is_active', true)
+        .maybeSingle();
 
-if (!session) {
-  throw new Error('Authentication failed');
-}
+      console.log('📋 Admin query result:', { adminUser, adminError });
 
-// Verify user is an admin - use the authenticated session
-const { data: adminUser, error: adminError } = await supabase
-  .from('admin_users')
-  .select('*')
-  .eq('email', email)
-  .eq('is_active', true)
-  .maybeSingle();  // Use maybeSingle() instead of single()
+      if (adminError) {
+        console.error('❌ Admin query error:', adminError);
+        await supabase.auth.signOut();
+        throw new Error(`Database error: ${adminError.message}`);
+      }
 
-if (adminError) {
-  console.error('Admin check error:', adminError);
-  await supabase.auth.signOut();
-  throw new Error('Error checking admin access');
-}
+      if (!adminUser) {
+        console.error('❌ No admin user found for:', email);
+        await supabase.auth.signOut();
+        throw new Error('You do not have admin access');
+      }
 
-if (!adminUser) {
-  await supabase.auth.signOut();
-  throw new Error('You do not have admin access');
-}
+      console.log('✅ Admin user found:', adminUser);
 
       // Type assertion since we know the structure
       const admin = adminUser as AdminUser;
 
       // Update last login time
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase.from('admin_users') as any)
+      const { error: updateError } = await supabase
+        .from('admin_users')
         .update({ last_login: new Date().toISOString() })
         .eq('id', admin.id);
+
+      if (updateError) {
+        console.warn('⚠️ Could not update last_login:', updateError);
+      }
+      
+      console.log('🎉 Login successful! Redirecting to /admin');
       
       // Redirect to admin dashboard
       navigate('/admin');
     } catch (err) {
+      console.error('💥 Login error:', err);
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {
       setIsLoading(false);
