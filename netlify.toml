@@ -41,9 +41,8 @@
   # Use esbuild for faster function bundling
   node_bundler = "esbuild"
   
-  # Set function timeout (max 26 seconds for Netlify Functions)
-  # Increase if you have long-running operations
-  function_timeout = 10
+# NOTE: function_timeout has been removed as it's not a valid top-level property
+# Timeouts are configured differently in newer Netlify versions
 
 # -------------------------------------
 # URL REDIRECTS
