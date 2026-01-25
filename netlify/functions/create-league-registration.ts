@@ -112,7 +112,6 @@ export const handler: Handler = async (event) => {
         waiver_signed: data.waiver_signed,
         waiver_signed_at: data.waiver_signed ? new Date().toISOString() : null,
         hear_about_us: data.hear_about_us || null,
-        additional_notes: data.additional_notes || null,
       })
       .select()
       .single();
