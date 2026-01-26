@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { 
+import {  
   Calendar,
   Trophy, 
   Users,
@@ -18,6 +18,7 @@ import { getCurrentAdmin, signOut } from '../../lib/supabase';
 import type { Database } from '../../lib/database.types';
 import Logo from '../../assets/logo.svg';
 import Footer from '../Footer/Footer';
+import { useMobileMenu } from '../../contexts/MobileMenuContext';
 import styles from './AdminLayout.module.scss';
 
 type AdminUser = Database['public']['Tables']['admin_users']['Row'];
@@ -25,6 +26,7 @@ type AdminUser = Database['public']['Tables']['admin_users']['Row'];
 const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isHeaderMenuOpen } = useMobileMenu();
   const [admin, setAdmin] = useState<AdminUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -188,7 +190,7 @@ const AdminLayout = () => {
       )}
 
       {/* Mobile Bottom Navigation */}
-      <nav className={styles.mobileBottomNav}>
+      <nav className={`${styles.mobileBottomNav} ${isHeaderMenuOpen ? styles.hidden : ''}`}>
         {/* Dashboard */}
         <div className={styles.navButtonWrapper}>
           <button

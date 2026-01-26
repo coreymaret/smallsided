@@ -242,6 +242,12 @@
     z-index: 1001;
     height: 70px;
     padding: 0.5rem 0;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+
+  &.hidden {
+    transform: translateY(100%);
   }
 }
 

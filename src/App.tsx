@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { lazy, Suspense } from 'react';
+import { MobileMenuProvider } from './contexts/MobileMenuContext';
 // Lazy load all page components for better performance
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -44,51 +45,53 @@ const App = () => {
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
-    <HelmetProvider>
-      <ScrollToTop />
-      <Header />
-      <main className="main-content" style={{ minHeight: '100vh' }}>
-        {/* ⬆️ ADDED: minHeight reserves space to prevent Subscribe from shifting */}
-        {/* Suspense boundary catches lazy-loaded components while they load */}
-        <Suspense fallback={<PageLoader />}>
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/exercises" element={<Exercises />} />
-            <Route path="/exercises/:slug" element={<ExerciseDetail />} />
-            <Route path="/work" element={<Work />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/services/field-rental" element={<FieldRental />} />
-            <Route path="/services/leagues" element={<Leagues />} />
-            <Route path="/services/pickup" element={<Pickup />} />
-            <Route path="/services/birthday-parties" element={<BirthdayParties />} />
-            <Route path="/services/camps" element={<Camps />} />
-            <Route path="/services/training" element={<Training />} />
-            <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-            <Route path="/get-started" element={<GetStarted />} />
-            <Route path="/TOS" element={<TOS />} />
-            <Route path="/CookiePolicy" element={<CookiePolicy />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="field-rentals" element={<AdminFieldRentals />} />
-            <Route path="leagues" element={<AdminLeagues />} />
-            <Route path="pickup" element={<AdminPickup />} />
-            <Route path="birthday-parties" element={<AdminBirthdayParties />} />
-            <Route path="training" element={<AdminTraining />} />
-            <Route path="camps" element={<AdminCamps />} />
-            </Route>
-          </Routes>
-        </Suspense>
-      </main>
-      {!isAdminRoute && <Subscribe />}
-      {!isAdminRoute && <Footer />}
-      <CookiePopup />
-    </HelmetProvider>
+    <MobileMenuProvider>
+      <HelmetProvider>
+        <ScrollToTop />
+        <Header />
+        <main className="main-content" style={{ minHeight: '100vh' }}>
+          {/* ⬆️ ADDED: minHeight reserves space to prevent Subscribe from shifting */}
+          {/* Suspense boundary catches lazy-loaded components while they load */}
+          <Suspense fallback={<PageLoader />}>
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/exercises" element={<Exercises />} />
+              <Route path="/exercises/:slug" element={<ExerciseDetail />} />
+              <Route path="/work" element={<Work />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/services/field-rental" element={<FieldRental />} />
+              <Route path="/services/leagues" element={<Leagues />} />
+              <Route path="/services/pickup" element={<Pickup />} />
+              <Route path="/services/birthday-parties" element={<BirthdayParties />} />
+              <Route path="/services/camps" element={<Camps />} />
+              <Route path="/services/training" element={<Training />} />
+              <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+              <Route path="/get-started" element={<GetStarted />} />
+              <Route path="/TOS" element={<TOS />} />
+              <Route path="/CookiePolicy" element={<CookiePolicy />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="field-rentals" element={<AdminFieldRentals />} />
+              <Route path="leagues" element={<AdminLeagues />} />
+              <Route path="pickup" element={<AdminPickup />} />
+              <Route path="birthday-parties" element={<AdminBirthdayParties />} />
+              <Route path="training" element={<AdminTraining />} />
+              <Route path="camps" element={<AdminCamps />} />
+              </Route>
+            </Routes>
+          </Suspense>
+        </main>
+        {!isAdminRoute && <Subscribe />}
+        {!isAdminRoute && <Footer />}
+        <CookiePopup />
+      </HelmetProvider>
+    </MobileMenuProvider>
   );
 };
 

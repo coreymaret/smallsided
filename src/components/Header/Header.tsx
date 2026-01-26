@@ -4,9 +4,11 @@ import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, C
 import styles from "./Header.module.scss";
 import Logo from "../../assets/logo.svg";
 import TopToggleBar from "../TopToggleBar/TopToggleBar";
+import { useMobileMenu } from "../../contexts/MobileMenuContext";
 
 const Header = () => {
   const location = useLocation();
+  const { setIsHeaderMenuOpen } = useMobileMenu();
   const [menuState, setMenuState] = useState<"open" | "closing" | "closed" | undefined>("closed");
   const isOpen = menuState === "open";
   const [isMobile, setIsMobile] = useState(window.innerWidth < 785);
@@ -24,6 +26,11 @@ const Header = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Update context when menu state changes
+  useEffect(() => {
+    setIsHeaderMenuOpen(isOpen);
+  }, [isOpen, setIsHeaderMenuOpen]);
 
   useEffect(() => {
     if (isMobile && isOpen) {
