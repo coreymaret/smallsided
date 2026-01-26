@@ -15,6 +15,7 @@ import {
 import { getCurrentAdmin, signOut } from '../../lib/supabase';
 import type { Database } from '../../lib/database.types';
 import Logo from '../../assets/logo.svg';
+import Footer from '../Footer/Footer';
 import styles from './AdminLayout.module.scss';
 
 type AdminUser = Database['public']['Tables']['admin_users']['Row'];
@@ -135,7 +136,10 @@ const AdminLayout = () => {
 
       {/* Main Content */}
       <main className={styles.mainContent}>
-        <Outlet />
+        <div>
+          <Outlet />
+        </div>
+        <Footer />
       </main>
 
       {/* Mobile Menu Overlay */}

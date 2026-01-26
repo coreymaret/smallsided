@@ -194,12 +194,28 @@
 .mainContent {
   flex: 1;
   margin-left: 280px;
-  padding: 2rem;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 768px) {
     margin-left: 0;
-    padding: 5rem 1rem 2rem;
+  }
+
+  // Content wrapper for pages with padding
+  > div {
+    flex: 1;
+    padding: 2rem;
+
+    @media (max-width: 768px) {
+      padding: 5rem 1rem 2rem;
+    }
+  }
+
+  // Footer should span full width with no extra padding
+  > footer {
+    margin-top: auto;
+    width: 100%;
   }
 }
 
