@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import { Lock, Mail, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
+import Logo from '../../assets/logo.svg';
 import styles from './AdminLogin.module.scss';
 
 const AdminLogin = () => {
@@ -73,8 +74,7 @@ const AdminLogin = () => {
       <div className={styles.loginCard}>
         <div className={styles.header}>
           <div className={styles.logo}>
-            <div className={styles.logoIcon}>⚽</div>
-            <h1>Small Sided Admin</h1>
+            <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
           </div>
           <p className={styles.subtitle}>Sign in to access the admin dashboard</p>
         </div>
@@ -88,35 +88,31 @@ const AdminLogin = () => {
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
-            <label htmlFor="email">
-              <Mail size={18} />
-              Email Address
-            </label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
+              placeholder="Email Address"
               required
               disabled={isLoading}
+              className={email ? styles.hasValue : ''}
             />
+            <label htmlFor="email">Email Address</label>
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="password">
-              <Lock size={18} />
-              Password
-            </label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="Password"
               required
               disabled={isLoading}
+              className={password ? styles.hasValue : ''}
             />
+            <label htmlFor="password">Password</label>
           </div>
 
           <button 
