@@ -42,25 +42,51 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     try {
+      console.log('🔍 Fetching admin dashboard stats...');
+      
       // Fetch total bookings count
-      const { count: bookingsCount } = await supabase
+      const { count: bookingsCount, error: bookingsError } = await supabase
         .from('bookings')
         .select('*', { count: 'exact', head: true });
+      
+      if (bookingsError) {
+        console.error('❌ Error fetching bookings count:', bookingsError);
+      } else {
+        console.log('✅ Bookings count:', bookingsCount);
+      }
 
       // Fetch bookings by type
-      const { data: bookings } = await supabase
+      const { data: bookings, error: bookingsDataError } = await supabase
         .from('bookings')
         .select('booking_type, total_amount');
+      
+      if (bookingsDataError) {
+        console.error('❌ Error fetching bookings data:', bookingsDataError);
+      } else {
+        console.log('✅ Bookings data:', bookings);
+      }
 
       // Fetch league registrations count
-      const { count: leaguesCount } = await supabase
+      const { count: leaguesCount, error: leaguesError } = await supabase
         .from('league_registrations')
         .select('*', { count: 'exact', head: true });
+      
+      if (leaguesError) {
+        console.error('❌ Error fetching league registrations:', leaguesError);
+      } else {
+        console.log('✅ League registrations count:', leaguesCount);
+      }
 
       // Fetch active leagues count
-      const { count: activeLeaguesCount } = await supabase
+      const { count: activeLeaguesCount, error: activeLeaguesError } = await supabase
         .from('leagues')
         .select('*', { count: 'exact', head: true });
+      
+      if (activeLeaguesError) {
+        console.error('❌ Error fetching active leagues:', activeLeaguesError);
+      } else {
+        console.log('✅ Active leagues count:', activeLeaguesCount);
+      }
 
       // Calculate stats with proper typing
       const typedBookings = (bookings || []) as BookingData[];
@@ -70,9 +96,11 @@ const AdminDashboard = () => {
         return acc;
       }, {} as Record<string, number>);
 
+      console.log('📊 Bookings by type:', bookingsByType);
+
       const totalRevenue = typedBookings.reduce((sum, booking) => sum + (booking.total_amount || 0), 0);
 
-      setStats({
+      const statsData = {
         totalBookings: bookingsCount || 0,
         totalRevenue,
         activeLeagues: activeLeaguesCount || 0,
@@ -83,9 +111,12 @@ const AdminDashboard = () => {
         birthdayParties: bookingsByType['birthday'] || 0,
         trainingSessions: bookingsByType['training'] || 0,
         campRegistrations: bookingsByType['camp'] || 0,
-      });
+      };
+
+      console.log('📈 Final stats:', statsData);
+      setStats(statsData);
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error('💥 Error fetching stats:', error);
     } finally {
       setIsLoading(false);
     }
