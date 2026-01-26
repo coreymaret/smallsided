@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Calendar, Users, Trophy, DollarSign, TrendingUp, Clock } from 'lucide-react';
-import styles from './Dashboard.module.scss';
+import styles from './AdminDashboard.module.scss';
 
 interface Stats {
   totalBookings: number;
