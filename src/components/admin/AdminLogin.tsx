@@ -96,80 +96,82 @@ const AdminLogin = () => {
 
   return (
     <div className={styles.loginPage}>
-      <div className={styles.headerSection}>
-        <div className={styles.logo}>
-          <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
-        </div>
-      </div>
-      
       <div className={styles.loginCard}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>Admin Login</h2>
-          <p className={styles.subtitle}>Sign in to access the admin dashboard</p>
+        <div className={styles.headerSection}>
+          <div className={styles.logo}>
+            <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
+          </div>
         </div>
-
-        {error && (
-          <div className={styles.error}>
-            <AlertCircle size={20} />
-            <p>{error}</p>
+        
+        <div className={styles.cardContent}>
+          <div className={styles.header}>
+            <h2 className={styles.title}>Admin Login</h2>
+            <p className={styles.subtitle}>Sign in to access the admin dashboard</p>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-              onBlur={handleEmailBlur}
-              placeholder="Email Address"
-              required
+          {error && (
+            <div className={styles.error}>
+              <AlertCircle size={20} />
+              <p>{error}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.inputGroup}>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+                onBlur={handleEmailBlur}
+                placeholder="Email Address"
+                required
+                disabled={isLoading}
+                className={`${styles.input} ${validationErrors.email ? styles.inputError : ''}`}
+              />
+              <label htmlFor="email" className={`${styles.floatingLabel} ${email ? styles.active : ''}`}>
+                Email Address *
+              </label>
+              {validationErrors.email && (
+                <span className={styles.errorMessage}>{validationErrors.email}</span>
+              )}
+            </div>
+
+            <div className={styles.inputGroup}>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                required
+                disabled={isLoading}
+                className={styles.input}
+              />
+              <label htmlFor="password" className={`${styles.floatingLabel} ${password ? styles.active : ''}`}>
+                Password *
+              </label>
+            </div>
+
+            <button 
+              type="submit" 
+              className={styles.submitButton}
               disabled={isLoading}
-              className={`${styles.input} ${validationErrors.email ? styles.inputError : ''}`}
-            />
-            <label htmlFor="email" className={`${styles.floatingLabel} ${email ? styles.active : ''}`}>
-              Email Address *
-            </label>
-            {validationErrors.email && (
-              <span className={styles.errorMessage}>{validationErrors.email}</span>
-            )}
+            >
+              {isLoading ? (
+                <>
+                  <div className={styles.spinner} />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </button>
+          </form>
+
+          <div className={styles.footer}>
+            <p>Forgot your password? Contact the super admin.</p>
           </div>
-
-          <div className={styles.inputGroup}>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              required
-              disabled={isLoading}
-              className={styles.input}
-            />
-            <label htmlFor="password" className={`${styles.floatingLabel} ${password ? styles.active : ''}`}>
-              Password *
-            </label>
-          </div>
-
-          <button 
-            type="submit" 
-            className={styles.submitButton}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <div className={styles.spinner} />
-                Signing in...
-              </>
-            ) : (
-              'Sign In'
-            )}
-          </button>
-        </form>
-
-        <div className={styles.footer}>
-          <p>Forgot your password? Contact the super admin.</p>
         </div>
       </div>
     </div>

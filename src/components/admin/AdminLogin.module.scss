@@ -1,8 +1,19 @@
 .loginPage {
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background: #f8f9fa;
+  padding: 0.5rem;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 420px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .headerSection {
@@ -12,6 +23,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 16px 16px 0 0;
 }
 
 .logo {
@@ -20,14 +32,8 @@
   }
 }
 
-.loginCard {
-  width: 100%;
-  max-width: 420px;
-  background-color: #ffffff;
-  border-radius: 16px;
+.cardContent {
   padding: 2.5rem;
-  margin: 2rem auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .header {
