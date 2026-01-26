@@ -125,6 +125,24 @@
     cursor: not-allowed;
     background-color: #f8f9fa;
   }
+
+  // Prevent autofill background color
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  // Move label up when autofilled
+  &:-webkit-autofill + .floatingLabel {
+    top: -0.625rem;
+    font-size: 0.75rem;
+    color: #15141a;
+    font-weight: 500;
+  }
 }
 
 .inputError {
@@ -206,6 +224,7 @@
   }
 
   &:disabled {
+    background-color: #15141a;
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
