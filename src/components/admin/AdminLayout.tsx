@@ -1,7 +1,6 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { 
-  LayoutDashboard, 
   Calendar,
   Trophy, 
   Users,
@@ -10,7 +9,10 @@ import {
   Smile,
   LogOut,
   Menu,
-  X
+  X,
+  Home,
+  User,
+  Settings
 } from 'lucide-react';
 import { getCurrentAdmin, signOut } from '../../lib/supabase';
 import type { Database } from '../../lib/database.types';
@@ -22,13 +24,20 @@ type AdminUser = Database['public']['Tables']['admin_users']['Row'];
 
 const AdminLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [admin, setAdmin] = useState<AdminUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeDropup, setActiveDropup] = useState<string | null>(null);
 
   useEffect(() => {
     checkAuth();
   }, []);
+
+  // Close dropup when route changes
+  useEffect(() => {
+    setActiveDropup(null);
+  }, [location.pathname]);
 
   const checkAuth = async () => {
     try {
@@ -53,6 +62,22 @@ const AdminLayout = () => {
     navigate('/admin/login');
   };
 
+  const toggleDropup = (menu: string) => {
+    setActiveDropup(activeDropup === menu ? null : menu);
+  };
+
+  const isBookingsActive = () => {
+    return location.pathname.includes('/admin/field-rentals') ||
+           location.pathname.includes('/admin/pickup') ||
+           location.pathname.includes('/admin/birthday-parties');
+  };
+
+  const isProgramsActive = () => {
+    return location.pathname.includes('/admin/leagues') ||
+           location.pathname.includes('/admin/camps') ||
+           location.pathname.includes('/admin/training');
+  };
+
   if (isLoading) {
     return (
       <div className={styles.loading}>
@@ -63,13 +88,25 @@ const AdminLayout = () => {
   }
 
   const navItems = [
-    { path: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
+    { path: '/admin', label: 'Dashboard', icon: Home, end: true },
     { path: '/admin/field-rentals', label: 'Field Rentals', icon: Calendar },
     { path: '/admin/leagues', label: 'Leagues', icon: Trophy },
     { path: '/admin/pickup', label: 'Pickup Games', icon: Users },
     { path: '/admin/birthday-parties', label: 'Birthday Parties', icon: Cake },
     { path: '/admin/training', label: 'Training', icon: ChartNoAxesCombined },
     { path: '/admin/camps', label: 'Camps', icon: Smile },
+  ];
+
+  const bookingsItems = [
+    { path: '/admin/field-rentals', label: 'Field Rentals', icon: Calendar },
+    { path: '/admin/pickup', label: 'Pickup', icon: Users },
+    { path: '/admin/birthday-parties', label: 'Birthday Parties', icon: Cake },
+  ];
+
+  const programsItems = [
+    { path: '/admin/leagues', label: 'Leagues', icon: Trophy },
+    { path: '/admin/camps', label: 'Camps', icon: Smile },
+    { path: '/admin/training', label: 'Training', icon: ChartNoAxesCombined },
   ];
 
   return (
@@ -147,6 +184,101 @@ const AdminLayout = () => {
         <div 
           className={styles.overlay}
           onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Bottom Navigation */}
+      <nav className={styles.mobileBottomNav}>
+        {/* Dashboard */}
+        <div className={styles.navButtonWrapper}>
+          <button
+            className={`${styles.navButton} ${location.pathname === '/admin' ? styles.active : ''}`}
+            onClick={() => navigate('/admin')}
+          >
+            <Home size={24} />
+            <span>Dashboard</span>
+          </button>
+        </div>
+
+        {/* Bookings */}
+        <div className={styles.navButtonWrapper}>
+          {activeDropup === 'bookings' && (
+            <div className={styles.dropup}>
+              {bookingsItems.map((item) => (
+                <button
+                  key={item.path}
+                  className={styles.dropupItem}
+                  onClick={() => navigate(item.path)}
+                >
+                  <item.icon size={20} />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+          <button
+            className={`${styles.navButton} ${isBookingsActive() ? styles.active : ''}`}
+            onClick={() => toggleDropup('bookings')}
+          >
+            <Calendar size={24} />
+            <span>Bookings</span>
+          </button>
+        </div>
+
+        {/* Programs */}
+        <div className={styles.navButtonWrapper}>
+          {activeDropup === 'programs' && (
+            <div className={styles.dropup}>
+              {programsItems.map((item) => (
+                <button
+                  key={item.path}
+                  className={styles.dropupItem}
+                  onClick={() => navigate(item.path)}
+                >
+                  <item.icon size={20} />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+          <button
+            className={`${styles.navButton} ${isProgramsActive() ? styles.active : ''}`}
+            onClick={() => toggleDropup('programs')}
+          >
+            <Trophy size={24} />
+            <span>Programs</span>
+          </button>
+        </div>
+
+        {/* Profile */}
+        <div className={styles.navButtonWrapper}>
+          {activeDropup === 'profile' && (
+            <div className={styles.dropup}>
+              <button className={styles.dropupItem} onClick={() => navigate('/admin/settings')}>
+                <Settings size={20} />
+                <span>Settings</span>
+              </button>
+              <button className={styles.dropupItem} onClick={handleSignOut}>
+                <LogOut size={20} />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          )}
+          <button
+            className={styles.navButton}
+            onClick={() => toggleDropup('profile')}
+          >
+            <User size={24} />
+            <span>Profile</span>
+          </button>
+        </div>
+      </nav>
+
+      {/* Dropup Overlay */}
+      {activeDropup && (
+        <div 
+          className={styles.dropupOverlay}
+          onClick={() => setActiveDropup(null)}
         />
       )}
     </div>

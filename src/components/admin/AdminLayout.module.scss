@@ -174,20 +174,9 @@
 
 .mobileMenuButton {
   display: none;
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 999;
-  background-color: #15141a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-  @media (max-width: 768px) {
-    display: block;
+  @media (min-width: 769px) {
+    display: none;
   }
 }
 
@@ -200,6 +189,8 @@
 
   @media (max-width: 768px) {
     margin-left: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
   }
 
   // Content wrapper for pages with padding
@@ -208,7 +199,7 @@
     padding: 2rem;
 
     @media (max-width: 768px) {
-      padding: 5rem 1rem 2rem;
+      padding: 1rem 1rem 5rem 1rem; // Extra bottom padding to account for nav
     }
   }
 
@@ -216,6 +207,11 @@
   > footer {
     margin-top: auto;
     width: 100%;
+    margin-bottom: 0;
+    
+    @media (max-width: 768px) {
+      margin-bottom: 70px; // Push up to sit above bottom nav
+    }
   }
 }
 
@@ -225,6 +221,148 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
   display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+// Mobile Bottom Navigation
+.mobileBottomNav {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #15141a;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1001;
+    height: 70px;
+    padding: 0.5rem 0;
+  }
+}
+
+.navButtonWrapper {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.navButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-size: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+  height: 100%;
+
+  &:hover {
+    color: #98ED66;
+  }
+
+  &.active {
+    color: #98ED66;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  span {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+}
+
+.dropup {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 0.5rem;
+  background-color: #15141a;
+  border-radius: 12px 12px 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: none;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  z-index: 1002;
+  animation: dropupSlide 0.2s ease;
+  overflow: hidden;
+}
+
+@keyframes dropupSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.dropupItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 0.875rem;
+  font-family: 'Inter', sans-serif;
+  text-align: left;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: rgba(152, 237, 102, 0.1);
+  }
+
+  svg {
+    flex-shrink: 0;
+    color: #98ED66;
+  }
+
+  span {
+    font-weight: 500;
+    color: #ffffff;
+  }
+}
+
+.dropupOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  background-color: transparent;
 
   @media (max-width: 768px) {
     display: block;
