@@ -41,6 +41,7 @@ const AdminCamps = lazy(() => import('./components/admin/AdminCamps'));
 
 const App = () => {
   const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
     <HelmetProvider>
@@ -84,7 +85,7 @@ const App = () => {
           </Routes>
         </Suspense>
       </main>
-      <Subscribe />
+      {!isAdminRoute && <Subscribe />}
       <Footer />
       <CookiePopup />
     </HelmetProvider>
