@@ -11,6 +11,15 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState<{
+    email?: string;
+  }>({});
+
+  // Validation function
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,13 +78,33 @@ const AdminLogin = () => {
     }
   };
 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    
+    // Clear error if email becomes valid
+    if (validationErrors.email && validateEmail(newEmail)) {
+      setValidationErrors(prev => ({ ...prev, email: undefined }));
+    }
+  };
+
+  const handleEmailBlur = () => {
+    if (email && !validateEmail(email)) {
+      setValidationErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+    }
+  };
+
   return (
     <div className={styles.loginPage}>
+      <div className={styles.headerSection}>
+        <div className={styles.logo}>
+          <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
+        </div>
+      </div>
+      
       <div className={styles.loginCard}>
         <div className={styles.header}>
-          <div className={styles.logo}>
-            <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
-          </div>
+          <h2 className={styles.title}>Admin Login</h2>
           <p className={styles.subtitle}>Sign in to access the admin dashboard</p>
         </div>
 
@@ -92,13 +121,19 @@ const AdminLogin = () => {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
+              onBlur={handleEmailBlur}
               placeholder="Email Address"
               required
               disabled={isLoading}
-              className={email ? styles.hasValue : ''}
+              className={`${styles.input} ${validationErrors.email ? styles.inputError : ''}`}
             />
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email" className={`${styles.floatingLabel} ${email ? styles.active : ''}`}>
+              Email Address *
+            </label>
+            {validationErrors.email && (
+              <span className={styles.errorMessage}>{validationErrors.email}</span>
+            )}
           </div>
 
           <div className={styles.inputGroup}>
@@ -110,9 +145,11 @@ const AdminLogin = () => {
               placeholder="Password"
               required
               disabled={isLoading}
-              className={password ? styles.hasValue : ''}
+              className={styles.input}
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" className={`${styles.floatingLabel} ${password ? styles.active : ''}`}>
+              Password *
+            </label>
           </div>
 
           <button 
