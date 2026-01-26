@@ -86,7 +86,7 @@ const App = () => {
         </Suspense>
       </main>
       {!isAdminRoute && <Subscribe />}
-      <Footer />
+      {!isAdminRoute && <Footer />}
       <CookiePopup />
     </HelmetProvider>
   );
