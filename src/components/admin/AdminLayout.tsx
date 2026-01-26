@@ -2,12 +2,12 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { 
   LayoutDashboard, 
-  MapPin,
+  Calendar,
   Trophy, 
   Users,
   Cake,
-  Target,
-  Zap,
+  ChartNoAxesCombined,
+  Smile,
   LogOut,
   Menu,
   X
@@ -63,12 +63,12 @@ const AdminLayout = () => {
 
   const navItems = [
     { path: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-    { path: '/admin/field-rentals', label: 'Field Rentals', icon: MapPin },
+    { path: '/admin/field-rentals', label: 'Field Rentals', icon: Calendar },
     { path: '/admin/leagues', label: 'Leagues', icon: Trophy },
     { path: '/admin/pickup', label: 'Pickup Games', icon: Users },
     { path: '/admin/birthday-parties', label: 'Birthday Parties', icon: Cake },
-    { path: '/admin/training', label: 'Training', icon: Target },
-    { path: '/admin/camps', label: 'Camps', icon: Zap },
+    { path: '/admin/training', label: 'Training', icon: ChartNoAxesCombined },
+    { path: '/admin/camps', label: 'Camps', icon: Smile },
   ];
 
   return (
