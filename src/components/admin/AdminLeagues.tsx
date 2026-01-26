@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Search, Download, Trophy, User, Mail, Phone, Users } from 'lucide-react';
+import { Search, Trophy, User } from 'lucide-react';
 import styles from './AdminTable.module.scss';
 
 const AdminLeagues = () => {
@@ -61,7 +61,7 @@ const AdminLeagues = () => {
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
-            <tr><th>Team</th><th>League</th><th>Captain</th><th>Contact</th><th>Players</th><th>Experience</th><th>Amount</th><th>Status</th></tr>
+            <tr><th>Team</th><th>League</th><th>Captain</th><th>Contact</th><th>Experience</th><th>Amount</th><th>Status</th></tr>
           </thead>
           <tbody>
             {filtered.map(r => (
@@ -70,10 +70,9 @@ const AdminLeagues = () => {
                 <td>{r.age_division}</td>
                 <td><div className={styles.cellWithIcon}><User size={16} />{r.captain_name}</div></td>
                 <td><div className={styles.contactCell}><div>{r.captain_email}</div><div className={styles.phoneNumber}>{r.captain_phone}</div></div></td>
-                <td>{r.players?.length || 0}</td>
                 <td>{r.skill_level}</td>
                 <td>${r.total_amount}</td>
-                <td><span className={`${styles.statusBadge} ${styles.statusPaid}`}>{r.payment_status}</span></td>
+                <td><span className={`${styles.statusBadge} ${styles.statusPaid}`}>{r.payment_status || 'paid'}</span></td>
               </tr>
             ))}
           </tbody>
