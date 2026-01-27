@@ -499,7 +499,6 @@ const RegisterCamps: React.FC = () => {
         emergency_phone: formData.emergencyPhone,
         medical_info: formData.medicalInfo,
       },
-      special_requests: undefined,
     };
     
     const result: any = await api.createBooking(bookingData);
