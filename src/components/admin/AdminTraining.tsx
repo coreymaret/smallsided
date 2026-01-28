@@ -297,8 +297,21 @@ const AdminTraining = () => {
             ) : (
               table.getRowModel().rows.map((row, index) => (
                 <tr key={row.id} className={index % 2 === 0 ? styles.evenRow : styles.oddRow}>
-                  {row.getVisibleCells().map(cell => (
-                    <td key={cell.id}>
+                  {row.getVisibleCells().map((cell, cellIndex) => (
+                    <td 
+                      key={cell.id}
+                      data-label={
+                        cellIndex === 0 ? 'Date' :
+                        cellIndex === 1 ? 'Player' :
+                        cellIndex === 2 ? 'Training Type' :
+                        cellIndex === 3 ? 'Skill Level' :
+                        cellIndex === 4 ? 'Parent/Guardian' :
+                        cellIndex === 5 ? 'Contact' :
+                        cellIndex === 6 ? 'Amount' :
+                        cellIndex === 7 ? 'Status' :
+                        'Actions'
+                      }
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
