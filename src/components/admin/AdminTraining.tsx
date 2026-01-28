@@ -1,7 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  flexRender,
+} from '@tanstack/react-table';
+import type { SortingState, ColumnDef } from '@tanstack/react-table';
 import { supabase } from '../../lib/supabase';
-import { Calendar, Target, User, Shield, Mail, Phone } from 'lucide-react';
-import styles from './AdminTable.module.scss';
+import { Calendar, Target, User, Shield, Mail, Phone, ArrowUpDown, Search } from 'lucide-react';
+import styles from './AdminTraining.module.scss';
 
 interface TrainingRegistration {
   id: string;
@@ -26,6 +35,8 @@ const AdminTraining = () => {
   const [registrations, setRegistrations] = useState<TrainingRegistration[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRegistration, setSelectedRegistration] = useState<TrainingRegistration | null>(null);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
 
   useEffect(() => { 
     fetchRegistrations(); 
@@ -107,6 +118,122 @@ const AdminTraining = () => {
     }
   };
 
+  const columns = useMemo<ColumnDef<TrainingRegistration>[]>(
+    () => [
+      {
+        accessorKey: 'created_at',
+        header: 'Date',
+        cell: ({ row }) => (
+          <div className={styles.dateCell}>
+            <Calendar size={16} />
+            {new Date(row.original.created_at).toLocaleDateString()}
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'player_name',
+        header: 'Player',
+        cell: ({ row }) => (
+          <div className={styles.playerCell}>
+            <User size={16} />
+            <div>
+              <div className={styles.playerName}>{row.original.player_name}</div>
+              <div className={styles.playerAge}>{row.original.player_age} yrs</div>
+            </div>
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'training_type',
+        header: 'Training Type',
+        cell: ({ row }) => (
+          <div className={styles.typeCell}>
+            <Target size={16} />
+            {formatTrainingType(row.original.training_type)}
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'skill_level',
+        header: 'Skill Level',
+        cell: ({ row }) => (
+          <div className={styles.skillCell}>
+            <Shield size={16} />
+            {formatSkillLevel(row.original.skill_level)}
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'parent_name',
+        header: 'Parent/Guardian',
+        cell: ({ row }) => row.original.parent_name,
+      },
+      {
+        accessorKey: 'parent_email',
+        header: 'Contact',
+        cell: ({ row }) => (
+          <div className={styles.contactCell}>
+            <div className={styles.contactItem}>
+              <Mail size={14} />
+              {row.original.parent_email}
+            </div>
+            <div className={styles.contactItem}>
+              <Phone size={14} />
+              {row.original.parent_phone}
+            </div>
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'total_amount',
+        header: 'Amount',
+        cell: ({ row }) => <span className={styles.amount}>${row.original.total_amount}</span>,
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: ({ row }) => (
+          <span className={`${styles.statusBadge} ${getStatusClass(row.original.status)}`}>
+            {row.original.status}
+          </span>
+        ),
+      },
+      {
+        id: 'actions',
+        header: 'Actions',
+        cell: ({ row }) => (
+          <button 
+            className={styles.viewButton}
+            onClick={() => setSelectedRegistration(row.original)}
+          >
+            View Details
+          </button>
+        ),
+      },
+    ],
+    []
+  );
+
+  const table = useReactTable({
+    data: registrations,
+    columns,
+    state: {
+      sorting,
+      globalFilter,
+    },
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
+  });
+
   if (isLoading) {
     return (
       <div className={styles.container}>
@@ -118,93 +245,103 @@ const AdminTraining = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1>Training Registrations</h1>
-        <p>{registrations.length} registration{registrations.length !== 1 ? 's' : ''}</p>
+        <div>
+          <h1>Training Registrations</h1>
+          <p>{registrations.length} registration{registrations.length !== 1 ? 's' : ''}</p>
+        </div>
+        
+        <div className={styles.searchBox}>
+          <Search size={20} />
+          <input
+            type="text"
+            placeholder="Search registrations..."
+            value={globalFilter ?? ''}
+            onChange={e => setGlobalFilter(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
-            <tr>
-              <th>Date</th>
-              <th>Player</th>
-              <th>Age</th>
-              <th>Training Type</th>
-              <th>Skill Level</th>
-              <th>Parent/Guardian</th>
-              <th>Contact</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <div
+                        className={styles.headerCell}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {header.column.getCanSort() && (
+                          <ArrowUpDown size={14} className={styles.sortIcon} />
+                        )}
+                      </div>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
           </thead>
           <tbody>
-            {registrations.length === 0 ? (
+            {table.getRowModel().rows.length === 0 ? (
               <tr>
-                <td colSpan={10} className={styles.emptyState}>
-                  No training registrations yet
+                <td colSpan={columns.length} className={styles.emptyState}>
+                  No training registrations found
                 </td>
               </tr>
             ) : (
-              registrations.map((reg) => (
-                <tr key={reg.id}>
-                  <td>
-                    <div className={styles.cellWithIcon}>
-                      <Calendar size={16} />
-                      {new Date(reg.created_at).toLocaleDateString()}
-                    </div>
-                  </td>
-                  <td>
-                    <div className={styles.cellWithIcon}>
-                      <User size={16} />
-                      {reg.player_name}
-                    </div>
-                  </td>
-                  <td>{reg.player_age} yrs</td>
-                  <td>
-                    <div className={styles.cellWithIcon}>
-                      <Target size={16} />
-                      {formatTrainingType(reg.training_type)}
-                    </div>
-                  </td>
-                  <td>
-                    <div className={styles.cellWithIcon}>
-                      <Shield size={16} />
-                      {formatSkillLevel(reg.skill_level)}
-                    </div>
-                  </td>
-                  <td>{reg.parent_name}</td>
-                  <td>
-                    <div className={styles.contactInfo}>
-                      <div className={styles.cellWithIcon}>
-                        <Mail size={14} />
-                        {reg.parent_email}
-                      </div>
-                      <div className={styles.cellWithIcon}>
-                        <Phone size={14} />
-                        {reg.parent_phone}
-                      </div>
-                    </div>
-                  </td>
-                  <td>${reg.total_amount}</td>
-                  <td>
-                    <span className={`${styles.statusBadge} ${getStatusClass(reg.status)}`}>
-                      {reg.status}
-                    </span>
-                  </td>
-                  <td>
-                    <button 
-                      className={styles.viewButton}
-                      onClick={() => setSelectedRegistration(reg)}
-                    >
-                      View Details
-                    </button>
-                  </td>
+              table.getRowModel().rows.map((row, index) => (
+                <tr key={row.id} className={index % 2 === 0 ? styles.evenRow : styles.oddRow}>
+                  {row.getVisibleCells().map(cell => (
+                    <td key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
                 </tr>
               ))
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination */}
+      <div className={styles.pagination}>
+        <button
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
+          className={styles.paginationButton}
+        >
+          First
+        </button>
+        <button
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+          className={styles.paginationButton}
+        >
+          Previous
+        </button>
+        <span className={styles.paginationInfo}>
+          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+        </span>
+        <button
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+          className={styles.paginationButton}
+        >
+          Next
+        </button>
+        <button
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+          className={styles.paginationButton}
+        >
+          Last
+        </button>
       </div>
 
       {/* Detail Modal */}
