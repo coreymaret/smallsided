@@ -1,4 +1,4 @@
-.training {
+.register {
   width: 100%;
   background: #f8f9fa;
   padding: 4rem 0.5rem 2rem;
@@ -9,14 +9,14 @@
   }
 }
 
-.trainingHeader {
+.registerHeader {
   max-width: 900px;
   margin: 0 auto 3rem;
   text-align: center;
   padding: 0 1rem;
 }
 
-.trainingTitle {
+.registerTitle {
   font-size: 2.5rem;
   font-weight: 800;
   color: #15141a;
@@ -29,7 +29,7 @@
   }
 }
 
-.trainingSubtitle {
+.registerSubtitle {
   font-size: 1.15rem;
   font-weight: 400;
   color: #15141a;
@@ -220,17 +220,21 @@
 }
 
 // Training Type Cards
-.trainingTypes {
+.trainingTypeCards {
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr;
 
   @media (min-width: 640px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.trainingCard {
+.trainingTypeCard {
   background-color: #f8f9fa;
   border: 2px solid rgba(21, 20, 26, 0.15);
   border-radius: 12px;
@@ -247,377 +251,49 @@
     border-color: #15141a;
     background: #15141a;
 
-    .trainingName {
+    .trainingTypeHeader h4 {
       color: #98ED66;
     }
 
-    .trainingPrice {
-      color: #98ED66;
+    .price {
+      color: rgba(152, 237, 102, 0.8);
     }
 
-    .trainingDuration,
-    .trainingDescription {
+    p {
       color: rgba(152, 237, 102, 0.7);
-    }
-
-    .trainingFeatures li {
-      color: rgba(152, 237, 102, 0.9);
-
-      svg {
-        color: #98ED66;
-      }
     }
   }
 }
 
-.trainingHeader {
+.trainingTypeHeader {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 0.75rem;
-}
-
-.trainingName {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #15141a;
-  margin: 0;
-  transition: color 0.3s ease;
-}
-
-.trainingPrice {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #15141a;
-  transition: color 0.3s ease;
-}
-
-.trainingDuration {
-  font-size: 0.875rem;
-  color: #15141a;
-  opacity: 0.7;
-  margin-bottom: 0.5rem;
-  transition: color 0.3s ease;
-}
-
-.trainingDescription {
-  font-size: 0.875rem;
-  color: #15141a;
-  opacity: 0.7;
-  margin-bottom: 1rem;
-  transition: color 0.3s ease;
-}
-
-.trainingFeatures {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-  li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: #15141a;
-    margin-bottom: 0.5rem;
-    transition: color 0.3s ease;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    svg {
-      color: #98ED66;
-      flex-shrink: 0;
-    }
-  }
-}
-
-// Session Packages
-.sessionPackages {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-}
-
-.sessionPackage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem 1rem;
-  border: 1px solid rgba(21, 20, 26, 0.15);
-  border-radius: 12px;
-  background: #f8f9fa;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  gap: 0.5rem;
-
-  &:hover {
-    border-color: rgba(21, 20, 26, 0.4);
-  }
-
-  &.selected {
-    border-color: #15141a;
-    background: #15141a;
-
-    .packageLabel {
-      color: #98ED66;
-    }
-
-    .packageDiscount {
-      background: #98ED66;
-      color: #15141a;
-    }
-  }
-}
-
-.packageLabel {
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #15141a;
-  transition: color 0.3s ease;
-}
-
-.packageDiscount {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  background: rgba(152, 237, 102, 0.2);
-  color: #15141a;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-}
-
-// Date Dropdowns
-.dateDropdowns {
-  display: grid;
-  grid-template-columns: 3fr 1.5fr 1.5fr;
-  gap: 1rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.dropdown {
-  padding: 1rem 2.5rem 1rem 1rem;
-  border: 1px solid rgba(21, 20, 26, 0.15);
-  border-radius: 8px;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  color: #15141a;
-  transition: all 0.3s ease;
-  background: #f8f9fa;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2315141a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 20px;
-  box-sizing: border-box;
-  width: 100%;
-
-  @media (max-width: 767px) {
-    border-radius: 8px;
-    font-size: 0.9375rem;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: rgba(21, 20, 26, 0.4);
-  }
-
-  accent-color: #98ED66;
-
-  option {
-    background-color: #ffffff;
-    color: #15141a;
-    padding: 0.75rem;
-    font-family: 'Inter', sans-serif;
-
-    &:disabled {
-      color: #ccc;
-      background-color: #f8f9fa;
-    }
-
-    &:checked,
-    &[selected] {
-      background-color: #98ED66;
-      background: #98ED66;
-      color: #15141a;
-    }
-
-    &:hover {
-      background-color: #98ED66;
-      background: #98ED66;
-      color: #15141a;
-    }
-  }
-}
-
-// Time Slots
-.timeSlots {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-}
-
-.timeSlot {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem 1rem;
-  border: 1px solid rgba(21, 20, 26, 0.15);
-  border-radius: 12px;
-  background: #f8f9fa;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  box-sizing: border-box;
-
-  &:hover:not(.unavailable) {
-    border-color: rgba(21, 20, 26, 0.4);
-  }
-
-  &.selected {
-    border-color: #15141a;
-    background: #15141a;
-
-    .timeSlotTime {
-      color: #98ED66;
-    }
-  }
-
-  &.unavailable {
-    opacity: 0.5;
-    cursor: not-allowed;
-
-    &:hover {
-      border-color: rgba(21, 20, 26, 0.15);
-    }
-  }
-}
-
-.timeSlotTime {
-  font-family: 'Inter', sans-serif;
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #15141a;
-  transition: color 0.3s ease;
-}
-
-.timeSlotStatus {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  font-size: 0.625rem;
-  color: #dc3545;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-// Skill Levels
-.skillLevels {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-}
-
-.skillLevel {
-  background-color: #f8f9fa;
-  border: 1px solid rgba(21, 20, 26, 0.15);
-  border-radius: 12px;
-  padding: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: left;
-
-  &:hover {
-    border-color: rgba(21, 20, 26, 0.4);
-  }
-
-  &.selected {
-    border-color: #15141a;
-    background: #15141a;
-
-    h4 {
-      color: #98ED66;
-    }
-
-    p {
-      color: rgba(152, 237, 102, 0.7);
-    }
-  }
 
   h4 {
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 700;
     color: #15141a;
-    margin: 0 0 0.5rem 0;
-    transition: color 0.3s ease;
-  }
-
-  p {
-    font-size: 0.875rem;
-    color: #15141a;
-    opacity: 0.7;
     margin: 0;
     transition: color 0.3s ease;
   }
 }
 
-// Focus Areas
-.focusAreas {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+.price {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #15141a;
+  opacity: 0.7;
+  transition: color 0.3s ease;
 }
 
-.focusArea {
-  background-color: #f8f9fa;
-  border: 1px solid rgba(21, 20, 26, 0.15);
-  border-radius: 12px;
-  padding: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: left;
-
-  &:hover {
-    border-color: rgba(21, 20, 26, 0.4);
-  }
-
-  &.selected {
-    border-color: #15141a;
-    background: #15141a;
-
-    h4 {
-      color: #98ED66;
-    }
-
-    p {
-      color: rgba(152, 237, 102, 0.7);
-    }
-  }
-
-  h4 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #15141a;
-    margin: 0 0 0.5rem 0;
-    transition: color 0.3s ease;
-  }
-
-  p {
-    font-size: 0.875rem;
-    color: #15141a;
-    opacity: 0.7;
-    margin: 0;
-    transition: color 0.3s ease;
-  }
+.trainingTypeCard p {
+  font-size: 0.875rem;
+  color: #15141a;
+  opacity: 0.7;
+  margin: 0;
+  transition: color 0.3s ease;
 }
 
 // Form Inputs
@@ -737,6 +413,137 @@
   }
 }
 
+// Preference Cards
+.preferenceCards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.preferenceCard {
+  background-color: #f8f9fa;
+  border: 1px solid rgba(21, 20, 26, 0.15);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+
+  &:hover {
+    border-color: rgba(21, 20, 26, 0.4);
+  }
+
+  &.selected {
+    border-color: #15141a;
+    background: #15141a;
+
+    h4 {
+      color: #98ED66;
+    }
+
+    p {
+      color: rgba(152, 237, 102, 0.7);
+    }
+  }
+
+  h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #15141a;
+    margin: 0 0 0.5rem 0;
+    transition: color 0.3s ease;
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: #15141a;
+    opacity: 0.7;
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+}
+
+// Focus Areas
+.focusAreas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.focusAreaChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: #f8f9fa;
+  border: 1px solid rgba(21, 20, 26, 0.15);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #15141a;
+
+  &:hover {
+    border-color: rgba(21, 20, 26, 0.4);
+  }
+
+  &.selected {
+    background: #15141a;
+    border-color: #15141a;
+    color: #98ED66;
+
+    svg {
+      color: #98ED66;
+    }
+  }
+
+  svg {
+    color: #15141a;
+    transition: color 0.3s ease;
+  }
+}
+
+// Days Grid
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.dayChip {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border: 1px solid rgba(21, 20, 26, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #15141a;
+  text-align: center;
+
+  &:hover {
+    border-color: rgba(21, 20, 26, 0.4);
+  }
+
+  &.selected {
+    background: #15141a;
+    border-color: #15141a;
+    color: #98ED66;
+  }
+}
+
 // Form Row for side-by-side inputs
 .formRow {
   display: grid;
@@ -783,11 +590,6 @@
     opacity: 0.7;
     font-weight: 500;
   }
-}
-
-.discount {
-  color: #98ED66 !important;
-  font-weight: 600 !important;
 }
 
 .totalMain {
@@ -860,11 +662,6 @@
       opacity: 0.7;
     }
   }
-}
-
-.summaryDiscount {
-  color: #98ED66 !important;
-  font-weight: 500 !important;
 }
 
 .terms {

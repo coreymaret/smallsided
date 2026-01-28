@@ -39,6 +39,22 @@ interface LeagueRegistrationData {
   additional_notes?: string;
 }
 
+interface TrainingRegistrationData {
+  training_type: string;
+  player_name: string;
+  player_age: number;
+  parent_name: string;
+  parent_email: string;
+  parent_phone: string;
+  skill_level: string;
+  focus_areas: string[];
+  preferred_days: string[];
+  preferred_time: string;
+  additional_info?: string | null;
+  stripe_payment_intent_id: string;
+  total_amount: number;
+}
+
 class ApiService {
   private baseUrl: string;
 
@@ -119,6 +135,26 @@ class ApiService {
   }
 
   // ====================================
+  // TRAINING REGISTRATIONS
+  // ====================================
+
+  async createTrainingRegistration(data: TrainingRegistrationData) {
+    return this.fetch('/create-training-registration', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getTrainingRegistrations(filters?: {
+    status?: string;
+    startDate?: string;
+    endDate?: string;
+  }) {
+    const params = new URLSearchParams(filters as Record<string, string>);
+    return this.fetch(`/get-training-registrations?${params}`);
+  }
+
+  // ====================================
   // TEAMS & LEAGUES
   // ====================================
 
@@ -188,4 +224,4 @@ class ApiService {
 export const api = new ApiService();
 
 // Export types for use in components
-export type { BookingData, LeagueRegistrationData };
+export type { BookingData, LeagueRegistrationData, TrainingRegistrationData };
