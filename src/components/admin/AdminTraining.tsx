@@ -32,23 +32,29 @@ const AdminTraining = () => {
   }, []);
 
   const fetchRegistrations = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('training_registrations')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('Error fetching training registrations:', error);
-      } else {
-        setRegistrations(data || []);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setIsLoading(false);
+  try {
+    console.log('🔍 Fetching training registrations...');
+    console.log('🔍 Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
+    
+    const { data, error } = await supabase
+      .from('training_registrations')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    console.log('🔍 Query result:', { data, error, count: data?.length });
+    
+    if (error) {
+      console.error('Error fetching training registrations:', error);
+    } else {
+      console.log('✅ Setting registrations:', data);
+      setRegistrations(data || []);
     }
-  };
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const formatTrainingType = (type: string) => {
     const types: Record<string, string> = {
