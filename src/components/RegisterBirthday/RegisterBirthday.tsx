@@ -490,59 +490,64 @@ const BirthdayParties: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  if (!validateStep5Fields()) {
-    return;
-  }
-  
-  setIsProcessing(true);
-  
-  try {
-    // Mock payment for now (we'll add real Stripe later)
-    const mockPaymentIntent = {
-      id: 'pi_' + Date.now(),
-      status: 'succeeded'
-    };
-    
-    // Prepare booking data
-    const selectedPackage = packages.find(p => p.id === formData.package);
-    const selectedTimeSlot = timeSlots.find(s => s.id === formData.timeSlot);
-    
-    const bookingData = {
-      booking_type: 'birthday' as const,
-      customer_name: formData.parentName,
-      customer_email: formData.email,
-      customer_phone: formData.phone,
-      booking_date: `${formData.year}-${formData.month.padStart(2, '0')}-${formData.day.padStart(2, '0')}`,
-      start_time: selectedTimeSlot?.time || '',
-      end_time: selectedTimeSlot?.time || '',
-      participants: formData.guestCount,
-      total_amount: calculateTotal(),
-      stripe_payment_intent_id: mockPaymentIntent.id,
-      metadata: {
-        package: selectedPackage?.name,
-        child_name: formData.childName,
-        child_age: formData.childAge,
-        cake_preference: cakeOptions.find(c => c.value === formData.cakePreference)?.label,
-      },
-      special_requests: formData.specialRequests || undefined,
-    };
-    
-    // Save to database
-    const result: any = await api.createBooking(bookingData);
-    
-    if (result && result.success) {
-      setShowSuccessAnimation(true);
-    } else {
-      throw new Error('Failed to save booking');
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    if (!validateStep5Fields()) {
+      return;
     }
-  } catch (error) {
-    console.error('Booking error:', error);
-    alert(`Booking failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
-  } finally {
-    setIsProcessing(false);
-  }
-};
+    
+    setIsProcessing(true);
+    
+    try {
+      const mockPaymentIntent = {
+        id: 'pi_' + Date.now(),
+        status: 'succeeded'
+      };
+      
+      const selectedPackage = packages.find(p => p.id === formData.package);
+      const selectedTimeSlot = timeSlots.find(s => s.id === formData.timeSlot);
+      
+      const bookingData: any = {
+        booking_type: 'birthday' as const,
+        customer_name: formData.parentName,
+        customer_email: formData.email,
+        customer_phone: formData.phone,
+        booking_date: `${formData.year}-${formData.month.padStart(2, '0')}-${formData.day.padStart(2, '0')}`,
+        start_time: selectedTimeSlot?.time || '',
+        participants: formData.guestCount,
+        total_amount: calculateTotal(),
+        stripe_payment_intent_id: mockPaymentIntent.id,
+        metadata: {
+          package: selectedPackage?.name,
+          duration: selectedPackage?.duration,
+          child_name: formData.childName,
+          child_age: formData.childAge,
+          cake_preference: cakeOptions.find(c => c.value === formData.cakePreference)?.label,
+          guest_count: formData.guestCount
+        }
+      };
+      
+      // Only include special_requests if user actually entered something
+      if (formData.specialRequests && formData.specialRequests.trim()) {
+        bookingData.special_requests = formData.specialRequests;
+      }
+      
+      console.log('📤 Birthday Party - Sending booking data:', bookingData);
+      
+      const result: any = await api.createBooking(bookingData);
+      
+      if (result && result.success) {
+        console.log('✅ Birthday Party - Booking successful:', result);
+        setShowSuccessAnimation(true);
+      } else {
+        throw new Error('Failed to save booking');
+      }
+    } catch (error) {
+      console.error('❌ Birthday Party - Booking error:', error);
+      alert(`Booking failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const getSelectedPackage = () => packages.find(p => p.id === formData.package);
   const getSelectedTimeSlot = () => timeSlots.find(s => s.id === formData.timeSlot);
@@ -1216,13 +1221,13 @@ const BirthdayParties: React.FC = () => {
             </button>
           ) : (
             <button
-  className={`${styles.button} ${styles.buttonPrimary}`}
-  onClick={handleSubmit}
-  disabled={isProcessing}
->
-  {isProcessing ? 'Processing...' : 'Confirm Booking'}
-  {!isProcessing && <Check size={20} />}
-</button>
+              className={`${styles.button} ${styles.buttonPrimary}`}
+              onClick={handleSubmit}
+              disabled={isProcessing}
+            >
+              {isProcessing ? 'Processing...' : 'Confirm Booking'}
+              {!isProcessing && <Check size={20} />}
+            </button>
           )}
         </div>
       </div>

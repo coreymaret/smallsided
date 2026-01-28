@@ -3,13 +3,18 @@ import { Users, Calendar, ChevronRight, Check, CreditCard, Lock, Trophy, Target,
 import styles from './RegisterTraining.module.scss';
 import { api } from '../../services/api';
 
-const RegisterTraining: React.FC = () => {
+interface RegisterTrainingProps {
+  preSelectedType?: string;
+  onClose?: () => void;
+}
+
+const RegisterTraining: React.FC<RegisterTrainingProps> = ({ preSelectedType, onClose }) => {
   const [step, setStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set<number>());
   const [maxStepReached, setMaxStepReached] = useState(1);
   
   const [formData, setFormData] = useState({
-    trainingType: '',
+    trainingType: preSelectedType || '',
     sessionCount: 1,
     month: '',
     day: '',
@@ -534,7 +539,6 @@ const RegisterTraining: React.FC = () => {
     setIsProcessing(true);
     
     try {
-      // Mock payment for now
       const mockPaymentIntent = {
         id: 'pi_' + Date.now(),
         status: 'succeeded'
@@ -543,7 +547,7 @@ const RegisterTraining: React.FC = () => {
       const selectedTraining = trainingTypes.find(t => t.id === formData.trainingType);
       const selectedTimeSlot = timeSlots.find(s => s.id === formData.timeSlot);
       
-      const bookingData = {
+      const bookingData: any = {
         booking_type: 'training' as const,
         customer_name: formData.parentName,
         customer_email: formData.email,
@@ -555,24 +559,39 @@ const RegisterTraining: React.FC = () => {
         stripe_payment_intent_id: mockPaymentIntent.id,
         metadata: {
           training_type: selectedTraining?.name,
+          duration: selectedTraining?.duration,
           session_count: formData.sessionCount,
           player_name: formData.playerName,
           player_age: formData.playerAge,
           skill_level: formData.skillLevel,
-          focus_area: focusAreas.find(f => f.value === formData.focusArea)?.label,
-        },
-        special_requests: formData.specialRequests || undefined,
+          focus_area: focusAreas.find(f => f.value === formData.focusArea)?.label
+        }
       };
+      
+      // Only include special_requests if user actually entered something
+      if (formData.specialRequests && formData.specialRequests.trim()) {
+        bookingData.special_requests = formData.specialRequests;
+      }
+      
+      console.log('📤 Training - Sending booking data:', bookingData);
       
       const result = await api.createBooking(bookingData) as { success: boolean; booking: { id: string } };
       
       if (result.success) {
+        console.log('✅ Training - Booking successful:', result);
         setShowSuccessAnimation(true);
+        
+        // Close modal after 3 seconds if onClose was provided
+        if (onClose) {
+          setTimeout(() => {
+            onClose();
+          }, 3000);
+        }
       } else {
         throw new Error('Failed to save booking');
       }
     } catch (error) {
-      console.error('Booking error:', error);
+      console.error('❌ Training - Booking error:', error);
       alert(`Booking failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
     } finally {
       setIsProcessing(false);
