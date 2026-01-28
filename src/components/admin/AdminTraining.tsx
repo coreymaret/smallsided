@@ -3,7 +3,6 @@ import { supabase } from '../../lib/supabase';
 import styles from './AdminTable.module.scss';
 
 const AdminTraining = () => {
-  alert('🚀 AdminTraining component loaded!');
   console.log('🚀 AdminTraining component loaded!');
   
   const [registrations, setRegistrations] = useState<any[]>([]);
@@ -14,8 +13,21 @@ const AdminTraining = () => {
     fetchRegistrations(); 
   }, []);
 
+  const checkAuth = async () => {
+    console.log('🔐 Checking authentication...');
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log('👤 Current user:', user);
+    console.log('📧 User email:', user?.email);
+    console.log('🆔 User ID:', user?.id);
+    alert(`Logged in as: ${user?.email || 'NOT LOGGED IN'}\nUser ID: ${user?.id || 'NONE'}`);
+  };
+
   const fetchRegistrations = async () => {
     console.log('📡 Starting to fetch training registrations...');
+    
+    // Check auth first
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log('👤 User during fetch:', user?.email);
     
     try {
       const { data, error } = await supabase
@@ -27,6 +39,7 @@ const AdminTraining = () => {
       
       if (error) {
         console.error('❌ Error fetching training registrations:', error);
+        console.error('❌ Error details:', JSON.stringify(error, null, 2));
       } else {
         console.log('✅ Successfully fetched data, setting registrations...');
         setRegistrations(data || []);
@@ -54,6 +67,9 @@ const AdminTraining = () => {
       <div className={styles.header}>
         <h1>Training Registrations (Debug Mode)</h1>
         <p>{registrations.length} registration{registrations.length !== 1 ? 's' : ''} found</p>
+        <button onClick={checkAuth} style={{ padding: '10px 20px', marginTop: '10px', cursor: 'pointer' }}>
+          Check Authentication
+        </button>
       </div>
 
       <div className={styles.tableWrapper}>
