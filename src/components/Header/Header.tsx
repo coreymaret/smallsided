@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, ChevronDown,ChartNoAxesCombined, Smile } from "lucide-react";
 import styles from "./Header.module.scss";
 import Logo from "../../assets/logo.svg";
-import TopToggleBar from "../TopToggleBar/TopToggleBar";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
 
 const Header = () => {
@@ -214,8 +213,6 @@ const Header = () => {
       <header 
         className={`${styles.header} ${visible ? styles.show : styles.hide}`}
       >
-        {topBarVisible && <TopToggleBar onClose={() => setTopBarVisible(false)} />}
-
         <div className={styles.headerContent} style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }}>
           <Link to="/" className={styles.logo} onClick={handleLinkClick}>
             <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
