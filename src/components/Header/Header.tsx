@@ -11,7 +11,6 @@ const Header = () => {
   const [menuState, setMenuState] = useState<"open" | "closing" | "closed" | undefined>("closed");
   const isOpen = menuState === "open";
   const [isMobile, setIsMobile] = useState(window.innerWidth < 785);
-  const [topBarVisible, setTopBarVisible] = useState(true);
   const lastScrollY = useRef<number>(0);
   const [visible, setVisible] = useState(true);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
@@ -60,23 +59,6 @@ const Header = () => {
       }
     }
   }, [isMobile, isOpen]);
-
-  useEffect(() => {
-    const topBarState = localStorage.getItem("topBarClosed");
-    if (topBarState) {
-      try {
-        const data = JSON.parse(topBarState);
-        const now = Date.now();
-        const fortyEightHours = 48 * 60 * 60 * 1000;
-        if (now - data.timestamp < fortyEightHours)
-          setTopBarVisible(!data.closed);
-        else
-          setTopBarVisible(true);
-      } catch {
-        setTopBarVisible(true);
-      }
-    }
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -213,7 +195,7 @@ const Header = () => {
       <header 
         className={`${styles.header} ${visible ? styles.show : styles.hide}`}
       >
-        <div className={styles.headerContent} style={{ paddingTop: topBarVisible ? "3rem" : "1rem" }}>
+        <div className={styles.headerContent}>
           <Link to="/" className={styles.logo} onClick={handleLinkClick}>
             <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
           </Link>
@@ -316,7 +298,6 @@ const Header = () => {
               ? styles.closed
               : ""
           }`}
-          style={{ paddingTop: topBarVisible ? "120px" : "80px" }}
           data-hover-enabled={menuAnimationComplete ? "true" : "false"}
           onTransitionEnd={() => {
             if (menuState === "closing") setMenuState("closed");
