@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabase';
 import styles from './AdminTable.module.scss';
 
 const AdminTraining = () => {
+  alert('🚀 AdminTraining component loaded!');
   console.log('🚀 AdminTraining component loaded!');
   
   const [registrations, setRegistrations] = useState<any[]>([]);
