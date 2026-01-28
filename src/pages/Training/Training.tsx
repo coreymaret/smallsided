@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react';
 import styles from "./Training.module.scss";
-import pricingStyles from './PricingSection.module.scss';
+import pricingStyles from '../../components/PricingSection/PricingSection.module.scss';
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/Blog/SEO';
 import RegisterTraining from '../../components/RegisterTraining/RegisterTraining';
