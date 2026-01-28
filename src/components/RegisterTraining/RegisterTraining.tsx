@@ -596,6 +596,16 @@ const RegisterTraining: React.FC = () => {
                     <span className={styles.detailValue}>{formData.parentName}</span>
                   </div>
                 </div>
+                
+                {formData.additionalInfo && (
+                  <div className={styles.detailItem}>
+                    <Mail className={styles.detailIcon} size={20} />
+                    <div className={styles.detailContent}>
+                      <span className={styles.detailLabel}>Additional Comments</span>
+                      <span className={styles.detailValue}>{formData.additionalInfo}</span>
+                    </div>
+                  </div>
+                )}
               </div>
               
               <div className={styles.emailNotice}>
