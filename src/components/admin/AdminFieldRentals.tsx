@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Search, Download, Calendar, DollarSign, User, MapPin, Clock } from 'lucide-react';
-import styles from './AdminTraining.module.scss';
+import styles from './AdminTable.module.scss';
 
 interface FieldRentalBooking {
   id: string;

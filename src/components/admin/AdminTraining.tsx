@@ -10,7 +10,7 @@ import {
 import type { SortingState, ColumnDef } from '@tanstack/react-table';
 import { supabase } from '../../lib/supabase';
 import { Calendar, Target, User, Shield, Mail, Phone, ArrowUpDown, Search } from 'lucide-react';
-import styles from './AdminTraining.module.scss';
+import styles from './AdminTable.module.scss';
 
 interface TrainingRegistration {
   id: string;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Search, Trophy, User } from 'lucide-react';
-import styles from './AdminTraining.module.scss';
+import styles from './AdminTable.module.scss';
 
 const AdminLeagues = () => {
   const [registrations, setRegistrations] = useState<any[]>([]);
