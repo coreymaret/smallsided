@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./RegisterTraining.module.scss";
 
 interface RegisterTrainingProps {
   onClose: () => void;
+  preSelectedType?: string; // 👈 allow optional pre-selected program
 }
 
-const RegisterTraining = ({ onClose }: RegisterTrainingProps) => {
+const RegisterTraining = ({ onClose, preSelectedType }: RegisterTrainingProps) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     playerName: "",
@@ -14,6 +15,13 @@ const RegisterTraining = ({ onClose }: RegisterTrainingProps) => {
     phone: "",
     program: "Starter",
   });
+
+  // 🎯 Auto-select program when modal opens
+  useEffect(() => {
+    if (preSelectedType) {
+      setFormData((prev) => ({ ...prev, program: preSelectedType }));
+    }
+  }, [preSelectedType]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -26,11 +34,11 @@ const RegisterTraining = ({ onClose }: RegisterTrainingProps) => {
     setLoading(true);
 
     try {
-      // 🔥 Replace this with your real API/Supabase/Stripe call
+      // Replace with real API call later
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       alert("Registration submitted successfully!");
-      onClose(); // Close modal after success
+      onClose();
     } catch (error) {
       console.error("Registration failed:", error);
       alert("Something went wrong. Please try again.");
@@ -95,9 +103,9 @@ const RegisterTraining = ({ onClose }: RegisterTrainingProps) => {
             value={formData.program}
             onChange={handleChange}
           >
-            <option>Starter</option>
-            <option>Elite</option>
-            <option>Academy</option>
+            <option value="Starter">Starter</option>
+            <option value="Elite">Elite</option>
+            <option value="Academy">Academy</option>
           </select>
         </div>
 
