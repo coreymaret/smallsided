@@ -21,6 +21,10 @@ interface BookingData {
   total_amount: number;
 }
 
+interface TrainingData {
+  total_amount: number;
+}
+
 const AdminDashboard = () => {
   const [stats, setStats] = useState<Stats>({
     totalBookings: 0,
@@ -88,6 +92,17 @@ const AdminDashboard = () => {
         console.log('✅ Active leagues count:', activeLeaguesCount);
       }
 
+      // Fetch training registrations count and revenue
+      const { data: trainingData, count: trainingCount, error: trainingError } = await supabase
+        .from('training_registrations')
+        .select('total_amount', { count: 'exact' });
+      
+      if (trainingError) {
+        console.error('❌ Error fetching training registrations:', trainingError);
+      } else {
+        console.log('✅ Training registrations count:', trainingCount);
+      }
+
       // Calculate stats with proper typing
       const typedBookings = (bookings || []) as BookingData[];
       
@@ -98,10 +113,14 @@ const AdminDashboard = () => {
 
       console.log('📊 Bookings by type:', bookingsByType);
 
-      const totalRevenue = typedBookings.reduce((sum, booking) => sum + (booking.total_amount || 0), 0);
+      // Calculate total revenue from both bookings and training
+      const bookingsRevenue = typedBookings.reduce((sum, booking) => sum + (booking.total_amount || 0), 0);
+      const typedTrainingData = (trainingData || []) as TrainingData[];
+      const trainingRevenue = typedTrainingData.reduce((sum, training) => sum + (training.total_amount || 0), 0);
+      const totalRevenue = bookingsRevenue + trainingRevenue;
 
       const statsData = {
-        totalBookings: bookingsCount || 0,
+        totalBookings: (bookingsCount || 0) + (trainingCount || 0),
         totalRevenue,
         activeLeagues: activeLeaguesCount || 0,
         upcomingEvents: bookingsCount || 0,
@@ -109,7 +128,7 @@ const AdminDashboard = () => {
         leagueRegistrations: leaguesCount || 0,
         pickupGames: bookingsByType['pickup'] || 0,
         birthdayParties: bookingsByType['birthday'] || 0,
-        trainingSessions: bookingsByType['training'] || 0,
+        trainingSessions: trainingCount || 0,
         campRegistrations: bookingsByType['camp'] || 0,
       };
 
