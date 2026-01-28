@@ -1,5 +1,4 @@
 import styles from "./Home.module.scss";
-import Popup from '../../components/Popup/Popup';
 import SEO from '../../components/Blog/SEO';
 import { getSEOConfig } from '../../config/seo';
 import ReviewSection from '../../components/Reviews/ReviewSection';
@@ -60,7 +59,6 @@ const Home = () => {
         ))}
         
         <ReviewSection />
-        <Popup />
       </div>
     </>
   );
