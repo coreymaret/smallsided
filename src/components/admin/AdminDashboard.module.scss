@@ -1,6 +1,7 @@
 .dashboard {
   padding: 2rem 0.5rem;
-  width: calc(100% - 1rem);
+  width: 100%;
+  max-width: calc(100% - 1rem);
   margin: 0 auto;
 }
 
@@ -106,9 +107,9 @@
 
         &:active,
         &.rbc-active {
-          background: #15141a;
-          color: #98ED66;
-          border-color: #15141a;
+          background: #15141a !important;
+          color: #98ED66 !important;
+          border-color: #15141a !important;
         }
       }
     }
@@ -413,6 +414,8 @@
 @media (max-width: 768px) {
   .dashboard {
     padding: 1rem 0.5rem;
+    width: 100%;
+    max-width: calc(100% - 1rem);
   }
 
   .calendarSection {
@@ -420,6 +423,8 @@
   }
 
   .calendarWrapper {
+    overflow-x: auto;
+    
     :global {
       .rbc-toolbar {
         flex-direction: column;
@@ -428,6 +433,18 @@
         .rbc-toolbar-label {
           order: -1;
         }
+      }
+
+      .rbc-time-view,
+      .rbc-day-view,
+      .rbc-week-view {
+        min-width: 100%;
+        overflow-x: auto;
+      }
+
+      .rbc-time-header,
+      .rbc-time-content {
+        overflow-x: auto;
       }
     }
   }

@@ -42,6 +42,25 @@ const AdminTraining = () => {
     fetchRegistrations(); 
   }, []);
 
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (selectedRegistration) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [selectedRegistration]);
+
   const fetchRegistrations = async () => {
     try {
       const { data, error } = await supabase
