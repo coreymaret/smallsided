@@ -11,7 +11,7 @@ import StatRow from '../../components/StatRow/StatRow';
 const statRowsData = [
   {
     id: 'row1',
-    stat: '50% MORE TOUCHES IN 7V7',
+    stat: '500% MORE TOUCHES IN 7V7',
     description: 'Half your team, double the development. Players get 50% more ball touches in 7v7 vs 11v11. Every touch matters when you\'re building tomorrow\'s stars.',
     imageAlt: 'Youth soccer player dribbling a ball in 7v7 format',
     reversed: false

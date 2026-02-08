@@ -8,53 +8,17 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
 
-interface Stats {
-  totalBookings: number;
-  totalRevenue: number;
-  activeLeagues: number;
-  upcomingEvents: number;
-  fieldRentals: number;
-  leagueRegistrations: number;
-  pickupGames: number;
-  birthdayParties: number;
-  trainingSessions: number;
-  campRegistrations: number;
-}
-
-interface BookingData {
-  booking_type: string;
+interface Booking {
+  id: string;
+  booking_date: string;
+  start_time: string;
+  end_time: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
   total_amount: number;
-  booking_date?: string;
-  start_time?: string;
-  end_time?: string;
-  customer_name?: string;
-  customer_email?: string;
-  customer_phone?: string;
-  field?: string;
-  party_size?: number;
-  status?: string;
-  id: string;
-}
-
-interface TrainingData {
-  total_amount: number;
-  player_name: string;
-  parent_email: string;
-  parent_phone: string;
-  training_type: string;
-  preferred_days?: string[];
-  created_at: string;
-  id: string;
-}
-
-interface LeagueData {
-  team_name: string;
-  division: string;
-  start_date?: string;
-  contact_email: string;
-  contact_phone: string;
-  created_at: string;
-  id: string;
+  status: string;
+  booking_type: 'field_rental' | 'training' | 'camp' | 'birthday' | 'league' | 'pickup';
 }
 
 interface CalendarEvent {
@@ -64,198 +28,153 @@ interface CalendarEvent {
   end: Date;
   resource: {
     type: 'field_rental' | 'training' | 'camp' | 'birthday' | 'league' | 'pickup';
-    data: BookingData | TrainingData | LeagueData;
+    data: Booking;
   };
 }
 
-interface SelectedEvent {
-  event: CalendarEvent;
-  type: 'field_rental' | 'training' | 'camp' | 'birthday' | 'league' | 'pickup';
-}
-
 const AdminDashboard = () => {
-  const [stats, setStats] = useState<Stats>({
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [stats, setStats] = useState({
     totalBookings: 0,
     totalRevenue: 0,
     activeLeagues: 0,
     upcomingEvents: 0,
-    fieldRentals: 0,
-    leagueRegistrations: 0,
-    pickupGames: 0,
-    birthdayParties: 0,
-    trainingSessions: 0,
-    campRegistrations: 0,
   });
-  const [isLoading, setIsLoading] = useState(true);
   const [calendarView, setCalendarView] = useState<'month' | 'week' | 'day'>('month');
   const [calendarDate, setCalendarDate] = useState(new Date());
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
-  const [selectedEvent, setSelectedEvent] = useState<SelectedEvent | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<CalendarEvent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchStats();
-    fetchAllBookings();
+    fetchDashboardData();
   }, []);
 
-  const fetchAllBookings = async () => {
+  const fetchDashboardData = async () => {
     try {
-      // Fetch all bookings
-      const { data: bookings } = await supabase
-        .from('bookings')
-        .select('*')
-        .order('booking_date', { ascending: true });
+      // Fetch all bookings from different tables
+      const [fieldRentals, training, leagues, pickupGames] = await Promise.all([
+        supabase.from('bookings').select('*'),
+        supabase.from('training_registrations').select('*'),
+        supabase.from('league_registrations').select('*'),
+        supabase.from('pickup_game_registrations').select('*'),
+      ]);
 
-      // Fetch training registrations
-      const { data: training } = await supabase
-        .from('training_registrations')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-      // Fetch league registrations
-      const { data: leagues } = await supabase
-        .from('league_registrations')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-      const calendarEvents: CalendarEvent[] = [];
-
-      // Process bookings
-      if (bookings) {
-        bookings.forEach((booking: BookingData) => {
-          if (booking.booking_date) {
-            const startDate = new Date(`${booking.booking_date}T${booking.start_time || '09:00'}`);
-            const endDate = new Date(`${booking.booking_date}T${booking.end_time || '10:00'}`);
-            
-            let title = '';
-            switch (booking.booking_type) {
-              case 'field_rental':
-                title = `Field Rental - ${booking.customer_name}`;
-                break;
-              case 'birthday':
-                title = `Birthday Party - ${booking.customer_name}`;
-                break;
-              case 'camp':
-                title = `Camp - ${booking.customer_name}`;
-                break;
-              case 'pickup':
-                title = `Pickup Game - ${booking.party_size || 0} players`;
-                break;
-              default:
-                title = `${booking.booking_type} - ${booking.customer_name}`;
-            }
-
-            calendarEvents.push({
-              id: booking.id,
-              title,
-              start: startDate,
-              end: endDate,
-              resource: {
-                type: booking.booking_type as any,
-                data: booking,
-              },
-            });
-          }
+      // Transform to unified booking format
+      const allBookings: Booking[] = [];
+      
+      if (fieldRentals.data) {
+        fieldRentals.data.forEach((b: any) => {
+          allBookings.push({
+            id: b.id,
+            booking_date: b.booking_date,
+            start_time: b.start_time,
+            end_time: b.end_time,
+            customer_name: b.name,
+            customer_email: b.email,
+            customer_phone: b.phone,
+            total_amount: b.total_amount,
+            status: b.status,
+            booking_type: 'field_rental',
+          });
         });
       }
-
-      // Process training registrations
-      if (training) {
-        training.forEach((session: TrainingData) => {
-          // Use created date for training since they don't have scheduled dates
-          const startDate = new Date(session.created_at);
-          const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // 1 hour duration
-
-          calendarEvents.push({
-            id: session.id,
-            title: `Training - ${session.player_name}`,
-            start: startDate,
-            end: endDate,
-            resource: {
-              type: 'training',
-              data: session,
-            },
+      
+      if (training.data) {
+        training.data.forEach((b: any) => {
+          allBookings.push({
+            id: b.id,
+            booking_date: b.created_at,
+            start_time: b.preferred_time || '09:00',
+            end_time: '',
+            customer_name: b.parent_name,
+            customer_email: b.parent_email,
+            customer_phone: b.parent_phone,
+            total_amount: b.total_amount,
+            status: b.status,
+            booking_type: 'training',
+          });
+        });
+      }
+      
+      if (leagues.data) {
+        leagues.data.forEach((b: any) => {
+          allBookings.push({
+            id: b.id,
+            booking_date: b.created_at,
+            start_time: '18:00',
+            end_time: '19:00',
+            customer_name: b.team_name,
+            customer_email: b.contact_email,
+            customer_phone: b.contact_phone,
+            total_amount: b.total_amount,
+            status: b.status,
+            booking_type: 'league',
+          });
+        });
+      }
+      
+      if (pickupGames.data) {
+        pickupGames.data.forEach((b: any) => {
+          allBookings.push({
+            id: b.id,
+            booking_date: b.game_date,
+            start_time: b.game_time,
+            end_time: '',
+            customer_name: b.player_name,
+            customer_email: b.player_email,
+            customer_phone: b.player_phone,
+            total_amount: b.total_amount || 0,
+            status: b.status,
+            booking_type: 'pickup',
           });
         });
       }
 
-      // Process league registrations
-      if (leagues) {
-        leagues.forEach((league: LeagueData) => {
-          const startDate = league.start_date ? new Date(league.start_date) : new Date(league.created_at);
-          const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // 2 hour duration
+      setBookings(allBookings);
 
-          calendarEvents.push({
-            id: league.id,
-            title: `League - ${league.team_name}`,
-            start: startDate,
-            end: endDate,
-            resource: {
-              type: 'league',
-              data: league,
-            },
-          });
-        });
-      }
+      // Convert to calendar events
+      const calendarEvents: CalendarEvent[] = allBookings.map(booking => {
+        const startDateTime = moment(`${booking.booking_date} ${booking.start_time}`).toDate();
+        const endDateTime = booking.end_time 
+          ? moment(`${booking.booking_date} ${booking.end_time}`).toDate()
+          : moment(startDateTime).add(1, 'hour').toDate();
+
+        return {
+          id: booking.id,
+          title: `${booking.customer_name} - ${booking.booking_type.replace('_', ' ')}`,
+          start: startDateTime,
+          end: endDateTime,
+          resource: {
+            type: booking.booking_type,
+            data: booking,
+          },
+        };
+      });
 
       setEvents(calendarEvents);
+
+      // Calculate stats
+      setStats({
+        totalBookings: allBookings.length,
+        totalRevenue: allBookings.reduce((sum, b) => sum + (b.total_amount || 0), 0),
+        activeLeagues: (leagues.data || []).filter((l: any) => l.status === 'active').length,
+        upcomingEvents: allBookings.filter(b => moment(b.booking_date).isAfter(moment())).length,
+      });
+
+      setIsLoading(false);
     } catch (error) {
-      console.error('Error fetching bookings:', error);
+      console.error('Error fetching dashboard data:', error);
+      setIsLoading(false);
     }
   };
 
-  const fetchStats = async () => {
-    try {
-      const { count: bookingsCount } = await supabase
-        .from('bookings')
-        .select('*', { count: 'exact', head: true });
+  const handleViewChange = (view: string) => {
+    setCalendarView(view as 'month' | 'week' | 'day');
+  };
 
-      const { data: bookings } = await supabase
-        .from('bookings')
-        .select('booking_type, total_amount');
-
-      const { count: leaguesCount } = await supabase
-        .from('league_registrations')
-        .select('*', { count: 'exact', head: true });
-
-      const { count: activeLeaguesCount } = await supabase
-        .from('leagues')
-        .select('*', { count: 'exact', head: true });
-
-      const { data: trainingData, count: trainingCount } = await supabase
-        .from('training_registrations')
-        .select('total_amount', { count: 'exact' });
-
-      const typedBookings = (bookings || []) as BookingData[];
-      
-      const bookingsByType = typedBookings.reduce((acc, booking) => {
-        acc[booking.booking_type] = (acc[booking.booking_type] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
-
-      const bookingsRevenue = typedBookings.reduce((sum, booking) => sum + (booking.total_amount || 0), 0);
-      const typedTrainingData = (trainingData || []) as TrainingData[];
-      const trainingRevenue = typedTrainingData.reduce((sum, training) => sum + (training.total_amount || 0), 0);
-      const totalRevenue = bookingsRevenue + trainingRevenue;
-
-      const statsData = {
-        totalBookings: (bookingsCount || 0) + (trainingCount || 0),
-        totalRevenue,
-        activeLeagues: activeLeaguesCount || 0,
-        upcomingEvents: bookingsCount || 0,
-        fieldRentals: bookingsByType['field_rental'] || 0,
-        leagueRegistrations: leaguesCount || 0,
-        pickupGames: bookingsByType['pickup'] || 0,
-        birthdayParties: bookingsByType['birthday'] || 0,
-        trainingSessions: trainingCount || 0,
-        campRegistrations: bookingsByType['camp'] || 0,
-      };
-
-      setStats(statsData);
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleNavigate = (date: Date) => {
+    setCalendarDate(date);
   };
 
   const eventStyleGetter = (event: CalendarEvent) => {
@@ -280,19 +199,50 @@ const AdminDashboard = () => {
     };
   };
 
+  const customDayPropGetter = (date: Date) => {
+    const today = new Date();
+    const isToday = moment(date).isSame(today, 'day');
+    
+    return {
+      className: isToday ? 'rbc-today' : '',
+    };
+  };
+
+  const CustomHeader = ({ date }: { date: Date }) => {
+    const today = new Date();
+    const isToday = moment(date).isSame(today, 'day');
+    const dayNumber = moment(date).format('D');
+    const dayName = moment(date).format('ddd');
+    
+    if (isToday) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}>
+          <span style={{ fontSize: '0.75rem', color: '#666', fontWeight: 500 }}>{dayName}</span>
+          <span style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            background: '#15141a',
+            color: '#98ED66',
+            fontWeight: 600,
+          }}>{dayNumber}</span>
+        </div>
+      );
+    }
+    
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}>
+        <span style={{ fontSize: '0.75rem', color: '#666', fontWeight: 500 }}>{dayName}</span>
+        <span style={{ fontWeight: 600 }}>{dayNumber}</span>
+      </div>
+    );
+  };
+
   const handleSelectEvent = (event: CalendarEvent) => {
-    setSelectedEvent({
-      event,
-      type: event.resource.type,
-    });
-  };
-
-  const handleNavigate = (date: Date) => {
-    setCalendarDate(date);
-  };
-
-  const handleViewChange = (view: string) => {
-    setCalendarView(view as 'month' | 'week' | 'day');
+    setSelectedBooking(event);
   };
 
   if (isLoading) {
@@ -341,6 +291,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
+        
         <div className={styles.calendarWrapper}>
           <BigCalendar
             localizer={localizer}
@@ -355,210 +306,137 @@ const AdminDashboard = () => {
             eventPropGetter={eventStyleGetter}
             onSelectEvent={handleSelectEvent}
             views={['month', 'week', 'day']}
+            dayPropGetter={customDayPropGetter}
+            step={30}
+            timeslots={2}
+            formats={{
+              timeGutterFormat: (date: Date) => moment(date).format('h A'),
+            }}
+            components={{
+              week: {
+                header: CustomHeader,
+              },
+              day: {
+                header: CustomHeader,
+              },
+            }}
           />
         </div>
       </div>
 
-      {/* Stats Section */}
+      {/* Stats Grid */}
       <div className={styles.stats}>
         <div className={styles.statCard}>
           <div className={styles.statIcon}>
-            <Calendar size={24} />
+            <Calendar size={24} color="#98ED66" />
           </div>
           <div className={styles.statContent}>
-            <h3>Total Bookings</h3>
+            <p className={styles.statLabel}>Total Bookings</p>
             <p className={styles.statValue}>{stats.totalBookings}</p>
-            <span className={styles.statLabel}>All time</span>
           </div>
         </div>
 
         <div className={styles.statCard}>
           <div className={styles.statIcon}>
-            <DollarSign size={24} />
+            <DollarSign size={24} color="#98ED66" />
           </div>
           <div className={styles.statContent}>
-            <h3>Total Revenue</h3>
+            <p className={styles.statLabel}>Total Revenue</p>
             <p className={styles.statValue}>${stats.totalRevenue.toLocaleString()}</p>
-            <span className={styles.statLabel}>All time</span>
           </div>
         </div>
 
         <div className={styles.statCard}>
           <div className={styles.statIcon}>
-            <Trophy size={24} />
+            <Trophy size={24} color="#98ED66" />
           </div>
           <div className={styles.statContent}>
-            <h3>Active Leagues</h3>
+            <p className={styles.statLabel}>Active Leagues</p>
             <p className={styles.statValue}>{stats.activeLeagues}</p>
-            <span className={styles.statLabel}>Currently running</span>
           </div>
         </div>
 
         <div className={styles.statCard}>
           <div className={styles.statIcon}>
-            <TrendingUp size={24} />
+            <TrendingUp size={24} color="#98ED66" />
           </div>
           <div className={styles.statContent}>
-            <h3>Upcoming Events</h3>
+            <p className={styles.statLabel}>Upcoming Events</p>
             <p className={styles.statValue}>{stats.upcomingEvents}</p>
-            <span className={styles.statLabel}>Next 30 days</span>
           </div>
         </div>
       </div>
 
-      {/* Bookings Breakdown */}
+      {/* Booking Breakdown */}
       <div className={styles.bookingBreakdown}>
-        <h2>Bookings by Type</h2>
+        <h2>Booking Breakdown by Service</h2>
         <div className={styles.breakdownGrid}>
-          <div className={styles.breakdownCard}>
-            <h3>Field Rentals</h3>
-            <p className={styles.breakdownValue}>{stats.fieldRentals}</p>
-          </div>
-          <div className={styles.breakdownCard}>
-            <h3>League Registrations</h3>
-            <p className={styles.breakdownValue}>{stats.leagueRegistrations}</p>
-          </div>
-          <div className={styles.breakdownCard}>
-            <h3>Pickup Games</h3>
-            <p className={styles.breakdownValue}>{stats.pickupGames}</p>
-          </div>
-          <div className={styles.breakdownCard}>
-            <h3>Birthday Parties</h3>
-            <p className={styles.breakdownValue}>{stats.birthdayParties}</p>
-          </div>
-          <div className={styles.breakdownCard}>
-            <h3>Training Sessions</h3>
-            <p className={styles.breakdownValue}>{stats.trainingSessions}</p>
-          </div>
-          <div className={styles.breakdownCard}>
-            <h3>Camp Registrations</h3>
-            <p className={styles.breakdownValue}>{stats.campRegistrations}</p>
-          </div>
+          {Object.entries(
+            bookings.reduce((acc, booking) => {
+              acc[booking.booking_type] = (acc[booking.booking_type] || 0) + 1;
+              return acc;
+            }, {} as Record<string, number>)
+          ).map(([type, count]) => (
+            <div key={type} className={styles.breakdownItem}>
+              <span className={styles.breakdownLabel}>
+                {type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              </span>
+              <span className={styles.breakdownValue}>{count}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Event Detail Modal */}
-      {selectedEvent && (
-        <>
-          <div 
-            className={styles.modalOverlay}
-            onClick={() => setSelectedEvent(null)}
-          />
-          <div className={styles.modal}>
+      {/* Booking Detail Modal */}
+      {selectedBooking && (
+        <div className={styles.modalOverlay} onClick={() => setSelectedBooking(null)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <h2>Booking Details</h2>
-              <button 
-                className={styles.closeButton}
-                onClick={() => setSelectedEvent(null)}
-              >
-                ×
-              </button>
+              <button className={styles.closeButton} onClick={() => setSelectedBooking(null)}>×</button>
             </div>
-            
             <div className={styles.modalContent}>
-              {selectedEvent.type === 'field_rental' || 
-               selectedEvent.type === 'birthday' || 
-               selectedEvent.type === 'camp' || 
-               selectedEvent.type === 'pickup' ? (
-                <>
-                  <div className={styles.detailSection}>
-                    <h3>Booking Information</h3>
-                    <div className={styles.detailGrid}>
-                      <div className={styles.detailItem}>
-                        <strong>Type:</strong>
-                        <span>{selectedEvent.type.replace('_', ' ').toUpperCase()}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Customer:</strong>
-                        <span>{(selectedEvent.event.resource.data as BookingData).customer_name}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Date:</strong>
-                        <span>{moment(selectedEvent.event.start).format('MMMM D, YYYY')}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Time:</strong>
-                        <span>{moment(selectedEvent.event.start).format('h:mm A')} - {moment(selectedEvent.event.end).format('h:mm A')}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className={styles.detailSection}>
-                    <h3>Contact Information</h3>
-                    <div className={styles.detailGrid}>
-                      <div className={styles.detailItem}>
-                        <strong>Email:</strong>
-                        <span>{(selectedEvent.event.resource.data as BookingData).customer_email}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Phone:</strong>
-                        <span>{(selectedEvent.event.resource.data as BookingData).customer_phone}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Amount:</strong>
-                        <span>${(selectedEvent.event.resource.data as BookingData).total_amount}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Status:</strong>
-                        <span className={styles.statusBadge}>
-                          {(selectedEvent.event.resource.data as BookingData).status || 'confirmed'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : selectedEvent.type === 'training' ? (
-                <>
-                  <div className={styles.detailSection}>
-                    <h3>Training Information</h3>
-                    <div className={styles.detailGrid}>
-                      <div className={styles.detailItem}>
-                        <strong>Player:</strong>
-                        <span>{(selectedEvent.event.resource.data as TrainingData).player_name}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Type:</strong>
-                        <span>{(selectedEvent.event.resource.data as TrainingData).training_type}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Contact Email:</strong>
-                        <span>{(selectedEvent.event.resource.data as TrainingData).parent_email}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Contact Phone:</strong>
-                        <span>{(selectedEvent.event.resource.data as TrainingData).parent_phone}</span>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className={styles.detailSection}>
-                    <h3>League Information</h3>
-                    <div className={styles.detailGrid}>
-                      <div className={styles.detailItem}>
-                        <strong>Team:</strong>
-                        <span>{(selectedEvent.event.resource.data as LeagueData).team_name}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Division:</strong>
-                        <span>{(selectedEvent.event.resource.data as LeagueData).division}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Contact Email:</strong>
-                        <span>{(selectedEvent.event.resource.data as LeagueData).contact_email}</span>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <strong>Contact Phone:</strong>
-                        <span>{(selectedEvent.event.resource.data as LeagueData).contact_phone}</span>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
+              <div className={styles.detailGrid}>
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>Customer:</span>
+                  <span className={styles.detailValue}>{selectedBooking.resource.data.customer_name}</span>
+                </div>
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>Email:</span>
+                  <span className={styles.detailValue}>{selectedBooking.resource.data.customer_email}</span>
+                </div>
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>Phone:</span>
+                  <span className={styles.detailValue}>{selectedBooking.resource.data.customer_phone}</span>
+                </div>
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>Date:</span>
+                  <span className={styles.detailValue}>
+                    {moment(selectedBooking.start).format('MMMM D, YYYY')}
+                  </span>
+                </div>
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>Time:</span>
+                  <span className={styles.detailValue}>
+                    {moment(selectedBooking.start).format('h:mm A')} - {moment(selectedBooking.end).format('h:mm A')}
+                  </span>
+                </div>
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>Amount:</span>
+                  <span className={styles.detailValue}>
+                    ${selectedBooking.resource.data.total_amount?.toFixed(2) || '0.00'}
+                  </span>
+                </div>
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>Status:</span>
+                  <span className={`${styles.statusBadge} ${styles[selectedBooking.resource.data.status]}`}>
+                    {selectedBooking.resource.data.status}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
