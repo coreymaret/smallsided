@@ -9,6 +9,8 @@ import CookiePopup from './components/CookiePopup/CookiePopup';
 import Subscribe from './components/Subscribe/Subscribe';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import PageLoader from './components/PageLoader/PageLoader';
+import Register from './components/Register/Register';
+
 // Each page will be loaded only when needed, reducing initial bundle size
 const Home = lazy(() => import('./pages/Home/Home'));
 const About = lazy(() => import('./pages/About/About'));
@@ -22,7 +24,6 @@ const Pickup = lazy(() => import('./pages/Pickup/Pickup'));
 const BirthdayParties = lazy(() => import('./pages/BirthdayParties/BirthdayParties'));
 const Camps = lazy(() => import('./pages/Camps/Camps'));
 const Training = lazy(() => import('./pages/Training/Training'));
-const ExerciseDetail = lazy(() => import('./components/Exercises/ExerciseDetail'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy/PrivacyPolicy'));
 const GetStarted = lazy(() => import('./pages/GetStarted/GetStarted'));
 const TOS = lazy(() => import('./pages/TOS/TOS'));
@@ -50,40 +51,74 @@ const App = () => {
         <ScrollToTop />
         <Header />
         <main className="main-content" style={{ minHeight: '100vh' }}>
-          {/* ⬆️ ADDED: minHeight reserves space to prevent Subscribe from shifting */}
           {/* Suspense boundary catches lazy-loaded components while they load */}
           <Suspense fallback={<PageLoader />}>
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/exercises" element={<Exercises />} />
-              <Route path="/exercises/:slug" element={<ExerciseDetail />} />
               <Route path="/work" element={<Work />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/services" element={<Services />} />
+              
+              {/* Service Landing Pages */}
               <Route path="/services/field-rental" element={<FieldRental />} />
               <Route path="/services/leagues" element={<Leagues />} />
               <Route path="/services/pickup" element={<Pickup />} />
               <Route path="/services/birthday-parties" element={<BirthdayParties />} />
               <Route path="/services/camps" element={<Camps />} />
               <Route path="/services/training" element={<Training />} />
+              
+              {/* Registration Routes - All use unified Register wrapper */}
+              <Route 
+                path="/services/field-rental/book" 
+                element={<Register config={{ type: 'fieldRental', title: '', subtitle: '', component: () => null }} />} 
+              />
+              <Route 
+                path="/services/pickup/book" 
+                element={<Register config={{ type: 'pickup', title: '', subtitle: '', component: () => null }} />} 
+              />
+              <Route 
+                path="/services/leagues/register" 
+                element={<Register config={{ type: 'league', title: '', subtitle: '', component: () => null }} />} 
+              />
+              <Route 
+                path="/services/training/register" 
+                element={<Register config={{ type: 'training', title: '', subtitle: '', component: () => null }} />} 
+              />
+              <Route 
+                path="/services/camps/register" 
+                element={<Register config={{ type: 'camps', title: '', subtitle: '', component: () => null }} />} 
+              />
+              <Route 
+                path="/services/birthday-parties/register" 
+                element={<Register config={{ type: 'birthday', title: '', subtitle: '', component: () => null }} />} 
+              />
+              
+              {/* Legal Pages */}
               <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
               <Route path="/get-started" element={<GetStarted />} />
               <Route path="/TOS" element={<TOS />} />
               <Route path="/CookiePolicy" element={<CookiePolicy />} />
-              <Route path="*" element={<NotFound />} />
+              
+              {/* Blog */}
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
+              
+              {/* Admin Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminDashboard />} />
-              <Route path="field-rentals" element={<AdminFieldRentals />} />
-              <Route path="leagues" element={<AdminLeagues />} />
-              <Route path="pickup" element={<AdminPickup />} />
-              <Route path="birthday-parties" element={<AdminBirthdayParties />} />
-              <Route path="training" element={<AdminTraining />} />
-              <Route path="camps" element={<AdminCamps />} />
+                <Route index element={<AdminDashboard />} />
+                <Route path="field-rentals" element={<AdminFieldRentals />} />
+                <Route path="leagues" element={<AdminLeagues />} />
+                <Route path="pickup" element={<AdminPickup />} />
+                <Route path="birthday-parties" element={<AdminBirthdayParties />} />
+                <Route path="training" element={<AdminTraining />} />
+                <Route path="camps" element={<AdminCamps />} />
               </Route>
+              
+              {/* 404 - Keep last */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </main>

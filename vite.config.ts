@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 // Import the `defineConfig` helper from Vite.
 import { defineConfig } from 'vite'
 
@@ -419,5 +421,29 @@ export default defineConfig({
   preview: {
     port: 4173,
     host: true,
+  },
+
+  /**
+   * TEST CONFIGURATION
+   * ------------------
+   * Vitest configuration
+   */
+  // @ts-expect-error - Vitest config is valid but not in Vite types
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    css: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        'src/test/',
+        '**/*.config.*',
+        '**/*.d.ts',
+        '**/types.ts',
+      ],
+    },
   },
 })

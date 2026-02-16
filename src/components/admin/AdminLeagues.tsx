@@ -1,21 +1,33 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Search, Trophy, User } from 'lucide-react';
-import styles from './AdminTable.module.scss';
+import { Trophy, User } from 'lucide-react';
+import AdminDataTable, { type Column } from './shared/AdminDataTable';
+import { CellWithIcon, ContactCell, StatusBadge } from './shared/TableCells';
+
+interface LeagueRegistration {
+  id: string;
+  team_name: string;
+  age_division: string;
+  captain_name: string;
+  captain_email: string;
+  captain_phone: string;
+  skill_level: string;
+  total_amount: number;
+  payment_status: string;
+  created_at: string;
+  leagues?: {
+    name: string;
+    season: string;
+  };
+}
 
 const AdminLeagues = () => {
-  const [registrations, setRegistrations] = useState<any[]>([]);
-  const [filtered, setFiltered] = useState<any[]>([]);
+  const [registrations, setRegistrations] = useState<LeagueRegistration[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchRegistrations();
   }, []);
-
-  useEffect(() => {
-    filterData();
-  }, [searchTerm, registrations]);
 
   const fetchRegistrations = async () => {
     try {
@@ -33,52 +45,69 @@ const AdminLeagues = () => {
     }
   };
 
-  const filterData = () => {
-    let result = [...registrations];
-    if (searchTerm) {
-      result = result.filter(r =>
-        r.team_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.captain_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.captain_email?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    setFiltered(result);
-  };
-
-  if (isLoading) return <div className={styles.container}><div className={styles.loading}>Loading...</div></div>;
+  const columns: Column<LeagueRegistration>[] = [
+    {
+      header: 'Team',
+      accessor: 'team_name',
+      cell: (value) => (
+        <CellWithIcon icon={Trophy}>
+          {value}
+        </CellWithIcon>
+      ),
+    },
+    {
+      header: 'League',
+      accessor: 'age_division',
+    },
+    {
+      header: 'Captain',
+      accessor: 'captain_name',
+      cell: (value) => (
+        <CellWithIcon icon={User}>
+          {value}
+        </CellWithIcon>
+      ),
+    },
+    {
+      header: 'Contact',
+      accessor: (row) => `${row.captain_email} ${row.captain_phone}`,
+      cell: (_, row) => (
+        <ContactCell email={row.captain_email} phone={row.captain_phone} />
+      ),
+      sortable: false,
+      exportFormatter: (_, row) => `${row.captain_email}, ${row.captain_phone}`,
+    },
+    {
+      header: 'Experience',
+      accessor: 'skill_level',
+    },
+    {
+      header: 'Amount',
+      accessor: 'total_amount',
+      cell: (value) => `$${value}`,
+      exportFormatter: (value) => `$${value}`,
+    },
+    {
+      header: 'Status',
+      accessor: 'payment_status',
+      cell: (value) => <StatusBadge status={value || 'paid'} />,
+    },
+  ];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div><h1>League Registrations</h1><p>{filtered.length} teams</p></div>
-      </div>
-      <div className={styles.filters}>
-        <div className={styles.searchBox}>
-          <Search size={18} />
-          <input type="text" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-        </div>
-      </div>
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr><th>Team</th><th>League</th><th>Captain</th><th>Contact</th><th>Experience</th><th>Amount</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            {filtered.map(r => (
-              <tr key={r.id}>
-                <td><div className={styles.cellWithIcon}><Trophy size={16} />{r.team_name}</div></td>
-                <td>{r.age_division}</td>
-                <td><div className={styles.cellWithIcon}><User size={16} />{r.captain_name}</div></td>
-                <td><div className={styles.contactCell}><div>{r.captain_email}</div><div className={styles.phoneNumber}>{r.captain_phone}</div></div></td>
-                <td>{r.skill_level}</td>
-                <td>${r.total_amount}</td>
-                <td><span className={`${styles.statusBadge} ${styles.statusPaid}`}>{r.payment_status || 'paid'}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <AdminDataTable
+      data={registrations}
+      columns={columns}
+      title="League Registrations"
+      subtitle={`${registrations.length} teams`}
+      searchable
+      searchPlaceholder="Search teams..."
+      searchFields={['team_name', 'captain_name', 'captain_email']}
+      exportable
+      exportFilename="league-registrations"
+      loading={isLoading}
+      emptyMessage="No league registrations found"
+    />
   );
 };
 

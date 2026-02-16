@@ -1,6 +1,7 @@
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/Blog/SEO';
-import RegisterTraining from '../../components/RegisterTraining/RegisterTraining';
+import Register from '../../components/Register/Register';
+import { trainingConfig } from '../../components/Register/configs';
 
 const Training = () => {
   const seo = getSEOConfig('training');
@@ -9,7 +10,7 @@ const Training = () => {
     <>
       <SEO {...seo} />
       <div>
-        <RegisterTraining />
+        <Register config={trainingConfig} />
       </div>
     </>
   );

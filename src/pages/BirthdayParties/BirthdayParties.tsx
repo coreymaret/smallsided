@@ -1,16 +1,16 @@
 import styles from "./BirthdayParties.module.scss";
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/Blog/SEO';
-import RegisterBirthday from '../../components/RegisterBirthday/RegisterBirthday'
-
+import Register from '../../components/Register/Register';
+import { birthdayConfig } from '../../components/Register/configs';
 
 const BirthdayParties = () => {
   const seo = getSEOConfig('birthdayParties');
   return (
     <>
-    <div className={styles.aboutPage}>
+      <div className={styles.aboutPage}>
         <SEO {...seo} />
-        <RegisterBirthday />
+        <Register config={birthdayConfig} />
       </div>
     </>
   );

@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    // Enable composite mode for project references
+    "composite": true,
+
     // Where TypeScript stores incremental build info (for faster rebuilds)
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
 
@@ -23,20 +26,23 @@
        ⚙️  Bundler Mode Configuration
        ------------------------------ */
 
-    // Use modern module resolution similar to how bundlers like Vite handle imports
-    "moduleResolution": "bundler",
+    // Use Node module resolution for compatibility with project references
+    "moduleResolution": "node",
 
-    // Allow importing `.ts` files directly with extensions (e.g. import './file.ts')
-    "allowImportingTsExtensions": true,
+    // Don't allow importing .ts files directly when using project references
+    "allowImportingTsExtensions": false,
 
-    // Keep import/export syntax as-is, don't rewrite it to CommonJS
-    "verbatimModuleSyntax": true,
+    // Allow default imports from modules without default export
+    "allowSyntheticDefaultImports": true,
+
+    // Better CommonJS/ESM interop
+    "esModuleInterop": true,
 
     // Treat all files as modules even if they don't have import/export statements
     "moduleDetection": "force",
 
-    // Don’t emit compiled JavaScript — only perform type checking (Vite handles the actual build)
-    "noEmit": true,
+    // REMOVED: noEmit (project references can't disable emit)
+    // TypeScript will emit declaration files for project references
 
 
     /* ------------------------------
@@ -52,14 +58,8 @@
     // Error if function parameters are declared but never used
     "noUnusedParameters": true,
 
-    // Restrict TypeScript to syntax that can be completely erased when compiling (no runtime TS)
-    "erasableSyntaxOnly": true,
-
     // Prevent missing 'break' statements in switch-case blocks
-    "noFallthroughCasesInSwitch": true,
-
-    // Disallow imports that only have side effects unless they're explicitly allowed
-    "noUncheckedSideEffectImports": true
+    "noFallthroughCasesInSwitch": true
   },
 
   // Files that this TypeScript configuration applies to

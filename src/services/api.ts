@@ -48,37 +48,73 @@ interface TrainingRegistrationData {
   parent_phone: string;
   skill_level: string;
   focus_areas: string[];
-  preferred_days: string[];
-  preferred_time: string;
-  additional_info?: string | null;
-  stripe_payment_intent_id: string;
+  preferred_schedule: string[];
   total_amount: number;
+  stripe_payment_intent_id: string;
+  emergency_contact?: {
+    name: string;
+    phone: string;
+    relation: string;
+  };
+  medical_info?: string;
+}
+
+// ===== NEW INTERFACES FOR PICKUP AND FIELD RENTAL =====
+interface PickupBookingData {
+  gameId: string;
+  gameDate?: string;
+  gameTime?: string;
+  location?: string;
+  format?: string;
+  skillLevel?: string;
+  spots: number;
+  name: string;
+  email: string;
+  phone: string;
+  totalAmount: number;
+}
+
+interface FieldRentalBookingData {
+  fieldId: string;
+  fieldName: string | undefined;
+  bookingDate: string;
+  timeSlot: string | undefined;
+  duration: number;
+  players: number;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  totalAmount: number;
 }
 
 class ApiService {
   private baseUrl: string;
 
   constructor() {
-  this.baseUrl = '/.netlify/functions';
-}
+    this.baseUrl = '/.netlify/functions';
+  }
 
-  // Generic fetch wrapper with error handling
-  private async fetch<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
+  private async fetch(endpoint: string, options: RequestInit = {}) {
+    const url = `${this.baseUrl}${endpoint}`;
+    
+    const defaultHeaders: HeadersInit = {
+      'Content-Type': 'application/json',
+    };
+
+    const config: RequestInit = {
+      ...options,
+      headers: {
+        ...defaultHeaders,
+        ...options.headers,
+      },
+    };
+
     try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        ...options,
-        headers: {
-          'Content-Type': 'application/json',
-          ...options.headers,
-        },
-      });
-
+      const response = await fetch(url, config);
+      
       if (!response.ok) {
-        const error = await response.json().catch(() => ({ message: 'Network error' }));
-        throw new Error(error.message || `HTTP error! status: ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
 
       return await response.json();
@@ -92,10 +128,10 @@ class ApiService {
   // BOOKINGS
   // ====================================
 
-  async createBooking(data: BookingData) {
+  async createBooking(bookingData: BookingData) {
     return this.fetch('/create-booking', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(bookingData),
     });
   }
 
@@ -105,14 +141,26 @@ class ApiService {
     startDate?: string;
     endDate?: string;
   }) {
-    const params = new URLSearchParams(filters as Record<string, string>);
+    const params = new URLSearchParams();
+    if (filters?.type) params.append('type', filters.type);
+    if (filters?.status) params.append('status', filters.status);
+    if (filters?.startDate) params.append('startDate', filters.startDate);
+    if (filters?.endDate) params.append('endDate', filters.endDate);
+    
     return this.fetch(`/get-bookings?${params}`);
   }
 
   async updateBookingStatus(bookingId: string, status: string) {
-    return this.fetch('/update-booking', {
+    return this.fetch('/update-booking-status', {
       method: 'PATCH',
       body: JSON.stringify({ bookingId, status }),
+    });
+  }
+
+  async cancelBooking(bookingId: string, reason?: string) {
+    return this.fetch('/cancel-booking', {
+      method: 'POST',
+      body: JSON.stringify({ bookingId, reason }),
     });
   }
 
@@ -120,57 +168,73 @@ class ApiService {
   // LEAGUE REGISTRATIONS
   // ====================================
 
-  async createLeagueRegistration(data: LeagueRegistrationData) {
+  async createLeagueRegistration(registrationData: LeagueRegistrationData) {
     return this.fetch('/create-league-registration', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(registrationData),
     });
   }
 
   async getLeagueRegistrations(leagueId?: string) {
-    const endpoint = leagueId 
-      ? `/get-league-registrations?leagueId=${leagueId}`
-      : '/get-league-registrations';
-    return this.fetch(endpoint);
+    const params = leagueId ? `?leagueId=${leagueId}` : '';
+    return this.fetch(`/get-league-registrations${params}`);
+  }
+
+  async updateRegistrationStatus(
+    registrationId: string,
+    status: 'pending' | 'approved' | 'rejected'
+  ) {
+    return this.fetch('/update-registration-status', {
+      method: 'PATCH',
+      body: JSON.stringify({ registrationId, status }),
+    });
   }
 
   // ====================================
   // TRAINING REGISTRATIONS
   // ====================================
 
-  async createTrainingRegistration(data: TrainingRegistrationData) {
+  async createTrainingRegistration(registrationData: TrainingRegistrationData) {
     return this.fetch('/create-training-registration', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(registrationData),
     });
   }
 
   async getTrainingRegistrations(filters?: {
+    trainingType?: string;
     status?: string;
-    startDate?: string;
-    endDate?: string;
   }) {
-    const params = new URLSearchParams(filters as Record<string, string>);
+    const params = new URLSearchParams();
+    if (filters?.trainingType) params.append('trainingType', filters.trainingType);
+    if (filters?.status) params.append('status', filters.status);
+    
     return this.fetch(`/get-training-registrations?${params}`);
   }
 
   // ====================================
-  // TEAMS & LEAGUES
+  // PAYMENTS
   // ====================================
 
-  async finalizeLeague(leagueId: string) {
-    return this.fetch('/finalize-league', {
+  async createPaymentIntent(amount: number, description: string) {
+    return this.fetch('/create-payment-intent', {
       method: 'POST',
-      body: JSON.stringify({ leagueId }),
+      body: JSON.stringify({ amount, description }),
     });
   }
 
-  async getTeamsByLeague(leagueId: string) {
-    return this.fetch(`/get-teams?leagueId=${leagueId}`);
+  async confirmPayment(paymentIntentId: string) {
+    return this.fetch('/confirm-payment', {
+      method: 'POST',
+      body: JSON.stringify({ paymentIntentId }),
+    });
   }
 
-  async getLeagueStandings(leagueId: string) {
-    return this.fetch(`/get-standings?leagueId=${leagueId}`);
+  async processRefund(paymentIntentId: string, amount?: number, reason?: string) {
+    return this.fetch('/process-refund', {
+      method: 'POST',
+      body: JSON.stringify({ paymentIntentId, amount, reason }),
+    });
   }
 
   // ====================================
@@ -204,6 +268,95 @@ class ApiService {
   }
 
   // ====================================
+  // PICKUP BOOKINGS
+  // ====================================
+
+  async createPickupBooking(data: PickupBookingData) {
+    try {
+      // Process payment first
+      const paymentResponse = await this.fetch('/create-payment-intent', {
+        method: 'POST',
+        body: JSON.stringify({
+          amount: data.totalAmount * 100, // Convert to cents
+          description: `Pickup Game - ${data.format} - ${data.gameDate}`,
+        }),
+      });
+
+      const { clientSecret, paymentIntentId } = paymentResponse;
+
+      // Create booking in Supabase
+      const bookingResponse = await this.fetch('/create-booking', {
+        method: 'POST',
+        body: JSON.stringify({
+          booking_type: 'pickup',
+          game_id: data.gameId,
+          game_date: data.gameDate,
+          game_time: data.gameTime,
+          location: data.location,
+          format: data.format,
+          skill_level: data.skillLevel,
+          spots_reserved: data.spots,
+          customer_name: data.name,
+          customer_email: data.email,
+          customer_phone: data.phone,
+          total_amount: data.totalAmount,
+          payment_status: 'completed',
+          stripe_payment_intent_id: paymentIntentId,
+        }),
+      });
+
+      return { success: true, booking: bookingResponse, clientSecret };
+    } catch (error) {
+      console.error('Pickup booking error:', error);
+      throw error;
+    }
+  }
+
+  // ====================================
+  // FIELD RENTAL BOOKINGS
+  // ====================================
+
+  async createFieldRentalBooking(data: FieldRentalBookingData) {
+    try {
+      // Process payment first
+      const paymentResponse = await this.fetch('/create-payment-intent', {
+        method: 'POST',
+        body: JSON.stringify({
+          amount: data.totalAmount * 100, // Convert to cents
+          description: `Field Rental - ${data.fieldName} - ${data.bookingDate}`,
+        }),
+      });
+
+      const { clientSecret, paymentIntentId } = paymentResponse;
+
+      // Create booking in Supabase
+      const bookingResponse = await this.fetch('/create-booking', {
+        method: 'POST',
+        body: JSON.stringify({
+          booking_type: 'field_rental',
+          field_id: data.fieldId,
+          field_name: data.fieldName,
+          booking_date: data.bookingDate,
+          time_slot: data.timeSlot,
+          duration_hours: data.duration,
+          number_of_players: data.players,
+          customer_name: data.customerName,
+          customer_email: data.customerEmail,
+          customer_phone: data.customerPhone,
+          total_amount: data.totalAmount,
+          payment_status: 'completed',
+          stripe_payment_intent_id: paymentIntentId,
+        }),
+      });
+
+      return { success: true, booking: bookingResponse, clientSecret };
+    } catch (error) {
+      console.error('Field rental booking error:', error);
+      throw error;
+    }
+  }
+
+  // ====================================
   // STRIPE WEBHOOK (Internal use only)
   // ====================================
 
@@ -224,4 +377,10 @@ class ApiService {
 export const api = new ApiService();
 
 // Export types for use in components
-export type { BookingData, LeagueRegistrationData, TrainingRegistrationData };
+export type { 
+  BookingData, 
+  LeagueRegistrationData, 
+  TrainingRegistrationData,
+  PickupBookingData,
+  FieldRentalBookingData 
+};

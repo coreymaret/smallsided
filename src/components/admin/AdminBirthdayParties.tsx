@@ -1,46 +1,98 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Calendar, Cake } from 'lucide-react';
-import styles from './AdminTable.module.scss';
+import AdminDataTable, { type Column } from './shared/AdminDataTable';
+import { CellWithIcon, StatusBadge } from './shared/TableCells';
+
+interface BirthdayBooking {
+  id: string;
+  created_at: string;
+  booking_date: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  total_amount: number;
+  payment_status: string;
+  metadata?: {
+    child_name?: string;
+    package?: string;
+    child_age?: number;
+  };
+}
 
 const AdminBirthdayParties = () => {
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<BirthdayBooking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => { fetchBookings(); }, []);
+  useEffect(() => {
+    fetchBookings();
+  }, []);
 
   const fetchBookings = async () => {
-    const { data } = await supabase.from('bookings').select('*').eq('booking_type', 'birthday').order('created_at', { ascending: false });
+    const { data } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('booking_type', 'birthday')
+      .order('created_at', { ascending: false });
     setBookings(data || []);
     setIsLoading(false);
   };
 
-  if (isLoading) return <div className={styles.container}><div className={styles.loading}>Loading...</div></div>;
+  const columns: Column<BirthdayBooking>[] = [
+    {
+      header: 'Date',
+      accessor: 'booking_date',
+      cell: (value) => (
+        <CellWithIcon icon={Calendar}>
+          {new Date(value).toLocaleDateString()}
+        </CellWithIcon>
+      ),
+      exportFormatter: (value) => new Date(value).toLocaleDateString(),
+    },
+    {
+      header: 'Child',
+      accessor: (row) => row.metadata?.child_name || 'N/A',
+      cell: (value) => (
+        <CellWithIcon icon={Cake}>
+          {value}
+        </CellWithIcon>
+      ),
+    },
+    {
+      header: 'Package',
+      accessor: (row) => row.metadata?.package || 'N/A',
+    },
+    {
+      header: 'Customer',
+      accessor: 'customer_name',
+    },
+    {
+      header: 'Amount',
+      accessor: 'total_amount',
+      cell: (value) => `$${value}`,
+      exportFormatter: (value) => `$${value}`,
+    },
+    {
+      header: 'Status',
+      accessor: 'payment_status',
+      cell: (value) => <StatusBadge status={value} />,
+    },
+  ];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1>Birthday Parties</h1>
-        <p>{bookings.length} bookings</p>
-      </div>
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead><tr><th>Date</th><th>Child</th><th>Package</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
-          <tbody>
-            {bookings.map(b => (
-              <tr key={b.id}>
-                <td><div className={styles.cellWithIcon}><Calendar size={16} />{new Date(b.booking_date).toLocaleDateString()}</div></td>
-                <td><div className={styles.cellWithIcon}><Cake size={16} />{b.metadata?.child_name || 'N/A'}</div></td>
-                <td>{b.metadata?.package || 'N/A'}</td>
-                <td>{b.customer_name}</td>
-                <td>${b.total_amount}</td>
-                <td><span className={`${styles.statusBadge} ${styles.statusPaid}`}>{b.payment_status}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <AdminDataTable
+      data={bookings}
+      columns={columns}
+      title="Birthday Parties"
+      subtitle={`${bookings.length} bookings`}
+      searchable
+      searchPlaceholder="Search birthday parties..."
+      searchFields={['customer_name', 'customer_email']}
+      exportable
+      exportFilename="birthday-parties"
+      loading={isLoading}
+      emptyMessage="No birthday party bookings found"
+    />
   );
 };
 

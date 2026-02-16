@@ -1,16 +1,17 @@
 import styles from "./Camps.module.scss";
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/Blog/SEO';
-import RegisterCamps from '../../components/RegisterCamps/RegisterCamps';
+import Register from '../../components/Register/Register';
+import { campsConfig } from '../../components/Register/configs';
 
 const Camps = () => {
   const seo = getSEOConfig('camps');
   return (
     <>
-    <SEO {...seo} />
-    <div className={styles.campsPage}>
-        <RegisterCamps />
-    </div>
+      <SEO {...seo} />
+      <div className={styles.campsPage}>
+        <Register config={campsConfig} />
+      </div>
     </>
   );
 }

@@ -1,0 +1,57 @@
+// Shared SCSS Variables for All Registration Services
+// Import this at the top of each service's SCSS file
+
+// Colors
+$color-primary: #15141a;
+$color-accent: #98ED66;
+$color-background: #f8f9fa;
+$color-white: #ffffff;
+$color-text: #15141a;
+$color-text-secondary: #6c757d;
+$color-border: rgba(21, 20, 26, 0.15);
+$color-error: #dc3545;
+
+// Spacing
+$spacing-xs: 0.5rem;
+$spacing-sm: 0.75rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-xxl: 3rem;
+
+// Border Radius
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-full: 50%;
+
+// Icon Circle
+$icon-circle-size: 40px;
+$icon-circle-bg: $color-primary;
+$icon-circle-color: $color-accent;
+
+// Transitions
+$transition-base: all 0.3s ease;
+$transition-fast: all 0.2s ease;
+
+// Shadows
+$shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
+$shadow-banner: 0 4px 20px rgba(152, 237, 102, 0.4);
+
+// Z-index
+$z-banner-backdrop: 9998;
+$z-banner: 9999;
+
+// Typography
+$font-family: 'Inter', sans-serif;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-extrabold: 800;
+
+// Breakpoints
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1280px;

@@ -1,46 +1,103 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Calendar, Zap, User } from 'lucide-react';
-import styles from './AdminTable.module.scss';
+import AdminDataTable, { type Column } from './shared/AdminDataTable';
+import { CellWithIcon, StatusBadge } from './shared/TableCells';
+
+interface CampBooking {
+  id: string;
+  created_at: string;
+  booking_date: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  total_amount: number;
+  payment_status: string;
+  metadata?: {
+    child_name?: string;
+    camp_type?: string;
+    child_age?: number;
+  };
+}
 
 const AdminCamps = () => {
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<CampBooking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => { fetchBookings(); }, []);
+  useEffect(() => {
+    fetchBookings();
+  }, []);
 
   const fetchBookings = async () => {
-    const { data } = await supabase.from('bookings').select('*').eq('booking_type', 'camp').order('created_at', { ascending: false });
+    const { data } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('booking_type', 'camp')
+      .order('created_at', { ascending: false });
     setBookings(data || []);
     setIsLoading(false);
   };
 
-  if (isLoading) return <div className={styles.container}><div className={styles.loading}>Loading...</div></div>;
+  const columns: Column<CampBooking>[] = [
+    {
+      header: 'Date',
+      accessor: 'booking_date',
+      cell: (value) => (
+        <CellWithIcon icon={Calendar}>
+          {new Date(value).toLocaleDateString()}
+        </CellWithIcon>
+      ),
+      exportFormatter: (value) => new Date(value).toLocaleDateString(),
+    },
+    {
+      header: 'Child',
+      accessor: (row) => row.metadata?.child_name || 'N/A',
+      cell: (value) => (
+        <CellWithIcon icon={User}>
+          {value}
+        </CellWithIcon>
+      ),
+    },
+    {
+      header: 'Camp Type',
+      accessor: (row) => row.metadata?.camp_type || 'N/A',
+      cell: (value) => (
+        <CellWithIcon icon={Zap}>
+          {value}
+        </CellWithIcon>
+      ),
+    },
+    {
+      header: 'Customer',
+      accessor: 'customer_name',
+    },
+    {
+      header: 'Amount',
+      accessor: 'total_amount',
+      cell: (value) => `$${value}`,
+      exportFormatter: (value) => `$${value}`,
+    },
+    {
+      header: 'Status',
+      accessor: 'payment_status',
+      cell: (value) => <StatusBadge status={value} />,
+    },
+  ];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1>Camp Registrations</h1>
-        <p>{bookings.length} registrations</p>
-      </div>
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead><tr><th>Date</th><th>Child</th><th>Camp Type</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
-          <tbody>
-            {bookings.map(b => (
-              <tr key={b.id}>
-                <td><div className={styles.cellWithIcon}><Calendar size={16} />{new Date(b.booking_date).toLocaleDateString()}</div></td>
-                <td><div className={styles.cellWithIcon}><User size={16} />{b.metadata?.child_name || 'N/A'}</div></td>
-                <td><div className={styles.cellWithIcon}><Zap size={16} />{b.metadata?.camp_type || 'N/A'}</div></td>
-                <td>{b.customer_name}</td>
-                <td>${b.total_amount}</td>
-                <td><span className={`${styles.statusBadge} ${styles.statusPaid}`}>{b.payment_status}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <AdminDataTable
+      data={bookings}
+      columns={columns}
+      title="Camp Registrations"
+      subtitle={`${bookings.length} registrations`}
+      searchable
+      searchPlaceholder="Search camps..."
+      searchFields={['customer_name', 'customer_email']}
+      exportable
+      exportFilename="camp-registrations"
+      loading={isLoading}
+      emptyMessage="No camp registrations found"
+    />
   );
 };
 

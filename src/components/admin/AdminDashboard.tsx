@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
+import { Calendar as BigCalendar, dateFnsLocalizer } from 'react-big-calendar';
+import { format, parse, startOfWeek, getDay, isAfter, addHours, isSameDay } from 'date-fns';
+import { enUS } from 'date-fns/locale';
 import { supabase } from '../../lib/supabase';
 import { Calendar, Trophy, DollarSign, TrendingUp } from 'lucide-react';
 import styles from './AdminDashboard.module.scss';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-const localizer = momentLocalizer(moment);
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales: { 'en-US': enUS }
+});
 
 interface Booking {
   id: string;
@@ -135,10 +142,10 @@ const AdminDashboard = () => {
 
       // Convert to calendar events
       const calendarEvents: CalendarEvent[] = allBookings.map(booking => {
-        const startDateTime = moment(`${booking.booking_date} ${booking.start_time}`).toDate();
+        const startDateTime = parse(`${booking.booking_date} ${booking.start_time}`, 'yyyy-MM-dd HH:mm', new Date());
         const endDateTime = booking.end_time 
-          ? moment(`${booking.booking_date} ${booking.end_time}`).toDate()
-          : moment(startDateTime).add(1, 'hour').toDate();
+          ? parse(`${booking.booking_date} ${booking.end_time}`, 'yyyy-MM-dd HH:mm', new Date())
+          : addHours(startDateTime, 1);
 
         return {
           id: booking.id,
@@ -159,7 +166,7 @@ const AdminDashboard = () => {
         totalBookings: allBookings.length,
         totalRevenue: allBookings.reduce((sum, b) => sum + (b.total_amount || 0), 0),
         activeLeagues: (leagues.data || []).filter((l: any) => l.status === 'active').length,
-        upcomingEvents: allBookings.filter(b => moment(b.booking_date).isAfter(moment())).length,
+        upcomingEvents: allBookings.filter(b => isAfter(parse(b.booking_date, 'yyyy-MM-dd', new Date()), new Date())).length,
       });
 
       setIsLoading(false);
@@ -201,7 +208,7 @@ const AdminDashboard = () => {
 
   const customDayPropGetter = (date: Date) => {
     const today = new Date();
-    const isToday = moment(date).isSame(today, 'day');
+    const isToday = isSameDay(date, today);
     
     return {
       className: isToday ? 'rbc-today' : '',
@@ -210,9 +217,9 @@ const AdminDashboard = () => {
 
   const CustomHeader = ({ date }: { date: Date }) => {
     const today = new Date();
-    const isToday = moment(date).isSame(today, 'day');
-    const dayNumber = moment(date).format('D');
-    const dayName = moment(date).format('ddd');
+    const isToday = isSameDay(date, today);
+    const dayNumber = format(date, 'd');
+    const dayName = format(date, 'EEE');
     
     if (isToday) {
       return (
@@ -310,7 +317,7 @@ const AdminDashboard = () => {
             step={30}
             timeslots={2}
             formats={{
-              timeGutterFormat: (date: Date) => moment(date).format('h A'),
+              timeGutterFormat: (date: Date) => format(date, 'h a'),
             }}
             components={{
               week: {
@@ -412,13 +419,13 @@ const AdminDashboard = () => {
                 <div className={styles.detailItem}>
                   <span className={styles.detailLabel}>Date:</span>
                   <span className={styles.detailValue}>
-                    {moment(selectedBooking.start).format('MMMM D, YYYY')}
+                    {format(selectedBooking.start, 'MMMM d, yyyy')}
                   </span>
                 </div>
                 <div className={styles.detailItem}>
                   <span className={styles.detailLabel}>Time:</span>
                   <span className={styles.detailValue}>
-                    {moment(selectedBooking.start).format('h:mm A')} - {moment(selectedBooking.end).format('h:mm A')}
+                    {format(selectedBooking.start, 'h:mm a')} - {format(selectedBooking.end, 'h:mm a')}
                   </span>
                 </div>
                 <div className={styles.detailItem}>

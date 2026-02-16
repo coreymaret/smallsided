@@ -17,12 +17,15 @@
     // - DOM.Iterable: adds iterable types (like NodeList for...of loops)
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
 
-    // Output module type — `ESNext` means “modern ESM syntax” (import/export)
+    // Output module type — `ESNext` means "modern ESM syntax" (import/export)
     // which Vite expects for tree-shaking and modern bundling
     "module": "ESNext",
 
-    // Include type definitions for Vite (gives autocompletion and globals like `import.meta.env`)
-    "types": ["vite/client"],
+    // Include type definitions for Vite and testing libraries
+    // - vite/client: gives autocompletion and globals like `import.meta.env`
+    // - vitest/globals: provides global test functions (describe, it, expect, etc.)
+    // - @testing-library/jest-dom: custom matchers (toBeInTheDocument, etc.)
+    "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
 
     // Skip type checking of .d.ts files in node_modules to speed up builds
     "skipLibCheck": true,
@@ -32,24 +35,24 @@
        ⚙️  Bundler Mode Configuration
        ------------------------------ */
 
-    // Resolve imports like a bundler would (Vite-style) rather than Node’s default
+    // Resolve imports like a bundler would (Vite-style) rather than Node's default
     "moduleResolution": "bundler",
 
     // Allow importing files with .ts/.tsx extensions directly
     "allowImportingTsExtensions": true,
 
     // Keep your import/export syntax exactly as written —
-    // don’t rewrite to CommonJS or change paths
+    // don't rewrite to CommonJS or change paths
     "verbatimModuleSyntax": true,
 
-    // Treat every file as a module (even if it doesn’t have an import/export)
+    // Treat every file as a module (even if it doesn't have an import/export)
     "moduleDetection": "force",
 
-    // Don’t output compiled JS files — Vite + SWC handle transpilation
+    // Don't output compiled JS files — Vite + SWC handle transpilation
     "noEmit": true,
 
     // Enables the modern JSX transform (used by React 17+)
-    // This means you don’t have to `import React` in every file using JSX
+    // This means you don't have to `import React` in every file using JSX
     "jsx": "react-jsx",
 
 
