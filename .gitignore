@@ -23,6 +23,8 @@ dev-dist
 *.njsproj
 *.sln
 *.sw?
+*.tmp
+*.log
 
 # Environment
 .env
@@ -30,3 +32,10 @@ dev-dist
 .env*.local
 # Local Netlify folder
 .netlify
+netlify/functions/node_modules
+
+# Caches
+.cache/
+node-compile-cache/
+.npm/
+.vite/
