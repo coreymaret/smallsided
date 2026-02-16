@@ -19,7 +19,7 @@ export const getPostBySlug = async (slug: string) => {
 
   try {
     // Import markdown files directly - Vite will handle this at build time
-    const modules = import.meta.glob('../content/blog/*.md', { as: 'raw' });
+    const modules = (import.meta as any).glob('../content/blog/*.md', { as: 'raw' });
     const path = `../content/blog/${post.fileName}`;
     
     if (!modules[path]) {
