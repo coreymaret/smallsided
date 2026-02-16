@@ -7,39 +7,35 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv
-  readonly glob: <T = Record<string, unknown>>(
-    pattern: string,
-    options?: { eager?: boolean; import?: string }
-  ) => Record<string, T>
 }
 
 // Asset type declarations
 declare module '*.svg' {
-  const content: string
-  export default content
+  const src: string
+  export default src
 }
 
 declare module '*.png' {
-  const content: string
-  export default content
+  const src: string
+  export default src
 }
 
 declare module '*.jpg' {
-  const content: string
-  export default content
+  const src: string
+  export default src
 }
 
 declare module '*.jpeg' {
-  const content: string
-  export default content
+  const src: string
+  export default src
 }
 
 declare module '*.webp' {
-  const content: string
-  export default content
+  const src: string
+  export default src
 }
 
 declare module '*.gif' {
-  const content: string
-  export default content
+  const src: string
+  export default src
 }
