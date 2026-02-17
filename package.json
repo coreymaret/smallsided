@@ -25,7 +25,6 @@
     "buffer": "^6.0.3",
     "date-fns": "^4.1.0",
     "gray-matter": "^4.0.3",
-    "highlight.js": "^11.11.1",
     "lottie-web": "^5.13.0",
     "lucide-react": "^0.548.0",
     "react": "^18.3.1",
