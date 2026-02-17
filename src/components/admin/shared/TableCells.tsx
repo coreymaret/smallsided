@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon } from '../../../components/Icons/Icons';
 import styles from '../AdminTable.module.scss';
 
 // Cell with icon

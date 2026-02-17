@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react'; 
+import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from '../../components/Icons/Icons'; 
 // Importing icon components from lucide-react
 
 import styles from './Footer.module.scss'; 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Star } from 'lucide-react';
+import { Star } from '../../components/Icons/Icons';
 import './ReviewSection.scss';
 
 interface Review {

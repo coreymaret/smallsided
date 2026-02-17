@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Users, Zap, Cake, Trophy, Target, ArrowDownRight } from 'lucide-react';
+import { Calendar, Users, Zap, Cake, Trophy, Target, ArrowDownRight } from '../../components/Icons/Icons';
 import styles from "./GetStarted.module.scss";
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/Blog/SEO';

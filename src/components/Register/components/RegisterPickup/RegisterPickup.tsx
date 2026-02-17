@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Users, Clock, MapPin, Trophy, ChevronLeft, ChevronRight, Check, CreditCard, Lock, User, Mail } from 'lucide-react';
+import { Calendar, Users, Clock, MapPin, Trophy, ChevronLeft, ChevronRight, Check, CreditCard, Lock, User, Mail } from '../../../../components/Icons/Icons';
 import styles from './RegisterPickup.module.scss';
 import { api } from '../../../../services/api';
 // Shared hooks for validation and formatting

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Cookie, Eye, Shield, Settings, BarChart3, Bell, ChevronDown } from 'lucide-react';
+import { Cookie, Eye, Shield, Settings, BarChart3, Bell, ChevronDown } from '../../components/Icons/Icons';
 import styles from './CookiePolicy.module.scss';
 
 const CookiesPolicy: React.FC = () => {

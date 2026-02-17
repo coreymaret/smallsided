@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, Shield, Calendar, CreditCard, Camera, Users, AlertCircle, FileText } from 'lucide-react';
+import { ChevronDown, Shield, Calendar, CreditCard, Camera, Users, AlertCircle, FileText } from '../../components/Icons/Icons';
 import styles from './TOS.module.scss';
 
 const TermsOfService: React.FC = () => {

@@ -13,7 +13,7 @@ import {
   Home,
   User,
   Settings
-} from 'lucide-react';
+} from '../../components/Icons/Icons';
 import { getCurrentAdmin, signOut } from '../../lib/supabase';
 import type { Database } from '../../lib/database.types';
 import Logo from '../../assets/logo.svg';

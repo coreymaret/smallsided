@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from '../../components/Icons/Icons';
 import styles from './HomeSlider.module.scss';
 
 interface Slide {

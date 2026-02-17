@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, CalendarDays, Clock, Users, MapPin, ChevronRight, Check, Pointer, CreditCard, Lock } from 'lucide-react';
+import { Calendar, CalendarDays, Clock, Users, MapPin, ChevronRight, Check, Pointer, CreditCard, Lock } from '../../../../components/Icons/Icons';
 import styles from './RegisterFieldRental.module.scss';
 import { api } from '../../../../services/api';
 

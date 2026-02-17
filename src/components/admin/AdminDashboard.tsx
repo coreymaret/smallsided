@@ -3,7 +3,7 @@ import { Calendar as BigCalendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay, isAfter, addHours, isSameDay } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { supabase } from '../../lib/supabase';
-import { Calendar, Trophy, DollarSign, TrendingUp } from 'lucide-react';
+import { Calendar, Trophy, DollarSign, TrendingUp } from '../../components/Icons/Icons';
 import styles from './AdminDashboard.module.scss';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 

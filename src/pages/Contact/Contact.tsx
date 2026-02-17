@@ -1,5 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { MapPin, Phone, Mail, ThumbsUp, Facebook, Instagram, Youtube, Twitter } from 'lucide-react';
+import { MapPin, Phone, Mail, ThumbsUp, Facebook, Instagram, Youtube, Twitter } from '../../components/Icons/Icons';
 import styles from './Contact.module.scss';
 import SEO from '../../components/Blog/SEO';
 import ContactAccordion from '../../components/ContactAccordion/ContactAccordion';

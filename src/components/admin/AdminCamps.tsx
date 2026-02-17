@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Calendar, Zap, User } from 'lucide-react';
+import { Calendar, Zap, User } from '../../components/Icons/Icons';
 import AdminDataTable, { type Column } from './shared/AdminDataTable';
 import { CellWithIcon, StatusBadge } from './shared/TableCells';
 

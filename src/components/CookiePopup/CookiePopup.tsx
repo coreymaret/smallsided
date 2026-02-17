@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';        // React hooks for state and lifecycle
-import { Cookie } from 'lucide-react';              // Cookie icon component
+import { Cookie } from '../../components/Icons/Icons';              // Cookie icon component
 import './CookiePopup.scss';                        // Styles for this popup
 
 // Main component that displays a cookie consent popup

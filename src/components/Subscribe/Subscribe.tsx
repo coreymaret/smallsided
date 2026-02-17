@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 // React state + lifecycle hooks
 
-import { BellRing, AlertCircle, Smile } from "lucide-react";
+import { BellRing, AlertCircle, Smile } from '../../components/Icons/Icons';
 // Icons used in the component UI
 
 import styles from "./Subscribe.module.scss";

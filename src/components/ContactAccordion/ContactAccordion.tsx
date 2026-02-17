@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown } from '../../components/Icons/Icons';
 import styles from './ContactAccordion.module.scss';
 
 interface AccordionItemProps {

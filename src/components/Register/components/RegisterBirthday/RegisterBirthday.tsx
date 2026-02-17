@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, Users, ChevronRight, Check, CreditCard, Lock, Cake, Gift, PartyPopper } from 'lucide-react';
+import { Calendar, Clock, Users, ChevronRight, Check, CreditCard, Lock, Cake, Gift, PartyPopper } from '../../../../components/Icons/Icons';
 import styles from './RegisterBirthday.module.scss';
 import { api } from '../../../../services/api';
 

@@ -1,5 +1,5 @@
 import styles from "./FeaturesSection.module.scss";
-import { Trophy, Target, Users, Lightbulb, TrendingUp, Award, ArrowDownRight } from 'lucide-react';
+import { Trophy, Target, Users, Lightbulb, TrendingUp, Award, ArrowDownRight } from '../../components/Icons/Icons';
 
 const FeaturesSection = () => {
   return (

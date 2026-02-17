@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, ChevronDown,ChartNoAxesCombined, Smile } from "lucide-react";
+import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, ChevronDown,ChartNoAxesCombined, Smile } from '../../components/Icons/Icons';
 import styles from "./Header.module.scss";
 import Logo from "../../assets/logo.svg";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";

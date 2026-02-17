@@ -14,7 +14,6 @@ import Register from './components/Register/Register';
 // Each page will be loaded only when needed, reducing initial bundle size
 const Home = lazy(() => import('./pages/Home/Home'));
 const About = lazy(() => import('./pages/About/About'));
-const Work = lazy(() => import('./pages/Work/Work'));
 const Contact = lazy(() => import('./pages/Contact/Contact'));
 const Services = lazy(() => import('./pages/Services/Services'));
 const FieldRental = lazy(() => import('./pages/FieldRental/FieldRental'));
@@ -55,7 +54,6 @@ const App = () => {
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
-              <Route path="/work" element={<Work />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/services" element={<Services />} />
               

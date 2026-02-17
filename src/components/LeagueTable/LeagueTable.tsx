@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, X, ChevronDown } from 'lucide-react';
+import { Calendar, X, ChevronDown } from '../../components/Icons/Icons';
 import styles from './LeagueTable.module.scss';
 
 // Generate mock teams for each group

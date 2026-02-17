@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, Shield, Eye, Lock, Users, FileText, Globe, Mail, AlertCircle } from 'lucide-react';
+import { ChevronDown, Shield, Eye, Lock, Users, FileText, Globe, Mail, AlertCircle } from '../../components/Icons/Icons';
 import styles from './PrivacyPolicy.module.scss';
 
 const PrivacyPolicy: React.FC = () => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Users, Clock, MapPin, Trophy, Mail, Phone, User, CreditCard, Lock, Heart, Check } from 'lucide-react';
+import { Calendar, Users, Clock, MapPin, Trophy, Mail, Phone, User, CreditCard, Lock, Heart, Check } from '../../../../components/Icons/Icons';
 import styles from './RegisterCamps.module.scss';
 import { api } from '../../../../services/api';
 

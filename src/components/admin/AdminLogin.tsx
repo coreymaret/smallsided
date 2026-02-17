@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle } from '../../components/Icons/Icons';
 import Logo from '../../assets/logo.svg';
 import styles from './AdminLogin.module.scss';
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Calendar, ChevronRight, Check, Trophy, Mail, User, Shield, CreditCard, Lock, Target } from 'lucide-react';
+import { Users, Calendar, ChevronRight, Check, Trophy, Mail, User, Shield, CreditCard, Lock, Target } from '../../../../components/Icons/Icons';
 import styles from './RegisterTraining.module.scss';
 import { api } from '../../../../services/api';
 

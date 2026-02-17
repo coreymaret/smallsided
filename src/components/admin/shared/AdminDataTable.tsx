@@ -1,5 +1,5 @@
 import { useState, useEffect, ReactNode } from 'react';
-import { Search, Download, ArrowUpDown } from 'lucide-react';
+import { Search, Download, ArrowUpDown } from '../../../components/Icons/Icons';
 import styles from '../AdminTable.module.scss';
 
 export interface Column<T> {
