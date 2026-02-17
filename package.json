@@ -22,7 +22,6 @@
     "@stripe/react-stripe-js": "^5.4.1",
     "@stripe/stripe-js": "^8.6.4",
     "@supabase/supabase-js": "^2.91.1",
-    "@tanstack/react-table": "^8.21.3",
     "buffer": "^6.0.3",
     "date-fns": "^4.1.0",
     "fs": "^0.0.1-security",
