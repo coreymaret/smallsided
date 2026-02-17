@@ -10,7 +10,7 @@ import viteCompression from 'vite-plugin-compression';
 // Bundle analyzer to visualize bundle composition
 import { visualizer } from 'rollup-plugin-visualizer';
 // HTML Meta Prerendering
-import vitePrerender from 'vite-plugin-prerender'
+import { htmlPrerender } from 'vite-plugin-html-prerender'
 import path from 'path'
 
 export default defineConfig({
@@ -56,7 +56,7 @@ export default defineConfig({
             brotliSize: true,
             filename: 'dist/stats.html',
         }),
-        vitePrerender({
+        htmlPrerender({
             staticDir: path.join(__dirname, 'dist'),
             routes: [
                 '/',
