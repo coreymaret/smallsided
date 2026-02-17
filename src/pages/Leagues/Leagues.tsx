@@ -1,6 +1,6 @@
 import styles from "./Leagues.module.scss";
 import { getSEOConfig } from '../../config/seo';
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 import LeagueTable from '../../components/LeagueTable/LeagueTable';
 import Register from '../../components/Register/Register';
 import { leagueConfig } from '../../components/Register/configs';

@@ -1,6 +1,6 @@
 import styles from "./FieldRental.module.scss";
 import { getSEOConfig } from '../../config/seo';
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 import RegisterFieldRental from '../../components/Register/components/RegisterFieldRental/RegisterFieldRental';
 
 const FieldRental = () => {

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Calendar, Users, Zap, Cake, Trophy, Target, ArrowDownRight } from '../../components/Icons/Icons';
 import styles from "./Services.module.scss";
 import { getSEOConfig } from '../../config/seo';
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 
 const Services = () => {
   const seo = getSEOConfig('services');

@@ -10,7 +10,7 @@ import remarkGfm from 'remark-gfm';
 import { Twitter, Linkedin, Facebook, Link as LinkIcon, Check, ArrowLeft } from '../../components/Icons/Icons';
 import { getPostBySlug, getAllPosts } from '../../utils/blogUtils';
 import type { BlogPost as BlogPostType } from '../../types/blog';
-import SEO from '../Blog/SEO';
+import SEO from '../SEO/SEO';
 import './BlogPost.scss';
 import { formatDate } from '../../utils/blogUtils';
 

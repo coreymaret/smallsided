@@ -1,6 +1,6 @@
 import styles from "./Camps.module.scss";
 import { getSEOConfig } from '../../config/seo';
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 import Register from '../../components/Register/Register';
 import { campsConfig } from '../../components/Register/configs';
 

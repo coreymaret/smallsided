@@ -1,5 +1,5 @@
 import { getSEOConfig } from '../../config/seo';
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 import Register from '../../components/Register/Register';
 import { trainingConfig } from '../../components/Register/configs';
 

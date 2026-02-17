@@ -1,7 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { MapPin, Phone, Mail, ThumbsUp, Facebook, Instagram, Youtube, Twitter } from '../../components/Icons/Icons';
 import styles from './Contact.module.scss';
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 import ContactAccordion from '../../components/ContactAccordion/ContactAccordion';
 
 // Lazy load the map component - only loads when user scrolls to it
@@ -48,6 +48,7 @@ const Contact: React.FC = () => {
       <SEO
         title="Contact | Small Sided"
         description="Get in touch with Small Sided. We typically respond within 24 hours during business days."
+        keywords="Contact"
         type="website"
         url="/contact"
       />

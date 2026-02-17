@@ -1,6 +1,6 @@
 import styles from "./Pickup.module.scss";
 import { getSEOConfig } from '../../config/seo';
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 import RegisterPickup from '../../components/Register/components/RegisterPickup/RegisterPickup';
 
 const Pickup = () => {

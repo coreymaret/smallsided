@@ -1,5 +1,5 @@
 import styles from "./Home.module.scss";
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 import { getSEOConfig } from '../../config/seo';
 import ReviewSection from '../../components/Reviews/ReviewSection';
 import HomeSlider from '../../components/HomeSlider/HomeSlider';

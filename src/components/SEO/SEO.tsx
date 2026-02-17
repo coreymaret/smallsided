@@ -1,4 +1,4 @@
-// src/components/Blog/SEO.tsx
+// src/components/SEO/SEO.tsx
 
 import { Helmet } from 'react-helmet-async';
 
@@ -55,7 +55,7 @@ const SEO: React.FC<SEOProps> = ({
   schema
 }) => {
   const siteUrl = 'https://www.smallsided.com';
-  const fullUrl = url ? `${siteUrl}${url}` : window.location.href;
+  const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
   const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
   const canonicalUrl = canonical || fullUrl;
 

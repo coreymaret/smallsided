@@ -1,6 +1,6 @@
 import styles from "./BirthdayParties.module.scss";
 import { getSEOConfig } from '../../config/seo';
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 import Register from '../../components/Register/Register';
 import { birthdayConfig } from '../../components/Register/configs';
 

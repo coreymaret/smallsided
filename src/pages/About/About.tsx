@@ -1,6 +1,6 @@
 import styles from "./About.module.scss";
 import { getSEOConfig } from '../../config/seo';
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 import FeaturesSection from '../../components/FeaturesSection/FeaturesSection';
 
 const About = () => {

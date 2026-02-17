@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import BlogList from '../../components/Blog/BlogList';
-import SEO from '../../components/Blog/SEO';
+import SEO from '../../components/SEO/SEO';
 import { getAllPosts } from '../../utils/blogUtils';
 import type { BlogPostMetadata } from '../../types/blog';
 import './Blog.scss';
