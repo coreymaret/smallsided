@@ -1,0 +1,32 @@
+// src/styles/_variables.scss
+
+// ─── Typography ───
+// Inter loaded via @fontsource/inter (bundled, not Google Fonts)
+$font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+
+// ─── Brand Colors ───
+$color-dark:        #15141a;
+$color-green:       #98ED66;
+$color-green-light: #b4ff80;
+$color-bg:          #f8f9fa;
+$color-white:       #ffffff;
+$color-text:        #1a1a1a;
+$color-text-muted:  #6b7280;
+
+// ─── Breakpoints ───
+$bp-mobile:  768px;
+$bp-tablet:  1024px;
+$bp-desktop: 1400px;
+
+// ─── Layout ───
+$container-max-width: 1400px;
+
+// ─── Transitions ───
+$transition-base: 0.3s ease;
+$transition-fast: 0.2s ease;
+
+// ─── Border Radius ───
+$radius-sm:   0.5rem;
+$radius-md:   12px;
+$radius-lg:   16px;
+$radius-pill:  9999px;

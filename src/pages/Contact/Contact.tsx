@@ -1,23 +1,52 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { MapPin, Phone, Mail, ThumbsUp, Facebook, Instagram, Youtube, Twitter } from '../../components/Icons/Icons';
+// src/pages/Contact/Contact.tsx
+
+// Styles
 import styles from './Contact.module.scss';
+
+// React
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+
+// SEO
 import SEO from '../../components/SEO/SEO';
+import { getSEOConfig } from '../../config/seo';
+
+// Components
 import ContactAccordion from '../../components/ContactAccordion/ContactAccordion';
 
-// Lazy load the map component - only loads when user scrolls to it
+// Lazy-loaded Components
 const ContactMap = lazy(() => import('./ContactMap'));
 
+// Icons
+import {
+  MapPin,
+  Phone,
+  Mail,
+  ThumbsUp,
+  Facebook,
+  Instagram,
+  Youtube,
+  Twitter,
+} from '../../components/Icons/Icons';
+
+/**
+ * Contact page with a two-column layout:
+ * left column houses the contact form,
+ * right column displays contact info & socials.
+ * Includes a lazy-loaded Google Map and FAQ accordion.
+ */
 const Contact: React.FC = () => {
+  const seo = getSEOConfig('contact');
+
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    message: ''
+    message: '',
   });
 
-  // Lazy load reCAPTCHA script only when needed
+  /** Load reCAPTCHA script on mount, clean up on unmount */
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://www.google.com/recaptcha/api.js';
@@ -26,46 +55,49 @@ const Contact: React.FC = () => {
     document.head.appendChild(script);
 
     return () => {
-      // Cleanup: remove script when component unmounts
       if (document.head.contains(script)) {
         document.head.removeChild(script);
       }
     };
   }, []);
 
+  /** Form field event handlers */
   const handleFocus = (field: string) => setFocusedField(field);
   const handleBlur = (field: string) => {
     if (!formData[field as keyof typeof formData]) setFocusedField(null);
   };
-  const handleChange = (field: string, value: string) => setFormData(prev => ({ ...prev, [field]: value }));
-  const handleSubmit = (e: React.FormEvent) => { 
-    e.preventDefault(); 
-    console.log('Form submitted:', formData); 
+  const handleChange = (field: string, value: string) =>
+    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
   };
 
   return (
     <>
-      <SEO
-        title="Contact | Small Sided"
-        description="Get in touch with Small Sided. We typically respond within 24 hours during business days."
-        keywords="Contact"
-        type="website"
-        url="/contact"
-      />
+      {/* SEO meta tags, OG, Twitter, JSON-LD */}
+      <SEO {...seo} />
+
+      {/* Two-column contact layout */}
       <div className={styles.contactContainer}>
-        {/* LEFT COLUMN */}
+
+        {/* LEFT COLUMN — Contact form */}
         <div className={styles.contactLeft}>
           <div className={styles.leftContent}>
             <div className={styles.decorativeLine}></div>
             <h1>Get in touch.</h1>
             <p className={styles.subtitle}>
-              We typically respond within 24 hours during business days. Whether you have a question, feedback, or just want to say hello, we're here to help.
+              We typically respond within 24 hours during business days. Whether you have a question,
+              feedback, or just want to say hello, we're here to help.
             </p>
 
             <form className={styles.contactForm} onSubmit={handleSubmit}>
+              {/* Name row */}
               <div className={styles.formRow}>
                 <div className={styles.inputGroup}>
-                  <label className={`${styles.floatingLabel} ${(focusedField === 'firstName' || formData.firstName) ? styles.active : ''}`}>First Name</label>
+                  <label className={`${styles.floatingLabel} ${(focusedField === 'firstName' || formData.firstName) ? styles.active : ''}`}>
+                    First Name
+                  </label>
                   <input
                     type="text"
                     required
@@ -79,7 +111,9 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div className={styles.inputGroup}>
-                  <label className={`${styles.floatingLabel} ${(focusedField === 'lastName' || formData.lastName) ? styles.active : ''}`}>Last Name</label>
+                  <label className={`${styles.floatingLabel} ${(focusedField === 'lastName' || formData.lastName) ? styles.active : ''}`}>
+                    Last Name
+                  </label>
                   <input
                     type="text"
                     required
@@ -93,8 +127,11 @@ const Contact: React.FC = () => {
                 </div>
               </div>
 
+              {/* Email */}
               <div className={styles.inputGroup}>
-                <label className={`${styles.floatingLabel} ${(focusedField === 'email' || formData.email) ? styles.active : ''}`}>Email</label>
+                <label className={`${styles.floatingLabel} ${(focusedField === 'email' || formData.email) ? styles.active : ''}`}>
+                  Email
+                </label>
                 <input
                   type="email"
                   required
@@ -107,8 +144,11 @@ const Contact: React.FC = () => {
                 />
               </div>
 
+              {/* Phone */}
               <div className={styles.inputGroup}>
-                <label className={`${styles.floatingLabel} ${(focusedField === 'phone' || formData.phone) ? styles.active : ''}`}>Phone</label>
+                <label className={`${styles.floatingLabel} ${(focusedField === 'phone' || formData.phone) ? styles.active : ''}`}>
+                  Phone
+                </label>
                 <input
                   type="tel"
                   required
@@ -121,8 +161,11 @@ const Contact: React.FC = () => {
                 />
               </div>
 
+              {/* Message */}
               <div className={styles.inputGroup}>
-                <label className={`${styles.floatingLabel} ${(focusedField === 'message' || formData.message) ? styles.active : ''}`}>Message</label>
+                <label className={`${styles.floatingLabel} ${(focusedField === 'message' || formData.message) ? styles.active : ''}`}>
+                  Message
+                </label>
                 <textarea
                   required
                   placeholder="Message"
@@ -140,7 +183,7 @@ const Contact: React.FC = () => {
           </div>
         </div>
 
-        {/* RIGHT COLUMN */}
+        {/* RIGHT COLUMN — Contact info & socials */}
         <div className={styles.contactRight}>
           <div className={styles.contactRow}>
             <MapPin className={styles.contactIcon} size={32} />
@@ -181,7 +224,7 @@ const Contact: React.FC = () => {
         </div>
       </div>
 
-      {/* GOOGLE MAP BELOW FLEXBOX - Now lazy loaded! */}
+      {/* Google Map — lazy loaded */}
       <div className={styles.contactMapWrapper}>
         <Suspense fallback={
           <div style={{
@@ -192,7 +235,7 @@ const Contact: React.FC = () => {
             justifyContent: 'center',
             backgroundColor: '#15141a',
             color: '#fff',
-            fontSize: '1rem'
+            fontSize: '1rem',
           }}>
             Loading map...
           </div>
@@ -200,7 +243,8 @@ const Contact: React.FC = () => {
           <ContactMap />
         </Suspense>
       </div>
-      
+
+      {/* FAQ accordion */}
       <ContactAccordion />
     </>
   );

@@ -1,54 +1,67 @@
+// src/pages/Home/Home.tsx
+
+// Styles
 import styles from "./Home.module.scss";
+
+// SEO
 import SEO from '../../components/SEO/SEO';
 import { getSEOConfig } from '../../config/seo';
-import ReviewSection from '../../components/Reviews/ReviewSection';
+
+// Components
 import HomeSlider from '../../components/HomeSlider/HomeSlider';
 import IntroHero from '../../components/IntroHero/IntroHero';
 import StatSection from '../../components/StatSection/StatSection';
 import StatRow from '../../components/StatRow/StatRow';
+import ReviewSection from '../../components/Reviews/ReviewSection';
 
-// Stat row data
+/**
+ * Data-driven stat rows highlighting small-sided soccer benefits.
+ * Each row alternates layout direction via the `reversed` flag.
+ */
 const statRowsData = [
   {
     id: 'row1',
     stat: '500% MORE TOUCHES IN 7V7',
-    description: 'Half your team, double the development. Players get 50% more ball touches in 7v7 vs 11v11. Every touch matters when you\'re building tomorrow\'s stars.',
+    description:
+      'Half your team, double the development. Players get 50% more ball touches in 7v7 vs 11v11. Every touch matters when you\'re building tomorrow\'s stars.',
     imageAlt: 'Youth soccer player dribbling a ball in 7v7 format',
-    reversed: false
+    reversed: false,
   },
   {
+    id: 'row2',
     stat: '66% LESS STANDING AROUND',
-    description: 'The ball is out of play 34% of the time in 11v11, but only 8% in 4v4. That means 66% less time standing around and 66% more time developing skills.',
+    description:
+      'The ball is out of play 34% of the time in 11v11, but only 8% in 4v4. That means 66% less time standing around and 66% more time developing skills.',
     imageAlt: 'Youth soccer player running with the ball',
-    reversed: true
+    reversed: true,
   },
-  {
-    stat: '2X MORE SCORING OPPORTUNITIES',
-    description: 'Goals every 2 minutes in 4v4 vs. every 4 minutes in 7v7. Double the chances to practice finishing, double the confidence, double the joy. This is how you fall in love with the game.',
-    imageAlt: 'Youth soccer player shooting at goal',
-    reversed: false
-  },
-  {
-    stat: '3X MORE 1V1 BATTLES',
-    description: 'Want your player to develop confidence? Small-sided games create 3X more one-on-one situations in 4v4 (and 2X more in 7v7). Real game scenarios, real skill development.',
-    imageAlt: 'Youth soccer player in one-on-one battle with defender',
-    reversed: true
-  }
 ];
 
+/*
+ * Home page featuring a hero slider, intro section,
+ * stat highlights, and customer reviews.
+ */
 const Home = () => {
   const seo = getSEOConfig('home');
 
   return (
     <>
+      {/* SEO meta tags, OG, Twitter, JSON-LD */}
       <SEO {...seo} />
+
       <div className={styles.homePage}>
+        {/* Hero carousel */}
         <HomeSlider />
+
+        {/* Mission / intro section */}
         <IntroHero />
+
+        {/* High-level stats overview */}
         <StatSection />
 
+        {/* Detailed stat rows with alternating layouts */}
         {statRowsData.map((row, index) => (
-          <StatRow 
+          <StatRow
             key={index}
             id={row.id}
             stat={row.stat}
@@ -57,7 +70,8 @@ const Home = () => {
             reversed={row.reversed}
           />
         ))}
-        
+
+        {/* Customer reviews */}
         <ReviewSection />
       </div>
     </>

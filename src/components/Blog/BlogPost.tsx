@@ -1,19 +1,42 @@
-// src/components/blog/BlogPost.tsx
+// src/components/Blog/BlogPost.tsx
 
+// Styles
+import styles from './BlogPost.module.scss';
+
+// React
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+
+// SEO
+import SEO from '../SEO/SEO';
+
+// Components
 import MarkdownRenderer from '../MarkdownRenderer/MarkdownRenderer';
+
+// Markdown Plugins
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
-import { Twitter, Linkedin, Facebook, Link as LinkIcon, Check, ArrowLeft } from '../../components/Icons/Icons';
-import { getPostBySlug, getAllPosts } from '../../utils/blogUtils';
-import type { BlogPost as BlogPostType } from '../../types/blog';
-import SEO from '../SEO/SEO';
-import './BlogPost.scss';
-import { formatDate } from '../../utils/blogUtils';
 
+// Icons
+import {
+  Twitter,
+  Linkedin,
+  Facebook,
+  Link as LinkIcon,
+  Check,
+  ArrowLeft,
+} from '../../components/Icons/Icons';
+
+// Utilities & Types
+import { getPostBySlug, getAllPosts, formatDate } from '../../utils/blogUtils';
+import type { BlogPost as BlogPostType } from '../../types/blog';
+
+/**
+ * Individual blog post page with reading progress bar,
+ * floating share buttons, author box, and related posts.
+ */
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<BlogPostType | null>(null);
@@ -23,6 +46,7 @@ const BlogPost: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  /** Load post and find related posts by matching tags */
   useEffect(() => {
     const loadPost = async () => {
       if (!slug) {
@@ -41,7 +65,7 @@ const BlogPost: React.FC = () => {
             .filter(p => p.slug !== slug)
             .map(p => ({
               post: p,
-              matchingTags: p.tags.filter(tag => postData.tags.includes(tag)).length
+              matchingTags: p.tags.filter(tag => postData.tags.includes(tag)).length,
             }))
             .filter(p => p.matchingTags > 0)
             .sort((a, b) => b.matchingTags - a.matchingTags)
@@ -63,6 +87,7 @@ const BlogPost: React.FC = () => {
     loadPost();
   }, [slug]);
 
+  /** Track scroll progress for reading progress bar */
   useEffect(() => {
     const handleScroll = () => {
       const windowHeight = window.innerHeight;
@@ -80,11 +105,12 @@ const BlogPost: React.FC = () => {
   const shareUrl = window.location.href;
   const shareTitle = post?.title || '';
 
+  /** Open share dialog for the given platform */
   const handleShare = (platform: string) => {
     const urls: Record<string, string> = {
       twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
     };
 
     if (urls[platform]) {
@@ -92,27 +118,30 @@ const BlogPost: React.FC = () => {
     }
   };
 
+  /** Copy current URL to clipboard */
   const handleCopyLink = () => {
     navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
+  /* Loading state */
   if (loading) {
     return (
-      <div className="blog-post-loading">
-        <div className="blog-post-spinner"></div>
+      <div className={styles.loading}>
+        <div className={styles.spinner}></div>
         <p>Loading post...</p>
       </div>
     );
   }
 
+  /* Error state */
   if (error || !post) {
     return (
-      <div className="blog-post-error">
+      <div className={styles.error}>
         <h1>Post Not Found</h1>
         <p>The blog post you're looking for doesn't exist.</p>
-        <Link to="/blog" className="blog-post-back-link">
+        <Link to="/blog" className={styles.backLink}>
           ← Back to Blog
         </Link>
       </div>
@@ -121,8 +150,9 @@ const BlogPost: React.FC = () => {
 
   return (
     <>
+      {/* SEO meta tags */}
       <SEO
-        title={`${post.title} | Your Site Name`}
+        title={`${post.title} | Small Sided`}
         description={post.description}
         type="article"
         url={`/blog/${post.slug}`}
@@ -131,187 +161,178 @@ const BlogPost: React.FC = () => {
         tags={post.tags}
       />
 
-      <div className="reading-progress-bar">
+      {/* Reading progress bar */}
+      <div className={styles.progressBar}>
         <div
-          className="reading-progress-fill"
+          className={styles.progressFill}
           style={{ width: `${scrollProgress}%` }}
         ></div>
       </div>
 
-      <article className="blog-post">
-        <div className="container">
-          <div 
-            className="blog-post-hero-image"
+      <article className={styles.article}>
+        <div className={styles.container}>
+
+          {/* Hero image */}
+          <div
+            className={styles.heroImage}
             style={{
-              backgroundImage: post.heroImage 
+              backgroundImage: post.heroImage
                 ? `url(${post.heroImage})`
                 : 'linear-gradient(135deg, #98ED66 0%, #15141a 100%)',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
+              backgroundRepeat: 'no-repeat',
             }}
-          >
-            {/* Placeholder gradient shown when no heroImage is provided */}
+          ></div>
+
+          {/* Floating share buttons (desktop only) */}
+          <div className={styles.floatingShare}>
+            <button onClick={() => handleShare('twitter')} aria-label="Share on Twitter">
+              <Twitter size={20} />
+            </button>
+            <button onClick={() => handleShare('linkedin')} aria-label="Share on LinkedIn">
+              <Linkedin size={20} />
+            </button>
+            <button onClick={() => handleShare('facebook')} aria-label="Share on Facebook">
+              <Facebook size={20} />
+            </button>
+            <button onClick={handleCopyLink} aria-label="Copy link">
+              {copied ? <Check size={20} /> : <LinkIcon size={20} />}
+            </button>
           </div>
 
-        <div className="floating-share">
-          <button 
-            className="share-button share-twitter"
-            onClick={() => handleShare('twitter')}
-            aria-label="Share on Twitter"
-          >
-            <Twitter size={20} />
-          </button>
-          <button 
-            className="share-button share-linkedin"
-            onClick={() => handleShare('linkedin')}
-            aria-label="Share on LinkedIn"
-          >
-            <Linkedin size={20} />
-          </button>
-          <button 
-            className="share-button share-facebook"
-            onClick={() => handleShare('facebook')}
-            aria-label="Share on Facebook"
-          >
-            <Facebook size={20} />
-          </button>
-          <button 
-            className="share-button share-link"
-            onClick={handleCopyLink}
-            aria-label="Copy link"
-          >
-            {copied ? <Check size={20} /> : <LinkIcon size={20} />}
-          </button>
-        </div>
+          {/* Post header */}
+          <header className={styles.header}>
+            <h1 className={styles.title}>{post.title}</h1>
 
-        <header className="blog-post-header">
-          <h1 className="blog-post-title">{post.title}</h1>
-
-          <div className="blog-post-meta">
-            <time dateTime={post.date}>{formatDate(post.date)}</time>
-            <span className="blog-post-separator">•</span>
-            <div className="blog-post-author-wrapper">
-              {post.authorImage ? (
-                <div className="blog-post-author-avatar">
-                  <img 
-                    src={post.authorImage} 
-                    alt={post.author}
-                    width="40"
-                    height="40"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const fallback = e.currentTarget.parentElement?.nextElementSibling;
-                      if (fallback) (fallback as HTMLElement).style.display = 'flex';
-                    }}
-                  />
+            <div className={styles.meta}>
+              <time dateTime={post.date}>{formatDate(post.date)}</time>
+              <span className={styles.separator}>•</span>
+              <div className={styles.authorWrapper}>
+                {post.authorImage ? (
+                  <div className={styles.authorAvatar}>
+                    <img
+                      src={post.authorImage}
+                      alt={post.author}
+                      width="40"
+                      height="40"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const fallback = e.currentTarget.parentElement?.nextElementSibling;
+                        if (fallback) (fallback as HTMLElement).style.display = 'flex';
+                      }}
+                    />
+                  </div>
+                ) : null}
+                <div
+                  className={styles.authorFallback}
+                  style={{ display: post.authorImage ? 'none' : 'flex' }}
+                >
+                  {post.author.charAt(0).toUpperCase()}
                 </div>
-              ) : null}
-              <div 
-                className="blog-post-author-fallback"
-                style={{ display: post.authorImage ? 'none' : 'flex' }}
-              >
-                {post.author.charAt(0).toUpperCase()}
+                <span className={styles.authorName}>{post.author}</span>
               </div>
-              <span className="blog-post-author">{post.author}</span>
             </div>
-          </div>
 
-          {post.tags.length > 0 && (
-            <div className="blog-post-tags">
-              {post.tags.map((tag) => (
-                <span key={tag} className="blog-post-tag">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-        </header>
-
-        <div className="blog-post-content">
-          <MarkdownRenderer
-            content={post.content || ''}
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[
-              rehypeRaw,
-              rehypeSlug,
-              [rehypeAutolinkHeadings, { behavior: 'wrap' }]
-            ]}
-            components={{
-              table: ({ children }) => (
-                <div style={{ overflowX: 'auto', display: 'flex', justifyContent: 'center' }}>
-                  <table>{children}</table>
-                </div>
-              )
-            }}
-          />
-        </div>
-
-        <div className="author-box">
-          <div className="author-avatar">
-            {post.author.charAt(0).toUpperCase()}
-          </div>
-          <div className="author-info">
-            <h3 className="author-name">{post.author}</h3>
-            <p className="author-bio">
-              Passionate writer and developer sharing insights on technology, design, and innovation.
-            </p>
-          </div>
-        </div>
-
-        <div className="share-section">
-          <h3 className="share-title">Share this article</h3>
-          <div className="share-buttons">
-            <button className="share-button-large share-twitter" onClick={() => handleShare('twitter')}>
-              <Twitter size={18} /> Twitter
-            </button>
-            <button className="share-button-large share-linkedin" onClick={() => handleShare('linkedin')}>
-              <Linkedin size={18} /> LinkedIn
-            </button>
-            <button className="share-button-large share-facebook" onClick={() => handleShare('facebook')}>
-              <Facebook size={18} /> Facebook
-            </button>
-            <button className="share-button-large share-link" onClick={handleCopyLink}>
-              {copied ? <Check size={18} /> : <LinkIcon size={18} />} {copied ? 'Copied!' : 'Copy Link'}
-            </button>
-          </div>
-        </div>
-
-        {relatedPosts.length > 0 && (
-          <div className="related-posts">
-            <h2 className="related-posts-title">Related Articles</h2>
-            <div className="related-posts-carousel">
-              <div className="related-posts-track">
-                {relatedPosts.map((relatedPost) => (
-                  <Link
-                    key={relatedPost.slug}
-                    to={`/blog/${relatedPost.slug}`}
-                    className="related-post-card"
-                  >
-                    <div className="related-post-tags">
-                      {relatedPost.tags.slice(0, 2).map((tag) => (
-                        <span key={tag} className="related-post-tag">{tag}</span>
-                      ))}
-                    </div>
-                    <h3 className="related-post-title">{relatedPost.title}</h3>
-                    <p className="related-post-description">{relatedPost.description}</p>
-                    <div className="related-post-meta">
-                      <time>{formatDate(relatedPost.date)}</time>
-                      <span className="related-post-arrow">→</span>
-                    </div>
-                  </Link>
+            {post.tags.length > 0 && (
+              <div className={styles.tags}>
+                {post.tags.map((tag) => (
+                  <span key={tag} className={styles.tag}>{tag}</span>
                 ))}
               </div>
+            )}
+          </header>
+
+          {/* Markdown content */}
+          <div className={styles.content}>
+            <MarkdownRenderer
+              content={post.content || ''}
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[
+                rehypeRaw,
+                rehypeSlug,
+                [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+              ]}
+              components={{
+                table: ({ children }) => (
+                  <div style={{ overflowX: 'auto', display: 'flex', justifyContent: 'center' }}>
+                    <table>{children}</table>
+                  </div>
+                ),
+              }}
+            />
+          </div>
+
+          {/* Author box */}
+          <div className={styles.authorBox}>
+            <div className={styles.authorBoxAvatar}>
+              {post.author.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <h3 className={styles.authorBoxName}>{post.author}</h3>
+              <p className={styles.authorBoxBio}>
+                Passionate writer and developer sharing insights on technology, design, and innovation.
+              </p>
             </div>
           </div>
-        )}
 
-        <footer className="blog-post-footer">
-          <Link to="/blog" className="blog-post-footer-link">
-            <ArrowLeft size={20} />
-            Back to all posts
-          </Link>
-        </footer>
+          {/* Share section */}
+          <div className={styles.shareSection}>
+            <h3 className={styles.shareTitle}>Share this article</h3>
+            <div className={styles.shareButtons}>
+              <button className={styles.shareButtonLarge} onClick={() => handleShare('twitter')}>
+                <Twitter size={18} /> Twitter
+              </button>
+              <button className={styles.shareButtonLarge} onClick={() => handleShare('linkedin')}>
+                <Linkedin size={18} /> LinkedIn
+              </button>
+              <button className={styles.shareButtonLarge} onClick={() => handleShare('facebook')}>
+                <Facebook size={18} /> Facebook
+              </button>
+              <button className={styles.shareButtonLarge} onClick={handleCopyLink}>
+                {copied ? <Check size={18} /> : <LinkIcon size={18} />} {copied ? 'Copied!' : 'Copy Link'}
+              </button>
+            </div>
+          </div>
+
+          {/* Related posts */}
+          {relatedPosts.length > 0 && (
+            <div className={styles.relatedPosts}>
+              <h2 className={styles.relatedPostsTitle}>Related Articles</h2>
+              <div className={styles.relatedCarousel}>
+                <div className={styles.relatedTrack}>
+                  {relatedPosts.map((relatedPost) => (
+                    <Link
+                      key={relatedPost.slug}
+                      to={`/blog/${relatedPost.slug}`}
+                      className={styles.relatedCard}
+                    >
+                      <div className={styles.relatedTags}>
+                        {relatedPost.tags.slice(0, 2).map((tag) => (
+                          <span key={tag} className={styles.relatedTag}>{tag}</span>
+                        ))}
+                      </div>
+                      <h3 className={styles.relatedCardTitle}>{relatedPost.title}</h3>
+                      <p className={styles.relatedCardDescription}>{relatedPost.description}</p>
+                      <div className={styles.relatedCardMeta}>
+                        <time>{formatDate(relatedPost.date)}</time>
+                        <span className={styles.relatedArrow}>→</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Back to blog */}
+          <footer className={styles.footer}>
+            <Link to="/blog" className={styles.footerLink}>
+              <ArrowLeft size={20} />
+              Back to all posts
+            </Link>
+          </footer>
+
         </div>
       </article>
     </>

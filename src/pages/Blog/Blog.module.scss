@@ -1,0 +1,149 @@
+// src/pages/Blog/Blog.module.scss
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+@use "sass:color";
+
+// ─── Page Wrapper ───
+.blogPage {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+}
+
+// ─── Loading State ───
+.loading {
+  text-align: center;
+  padding: 6rem 2rem;
+}
+
+.spinner {
+  @include spinner;
+}
+
+// ─── Header ───
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+  background: $color-dark;
+  padding: 5rem 2rem;
+  border-bottom: 4px solid $color-green;
+  border-radius: 1rem;
+}
+
+.title {
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: $color-white;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  font-size: 1.5rem;
+  color: $color-green;
+  font-weight: 500;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+// ─── Tag Filters ───
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 4rem;
+}
+
+.filter {
+  background: $color-dark;
+  border: 2px solid $color-dark;
+  color: $color-green-light;
+  padding: 0.3rem 0.75rem;
+  border-radius: $radius-pill;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover {
+    background: color.scale($color-dark, $lightness: 8%);
+    border-color: $color-green-light;
+  }
+
+  &.active {
+    background: $color-green;
+    border-color: $color-green;
+    color: $color-dark;
+    box-shadow: 0 4px 12px rgba($color-green-light, 0.3);
+    transform: scale(1.05);
+
+    &:hover {
+      background: $color-green;
+      border-color: $color-green;
+    }
+  }
+}
+
+.filterToggle {
+  background: transparent;
+  border: none;
+  color: rgba($color-dark, 0.45);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color $transition-base;
+
+  &:hover {
+    color: rgba($color-dark, 0.7);
+  }
+}
+
+.filterMore {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba($color-dark, 0.45);
+  padding: 0.3rem 0.4rem;
+  white-space: nowrap;
+}
+
+// ─── Mobile ───
+@media (max-width: $bp-mobile) {
+  .blogPage {
+    padding: 2rem 1rem;
+  }
+
+  .header {
+    padding: 3rem 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    margin-top: -2rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .description {
+    font-size: 1.125rem;
+  }
+
+  .filters {
+    justify-content: flex-start;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 48.99rem) {
+  .header {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+}
