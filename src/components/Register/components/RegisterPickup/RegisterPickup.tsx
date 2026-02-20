@@ -415,7 +415,6 @@ const RegisterPickup: React.FC = () => {
 
   return (
     <div className={styles.pickupReservation}>
-      <div className={styles.pickupContainer}>
       {showSuccessAnimation && confirmedGame && (
         <>
           <div 
@@ -524,443 +523,443 @@ const RegisterPickup: React.FC = () => {
         <p>Join friendly matches at your skill level. Drop in for a game whenever you're free!</p>
       </div>
 
-      <div className={styles.contentCard}>
-      {/* Progress Bar */}
-      <div className={styles.progress}>
-        <div className={styles.progressSteps}>
-          {[1, 2, 3, 4, 5].map((s) => {
-            const isClickable = s <= maxStepReached;
-            const isCompleted = completedSteps.has(s) || step > s;
-            return (
-              <div
-                key={s}
-                onClick={() => isClickable && handleStepClick(s)}
-                className={`${styles.progressStep} ${isClickable ? styles.clickable : ''} ${isCompleted ? styles.completed : ''} ${step === s ? styles.active : ''}`}
-              >
-                <div className={styles.progressCircle}>
-                  {isCompleted ? <Check size={16} /> : s}
-                </div>
-                <span className={styles.progressLabel}>
-                  {s === 1 && 'Select Game'}
-                  {s === 2 && 'Details'}
-                  {s === 3 && 'Your Info'}
-                  {s === 4 && 'Confirm'}
-                  {s === 5 && 'Payment'}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-        <div className={styles.progressBar}>
-          <div className={styles.progressFill} style={{ width: `${(step / 5) * 100}%` }} />
-        </div>
-      </div>
-
-      {/* Step 1: Select Game */}
-      {step === 1 && (
-        <div className={styles.step}>
-          <div className={styles.filtersSection}>
-            <div className={styles.filterGroup}>
-              <label>Skill Level</label>
-              <select value={filterSkillLevel} onChange={(e) => setFilterSkillLevel(e.target.value)}>
-                <option value="all">All Levels</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
-            </div>
-            <div className={styles.filterGroup}>
-              <label>Format</label>
-              <select value={filterFormat} onChange={(e) => setFilterFormat(e.target.value)}>
-                <option value="all">All Formats</option>
-                <option value="5v5">5v5</option>
-                <option value="7v7">7v7</option>
-              </select>
-            </div>
-          </div>
-
-          <div className={styles.weekNavigation}>
-            <button 
-              className={styles.weekNavBtn}
-              onClick={() => setSelectedWeek(selectedWeek - 1)}
-              disabled={selectedWeek === 0}
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <span className={styles.weekRange}>{weekStart} - {weekEnd}</span>
-            <button 
-              className={styles.weekNavBtn}
-              onClick={() => setSelectedWeek(selectedWeek + 1)}
-              disabled={selectedWeek >= 3}
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
-
-          <div className={styles.scheduleGrid}>
-            {weekDates.map((date, index) => {
-              const games = getGamesForDate(date);
-              const isToday = date.toDateString() === new Date().toDateString();
-              
-              return (
-                <div key={index} className={`${styles.dayColumn} ${isToday ? styles.today : ''}`}>
-                  <div className={styles.dayHeader}>
-                    <span className={styles.dayName}>{formatDayName(date)}</span>
-                    <span className={styles.dayDate}>{formatDate(date)}</span>
+      <div className={styles.pickupContainer}>
+        <div className={styles.contentCard}>
+          {/* Progress Bar */}
+          <div className={styles.progress}>
+            <div className={styles.progressSteps}>
+              {[1, 2, 3, 4, 5].map((s) => {
+                const isClickable = s <= maxStepReached;
+                const isCompleted = completedSteps.has(s) || step > s;
+                return (
+                  <div
+                    key={s}
+                    onClick={() => isClickable && handleStepClick(s)}
+                    className={`${styles.progressStep} ${isClickable ? styles.clickable : ''} ${isCompleted ? styles.completed : ''} ${step === s ? styles.active : ''}`}
+                  >
+                    <div className={styles.progressCircle}>
+                      {isCompleted ? <Check size={16} /> : s}
+                    </div>
+                    <span className={styles.progressLabel}>
+                      {s === 1 && 'Select Game'}
+                      {s === 2 && 'Details'}
+                      {s === 3 && 'Your Info'}
+                      {s === 4 && 'Confirm'}
+                      {s === 5 && 'Payment'}
+                    </span>
                   </div>
-                  <div className={styles.gamesList}>
-                    {games.length === 0 ? (
-                      <div className={styles.noGames}>No games scheduled</div>
-                    ) : (
-                      games.map(game => (
-                        <div 
-                          key={game.id} 
-                          className={`${styles.gameCard} ${selectedGame?.id === game.id ? styles.selected : ''}`}
-                          onClick={() => handleGameSelect(game)}
-                        >
-                          <div className={styles.gameInfo}>
-                            <Clock size={16} />
-                            {game.time}
-                          </div>
-                          <div className={styles.gameInfo}>
-                            <Trophy size={16} />
-                            {game.format}
-                          </div>
-                          <div className={styles.gameInfo}>
-                            <MapPin size={16} />
-                            {game.location}
-                          </div>
-                          <div className={styles.gameSkill}>{game.skillLevel}</div>
-                          <div className={styles.gameInfo}>
-                            <Users size={16} />
-                            <span className={game.spotsAvailable <= 3 ? styles.spotsLow : ''}>
-                              {game.spotsAvailable}/{game.spotsTotal} spots
-                            </span>
-                          </div>
-                          <div className={styles.gamePrice}>${game.pricePerPlayer}/player</div>
-                        </div>
-                      ))
+                );
+              })}
+            </div>
+            <div className={styles.progressBar}>
+              <div className={styles.progressFill} style={{ width: `${(step / 5) * 100}%` }} />
+            </div>
+          </div>
+
+          {/* Step 1: Select Game */}
+          {step === 1 && (
+            <div className={styles.step}>
+              <div className={styles.filtersSection}>
+                <div className={styles.filterGroup}>
+                  <label>Skill Level</label>
+                  <select value={filterSkillLevel} onChange={(e) => setFilterSkillLevel(e.target.value)}>
+                    <option value="all">All Levels</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                  </select>
+                </div>
+                <div className={styles.filterGroup}>
+                  <label>Format</label>
+                  <select value={filterFormat} onChange={(e) => setFilterFormat(e.target.value)}>
+                    <option value="all">All Formats</option>
+                    <option value="5v5">5v5</option>
+                    <option value="7v7">7v7</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className={styles.weekNavigation}>
+                <button 
+                  className={styles.weekNavBtn}
+                  onClick={() => setSelectedWeek(selectedWeek - 1)}
+                  disabled={selectedWeek === 0}
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <span className={styles.weekRange}>{weekStart} - {weekEnd}</span>
+                <button 
+                  className={styles.weekNavBtn}
+                  onClick={() => setSelectedWeek(selectedWeek + 1)}
+                  disabled={selectedWeek >= 3}
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+
+              <div className={styles.scheduleGrid}>
+                {weekDates.map((date, index) => {
+                  const games = getGamesForDate(date);
+                  const isToday = date.toDateString() === new Date().toDateString();
+                  
+                  return (
+                    <div key={index} className={`${styles.dayColumn} ${isToday ? styles.today : ''}`}>
+                      <div className={styles.dayHeader}>
+                        <span className={styles.dayName}>{formatDayName(date)}</span>
+                        <span className={styles.dayDate}>{formatDate(date)}</span>
+                      </div>
+                      <div className={styles.gamesList}>
+                        {games.length === 0 ? (
+                          <div className={styles.noGames}>No games scheduled</div>
+                        ) : (
+                          games.map(game => (
+                            <div 
+                              key={game.id} 
+                              className={`${styles.gameCard} ${selectedGame?.id === game.id ? styles.selected : ''}`}
+                              onClick={() => handleGameSelect(game)}
+                            >
+                              <div className={styles.gameInfo}>
+                                <Clock size={16} />
+                                {game.time}
+                              </div>
+                              <div className={styles.gameInfo}>
+                                <Trophy size={16} />
+                                {game.format}
+                              </div>
+                              <div className={styles.gameInfo}>
+                                <MapPin size={16} />
+                                {game.location}
+                              </div>
+                              <div className={styles.gameSkill}>{game.skillLevel}</div>
+                              <div className={styles.gameInfo}>
+                                <Users size={16} />
+                                <span className={game.spotsAvailable <= 3 ? styles.spotsLow : ''}>
+                                  {game.spotsAvailable}/{game.spotsTotal} spots
+                                </span>
+                              </div>
+                              <div className={styles.gamePrice}>${game.pricePerPlayer}/player</div>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Step 2: Game Details */}
+          {step === 2 && selectedGame && (
+            <div className={styles.step}>
+              <h2 className={styles.title}>Game Details</h2>
+              
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>
+                  <div className={styles.iconCircle}>
+                    <Trophy size={20} />
+                  </div>
+                  Game Information
+                </h3>
+                
+                <div className={styles.gameDetails}>
+                  <div className={styles.detailRow}>
+                    <Calendar size={20} />
+                    <span>{new Date(selectedGame.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</span>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <Clock size={20} />
+                    <span>{selectedGame.time}</span>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <MapPin size={20} />
+                    <span>{selectedGame.location}</span>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <Trophy size={20} />
+                    <span>{selectedGame.format} - {selectedGame.skillLevel}</span>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <Users size={20} />
+                    <span>{selectedGame.spotsAvailable} spots available</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>
+                  <div className={styles.iconCircle}>
+                    <Users size={20} />
+                  </div>
+                  Select Spots
+                </h3>
+                
+                <div className={styles.formGroup}>
+                  <select
+                    value={formData.spots}
+                    onChange={(e) => setFormData({ ...formData, spots: Number(e.target.value) })}
+                    className={styles.input}
+                  >
+                    {Array.from({ length: Math.min(selectedGame.spotsAvailable, 4) }, (_, i) => i + 1).map(num => (
+                      <option key={num} value={num}>{num} spot{num > 1 ? 's' : ''}</option>
+                    ))}
+                  </select>
+                  <label className={`${styles.floatingLabel} ${styles.active}`}>
+                    Number of Spots
+                  </label>
+                </div>
+
+                <div className={styles.priceHighlight}>
+                  ${selectedGame.pricePerPlayer * formData.spots}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Your Info */}
+          {step === 3 && (
+            <div className={styles.step}>
+              <h2 className={styles.title}>Your Information</h2>
+              
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>
+                  <div className={styles.iconCircle}>
+                    <User size={20} />
+                  </div>
+                  Contact Details
+                </h3>
+                
+                <div className={styles.form}>
+                  <div className={styles.formGroup}>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: e.target.value });
+                        if (errors.name) {
+                          setErrors({ ...errors, name: undefined });
+                        }
+                      }}
+                      placeholder="Full Name"
+                      className={`${styles.input} ${errors.name ? styles.error : ''}`}
+                    />
+                    <label className={`${styles.floatingLabel} ${formData.name ? styles.active : ''}`}>
+                      Full Name *
+                    </label>
+                    {errors.name && (
+                      <span className={styles.errorMessage}>{errors.name}</span>
+                    )}
+                  </div>
+                  <div className={styles.formGroup}>
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        if (errors.email) {
+                          setErrors({ ...errors, email: undefined });
+                        }
+                      }}
+                      placeholder="Email Address"
+                      className={`${styles.input} ${errors.email ? styles.error : ''}`}
+                    />
+                    <label className={`${styles.floatingLabel} ${formData.email ? styles.active : ''}`}>
+                      Email Address *
+                    </label>
+                    {errors.email && (
+                      <span className={styles.errorMessage}>{errors.email}</span>
+                    )}
+                  </div>
+                  <div className={styles.formGroup}>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handlePhoneChange}
+                      placeholder="Phone Number"
+                      className={`${styles.input} ${errors.phone ? styles.error : ''}`}
+                    />
+                    <label className={`${styles.floatingLabel} ${formData.phone ? styles.active : ''}`}>
+                      Phone Number *
+                    </label>
+                    {errors.phone && (
+                      <span className={styles.errorMessage}>{errors.phone}</span>
                     )}
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Step 2: Game Details */}
-      {step === 2 && selectedGame && (
-        <div className={styles.step}>
-          <h2 className={styles.title}>Game Details</h2>
-          
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>
-              <div className={styles.iconCircle}>
-                <Trophy size={20} />
-              </div>
-              Game Information
-            </h3>
-            
-            <div className={styles.gameDetails}>
-              <div className={styles.detailRow}>
-                <Calendar size={20} />
-                <span>{new Date(selectedGame.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</span>
-              </div>
-              <div className={styles.detailRow}>
-                <Clock size={20} />
-                <span>{selectedGame.time}</span>
-              </div>
-              <div className={styles.detailRow}>
-                <MapPin size={20} />
-                <span>{selectedGame.location}</span>
-              </div>
-              <div className={styles.detailRow}>
-                <Trophy size={20} />
-                <span>{selectedGame.format} - {selectedGame.skillLevel}</span>
-              </div>
-              <div className={styles.detailRow}>
-                <Users size={20} />
-                <span>{selectedGame.spotsAvailable} spots available</span>
               </div>
             </div>
-          </div>
-          
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>
-              <div className={styles.iconCircle}>
-                <Users size={20} />
+          )}
+
+          {/* Step 4: Confirm */}
+          {step === 4 && selectedGame && (
+            <div className={styles.step}>
+              <h2 className={styles.title}>Confirm Your Booking</h2>
+              <div className={styles.bookingDetailsWrapper}>
+                <div className={styles.bookingDetails}>
+                  <div className={styles.detailRow}>
+                    <Calendar size={20} />
+                    <span>{new Date(selectedGame.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</span>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <Clock size={20} />
+                    <span>{selectedGame.time}</span>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <MapPin size={20} />
+                    <span>{selectedGame.location}</span>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <Trophy size={20} />
+                    <span>{selectedGame.format} - {selectedGame.skillLevel}</span>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <User size={20} />
+                    <span>{formData.name}</span>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <Mail size={20} />
+                    <span>{formData.email}</span>
+                  </div>
+                </div>
+                <div className={styles.bookingSummary}>
+                  <span>Total:</span>
+                  <span className={styles.totalPrice}>${selectedGame.pricePerPlayer * formData.spots}</span>
+                </div>
               </div>
-              Select Spots
-            </h3>
+            </div>
+          )}
+
+          {/* Step 5: Payment */}
+          {step === 5 && selectedGame && (
+            <div className={styles.step}>
+              <h2 className={styles.title}>Payment Information</h2>
+              
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>
+                  <div className={styles.iconCircle}>
+                    <CreditCard size={20} />
+                  </div>
+                  Card Details
+                </h3>
+                
+                <div className={styles.form}>
+                  <div className={styles.formGroup}>
+                    <input
+                      type="text"
+                      name="cardNumber"
+                      value={formData.cardNumber}
+                      onChange={handleCardNumberChange}
+                      placeholder="Card Number"
+                      maxLength={19}
+                      className={`${styles.input} ${errors.cardNumber ? styles.error : ''}`}
+                    />
+                    <label className={`${styles.floatingLabel} ${formData.cardNumber ? styles.active : ''}`}>
+                      Card Number *
+                    </label>
+                    {errors.cardNumber && (
+                      <span className={styles.errorMessage}>{errors.cardNumber}</span>
+                    )}
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div className={styles.formGroup}>
+                      <input
+                        type="text"
+                        name="cardExpiry"
+                        value={formData.cardExpiry}
+                        onChange={handleCardExpiryChange}
+                        placeholder="Expiry Date"
+                        maxLength={5}
+                        className={`${styles.input} ${errors.cardExpiry ? styles.error : ''}`}
+                      />
+                      <label className={`${styles.floatingLabel} ${formData.cardExpiry ? styles.active : ''}`}>
+                        Expiry (MM/YY) *
+                      </label>
+                      {errors.cardExpiry && (
+                        <span className={styles.errorMessage}>{errors.cardExpiry}</span>
+                      )}
+                    </div>
+
+                    <div className={styles.formGroup}>
+                      <input
+                        type="text"
+                        name="cardCVV"
+                        value={formData.cardCVV}
+                        onChange={handleInputChange}
+                        placeholder="CVV"
+                        maxLength={3}
+                        className={`${styles.input} ${errors.cardCVV ? styles.error : ''}`}
+                      />
+                      <label className={`${styles.floatingLabel} ${formData.cardCVV ? styles.active : ''}`}>
+                        CVV *
+                      </label>
+                      {errors.cardCVV && (
+                        <span className={styles.errorMessage}>{errors.cardCVV}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <input
+                      type="text"
+                      name="billingZip"
+                      value={formData.billingZip}
+                      onChange={handleInputChange}
+                      placeholder="Billing ZIP Code"
+                      maxLength={10}
+                      className={`${styles.input} ${errors.billingZip ? styles.error : ''}`}
+                    />
+                    <label className={`${styles.floatingLabel} ${formData.billingZip ? styles.active : ''}`}>
+                      Billing ZIP Code *
+                    </label>
+                    {errors.billingZip && (
+                      <span className={styles.errorMessage}>{errors.billingZip}</span>
+                    )}
+                  </div>
+
+                  <div className={styles.bookingSummary}>
+                    <span>Total Amount:</span>
+                    <span className={styles.totalPrice}>${selectedGame.pricePerPlayer * formData.spots}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation Buttons */}
+          <div className={styles.actions}>
+            {step > 1 && (
+              <button className={`${styles.button} ${styles.buttonSecondary}`} onClick={handleBack}>
+                Back
+              </button>
+            )}
             
-            <div className={styles.formGroup}>
-              <select
-                value={formData.spots}
-                onChange={(e) => setFormData({ ...formData, spots: Number(e.target.value) })}
-                className={styles.input}
+            {step < 5 ? (
+              <button
+                className={`${styles.button} ${styles.buttonPrimary}`}
+                onClick={handleNext}
+                disabled={!canProceed()}
               >
-                {Array.from({ length: Math.min(selectedGame.spotsAvailable, 4) }, (_, i) => i + 1).map(num => (
-                  <option key={num} value={num}>{num} spot{num > 1 ? 's' : ''}</option>
-                ))}
-              </select>
-              <label className={`${styles.floatingLabel} ${styles.active}`}>
-                Number of Spots
-              </label>
-            </div>
-
-            <div className={styles.priceHighlight}>
-              ${selectedGame.pricePerPlayer * formData.spots}
-            </div>
+                Continue
+                <ChevronRight size={20} />
+              </button>
+            ) : (
+              <button
+                className={`${styles.button} ${styles.buttonPrimary}`}
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Confirm Booking'}
+                {!isSubmitting && <Check size={20} />}
+              </button>
+            )}
           </div>
         </div>
-      )}
-
-      {/* Step 3: Your Info */}
-      {step === 3 && (
-        <div className={styles.step}>
-          <h2 className={styles.title}>Your Information</h2>
-          
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>
-              <div className={styles.iconCircle}>
-                <User size={20} />
-              </div>
-              Contact Details
-            </h3>
-            
-            <div className={styles.form}>
-              <div className={styles.formGroup}>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={(e) => {
-                    setFormData({ ...formData, name: e.target.value });
-                    if (errors.name) {
-                      setErrors({ ...errors, name: undefined });
-                    }
-                  }}
-                  placeholder="Full Name"
-                  className={`${styles.input} ${errors.name ? styles.error : ''}`}
-                />
-                <label className={`${styles.floatingLabel} ${formData.name ? styles.active : ''}`}>
-                  Full Name *
-                </label>
-                {errors.name && (
-                  <span className={styles.errorMessage}>{errors.name}</span>
-                )}
-              </div>
-              <div className={styles.formGroup}>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => {
-                    setFormData({ ...formData, email: e.target.value });
-                    if (errors.email) {
-                      setErrors({ ...errors, email: undefined });
-                    }
-                  }}
-                  placeholder="Email Address"
-                  className={`${styles.input} ${errors.email ? styles.error : ''}`}
-                />
-                <label className={`${styles.floatingLabel} ${formData.email ? styles.active : ''}`}>
-                  Email Address *
-                </label>
-                {errors.email && (
-                  <span className={styles.errorMessage}>{errors.email}</span>
-                )}
-              </div>
-              <div className={styles.formGroup}>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handlePhoneChange}
-                  placeholder="Phone Number"
-                  className={`${styles.input} ${errors.phone ? styles.error : ''}`}
-                />
-                <label className={`${styles.floatingLabel} ${formData.phone ? styles.active : ''}`}>
-                  Phone Number *
-                </label>
-                {errors.phone && (
-                  <span className={styles.errorMessage}>{errors.phone}</span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Step 4: Confirm */}
-      {step === 4 && selectedGame && (
-        <div className={styles.step}>
-          <h2 className={styles.title}>Confirm Your Booking</h2>
-          <div className={styles.bookingDetailsWrapper}>
-            <div className={styles.bookingDetails}>
-              <div className={styles.detailRow}>
-                <Calendar size={20} />
-                <span>{new Date(selectedGame.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</span>
-              </div>
-              <div className={styles.detailRow}>
-                <Clock size={20} />
-                <span>{selectedGame.time}</span>
-              </div>
-              <div className={styles.detailRow}>
-                <MapPin size={20} />
-                <span>{selectedGame.location}</span>
-              </div>
-              <div className={styles.detailRow}>
-                <Trophy size={20} />
-                <span>{selectedGame.format} - {selectedGame.skillLevel}</span>
-              </div>
-              <div className={styles.detailRow}>
-                <User size={20} />
-                <span>{formData.name}</span>
-              </div>
-              <div className={styles.detailRow}>
-                <Mail size={20} />
-                <span>{formData.email}</span>
-              </div>
-            </div>
-            <div className={styles.bookingSummary}>
-              <span>Total:</span>
-              <span className={styles.totalPrice}>${selectedGame.pricePerPlayer * formData.spots}</span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Step 5: Payment */}
-      {step === 5 && selectedGame && (
-        <div className={styles.step}>
-          <h2 className={styles.title}>Payment Information</h2>
-          
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>
-              <div className={styles.iconCircle}>
-                <CreditCard size={20} />
-              </div>
-              Card Details
-            </h3>
-            
-            <div className={styles.form}>
-              <div className={styles.formGroup}>
-                <input
-                  type="text"
-                  name="cardNumber"
-                  value={formData.cardNumber}
-                  onChange={handleCardNumberChange}
-                  placeholder="Card Number"
-                  maxLength={19}
-                  className={`${styles.input} ${errors.cardNumber ? styles.error : ''}`}
-                />
-                <label className={`${styles.floatingLabel} ${formData.cardNumber ? styles.active : ''}`}>
-                  Card Number *
-                </label>
-                {errors.cardNumber && (
-                  <span className={styles.errorMessage}>{errors.cardNumber}</span>
-                )}
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div className={styles.formGroup}>
-                  <input
-                    type="text"
-                    name="cardExpiry"
-                    value={formData.cardExpiry}
-                    onChange={handleCardExpiryChange}
-                    placeholder="Expiry Date"
-                    maxLength={5}
-                    className={`${styles.input} ${errors.cardExpiry ? styles.error : ''}`}
-                  />
-                  <label className={`${styles.floatingLabel} ${formData.cardExpiry ? styles.active : ''}`}>
-                    Expiry (MM/YY) *
-                  </label>
-                  {errors.cardExpiry && (
-                    <span className={styles.errorMessage}>{errors.cardExpiry}</span>
-                  )}
-                </div>
-
-                <div className={styles.formGroup}>
-                  <input
-                    type="text"
-                    name="cardCVV"
-                    value={formData.cardCVV}
-                    onChange={handleInputChange}
-                    placeholder="CVV"
-                    maxLength={3}
-                    className={`${styles.input} ${errors.cardCVV ? styles.error : ''}`}
-                  />
-                  <label className={`${styles.floatingLabel} ${formData.cardCVV ? styles.active : ''}`}>
-                    CVV *
-                  </label>
-                  {errors.cardCVV && (
-                    <span className={styles.errorMessage}>{errors.cardCVV}</span>
-                  )}
-                </div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <input
-                  type="text"
-                  name="billingZip"
-                  value={formData.billingZip}
-                  onChange={handleInputChange}
-                  placeholder="Billing ZIP Code"
-                  maxLength={10}
-                  className={`${styles.input} ${errors.billingZip ? styles.error : ''}`}
-                />
-                <label className={`${styles.floatingLabel} ${formData.billingZip ? styles.active : ''}`}>
-                  Billing ZIP Code *
-                </label>
-                {errors.billingZip && (
-                  <span className={styles.errorMessage}>{errors.billingZip}</span>
-                )}
-              </div>
-
-              <div className={styles.bookingSummary}>
-                <span>Total Amount:</span>
-                <span className={styles.totalPrice}>${selectedGame.pricePerPlayer * formData.spots}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className={styles.actionsCard}>
-      <div className={styles.bookingActions}>
-        {step > 1 && (
-          <button className={styles.btnSecondary} onClick={handleBack}>
-            Back
-          </button>
-        )}
-        
-        {step < 5 ? (
-          <button
-            className={styles.btnPrimary}
-            onClick={handleNext}
-            disabled={!canProceed()}
-          >
-            Continue
-          </button>
-        ) : (
-          <button
-            className={styles.btnPrimary}
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Processing...' : 'Confirm Booking'}
-          </button>
-        )}
-      </div>
-      </div>
       </div>
     </div>
   );

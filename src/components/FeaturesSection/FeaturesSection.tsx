@@ -90,10 +90,6 @@ const FeaturesSection = () => {
           </ul>
         </div>
       </div>
-
-      <div className={styles.featuresSectionFooter}>
-        <a href="#" className={styles.ctaButton}>Learn More</a>
-      </div>
     </section>
   );
 };
