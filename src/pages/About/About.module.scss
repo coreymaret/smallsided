@@ -1,0 +1,15 @@
+// src/pages/About/About.module.scss
+@use '../../styles/variables' as *;
+
+.aboutPage {
+  max-width: $container-max-width;
+  margin: 8rem auto;
+  padding: 0 2rem 4rem;
+}
+
+@media (max-width: $bp-mobile) {
+  .aboutPage {
+    padding: 2rem 1rem;
+    margin: 6rem 0 0 auto;
+  }
+}

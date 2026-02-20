@@ -18,17 +18,18 @@ import { getAllPosts } from '../../utils/blogUtils';
 import type { BlogPostMetadata } from '../../types/blog';
 
 /**
- * Blog listing page with tag-based filtering.
- * Loads all posts on mount, extracts unique tags,
- * and lets users filter by topic.
+ * Blog listing page with tag-based filtering,
+ * expandable tag pills, and pagination.
  */
 const Blog: React.FC = () => {
   const seo = getSEOConfig('blog');
 
   const [posts, setPosts] = useState<BlogPostMetadata[]>([]);
-  const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const postsPerPage = 6;
 
   /** Fetch all blog posts on mount */
   useEffect(() => {
@@ -51,6 +52,13 @@ const Blog: React.FC = () => {
   const filteredPosts = selectedTag
     ? posts.filter(post => post.tags.includes(selectedTag))
     : posts;
+
+  /** Pagination */
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+  const paginatedPosts = filteredPosts.slice(
+    (currentPage - 1) * postsPerPage,
+    currentPage * postsPerPage
+  );
 
   /* Loading state */
   if (loading) {
@@ -81,7 +89,7 @@ const Blog: React.FC = () => {
           <div className={styles.filters}>
             <button
               className={`${styles.filter} ${!selectedTag ? styles.active : ''}`}
-              onClick={() => setSelectedTag(null)}
+              onClick={() => { setSelectedTag(null); setCurrentPage(1); }}
             >
               All Posts
             </button>
@@ -89,7 +97,7 @@ const Blog: React.FC = () => {
               <button
                 key={tag}
                 className={`${styles.filter} ${selectedTag === tag ? styles.active : ''}`}
-                onClick={() => setSelectedTag(tag)}
+                onClick={() => { setSelectedTag(tag); setCurrentPage(1); }}
               >
                 {tag}
               </button>
@@ -106,7 +114,38 @@ const Blog: React.FC = () => {
         )}
 
         {/* Filtered post grid */}
-        <BlogList posts={filteredPosts} />
+        <BlogList posts={paginatedPosts} />
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <nav className={styles.pagination} aria-label="Blog pagination">
+            <button
+              className={`${styles.pageBtn} ${styles.pageNav}`}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              ← Prev
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                className={`${styles.pageBtn} ${page === currentPage ? styles.pageActive : ''}`}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              className={`${styles.pageBtn} ${styles.pageNav}`}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Next →
+            </button>
+          </nav>
+        )}
       </div>
     </>
   );

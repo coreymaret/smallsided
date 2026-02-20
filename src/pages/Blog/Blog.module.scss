@@ -6,7 +6,7 @@
 // ─── Page Wrapper ───
 .blogPage {
   max-width: $container-max-width;
-  margin: 0 auto;
+  margin: 8rem auto;
   padding: 0 2rem 4rem;
 }
 
@@ -114,10 +114,74 @@
   white-space: nowrap;
 }
 
+// ─── Pagination ───
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 3rem;
+}
+
+.pageBtn {
+  background: transparent;
+  border: 2px solid rgba($color-dark, 0.1);
+  border-radius: $radius-pill;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: rgba($color-dark, 0.6);
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover:not(:disabled) {
+    border-color: $color-dark;
+    color: $color-dark;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+.pageActive {
+  background: $color-green;
+  border-color: $color-green;
+  color: $color-dark;
+  box-shadow: 0 4px 12px rgba($color-green-light, 0.3);
+}
+
+.pageNav {
+  width: auto;
+  padding: 0.5rem 1rem;
+  background: $color-dark;
+  border-color: $color-dark;
+  color: $color-green-light;
+
+  &:hover:not(:disabled) {
+    background: lighten($color-dark, 8%);
+    border-color: lighten($color-dark, 8%);
+    color: $color-green-light;
+  }
+
+  &:disabled {
+    background: rgba($color-dark, 0.05);
+    border-color: transparent;
+    color: rgba($color-dark, 0.25);
+  }
+}
+
 // ─── Mobile ───
 @media (max-width: $bp-mobile) {
   .blogPage {
     padding: 2rem 1rem;
+    margin: 6rem 0 0 auto;
   }
 
   .header {

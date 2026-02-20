@@ -363,7 +363,7 @@ const Header = () => {
               </li>
 
               <li className={styles.ctaItem}>
-                <Link to="/get-started" onClick={handleLinkClick} className={styles.ctaButton}>
+                <Link to="/services" onClick={handleLinkClick} className={styles.ctaButton}>
                   Get Started
                 </Link>
               </li>

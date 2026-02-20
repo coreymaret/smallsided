@@ -2,7 +2,6 @@
 .featuresSection {
   width: 100%;
   background-color: #f8f9fa;
-  padding: 80px 40px;
   box-sizing: border-box;
 }
 
@@ -149,9 +148,6 @@
 
 /* Mobile Styles */
 @media (max-width: 768px) {
-  .featuresSection {
-    padding: 60px 24px;
-  }
 
   .featuresSectionHeader {
     margin-bottom: 40px;
