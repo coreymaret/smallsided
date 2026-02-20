@@ -1,32 +1,42 @@
-@import '../shared/variables';
+@use '../../../../styles/variables' as *;
 
+// ─── Page Wrapper ───
 .register {
-  width: 100%;
-  background: #f8f9fa;
-  padding: 4rem 0.5rem 2rem;
-  font-family: 'Inter', sans-serif;
+  max-width: $container-max-width;
+  margin: 8rem auto 0;
+  padding: 0 2rem 4rem;
+  font-family: $font-primary;
 
-  @media (min-width: 768px) {
-    padding: 6rem 2rem 4rem;
+  @media (max-width: $bp-mobile) {
+    padding: 0 1rem 2rem;
+    margin: 6rem auto 0;
   }
 }
 
+// ─── Register Header ───
 .registerHeader {
-  max-width: 900px;
-  margin: 0 auto 3rem;
   text-align: center;
-  padding: 0 1rem;
+  padding: 5rem 2rem;
+  background: $color-dark;
+  border-bottom: 4px solid $color-green;
+  border-radius: $radius-lg;
+  margin-bottom: 3rem;
+
+  @media (max-width: $bp-mobile) {
+    padding: 3rem 1rem;
+    margin-bottom: 2rem;
+  }
 }
 
 .registerTitle {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #15141a;
+  color: $color-white;
   line-height: 1.2;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem 0;
   letter-spacing: -0.02em;
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     font-size: 2.75rem;
   }
 }
@@ -34,28 +44,29 @@
 .registerSubtitle {
   font-size: 1.15rem;
   font-weight: 400;
-  color: #15141a;
-  opacity: 0.7;
+  color: $color-green;
   line-height: 1.6;
-  margin: 0;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
+// ─── Container ───
 .container {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
-  background: #ffffff;
-  border-radius: 16px;
+  background: $color-white;
+  border-radius: $radius-lg;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
   overflow: hidden;
 }
 
-// Progress Bar
+// ─── Progress Bar ───
 .progress {
   padding: 2rem 0.5rem 1.5rem;
-  background: #f8f9fa;
-  border-bottom: 1px solid rgba(21, 20, 26, 0.15);
+  background: $color-white;
+  border-bottom: 1px solid rgba($color-dark, 0.15);
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     padding: 3rem 3rem 2rem;
   }
 }
@@ -78,7 +89,7 @@
   z-index: 1;
   opacity: 0.5;
   cursor: default;
-  transition: opacity 0.3s ease;
+  transition: opacity $transition-base;
 
   &.clickable {
     cursor: pointer;
@@ -94,44 +105,44 @@
 .progressCircle {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 2px solid rgba(21, 20, 26, 0.15);
+  border-radius: $radius-pill;
+  background: $color-white;
+  border: 2px solid rgba($color-dark, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   font-size: 0.875rem;
-  color: #6c757d;
-  transition: all 0.3s ease;
+  color: $color-text-muted;
+  transition: all $transition-base;
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     width: 44px;
     height: 44px;
     font-size: 1rem;
   }
 
   .completed & {
-    background: #98ED66;
-    color: #15141a;
-    border-color: #98ED66;
+    background: $color-green;
+    color: $color-dark;
+    border-color: $color-green;
   }
 }
 
 .progressLabel {
   font-size: 0.75rem;
-  color: #6c757d;
+  color: $color-text-muted;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all $transition-base;
   max-width: 80px;
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     font-size: 0.875rem;
     max-width: none;
   }
 
   .active & {
-    color: #15141a;
+    color: $color-dark;
     font-weight: 600;
   }
 }
@@ -139,25 +150,25 @@
 .progressBar {
   width: 100%;
   height: 4px;
-  background: rgba(21, 20, 26, 0.15);
+  background: rgba($color-dark, 0.15);
   border-radius: 2px;
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  background: #98ED66;
+  background: $color-green;
   border-radius: 2px;
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-// Content Area
+// ─── Content Area ───
 .content {
   padding: 2rem 0.5rem;
   min-height: 400px;
-  background: #f8f9fa;
+  background: $color-white;
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     padding: 3rem;
   }
 }
@@ -180,10 +191,10 @@
 .title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #15141a;
+  color: $color-dark;
   margin-bottom: 2rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     font-size: 2rem;
   }
 }
@@ -202,26 +213,26 @@
   gap: 0.75rem;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #15141a;
+  color: $color-dark;
   margin-bottom: 1.25rem;
 }
 
 .iconCircle {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background: #15141a;
+  border-radius: $radius-pill;
+  background: $color-dark;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 
   svg {
-    color: #98ED66;
+    color: $color-green;
   }
 }
 
-// Category Cards
+// ─── Category Cards ───
 .categoryCards {
   display: grid;
   gap: 1rem;
@@ -233,28 +244,28 @@
 }
 
 .categoryCard {
-  background-color: #f8f9fa;
-  border: 2px solid rgba(21, 20, 26, 0.15);
-  border-radius: 12px;
+  background-color: $color-bg;
+  border: 2px solid rgba($color-dark, 0.15);
+  border-radius: $radius-md;
   padding: 2rem 1.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all $transition-base;
   text-align: left;
 
   &:hover {
-    border-color: rgba(21, 20, 26, 0.4);
+    border-color: rgba($color-dark, 0.4);
   }
 
   &.selected {
-    border-color: #15141a;
-    background: #15141a;
+    border-color: $color-dark;
+    background: $color-dark;
 
     .categoryTitle {
-      color: #98ED66;
+      color: $color-green;
     }
 
     .categorySubtitle {
-      color: rgba(152, 237, 102, 0.7);
+      color: rgba($color-green, 0.7);
     }
   }
 }
@@ -262,20 +273,20 @@
 .categoryTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #15141a;
+  color: $color-dark;
   margin-bottom: 0.5rem;
-  transition: color 0.3s ease;
+  transition: color $transition-base;
 }
 
 .categorySubtitle {
   font-size: 0.875rem;
-  color: #15141a;
+  color: $color-dark;
   opacity: 0.7;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: color $transition-base;
 }
 
-// Gender Tabs
+// ─── Gender Tabs ───
 .genderTabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -284,29 +295,29 @@
 
 .genderTab {
   padding: 1.5rem;
-  background-color: #f8f9fa;
-  border: 2px solid rgba(21, 20, 26, 0.15);
-  border-radius: 12px;
+  background-color: $color-bg;
+  border: 2px solid rgba($color-dark, 0.15);
+  border-radius: $radius-md;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Inter', sans-serif;
+  transition: all $transition-base;
+  font-family: $font-primary;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #15141a;
+  color: $color-dark;
   text-align: center;
 
   &:hover {
-    border-color: rgba(21, 20, 26, 0.4);
+    border-color: rgba($color-dark, 0.4);
   }
 
   &.selected {
-    border-color: #15141a;
-    background: #15141a;
-    color: #98ED66;
+    border-color: $color-dark;
+    background: $color-dark;
+    color: $color-green;
   }
 }
 
-// League Options
+// ─── League Options ───
 .leagueOptions {
   display: grid;
   gap: 1rem;
@@ -319,45 +330,45 @@
   align-items: center;
   justify-content: center;
   padding: 2rem 1rem;
-  border: 1px solid rgba(21, 20, 26, 0.15);
-  border-radius: 12px;
-  background: #f8f9fa;
+  border: 1px solid rgba($color-dark, 0.15);
+  border-radius: $radius-md;
+  background: $color-bg;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all $transition-base;
   gap: 0.75rem;
 
   &:hover {
-    border-color: rgba(21, 20, 26, 0.4);
+    border-color: rgba($color-dark, 0.4);
   }
 
   &.selected {
-    border-color: #15141a;
-    background: #15141a;
+    border-color: $color-dark;
+    background: $color-dark;
 
     svg {
-      color: #98ED66;
+      color: $color-green;
     }
 
     span {
-      color: #98ED66;
+      color: $color-green;
     }
   }
 
   svg {
-    color: #15141a;
-    transition: color 0.3s ease;
+    color: $color-dark;
+    transition: color $transition-base;
   }
 
   span {
-    font-family: 'Inter', sans-serif;
+    font-family: $font-primary;
     font-size: 1rem;
     font-weight: 600;
-    color: #15141a;
-    transition: color 0.3s ease;
+    color: $color-dark;
+    transition: color $transition-base;
   }
 }
 
-// Form Inputs
+// ─── Form Inputs ───
 .form {
   display: flex;
   flex-direction: column;
@@ -372,12 +383,12 @@
   width: 100%;
   padding: 1rem;
   font-size: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: $font-primary;
   border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  background: #ffffff;
-  color: #1a1a1a;
-  transition: border-color 0.3s ease;
+  border-radius: $radius-sm;
+  background: $color-white;
+  color: $color-text;
+  transition: border-color $transition-base;
   box-sizing: border-box;
 
   &::placeholder {
@@ -386,12 +397,12 @@
 
   &:focus {
     outline: none;
-    border-color: #15141a;
+    border-color: $color-dark;
 
     + .floatingLabel {
       top: -0.625rem;
       font-size: 0.75rem;
-      color: #15141a;
+      color: $color-dark;
       font-weight: 500;
     }
   }
@@ -399,7 +410,7 @@
   &:not(:placeholder-shown) + .floatingLabel {
     top: -0.625rem;
     font-size: 0.75rem;
-    color: #15141a;
+    color: $color-dark;
     font-weight: 500;
   }
 }
@@ -408,18 +419,18 @@
   width: 100%;
   padding: 1rem;
   font-size: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: $font-primary;
   border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  background: #ffffff;
-  color: #1a1a1a;
-  transition: border-color 0.3s ease;
+  border-radius: $radius-sm;
+  background: $color-white;
+  color: $color-text;
+  transition: border-color $transition-base;
   box-sizing: border-box;
   resize: vertical;
 
   &:focus {
     outline: none;
-    border-color: #15141a;
+    border-color: $color-dark;
   }
 }
 
@@ -436,11 +447,11 @@
 .errorMessage {
   display: block;
   margin-top: 0.5rem;
-  font-family: 'Inter', sans-serif;
+  font-family: $font-primary;
   font-size: 0.875rem;
   color: #dc3545;
   font-weight: 500;
-  animation: slideDown 0.3s ease;
+  animation: slideDown $transition-base;
 }
 
 @keyframes slideDown {
@@ -458,23 +469,23 @@
   position: absolute;
   left: 1rem;
   top: 1rem;
-  color: #6b7280;
+  color: $color-text-muted;
   font-size: 1rem;
   pointer-events: none;
-  transition: all 0.3s ease;
-  background: #f8f9fa;
+  transition: all $transition-base;
+  background: $color-white;
   padding: 0 0.25rem;
   white-space: nowrap;
 
   &.active {
     top: -0.625rem;
     font-size: 0.75rem;
-    color: #15141a;
+    color: $color-dark;
     font-weight: 500;
   }
 }
 
-// Preference Cards
+// ─── Preference Cards ───
 .preferenceCards {
   display: grid;
   gap: 1rem;
@@ -484,84 +495,84 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: $bp-tablet) {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 .preferenceCard {
-  background-color: #f8f9fa;
-  border: 1px solid rgba(21, 20, 26, 0.15);
-  border-radius: 12px;
+  background-color: $color-bg;
+  border: 1px solid rgba($color-dark, 0.15);
+  border-radius: $radius-md;
   padding: 1.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all $transition-base;
   text-align: left;
 
   &:hover {
-    border-color: rgba(21, 20, 26, 0.4);
+    border-color: rgba($color-dark, 0.4);
   }
 
   &.selected {
-    border-color: #15141a;
-    background: #15141a;
+    border-color: $color-dark;
+    background: $color-dark;
 
     h4 {
-      color: #98ED66;
+      color: $color-green;
     }
 
     p {
-      color: rgba(152, 237, 102, 0.7);
+      color: rgba($color-green, 0.7);
     }
   }
 
   h4 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: #15141a;
+    color: $color-dark;
     margin: 0 0 0.5rem 0;
-    transition: color 0.3s ease;
+    transition: color $transition-base;
   }
 
   p {
     font-size: 0.875rem;
-    color: #15141a;
+    color: $color-dark;
     opacity: 0.7;
     margin: 0;
-    transition: color 0.3s ease;
+    transition: color $transition-base;
   }
 }
 
-// Form Row for side-by-side inputs
+// ─── Form Row ───
 .formRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-// Security Notice
+// ─── Security Notice ───
 .securityNotice {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 1rem;
-  background: rgba(152, 237, 102, 0.05);
-  border-radius: 8px;
+  background: rgba($color-green, 0.05);
+  border-radius: $radius-sm;
   font-size: 0.875rem;
-  color: #15141a;
+  color: $color-dark;
   opacity: 0.7;
 
   svg {
-    color: #98ED66;
+    color: $color-green;
     flex-shrink: 0;
   }
 }
 
-// Total Section
+// ─── Total Section ───
 .total {
-  background: #f8f9fa;
-  border: 1px solid rgba(21, 20, 26, 0.15);
-  border-radius: 12px;
+  background: $color-bg;
+  border: 1px solid rgba($color-dark, 0.15);
+  border-radius: $radius-md;
   padding: 2rem;
   margin-top: 1.5rem;
 }
@@ -574,7 +585,7 @@
 
   span {
     font-size: 1rem;
-    color: #15141a;
+    color: $color-dark;
     opacity: 0.7;
     font-weight: 500;
   }
@@ -585,22 +596,22 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 1rem;
-  border-top: 1px solid rgba(21, 20, 26, 0.15);
+  border-top: 1px solid rgba($color-dark, 0.15);
 
   span {
     font-size: 1.125rem;
-    color: #15141a;
+    color: $color-dark;
     font-weight: 600;
   }
 
   strong {
     font-size: 1.75rem;
     font-weight: 700;
-    color: #15141a;
+    color: $color-dark;
   }
 }
 
-// Confirmation
+// ─── Confirmation ───
 .confirmation {
   display: flex;
   flex-direction: column;
@@ -608,9 +619,9 @@
 }
 
 .summary {
-  background: #f8f9fa;
-  border: 1px solid rgba(21, 20, 26, 0.15);
-  border-radius: 12px;
+  background: $color-bg;
+  border: 1px solid rgba($color-dark, 0.15);
+  border-radius: $radius-md;
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -621,7 +632,7 @@
   h3 {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #6c757d;
+    color: $color-text-muted;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 1rem;
@@ -640,13 +651,13 @@
 
     strong {
       font-weight: 600;
-      color: #15141a;
+      color: $color-dark;
       font-size: 1rem;
     }
 
     span {
       font-size: 0.875rem;
-      color: #15141a;
+      color: $color-dark;
       opacity: 0.7;
     }
   }
@@ -654,33 +665,33 @@
 
 .terms {
   padding: 1.5rem;
-  background: rgba(152, 237, 102, 0.05);
-  border: 1px solid rgba(21, 20, 26, 0.15);
-  border-radius: 8px;
+  background: rgba($color-green, 0.05);
+  border: 1px solid rgba($color-dark, 0.15);
+  border-radius: $radius-sm;
 
   p {
     font-size: 0.875rem;
-    color: #15141a;
+    color: $color-dark;
     opacity: 0.7;
     line-height: 1.6;
     margin: 0;
   }
 }
 
-// Action Buttons
+// ─── Action Buttons ───
 .actions {
   display: flex;
   gap: 1rem;
   padding: 2rem 0.5rem;
-  border-top: 1px solid rgba(21, 20, 26, 0.15);
+  border-top: 1px solid rgba($color-dark, 0.15);
   justify-content: flex-end;
-  background: #f8f9fa;
+  background: $color-white;
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     padding: 2rem 3rem;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: $bp-mobile) {
     flex-direction: column-reverse;
 
     .button {
@@ -692,12 +703,12 @@
 
 .button {
   padding: 1rem 2rem;
-  border-radius: 12px;
-  font-family: 'Inter', sans-serif;
+  border-radius: $radius-md;
+  font-family: $font-primary;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all $transition-base;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -711,28 +722,28 @@
 }
 
 .buttonPrimary {
-  border: 2px solid #15141a;
+  border: 2px solid $color-dark;
   background: transparent;
-  color: #15141a;
+  color: $color-dark;
 
   &:hover:not(:disabled) {
-    background: #15141a;
-    color: #98ED66;
+    background: $color-dark;
+    color: $color-green;
   }
 }
 
 .buttonSecondary {
-  border: 2px solid #15141a;
+  border: 2px solid $color-dark;
   background: transparent;
-  color: #15141a;
+  color: $color-dark;
 
   &:hover {
-    background: #15141a;
-    color: #98ED66;
+    background: $color-dark;
+    color: $color-green;
   }
 }
 
-// Backdrop overlay
+// ─── Backdrop Overlay ───
 .bannerBackdrop {
   position: fixed;
   top: 0;
@@ -741,32 +752,28 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.3);
   z-index: 9998;
-  animation: backdropFadeIn 0.3s ease-in-out;
+  animation: backdropFadeIn $transition-base;
   cursor: pointer;
 
   &.backdropClosing {
-    animation: backdropFadeOut 0.4s ease-in-out forwards;
+    animation: backdropFadeOut 0.4s ease forwards;
   }
 }
 
-// Success Banner
+// ─── Success Banner ───
 .successBanner {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(135deg, #98ED66 0%, #7acc4d 100%);
-  box-shadow: 0 4px 20px rgba(152, 237, 102, 0.4);
+  background: linear-gradient(135deg, $color-green 0%, #7acc4d 100%);
+  box-shadow: 0 4px 20px rgba($color-green, 0.4);
   z-index: 9999;
   animation: slideDownBanner 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   overflow: hidden;
 
   &.closing {
     animation: slideUpBanner 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-
-  @media (max-width: 767px) {
-    position: fixed;
   }
 }
 
@@ -776,18 +783,18 @@
   right: 1rem;
   width: 36px;
   height: 36px;
-  border-radius: 50%;
-  background: rgba(21, 20, 26, 0.1);
+  border-radius: $radius-pill;
+  background: rgba($color-dark, 0.1);
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all $transition-fast;
   z-index: 10;
 
   &:hover {
-    background: rgba(21, 20, 26, 0.2);
+    background: rgba($color-dark, 0.2);
     transform: scale(1.1);
   }
 
@@ -796,10 +803,10 @@
   }
 
   svg {
-    color: rgba(21, 20, 26, 0.8);
+    color: rgba($color-dark, 0.8);
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: $bp-mobile) {
     top: 0.75rem;
     right: 0.75rem;
     width: 32px;
@@ -812,9 +819,9 @@
   align-items: center;
   gap: 1rem;
   padding: 1.5rem 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba($color-white, 0.2);
 
-  @media (max-width: 767px) {
+  @media (max-width: $bp-mobile) {
     padding: 1.25rem 1rem;
     gap: 0.75rem;
   }
@@ -823,8 +830,8 @@
 .bannerIcon {
   width: 56px;
   height: 56px;
-  background: rgba(21, 20, 26, 0.15);
-  border-radius: 50%;
+  background: rgba($color-dark, 0.15);
+  border-radius: $radius-pill;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -840,7 +847,7 @@
     opacity: 0;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: $bp-mobile) {
     width: 48px;
     height: 48px;
   }
@@ -855,24 +862,24 @@
 }
 
 .bannerTitle {
-  font-family: 'Inter', sans-serif;
+  font-family: $font-primary;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #15141a;
+  color: $color-dark;
   margin: 0 0 0.25rem 0;
 
-  @media (max-width: 767px) {
+  @media (max-width: $bp-mobile) {
     font-size: 1.25rem;
   }
 }
 
 .bannerSubtitle {
-  font-family: 'Inter', sans-serif;
+  font-family: $font-primary;
   font-size: 0.9375rem;
-  color: rgba(21, 20, 26, 0.8);
+  color: rgba($color-dark, 0.8);
   margin: 0;
 
-  @media (max-width: 767px) {
+  @media (max-width: $bp-mobile) {
     font-size: 0.875rem;
   }
 }
@@ -889,9 +896,9 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   padding: 1.5rem 2rem;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba($color-white, 0.15);
 
-  @media (max-width: 767px) {
+  @media (max-width: $bp-mobile) {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
     padding: 1.25rem 1rem;
@@ -916,7 +923,7 @@
 .detailIcon {
   flex-shrink: 0;
   margin-top: 0.125rem;
-  color: rgba(21, 20, 26, 0.7);
+  color: rgba($color-dark, 0.7);
 }
 
 .detailContent {
@@ -928,22 +935,22 @@
 }
 
 .detailLabel {
-  font-family: 'Inter', sans-serif;
+  font-family: $font-primary;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: rgba(21, 20, 26, 0.7);
+  color: rgba($color-dark, 0.7);
 }
 
 .detailValue {
-  font-family: 'Inter', sans-serif;
+  font-family: $font-primary;
   font-size: 1rem;
   font-weight: 700;
-  color: #15141a;
+  color: $color-dark;
   word-wrap: break-word;
 
-  @media (max-width: 767px) {
+  @media (max-width: $bp-mobile) {
     font-size: 0.9375rem;
   }
 }
@@ -953,9 +960,9 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1rem 2rem 1.5rem;
-  font-family: 'Inter', sans-serif;
+  font-family: $font-primary;
   font-size: 0.875rem;
-  color: rgba(21, 20, 26, 0.8);
+  color: rgba($color-dark, 0.8);
   animation: fadeIn 0.5s ease-out;
   animation-delay: 1.4s;
   animation-fill-mode: both;
@@ -966,47 +973,31 @@
     opacity: 0.8;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: $bp-mobile) {
     padding: 1rem 1rem 1.25rem;
     font-size: 0.8125rem;
   }
 }
 
-// Animations
+// ─── Animations ───
 @keyframes backdropFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes backdropFadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 @keyframes slideDownBanner {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
 }
 
 @keyframes slideUpBanner {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-100%);
-  }
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
 }
 
 @keyframes popIn {
@@ -1035,12 +1026,8 @@
 }
 
 @keyframes expandAccordion {
-  from {
-    max-height: 0;
-  }
-  to {
-    max-height: 500px;
-  }
+  from { max-height: 0; }
+  to { max-height: 500px; }
 }
 
 @keyframes fadeInUp {
@@ -1055,19 +1042,11 @@
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes drawCheckBanner {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

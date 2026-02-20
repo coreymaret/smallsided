@@ -429,12 +429,12 @@ const RegisterFieldRental: React.FC = () => {
         </>
       )}
 
-      <div className={styles.container}>
-        <div className={styles.bookingHeader}>
-          <h1 className={styles.bookingTitle}>Field Rental</h1>
-          <p className={styles.bookingSubtitle}>Book your perfect field for games, practices, or events</p>
-        </div>
+      <div className={styles.bookingHeader}>
+        <h1 className={styles.bookingTitle}>Field Rental</h1>
+        <p className={styles.bookingSubtitle}>Book your perfect field for games, practices, or events</p>
+      </div>
 
+      <div className={styles.container}>
         {/* Progress Bar */}
         <div className={styles.progress}>
           <div className={styles.progressSteps}>
