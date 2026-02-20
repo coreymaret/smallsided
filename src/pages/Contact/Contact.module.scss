@@ -1,10 +1,16 @@
 // Contact.module.scss
+@use '../../styles/variables' as *;
 
 .contactContainer {
   display: flex;
   min-height: 100vh;
-  font-family: "Inter", sans-serif;
-  //padding-top: 100px;
+  font-family: $font-primary;
+  width: 100%;
+  margin: 0rem auto 0;
+
+  @media (max-width: $bp-mobile) {
+    margin: 6rem auto 0;
+  }
 }
 
 .contactLeft {
@@ -13,9 +19,9 @@
   align-items: center;
   justify-content: center;
   padding: 2rem 1.5rem;
-  background-color: #f8f9fa;
+  background-color: $color-bg;
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     padding: 3rem;
   }
 }
@@ -28,10 +34,10 @@
 .decorativeLine {
   width: 60px;
   height: 4px;
-  background-color: #98ED66;
+  background-color: $color-green;
   margin-bottom: 1.5rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     width: 80px;
     height: 5px;
     margin-bottom: 2rem;
@@ -41,12 +47,12 @@
 .contactLeft h1 {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: $color-text;
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     font-size: 3.5rem;
     margin-bottom: 1.5rem;
   }
@@ -55,12 +61,12 @@
 .subtitle {
   font-size: 1rem;
   font-weight: 400;
-  color: #6b7280;
+  color: $color-text-muted;
   line-height: 1.6;
   letter-spacing: 0.01em;
   margin-bottom: 2rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: $bp-mobile) {
     font-size: 1.125rem;
     margin-bottom: 2.5rem;
   }
@@ -89,17 +95,17 @@
   position: absolute;
   left: 1rem;
   top: 1rem;
-  color: #6b7280;
+  color: $color-text-muted;
   font-size: 1rem;
   pointer-events: none;
-  transition: all 0.3s ease;
-  background-color: #f8f9fa;
+  transition: all $transition-base;
+  background-color: $color-bg;
   padding: 0 0.25rem;
 
   &.active {
     top: -0.625rem;
     font-size: 0.75rem;
-    color: #15141a;
+    color: $color-dark;
     font-weight: 500;
   }
 }
@@ -108,12 +114,12 @@
   width: 100%;
   padding: 1rem;
   font-size: 1rem;
-  font-family: "Inter", sans-serif;
+  font-family: $font-primary;
   border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  background-color: #ffffff;
-  color: #1a1a1a;
-  transition: border-color 0.3s ease;
+  border-radius: $radius-sm;
+  background-color: $color-white;
+  color: $color-text;
+  transition: border-color $transition-base;
 
   &::placeholder {
     color: transparent;
@@ -121,14 +127,14 @@
 
   &:focus {
     outline: none;
-    border-color: #15141a;
+    border-color: $color-dark;
   }
 
   &:focus + .floatingLabel,
   &:not(:placeholder-shown) + .floatingLabel {
     top: -0.625rem;
     font-size: 0.75rem;
-    color: #15141a;
+    color: $color-dark;
     font-weight: 500;
   }
 }
@@ -143,13 +149,13 @@
   padding: 1rem 2rem;
   font-size: 1rem;
   font-weight: 600;
-  font-family: "Inter", sans-serif;
-  color: #ffffff;
-  background-color: #15141a;
+  font-family: $font-primary;
+  color: $color-white;
+  background-color: $color-dark;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: $radius-sm;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color $transition-base;
 
   &:hover {
     background-color: #2a2930;
@@ -167,7 +173,7 @@
   justify-content: center;
   padding: 3rem;
   gap: 2.5rem;
-  background-color: #15141a;
+  background-color: $color-dark;
 }
 
 .contactRow {
@@ -177,7 +183,7 @@
 }
 
 .contactIcon {
-  color: #98ED66;
+  color: $color-green;
   background-color: transparent;
   flex-shrink: 0;
   margin-top: 0.25rem;
@@ -187,21 +193,21 @@
   h3 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: #ffffff;
+    color: $color-white;
     margin-bottom: 0.5rem;
   }
 
   p {
     font-size: 0.9rem;
-    color: #ffffff;
+    color: $color-white;
     line-height: 1.6;
     text-decoration-line: underline;
     text-decoration-style: dotted;
-    text-decoration-color: #98ED66;
+    text-decoration-color: $color-green;
     text-underline-offset: 8px;
     display: inline-block;
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    transition: opacity $transition-fast;
 
     &:hover {
       opacity: 0.8;
@@ -216,12 +222,12 @@
 }
 
 .socialIcon {
-  color: #98ED66;
+  color: $color-green;
   background-color: #2a2930;
   padding: 0.5rem;
-  border-radius: 50%;
+  border-radius: $radius-pill;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color $transition-fast, color $transition-fast;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -229,12 +235,12 @@
   height: 2.5rem;
 
   &:hover {
-    background-color: #98ED66;
-    color: #15141a;
+    background-color: $color-green;
+    color: $color-dark;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $bp-mobile) {
   .contactContainer {
     flex-direction: column;
   }
