@@ -1,12 +1,14 @@
+@use '../../styles/variables' as *;
+
 .cookiesPolicy {
   min-height: 100vh;
-  background: #f8f9fa;
+  background: $color-bg;
   margin-top: 5rem;
 }
 
 .hero {
-  background: linear-gradient(135deg, #15141a 0%, #2a2833 100%);
-  color: white;
+  background: linear-gradient(135deg, $color-dark 0%, #2a2833 100%);
+  color: $color-white;
   padding: 80px 20px;
   text-align: center;
 
@@ -21,7 +23,7 @@
     justify-content: center;
     width: 80px;
     height: 80px;
-    background: rgba(152, 237, 102, 0.1);
+    background: rgba($color-green, 0.1);
     border-radius: 50%;
     margin-bottom: 24px;
   }
@@ -29,7 +31,7 @@
   .heroIcon {
     width: 40px;
     height: 40px;
-    color: #98ed66;
+    color: $color-green;
   }
 
   h1 {
@@ -52,7 +54,7 @@
 }
 
 .tabContainer {
-  background: white;
+  background: $color-white;
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
@@ -61,7 +63,7 @@
 }
 
 .tabs {
-  max-width: 1200px;
+  max-width: $container-max-width;
   margin: 0 auto;
   display: flex;
   gap: 8px;
@@ -77,7 +79,7 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #98ed66;
+    background: $color-green;
     border-radius: 2px;
   }
 }
@@ -93,8 +95,8 @@
   cursor: pointer;
   font-size: 15px;
   font-weight: 500;
-  color: #6b7280;
-  transition: all 0.3s ease;
+  color: $color-text-muted;
+  transition: all $transition-base;
   white-space: nowrap;
 
   .tabIcon {
@@ -103,28 +105,28 @@
   }
 
   &:hover {
-    color: #15141a;
-    background: rgba(152, 237, 102, 0.05);
+    color: $color-dark;
+    background: rgba($color-green, 0.05);
   }
 
   &.active {
-    color: #15141a;
-    border-bottom-color: #98ed66;
+    color: $color-dark;
+    border-bottom-color: $color-green;
 
     .tabIcon {
-      color: #98ed66;
+      color: $color-green;
     }
   }
 }
 
 .content {
-  max-width: 1200px;
+  max-width: $container-max-width;
   margin: 0 auto;
   padding: 60px 20px;
 }
 
 .tabContent {
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn $transition-base;
 }
 
 @keyframes fadeIn {
@@ -143,21 +145,21 @@
 
   h2 {
     font-size: 32px;
-    color: #15141a;
+    color: $color-dark;
     margin: 0 0 24px 0;
     font-weight: 700;
   }
 
   h3 {
     font-size: 24px;
-    color: #15141a;
+    color: $color-dark;
     margin: 24px 0 16px 0;
     font-weight: 600;
   }
 
   h4 {
     font-size: 18px;
-    color: #15141a;
+    color: $color-dark;
     margin: 20px 0 12px 0;
     font-weight: 600;
   }
@@ -171,7 +173,7 @@
 
   .intro {
     font-size: 18px;
-    color: #6b7280;
+    color: $color-text-muted;
     margin-bottom: 32px;
   }
 }
@@ -184,11 +186,11 @@
 }
 
 .card {
-  background: white;
-  border-radius: 12px;
+  background: $color-white;
+  border-radius: $radius-md;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform $transition-base, box-shadow $transition-base;
 
   &:hover {
     transform: translateY(-4px);
@@ -198,8 +200,8 @@
   .cardIcon {
     width: 48px;
     height: 48px;
-    background: rgba(152, 237, 102, 0.1);
-    border-radius: 12px;
+    background: rgba($color-green, 0.1);
+    border-radius: $radius-md;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -208,7 +210,7 @@
     svg {
       width: 24px;
       height: 24px;
-      color: #98ed66;
+      color: $color-green;
     }
   }
 
@@ -219,7 +221,7 @@
 
   p {
     font-size: 15px;
-    color: #6b7280;
+    color: $color-text-muted;
     margin: 0;
   }
 }
@@ -235,11 +237,11 @@
     margin-bottom: 8px;
     font-size: 16px;
     line-height: 1.6;
-    color: #15141a;
-    background: white;
-    border-radius: 8px;
+    color: $color-dark;
+    background: $color-white;
+    border-radius: $radius-sm;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
+    transition: all $transition-base;
 
     &:hover {
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -254,7 +256,7 @@
       transform: translateY(-50%);
       width: 8px;
       height: 8px;
-      background: #98ed66;
+      background: $color-green;
       border-radius: 50%;
     }
   }
@@ -267,11 +269,11 @@
 }
 
 .cookieTypeCard {
-  background: white;
-  border-radius: 12px;
+  background: $color-white;
+  border-radius: $radius-md;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid #98ed66;
+  border-left: 4px solid $color-green;
 
   .cookieTypeHeader {
     display: flex;
@@ -289,14 +291,14 @@
     background: #fee2e2;
     color: #991b1b;
     padding: 4px 12px;
-    border-radius: 12px;
+    border-radius: $radius-md;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
   }
 
   .cookieTypeDescription {
-    color: #6b7280;
+    color: $color-text-muted;
     margin-bottom: 20px;
   }
 
@@ -312,12 +314,12 @@
 
     .detailLabel {
       font-weight: 600;
-      color: #15141a;
+      color: $color-dark;
       min-width: 100px;
     }
 
     .detailValue {
-      color: #6b7280;
+      color: $color-text-muted;
     }
   }
 }
@@ -330,14 +332,14 @@
 }
 
 .comparisonCard {
-  background: white;
-  border-radius: 12px;
+  background: $color-white;
+  border-radius: $radius-md;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
   h3 {
     margin: 0 0 16px 0;
-    color: #15141a;
+    color: $color-dark;
   }
 
   p {
@@ -346,8 +348,8 @@
 
   .exampleTag {
     display: inline-block;
-    background: rgba(152, 237, 102, 0.1);
-    color: #15141a;
+    background: rgba($color-green, 0.1);
+    color: $color-dark;
     padding: 6px 16px;
     border-radius: 20px;
     font-size: 13px;
@@ -362,8 +364,8 @@
 }
 
 .thirdPartyCard {
-  background: white;
-  border-radius: 12px;
+  background: $color-white;
+  border-radius: $radius-md;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
@@ -376,7 +378,7 @@
     .serviceIcon {
       width: 32px;
       height: 32px;
-      color: #98ed66;
+      color: $color-green;
     }
 
     h3 {
@@ -397,13 +399,13 @@
 
     .serviceLabel {
       font-weight: 600;
-      color: #15141a;
+      color: $color-dark;
       min-width: 120px;
       font-size: 15px;
     }
 
     .serviceValue {
-      color: #6b7280;
+      color: $color-text-muted;
       font-size: 15px;
       flex: 1;
     }
@@ -414,14 +416,14 @@
       border-radius: 6px;
       font-family: 'Monaco', monospace;
       font-size: 13px;
-      color: #15141a;
+      color: $color-dark;
     }
 
     .optOutLink {
-      color: #98ed66;
+      color: $color-green;
       text-decoration: none;
       font-weight: 500;
-      transition: color 0.3s ease;
+      transition: color $transition-base;
 
       &:hover {
         color: #7acc4d;
@@ -432,11 +434,11 @@
 }
 
 .highlightBox {
-  background: white;
-  border-radius: 12px;
+  background: $color-white;
+  border-radius: $radius-md;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid #98ed66;
+  border-left: 4px solid $color-green;
   margin-top: 32px;
 
   h3 {
@@ -444,14 +446,14 @@
   }
 
   h4 {
-    color: #15141a;
+    color: $color-dark;
     margin-top: 24px;
   }
 }
 
 .notificationBox {
-  background: white;
-  border-radius: 12px;
+  background: $color-white;
+  border-radius: $radius-md;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   display: flex;
@@ -461,7 +463,7 @@
   .notificationIcon {
     width: 48px;
     height: 48px;
-    color: #98ed66;
+    color: $color-green;
     flex-shrink: 0;
   }
 
@@ -487,10 +489,10 @@
 
     span {
       font-size: 14px;
-      color: #6b7280;
+      color: $color-text-muted;
 
       strong {
-        color: #15141a;
+        color: $color-dark;
         font-weight: 600;
       }
     }
@@ -505,8 +507,8 @@
 }
 
 .manageCard {
-  background: white;
-  border-radius: 12px;
+  background: $color-white;
+  border-radius: $radius-md;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
@@ -531,7 +533,7 @@
       }
 
       strong {
-        color: #15141a;
+        color: $color-dark;
         font-weight: 600;
       }
     }
@@ -546,8 +548,8 @@
 }
 
 .optOutCard {
-  background: white;
-  border-radius: 12px;
+  background: $color-white;
+  border-radius: $radius-md;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   text-align: center;
@@ -555,7 +557,7 @@
   .optOutIcon {
     width: 48px;
     height: 48px;
-    color: #98ed66;
+    color: $color-green;
     margin: 0 auto 16px;
   }
 
@@ -565,28 +567,28 @@
 
   .optOutButton {
     display: inline-block;
-    background: #98ed66;
-    color: #15141a;
+    background: $color-green;
+    color: $color-dark;
     padding: 12px 32px;
-    border-radius: 8px;
+    border-radius: $radius-sm;
     text-decoration: none;
     font-weight: 600;
     margin-top: 16px;
-    transition: all 0.3s ease;
+    transition: all $transition-base;
 
     &:hover {
       background: #7acc4d;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(152, 237, 102, 0.3);
+      box-shadow: 0 4px 12px rgba($color-green, 0.3);
     }
   }
 
   .dntInfo {
     background: #f3f4f6;
     padding: 12px 20px;
-    border-radius: 8px;
+    border-radius: $radius-sm;
     font-size: 14px;
-    color: #6b7280;
+    color: $color-text-muted;
     margin-top: 16px;
   }
 }
@@ -596,8 +598,8 @@
 }
 
 .accordionItem {
-  background: white;
-  border-radius: 12px;
+  background: $color-white;
+  border-radius: $radius-md;
   margin-bottom: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -609,44 +611,44 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px;
-  background: white;
+  background: $color-white;
   border: none;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
-  color: #15141a;
+  color: $color-dark;
   text-align: left;
-  transition: background 0.3s ease;
+  transition: background $transition-base;
 
   &:hover {
-    background: rgba(152, 237, 102, 0.05);
+    background: rgba($color-green, 0.05);
   }
 
   &.active {
-    background: rgba(152, 237, 102, 0.1);
+    background: rgba($color-green, 0.1);
 
     .accordionIcon {
       transform: rotate(180deg);
-      color: #98ed66;
+      color: $color-green;
     }
   }
 
   .accordionIcon {
     width: 20px;
     height: 20px;
-    color: #6b7280;
-    transition: transform 0.3s ease, color 0.3s ease;
+    color: $color-text-muted;
+    transition: transform $transition-base, color $transition-base;
     flex-shrink: 0;
   }
 }
 
 .accordionContent {
   padding: 0 24px 24px 24px;
-  animation: slideDown 0.3s ease;
+  animation: slideDown $transition-base;
 
   p {
     margin: 0;
-    color: #6b7280;
+    color: $color-text-muted;
     line-height: 1.7;
   }
 }
@@ -663,7 +665,7 @@
 }
 
 .contactSection {
-  background: white;
+  background: $color-white;
   border-top: 1px solid #e5e7eb;
   padding: 60px 20px;
   margin-top: 60px;
@@ -675,13 +677,13 @@
 
     h2 {
       font-size: 32px;
-      color: #15141a;
+      color: $color-dark;
       margin: 0 0 16px 0;
     }
 
     p {
       font-size: 16px;
-      color: #6b7280;
+      color: $color-text-muted;
       margin: 0 0 32px 0;
     }
   }
@@ -698,14 +700,14 @@
     color: #4b5563;
 
     strong {
-      color: #15141a;
+      color: $color-dark;
       font-weight: 600;
       margin-right: 8px;
     }
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $bp-mobile) {
   .hero {
     padding: 60px 20px;
 
