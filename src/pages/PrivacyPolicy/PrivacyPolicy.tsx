@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
-import { ChevronDown, Shield, Eye, Lock, Users, FileText, Globe, Mail, AlertCircle } from '../../components/Icons/Icons';
+import { ChevronDown, HatGlasses, Eye, Lock, Users, FileText, Globe, Mail, AlertCircle } from '../../components/Icons/Icons';
 import styles from './PrivacyPolicy.module.scss';
 
 const PrivacyPolicy: React.FC = () => {
-  const [openSections, setOpenSections] = useState<Set<number>>(new Set([0]));
+  const [openAccordion, setOpenAccordion] = useState<number | null>(0);
 
-  const toggleSection = (index: number) => {
-    setOpenSections(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(index)) {
-        newSet.delete(index);
-      } else {
-        newSet.add(index);
-      }
-      return newSet;
-    });
+  const toggleAccordion = (index: number) => {
+    setOpenAccordion(openAccordion === index ? null : index);
   };
 
   const sections = [
@@ -193,7 +185,7 @@ const PrivacyPolicy: React.FC = () => {
     },
     {
       title: "Your Privacy Rights",
-      icon: <Shield size={24} />,
+      icon: <HatGlasses size={24} />,
       content: (
         <>
           <p>You have various rights regarding your personal information:</p>
@@ -515,7 +507,9 @@ const PrivacyPolicy: React.FC = () => {
     <div className={styles.privacyPolicy}>
       <div className={styles.header}>
         <div className={styles.headerContent}>
-          <Shield className={styles.headerIcon} size={48} />
+          <div className={styles.iconWrapper}>
+            <HatGlasses size={48} />
+          </div>
           <h1>Privacy Policy</h1>
           <p className={styles.lastUpdated}>Last Updated: January 21, 2026</p>
           <p className={styles.headerDescription}>
@@ -524,65 +518,38 @@ const PrivacyPolicy: React.FC = () => {
         </div>
       </div>
 
-      <div className={styles.quickNav}>
-        <h3>Quick Navigation</h3>
-        <div className={styles.navGrid}>
-          {sections.map((section, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                toggleSection(index);
-                setTimeout(() => {
-                  document.getElementById(`section-${index}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-              }}
-              className={styles.navCard}
-            >
-              <div className={styles.navIcon}>{section.icon}</div>
-              <span>{section.title}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className={styles.content}>
         {sections.map((section, index) => (
-          <div key={index} id={`section-${index}`} className={styles.section}>
+          <div key={index} className={styles.accordionItem}>
             <button
-              className={`${styles.sectionHeader} ${openSections.has(index) ? styles.open : ''}`}
-              onClick={() => toggleSection(index)}
+              className={`${styles.accordionHeader} ${openAccordion === index ? styles.active : ''}`}
+              onClick={() => toggleAccordion(index)}
             >
-              <div className={styles.sectionTitle}>
-                <div className={styles.sectionIcon}>{section.icon}</div>
+              <div className={styles.accordionTitle}>
+                <div className={styles.accordionIconWrap}>{section.icon}</div>
                 <h2>{section.title}</h2>
               </div>
-              <ChevronDown className={styles.chevron} size={24} />
+              <ChevronDown className={styles.accordionIcon} />
             </button>
-            <div className={`${styles.sectionContent} ${openSections.has(index) ? styles.open : ''}`}>
-              <div className={styles.sectionInner}>
+            {openAccordion === index && (
+              <div className={styles.accordionContent}>
                 {section.content}
               </div>
-            </div>
+            )}
           </div>
         ))}
       </div>
 
       <div className={styles.footer}>
         <div className={styles.footerContent}>
-          <Shield size={32} />
+          <HatGlasses size={32} />
           <h3>Your Privacy Matters</h3>
           <p>
             We're committed to protecting your personal information and being transparent about our practices. 
             If you have any questions or concerns, please don't hesitate to contact us at{' '}
             <a href="mailto:privacy@smallsided.com">privacy@smallsided.com</a>
           </p>
-          <div className={styles.footerLinks}>
-            <a href="/terms">Terms of Service</a>
-            <span>•</span>
-            <a href="/cookies">Cookie Policy</a>
-            <span>•</span>
-            <a href="/contact">Contact Us</a>
-          </div>
+          <p className={styles.lastUpdatedFooter}>Last Updated: January 21, 2026</p>
         </div>
       </div>
     </div>

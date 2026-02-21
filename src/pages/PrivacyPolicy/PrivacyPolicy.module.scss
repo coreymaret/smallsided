@@ -1,275 +1,189 @@
-// Brand colors
-$navy: #15141a;
-$green: #98ed66;
-$light-gray: #f8f9fa;
+@use '../../styles/variables' as *;
 
 .privacyPolicy {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  padding-bottom: 4rem;
+  background: $color-bg;
   margin-top: 5rem;
 }
 
+// ─── Header: matches CookiePolicy/TOS ───
 .header {
-  background: linear-gradient(135deg, $navy 0%, lighten($navy, 10%) 100%);
-  color: white;
-  padding: 4rem 2rem;
+  background: linear-gradient(135deg, $color-dark 0%, #2a2833 100%);
+  color: $color-white;
+  padding: 80px 20px;
   text-align: center;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      radial-gradient(circle at 20% 50%, rgba($green, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 50%, rgba($green, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-  }
 }
 
 .headerContent {
   max-width: 800px;
   margin: 0 auto;
-  position: relative;
-  z-index: 1;
 }
 
-.headerIcon {
-  color: $green;
-  margin-bottom: 1.5rem;
-  animation: fadeInDown 0.6s ease-out;
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: rgba($color-green, 0.1);
+  border-radius: 50%;
+  margin-bottom: 24px;
+
+  svg {
+    width: 40px;
+    height: 40px;
+    color: $color-green;
+  }
 }
 
 .header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  animation: fadeInDown 0.6s ease-out 0.1s backwards;
-
-  @media (max-width: 768px) {
-    font-size: 2rem;
-  }
+  font-size: 48px;
+  margin: 0 0 16px 0;
+  font-weight: 700;
 }
 
 .lastUpdated {
-  color: rgba(white, 0.7);
-  font-size: 0.875rem;
-  margin-bottom: 1.5rem;
-  animation: fadeInDown 0.6s ease-out 0.2s backwards;
+  color: $color-green;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .headerDescription {
-  font-size: 1.125rem;
+  font-size: 20px;
   line-height: 1.6;
-  color: rgba(white, 0.9);
-  animation: fadeInDown 0.6s ease-out 0.3s backwards;
-}
-
-.quickNav {
-  max-width: 1200px;
-  margin: -2rem auto 3rem;
-  padding: 0 2rem;
-  position: relative;
-  z-index: 2;
-
-  h3 {
-    text-align: center;
-    color: $navy;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-  }
-}
-
-.navGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem;
-  }
-}
-
-.navCard {
-  background: white;
-  border: 2px solid #e9ecef;
-  border-radius: 12px;
-  padding: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: left;
-
-  &:hover {
-    transform: translateY(-4px);
-    border-color: $green;
-    box-shadow: 0 8px 20px rgba($navy, 0.15);
-
-    .navIcon {
-      color: $green;
-      transform: scale(1.1);
-    }
-  }
-
-  span {
-    font-weight: 600;
-    color: $navy;
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 768px) {
-    padding: 1rem;
-    gap: 0.75rem;
-
-    span {
-      font-size: 0.85rem;
-    }
-  }
-}
-
-.navIcon {
-  flex-shrink: 0;
-  color: $navy;
-  transition: all 0.3s ease;
-}
-
-.content {
-  max-width: 900px;
+  color: rgba($color-white, 0.9);
+  max-width: 700px;
   margin: 0 auto;
-  padding: 0 2rem;
 }
 
-.section {
-  background: white;
-  border-radius: 16px;
-  margin-bottom: 1.5rem;
+// ─── Content ───
+.content {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+// ─── Accordion: matches CookiePolicy pattern exactly ───
+.accordionItem {
+  background: $color-white;
+  border-radius: $radius-md;
+  margin-bottom: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-  animation: fadeInUp 0.6s ease-out backwards;
-
-  &:nth-child(1) { animation-delay: 0.1s; }
-  &:nth-child(2) { animation-delay: 0.15s; }
-  &:nth-child(3) { animation-delay: 0.2s; }
-  &:nth-child(4) { animation-delay: 0.25s; }
-  &:nth-child(5) { animation-delay: 0.3s; }
-  &:nth-child(6) { animation-delay: 0.35s; }
-  &:nth-child(7) { animation-delay: 0.4s; }
-  &:nth-child(8) { animation-delay: 0.45s; }
-  &:nth-child(9) { animation-delay: 0.5s; }
-  &:nth-child(10) { animation-delay: 0.55s; }
-
-  &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  }
 }
 
-.sectionHeader {
+.accordionHeader {
   width: 100%;
-  padding: 1.75rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: none;
+  padding: 20px 24px;
+  background: $color-white;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
   text-align: left;
+  transition: all $transition-base;
 
   &:hover {
-    background: #f8f9fa;
+    background: rgba($color-green, 0.05);
   }
 
-  &.open {
-    background: linear-gradient(135deg, $navy 0%, lighten($navy, 5%) 100%);
+  &.active {
+    background: $color-dark;
 
-    .sectionTitle {
+    .accordionTitle {
+      .accordionIconWrap {
+        svg {
+          color: $color-green;
+        }
+      }
+
       h2 {
-        color: white;
-      }
-
-      .sectionIcon {
-        color: $green;
+        color: $color-green;
       }
     }
 
-    .chevron {
-      color: $green;
+    .accordionIcon {
       transform: rotate(180deg);
+      color: $color-green;
     }
   }
 
-  @media (max-width: 768px) {
-    padding: 1.25rem 1.5rem;
-  }
-}
+  .accordionTitle {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
 
-.sectionTitle {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex: 1;
-
-  h2 {
-    font-size: 1.5rem;
-    color: $navy;
-    margin: 0;
-    transition: color 0.3s ease;
-
-    @media (max-width: 768px) {
+    h2 {
       font-size: 1.25rem;
+      font-weight: 700;
+      color: $color-dark;
+      margin: 0;
+      transition: color $transition-base;
+    }
+  }
+
+  .accordionIconWrap {
+    flex-shrink: 0;
+
+    svg {
+      color: $color-dark;
+      transition: color $transition-base;
+    }
+  }
+
+  .accordionIcon {
+    width: 20px;
+    height: 20px;
+    color: $color-text-muted;
+    transition: transform $transition-base, color $transition-base;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: $bp-mobile) {
+    padding: 18px;
+
+    .accordionTitle {
+      gap: 12px;
+
+      h2 {
+        font-size: 1.1rem;
+      }
     }
   }
 }
 
-.sectionIcon {
-  color: $navy;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-}
-
-.chevron {
-  color: $navy;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-
-.sectionContent {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease-in-out;
-
-  &.open {
-    max-height: 10000px;
-  }
-}
-
-.sectionInner {
-  padding: 2rem;
-  border-top: 2px solid #e9ecef;
+.accordionContent {
+  padding: 12px 24px 24px 24px;
+  animation: slideDown $transition-base;
 
   h3 {
-    color: $navy;
-    font-size: 1.25rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $color-dark;
+    margin: 24px 0 12px;
 
     &:first-child {
       margin-top: 0;
     }
   }
 
+  h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $color-dark;
+    margin: 20px 0 10px;
+  }
+
   p {
-    color: #495057;
+    font-size: 1rem;
     line-height: 1.7;
-    margin-bottom: 1rem;
+    color: #444;
+    margin-bottom: 16px;
 
     &:last-child {
       margin-bottom: 0;
@@ -279,12 +193,13 @@ $light-gray: #f8f9fa;
   ul {
     list-style: none;
     padding: 0;
-    margin: 1rem 0;
+    margin: 16px 0;
 
     li {
-      color: #495057;
+      font-size: 1rem;
       line-height: 1.7;
-      margin-bottom: 0.75rem;
+      color: #444;
+      margin-bottom: 8px;
       padding-left: 2rem;
       position: relative;
 
@@ -295,56 +210,78 @@ $light-gray: #f8f9fa;
         top: 0.6rem;
         width: 8px;
         height: 8px;
-        background: $green;
+        background: $color-green;
         border-radius: 50%;
       }
 
       strong {
-        color: $navy;
-        font-weight: 600;
+        color: $color-dark;
+        font-weight: 700;
       }
     }
   }
 
   a {
-    color: $green;
+    color: $color-green;
     text-decoration: none;
     font-weight: 600;
-    transition: color 0.3s ease;
+    transition: color $transition-base;
 
     &:hover {
-      color: darken($green, 10%);
+      color: #7acc4d;
       text-decoration: underline;
     }
   }
 
-  @media (max-width: 768px) {
-    padding: 1.5rem;
+  @media (max-width: $bp-mobile) {
+    padding: 0 18px 18px;
+
+    h3 {
+      font-size: 1rem;
+      margin: 20px 0 10px;
+    }
+
+    p, ul li {
+      font-size: 0.95rem;
+    }
   }
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ─── Special content blocks ───
 .warningBox {
-  background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%);
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
   border-left: 4px solid #ffc107;
-  padding: 1.25rem;
-  border-radius: 8px;
-  margin: 1.5rem 0;
+  padding: 16px;
+  border-radius: $radius-sm;
+  margin: 20px 0;
   display: flex;
+  gap: 12px;
   align-items: flex-start;
-  gap: 1rem;
 
   svg {
-    color: #ff9800;
+    color: #ffc107;
     flex-shrink: 0;
-    margin-top: 0.15rem;
+    margin-top: 2px;
   }
 
   p {
     margin: 0;
-    color: #856404;
+    color: $color-dark;
 
     strong {
-      color: #664300;
+      color: $color-dark;
+      font-weight: 700;
     }
   }
 }
@@ -352,46 +289,46 @@ $light-gray: #f8f9fa;
 .contactGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
+  gap: 24px;
+  margin: 24px 0;
 }
 
 .contactCard {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: $color-bg;
   border: 2px solid #dee2e6;
-  border-radius: 12px;
-  padding: 2rem;
+  border-radius: $radius-md;
+  padding: 32px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all $transition-base;
 
   &:hover {
     transform: translateY(-4px);
-    border-color: $green;
-    box-shadow: 0 8px 20px rgba($navy, 0.15);
+    border-color: $color-dark;
+    box-shadow: 0 8px 20px rgba($color-dark, 0.15);
 
     svg {
-      color: $green;
+      color: $color-green;
       transform: scale(1.1);
     }
   }
 
   svg {
-    color: $navy;
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
+    color: $color-dark;
+    margin-bottom: 16px;
+    transition: all $transition-base;
   }
 
   h4 {
-    color: $navy;
+    color: $color-dark;
     font-size: 1.125rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 8px;
   }
 
   p {
-    margin-bottom: 0.5rem;
+    margin-bottom: 8px;
 
     a {
-      color: $green;
+      color: $color-green;
       text-decoration: none;
       font-weight: 600;
 
@@ -402,24 +339,24 @@ $light-gray: #f8f9fa;
   }
 
   span {
-    color: #6c757d;
+    color: $color-text-muted;
     font-size: 0.875rem;
   }
 }
 
 .addressSection {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 2rem 0;
+  background: $color-bg;
+  border-radius: $radius-md;
+  padding: 24px;
+  margin: 24px 0;
 
   h4 {
-    color: $navy;
-    margin-bottom: 1rem;
+    color: $color-dark;
+    margin-bottom: 12px;
   }
 
   p {
-    color: #495057;
+    color: #444;
     line-height: 1.7;
     margin: 0;
   }
@@ -428,18 +365,18 @@ $light-gray: #f8f9fa;
 .regulatorySection {
   background: linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%);
   border-left: 4px solid #2196f3;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin: 2rem 0;
+  padding: 24px;
+  border-radius: $radius-sm;
+  margin: 24px 0;
 
   h4 {
     color: #1565c0;
-    margin-bottom: 1rem;
+    margin-bottom: 12px;
   }
 
   p {
     color: #01579b;
-    margin-bottom: 1rem;
+    margin-bottom: 12px;
   }
 
   ul {
@@ -459,54 +396,40 @@ $light-gray: #f8f9fa;
   }
 }
 
+// ─── Footer: matches TOS/CookiePolicy ───
 .footer {
-  background: linear-gradient(135deg, $navy 0%, lighten($navy, 10%) 100%);
-  margin-top: 4rem;
-  padding: 3rem 2rem;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      radial-gradient(circle at 20% 50%, rgba($green, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 50%, rgba($green, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-  }
+  background: linear-gradient(135deg, $color-dark 0%, #2a2833 100%);
+  padding: 60px 20px;
+  margin-top: 0;
 }
 
 .footerContent {
   max-width: 800px;
   margin: 0 auto;
   text-align: center;
-  color: white;
-  position: relative;
-  z-index: 1;
+  color: $color-white;
 
   svg {
-    color: $green;
-    margin-bottom: 1rem;
+    color: $color-green;
+    margin-bottom: 20px;
   }
 
   h3 {
     font-size: 1.75rem;
-    margin-bottom: 1rem;
-    color: white;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: $color-white;
   }
 
   p {
-    font-size: 1.125rem;
-    line-height: 1.6;
-    color: rgba(white, 0.9);
-    margin-bottom: 2rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba($color-white, 0.95);
+    max-width: 700px;
+    margin: 0 auto 16px;
 
     a {
-      color: $green;
+      color: $color-green;
       text-decoration: none;
       font-weight: 600;
 
@@ -514,50 +437,54 @@ $light-gray: #f8f9fa;
         text-decoration: underline;
       }
     }
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
   }
 }
 
-.footerLinks {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+.lastUpdatedFooter {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba($color-white, 0.2);
+  font-size: 0.9rem;
+  color: $color-green;
+  font-weight: 600;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  a {
-    color: rgba(white, 0.9);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
+// ─── Mobile ───
+@media (max-width: $bp-mobile) {
+  .header {
+    padding: 60px 20px;
 
-    &:hover {
-      color: $green;
+    h1 {
+      font-size: 36px;
+    }
+
+    .headerDescription {
+      font-size: 18px;
     }
   }
 
-  span {
-    color: rgba(white, 0.5);
+  .contactGrid {
+    grid-template-columns: 1fr;
   }
-}
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
+  .footer {
+    padding: 40px 20px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .footerContent {
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
   }
 }

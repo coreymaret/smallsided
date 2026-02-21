@@ -106,10 +106,10 @@ const CookiesPolicy: React.FC = () => {
             <Cookie className={styles.heroIcon} />
           </div>
           <h1>Cookies Policy</h1>
+          <p className={styles.lastUpdated}>Last Updated: January 21, 2026</p>
           <p className={styles.subtitle}>
             Transparency about how we use cookies and similar technologies
           </p>
-          <p className={styles.lastUpdated}>Last Updated: January 21, 2026</p>
         </div>
       </section>
 
@@ -443,10 +443,10 @@ const CookiesPolicy: React.FC = () => {
           </p>
           <div className={styles.contactInfo}>
             <div className={styles.contactMethod}>
-              <strong>Email:</strong> hello@smallsided.com
+              <strong>Email:</strong> <span>hello@smallsided.com</span>
             </div>
             <div className={styles.contactMethod}>
-              <strong>Phone:</strong> (727) 4-SOCCER
+              <strong>Phone:</strong> <span>(727) 4-SOCCER</span>
             </div>
           </div>
         </div>

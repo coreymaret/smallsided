@@ -11,12 +11,30 @@
 .termsHero {
   background: linear-gradient(135deg, $color-dark 0%, #2a2833 100%);
   color: $color-white;
-  padding: 80px 20px 60px;
+  padding: 80px 20px;
   text-align: center;
 
   .heroContent {
     max-width: 800px;
     margin: 0 auto;
+
+    .iconWrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      background: rgba($color-green, 0.1);
+      border-radius: 50%;
+      margin-bottom: 24px;
+
+      svg {
+        width: 40px;
+        height: 40px;
+        color: $color-green;
+        margin-bottom: 0;
+      }
+    }
 
     svg {
       color: $color-green;
@@ -24,9 +42,9 @@
     }
 
     h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      margin-bottom: 12px;
+      font-size: 48px;
+      font-weight: 700;
+      margin: 0 0 16px 0;
       line-height: 1.2;
     }
 
@@ -40,7 +58,7 @@
     }
 
     .heroDescription {
-      font-size: 1.1rem;
+      font-size: 20px;
       line-height: 1.6;
       color: rgba($color-white, 0.9);
       max-width: 700px;
@@ -49,15 +67,15 @@
   }
 
   @media (max-width: $bp-mobile) {
-    padding: 60px 20px 40px;
+    padding: 60px 20px;
 
     .heroContent {
       h1 {
-        font-size: 2rem;
+        font-size: 36px;
       }
 
       .heroDescription {
-        font-size: 1rem;
+        font-size: 18px;
       }
     }
   }
@@ -77,7 +95,6 @@
   top: 0;
   z-index: 100;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  // Break out of parent max-width to span full viewport
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
   margin-bottom: 40px;
@@ -135,7 +152,7 @@
       border-bottom-color: $color-green;
 
       svg {
-        color: $color-green;
+        color: $color-dark;
         transform: none;
       }
     }
@@ -162,39 +179,52 @@
   gap: 16px;
 }
 
+// ─── Accordion: exact same pattern as CookiePolicy ───
 .accordionItem {
   background: $color-white;
   border-radius: $radius-md;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  transition: all $transition-base;
+  margin-bottom: 12px;
 
   &:hover {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  }
-
-  &.open {
-    .accordionHeader {
-      background: $color-bg;
-      border-bottom: 2px solid $color-green;
-    }
   }
 }
 
 .accordionHeader {
   width: 100%;
-  padding: 24px;
-  background: $color-white;
-  border: none;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: all $transition-base;
+  padding: 20px 24px;
+  background: $color-white;
+  border: none;
+  cursor: pointer;
   text-align: left;
+  transition: all $transition-base;
 
   &:hover {
-    background: $color-bg;
+    background: rgba($color-green, 0.05);
+  }
+
+  &.active {
+    background: $color-dark;
+
+    .accordionTitle {
+      svg {
+        color: $color-green;
+      }
+
+      h3 {
+        color: $color-green;
+      }
+    }
+
+    .accordionIcon {
+      transform: rotate(180deg);
+      color: $color-green;
+    }
   }
 
   .accordionTitle {
@@ -203,8 +233,9 @@
     gap: 16px;
 
     svg {
-      color: $color-green;
+      color: $color-dark;
       flex-shrink: 0;
+      transition: color $transition-base;
     }
 
     h3 {
@@ -212,17 +243,16 @@
       font-weight: 700;
       color: $color-dark;
       margin: 0;
+      transition: color $transition-base;
     }
   }
 
-  .chevron {
-    color: $color-dark;
-    transition: transform $transition-base;
+  .accordionIcon {
+    width: 20px;
+    height: 20px;
+    color: $color-text-muted;
+    transition: transform $transition-base, color $transition-base;
     flex-shrink: 0;
-
-    &.rotated {
-      transform: rotate(180deg);
-    }
   }
 
   @media (max-width: $bp-mobile) {
@@ -244,7 +274,7 @@
 }
 
 .accordionContent {
-  padding: 0 24px 24px;
+  padding: 12px 24px 24px;
   color: $color-dark;
   animation: slideDown $transition-base;
 
@@ -377,16 +407,17 @@
 .termsFooter {
   margin-top: 60px;
   padding-top: 40px;
-  border-top: 2px solid #e0e0e0;
 }
 
 .acknowledgmentBox {
   background: linear-gradient(135deg, $color-dark 0%, #2a2833 100%);
   color: $color-white;
   padding: 40px;
-  border-radius: $radius-lg;
   text-align: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  border-radius: 0;
 
   svg {
     color: $color-green;
@@ -419,6 +450,9 @@
     font-size: 0.9rem;
     color: $color-green;
     font-weight: 600;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   @media (max-width: $bp-mobile) {

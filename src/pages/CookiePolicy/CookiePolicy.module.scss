@@ -47,9 +47,12 @@
   }
 
   .lastUpdated {
-    font-size: 14px;
-    opacity: 0.7;
-    margin: 0;
+    color: $color-green;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 24px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 }
 
@@ -114,7 +117,7 @@
     border-bottom-color: $color-green;
 
     .tabIcon {
-      color: $color-green;
+      color: $color-dark;
     }
   }
 }
@@ -200,7 +203,7 @@
   .cardIcon {
     width: 48px;
     height: 48px;
-    background: rgba($color-green, 0.1);
+    background: $color-dark;
     border-radius: $radius-md;
     display: flex;
     align-items: center;
@@ -378,7 +381,7 @@
     .serviceIcon {
       width: 32px;
       height: 32px;
-      color: $color-green;
+      color: $color-dark;
     }
 
     h3 {
@@ -618,14 +621,15 @@
   font-weight: 600;
   color: $color-dark;
   text-align: left;
-  transition: background $transition-base;
+  transition: all $transition-base;
 
   &:hover {
     background: rgba($color-green, 0.05);
   }
 
   &.active {
-    background: rgba($color-green, 0.1);
+    background: $color-dark;
+    color: $color-green;
 
     .accordionIcon {
       transform: rotate(180deg);
@@ -643,7 +647,7 @@
 }
 
 .accordionContent {
-  padding: 0 24px 24px 24px;
+  padding: 12px 24px 24px 24px;
   animation: slideDown $transition-base;
 
   p {
@@ -665,8 +669,8 @@
 }
 
 .contactSection {
-  background: $color-white;
-  border-top: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, $color-dark 0%, #2a2833 100%);
+  border-top: none;
   padding: 60px 20px;
   margin-top: 60px;
 
@@ -677,13 +681,13 @@
 
     h2 {
       font-size: 32px;
-      color: $color-dark;
+      color: $color-white;
       margin: 0 0 16px 0;
     }
 
     p {
       font-size: 16px;
-      color: $color-text-muted;
+      color: $color-white;
       margin: 0 0 32px 0;
     }
   }
@@ -697,12 +701,18 @@
 
   .contactMethod {
     font-size: 15px;
-    color: #4b5563;
+    color: $color-white;
 
     strong {
-      color: $color-dark;
+      color: $color-white;
       font-weight: 600;
       margin-right: 8px;
+    }
+
+    span {
+      color: $color-white;
+      padding-bottom: 8px;
+      border-bottom: 1px dotted $color-green;
     }
   }
 }
