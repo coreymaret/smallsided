@@ -436,6 +436,7 @@ const CookiesPolicy: React.FC = () => {
       {/* Contact Section */}
       <section className={styles.contactSection}>
         <div className={styles.contactContent}>
+          <Cookie size={32} />
           <h2>Questions About Our Cookie Policy?</h2>
           <p>
             If you have questions about how we use cookies or would like more information about your privacy
