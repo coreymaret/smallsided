@@ -1,7 +1,7 @@
 import styles from "./Camps.module.scss";
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/SEO/SEO';
-import { Users } from '../../components/Icons/Icons';
+import { Smile } from '../../components/Icons/Icons';
 import RegisterCamps from '../../components/Register/components/RegisterCamps/RegisterCamps';
 
 const Camps = () => {
@@ -13,7 +13,7 @@ const Camps = () => {
         <div className={styles.campsHero}>
           <div className={styles.heroContent}>
             <div className={styles.iconWrapper}>
-              <Users size={48} />
+              <Smile size={48} />
             </div>
             <h1>Soccer Camp Registration</h1>
             <p className={styles.heroSubtitle}>Skills, Fun & Development</p>

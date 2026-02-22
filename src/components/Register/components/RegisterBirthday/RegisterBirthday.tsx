@@ -433,11 +433,6 @@ const BirthdayParties: React.FC = () => {
         </>
       )}
 
-      <div className={styles.partiesHeader}>
-        <h1 className={styles.partiesTitle}>Birthday Party Booking</h1>
-        <p className={styles.partiesSubtitle}>Make your child's special day unforgettable with our all-inclusive party packages</p>
-      </div>
-
       <div className={styles.container}>
         {/* Progress Bar */}
         <div className={styles.progress}>

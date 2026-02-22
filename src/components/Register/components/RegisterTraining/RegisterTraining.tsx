@@ -442,11 +442,6 @@ const RegisterTraining: React.FC = () => {
         </>
       )}
 
-      <div className={styles.registerHeader}>
-        <h1 className={styles.registerTitle}>Training Program Registration</h1>
-        <p className={styles.registerSubtitle}>Personalized soccer training to elevate your game</p>
-      </div>
-
       <div className={styles.container}>
         {/* Progress Bar */}
         <div className={styles.progress}>

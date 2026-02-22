@@ -3,51 +3,13 @@
 // ─── Page Wrapper ───
 .register {
   max-width: $container-max-width;
-  margin: 8rem auto 0;
-  padding: 0 2rem 4rem;
+  margin: 0 auto;
+  padding: 60px 2rem 4rem;
   font-family: $font-primary;
 
   @media (max-width: $bp-mobile) {
-    padding: 0 1rem 2rem;
-    margin: 6rem auto 0;
+    padding: 40px 1rem 2rem;
   }
-}
-
-// ─── Register Header ───
-.registerHeader {
-  text-align: center;
-  padding: 5rem 2rem;
-  background: $color-dark;
-  border-bottom: 4px solid $color-green;
-  border-radius: $radius-lg;
-  margin-bottom: 3rem;
-
-  @media (max-width: $bp-mobile) {
-    padding: 3rem 1rem;
-    margin-bottom: 2rem;
-  }
-}
-
-.registerTitle {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: $color-white;
-  line-height: 1.2;
-  margin: 0 0 1rem 0;
-  letter-spacing: -0.02em;
-
-  @media (min-width: $bp-mobile) {
-    font-size: 2.75rem;
-  }
-}
-
-.registerSubtitle {
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: $color-green;
-  line-height: 1.6;
-  max-width: 800px;
-  margin: 0 auto;
 }
 
 // ─── Container ───

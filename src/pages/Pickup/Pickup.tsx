@@ -1,7 +1,7 @@
 import styles from "./Pickup.module.scss";
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/SEO/SEO';
-import { Zap } from '../../components/Icons/Icons';
+import { Users } from '../../components/Icons/Icons';
 import RegisterPickup from '../../components/Register/components/RegisterPickup/RegisterPickup';
 
 const Pickup = () => {
@@ -13,7 +13,7 @@ const Pickup = () => {
         <div className={styles.pickupHero}>
           <div className={styles.heroContent}>
             <div className={styles.iconWrapper}>
-              <Zap size={48} />
+              <Users size={48} />
             </div>
             <h1>Pickup Games</h1>
             <p className={styles.heroSubtitle}>Drop In & Play</p>
