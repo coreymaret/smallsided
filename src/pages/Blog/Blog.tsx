@@ -10,6 +10,9 @@ import { useState, useEffect } from 'react';
 import SEO from '../../components/SEO/SEO';
 import { getSEOConfig } from '../../config/seo';
 
+// Icons
+import { FileText } from '../../components/Icons/Icons';
+
 // Components
 import BlogList from '../../components/Blog/BlogList';
 
@@ -76,76 +79,85 @@ const Blog: React.FC = () => {
       <SEO {...seo} />
 
       <div className={styles.blogPage}>
-        {/* Page header */}
-        <header className={styles.header}>
-          <h1 className={styles.title}>Blog</h1>
-          <p className={styles.description}>
-            Insights, tutorials, and updates from our team
-          </p>
-        </header>
-
-        {/* Tag filter buttons */}
-        {allTags.length > 0 && (
-          <div className={styles.filters}>
-            <button
-              className={`${styles.filter} ${!selectedTag ? styles.active : ''}`}
-              onClick={() => { setSelectedTag(null); setCurrentPage(1); }}
-            >
-              All Posts
-            </button>
-            {(filtersExpanded ? allTags : allTags.slice(0, 3)).map(tag => (
-              <button
-                key={tag}
-                className={`${styles.filter} ${selectedTag === tag ? styles.active : ''}`}
-                onClick={() => { setSelectedTag(tag); setCurrentPage(1); }}
-              >
-                {tag}
-              </button>
-            ))}
-            {allTags.length > 3 && (
-              <button
-                className={styles.filterToggle}
-                onClick={() => setFiltersExpanded(!filtersExpanded)}
-              >
-                {filtersExpanded ? 'Show less' : `+${allTags.length - 3} more`}
-              </button>
-            )}
+        {/* Hero banner */}
+        <div className={styles.blogHero}>
+          <div className={styles.heroContent}>
+            <div className={styles.iconWrapper}>
+              <FileText size={48} />
+            </div>
+            <h1>Blog</h1>
+            <p className={styles.heroSubtitle}>News & Insights</p>
+            <p className={styles.heroDescription}>
+              Insights, tutorials, and updates from our team
+            </p>
           </div>
-        )}
+        </div>
 
-        {/* Filtered post grid */}
-        <BlogList posts={paginatedPosts} />
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <nav className={styles.pagination} aria-label="Blog pagination">
-            <button
-              className={`${styles.pageBtn} ${styles.pageNav}`}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-            >
-              ← Prev
-            </button>
-
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        {/* Content area */}
+        <div className={styles.blogContent}>
+          {/* Tag filter buttons */}
+          {allTags.length > 0 && (
+            <div className={styles.filters}>
               <button
-                key={page}
-                className={`${styles.pageBtn} ${page === currentPage ? styles.pageActive : ''}`}
-                onClick={() => setCurrentPage(page)}
+                className={`${styles.filter} ${!selectedTag ? styles.active : ''}`}
+                onClick={() => { setSelectedTag(null); setCurrentPage(1); }}
               >
-                {page}
+                All Posts
               </button>
-            ))}
+              {(filtersExpanded ? allTags : allTags.slice(0, 3)).map(tag => (
+                <button
+                  key={tag}
+                  className={`${styles.filter} ${selectedTag === tag ? styles.active : ''}`}
+                  onClick={() => { setSelectedTag(tag); setCurrentPage(1); }}
+                >
+                  {tag}
+                </button>
+              ))}
+              {allTags.length > 3 && (
+                <button
+                  className={styles.filterToggle}
+                  onClick={() => setFiltersExpanded(!filtersExpanded)}
+                >
+                  {filtersExpanded ? 'Show less' : `+${allTags.length - 3} more`}
+                </button>
+              )}
+            </div>
+          )}
 
-            <button
-              className={`${styles.pageBtn} ${styles.pageNav}`}
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-            >
-              Next →
-            </button>
-          </nav>
-        )}
+          {/* Filtered post grid */}
+          <BlogList posts={paginatedPosts} />
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <nav className={styles.pagination} aria-label="Blog pagination">
+              <button
+                className={`${styles.pageBtn} ${styles.pageNav}`}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+              >
+                ← Prev
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  className={`${styles.pageBtn} ${page === currentPage ? styles.pageActive : ''}`}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button
+                className={`${styles.pageBtn} ${styles.pageNav}`}
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+              >
+                Next →
+              </button>
+            </nav>
+          )}
+        </div>
       </div>
     </>
   );

@@ -3,62 +3,87 @@
 
 // ─── Page Wrapper ───
 .servicesPage {
-  max-width: $container-max-width;
-  margin: 8rem auto 0;
-  padding: 0 2rem 4rem;
-  font-family: $font-primary;
+  width: 100%;
   min-height: 100vh;
+  background: $color-bg;
+  margin-top: 5rem;
+  font-family: $font-primary;
+}
+
+// ─── Hero: matches TOS/CookiePolicy/About ───
+.servicesHero {
+  background: linear-gradient(135deg, $color-dark 0%, #2a2833 100%);
+  color: $color-white;
+  padding: 80px 20px;
+  text-align: center;
+
+  .heroContent {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .iconWrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: rgba($color-green, 0.1);
+    border-radius: 50%;
+    margin-bottom: 24px;
+
+    svg {
+      width: 40px;
+      height: 40px;
+      color: $color-green;
+    }
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+  }
+
+  .heroSubtitle {
+    color: $color-green;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .heroDescription {
+    font-size: 20px;
+    line-height: 1.6;
+    color: rgba($color-white, 0.9);
+    max-width: 700px;
+    margin: 0 auto;
+  }
 
   @media (max-width: $bp-mobile) {
-    padding: 0 1rem 2rem;
-    margin: 6rem auto 0;
+    padding: 60px 20px;
+
+    h1 {
+      font-size: 36px;
+    }
+
+    .heroDescription {
+      font-size: 18px;
+    }
   }
 }
 
-// ─── Container ───
-.container {
+// ─── Content Area ───
+.serviceContent {
   max-width: $container-max-width;
   margin: 0 auto;
-}
-
-// ─── Header (Dark Hero) ───
-.header {
-  text-align: center;
-  padding: 5rem 2rem;
-  background: $color-dark;
-  border-bottom: 4px solid $color-green;
-  border-radius: $radius-lg;
-  margin-bottom: 3rem;
+  padding: 60px 2rem 4rem;
 
   @media (max-width: $bp-mobile) {
-    padding: 3rem 1rem;
-    margin-bottom: 2rem;
-  }
-}
-
-.title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: $color-white;
-  line-height: 1.2;
-  margin: 0 0 1rem 0;
-  letter-spacing: -0.02em;
-
-  @media (min-width: $bp-mobile) {
-    font-size: 3rem;
-  }
-}
-
-.subtitle {
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: $color-green;
-  line-height: 1.6;
-  max-width: 700px;
-  margin: 0 auto;
-
-  @media (min-width: $bp-mobile) {
-    font-size: 1.25rem;
+    padding: 40px 1rem 2rem;
   }
 }
 
@@ -94,7 +119,7 @@
     transform: translateY(-4px);
     box-shadow: 0 12px 24px rgba($color-dark, 0.1);
 
-    .iconWrapper {
+    .cardIconWrapper {
       background: $color-dark;
       transform: scale(1.1);
     }
@@ -114,7 +139,7 @@
   }
 }
 
-.iconWrapper {
+.cardIconWrapper {
   width: 64px;
   height: 64px;
   background: $color-bg;

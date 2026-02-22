@@ -4,13 +4,6 @@ import { Trophy, Target, Users, Lightbulb, TrendingUp, Award, ArrowDownRight } f
 const FeaturesSection = () => {
   return (
     <section className={styles.featuresSection}>
-      <div className={styles.featuresSectionHeader}>
-        <h2 className={styles.featuresSectionTitle}>Why Small-Sided Soccer Works</h2>
-        <p className={styles.featuresSectionSubtitle}>
-          Discover the key benefits that make small-sided formats the superior choice for youth development
-        </p>
-      </div>
-
       <div className={styles.featuresContainer}>
         <div className={styles.featureItem}>
           <div className={styles.featureIconWrapper}>

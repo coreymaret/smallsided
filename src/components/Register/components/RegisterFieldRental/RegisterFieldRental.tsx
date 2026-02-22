@@ -57,8 +57,6 @@ const RegisterFieldRental: React.FC = () => {
     }, 400);
   };
 
-  // Removed 40 lines of duplicate validation code - now using shared hooks
-
   const validateStep3Fields = (): boolean => {
     const errors: typeof validationErrors = {};
     let isValid = true;
@@ -201,7 +199,6 @@ const RegisterFieldRental: React.FC = () => {
     }
   };
 
-  // Using shared formatters for phone
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatters.formatPhoneNumber(e.target.value, formData.phone);
     setFormData({ ...formData, phone: formatted });
@@ -213,7 +210,6 @@ const RegisterFieldRental: React.FC = () => {
     }
   };
 
-  // Using shared formatters for card number
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatters.formatCardNumber(e.target.value);
     setFormData({ ...formData, cardNumber: formatted });
@@ -225,7 +221,6 @@ const RegisterFieldRental: React.FC = () => {
     }
   };
 
-  // Using shared formatters for card expiry
   const handleCardExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatters.formatCardExpiry(e.target.value);
     setFormData({ ...formData, cardExpiry: formatted });
@@ -428,11 +423,6 @@ const RegisterFieldRental: React.FC = () => {
           </div>
         </>
       )}
-
-      <div className={styles.bookingHeader}>
-        <h1 className={styles.bookingTitle}>Field Rental</h1>
-        <p className={styles.bookingSubtitle}>Book your perfect field for games, practices, or events</p>
-      </div>
 
       <div className={styles.container}>
         {/* Progress Bar */}

@@ -6,55 +6,12 @@
   width: 100%;
   max-width: $container-max-width;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 60px 2rem 0;
   background-color: $color-bg;
   box-sizing: border-box;
 
   @media (max-width: $bp-mobile) {
-    padding: 0 1rem;
-  }
-}
-
-// ─── Section Header (Dark Hero) ───
-.featuresSectionHeader {
-  text-align: center;
-  padding: 5rem 2rem;
-  background: $color-dark;
-  border-bottom: 4px solid $color-green;
-  border-radius: $radius-lg;
-  margin: 0 auto 60px;
-
-  @media (max-width: $bp-mobile) {
-    padding: 3rem 1rem;
-    margin-bottom: 40px;
-  }
-}
-
-.featuresSectionTitle {
-  font-family: $font-primary;
-  font-size: 2.75rem;
-  font-weight: 800;
-  color: $color-white;
-  line-height: 1.2;
-  margin: 0 0 1rem 0;
-  letter-spacing: -0.02em;
-
-  @media (max-width: $bp-mobile) {
-    font-size: 2rem;
-  }
-}
-
-.featuresSectionSubtitle {
-  font-family: $font-primary;
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: $color-green;
-  line-height: 1.6;
-  max-width: 800px;
-  margin: 0 auto;
-
-  @media (max-width: $bp-mobile) {
-    font-size: 1rem;
+    padding: 40px 1rem 0;
   }
 }
 

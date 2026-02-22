@@ -517,11 +517,6 @@ const result: any = await api.createLeagueRegistration(registrationData);
         </>
       )}
 
-      <div className={styles.registerHeader}>
-        <h2 className={styles.registerTitle}>Register Your Team</h2>
-        <p className={styles.registerSubtitle}>Join one of our competitive leagues in just a few simple steps</p>
-      </div>
-
       <div className={styles.container} id="register-container">
         {/* Progress Bar */}
         <div className={styles.progress}>

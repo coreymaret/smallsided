@@ -439,11 +439,6 @@ const RegisterCamps: React.FC = () => {
         </>
       )}
 
-      <div className={styles.campsHeader}>
-        <h1 className={styles.campsTitle}>Soccer Camp Registration</h1>
-        <p className={styles.campsSubtitle}>Join us for an unforgettable week of soccer, fun, and skill development</p>
-      </div>
-
       <div className={styles.container}>
         {/* Progress Bar */}
         <div className={styles.progress}>

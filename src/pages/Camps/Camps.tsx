@@ -1,8 +1,8 @@
 import styles from "./Camps.module.scss";
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/SEO/SEO';
-import Register from '../../components/Register/Register';
-import { campsConfig } from '../../components/Register/configs';
+import { Users } from '../../components/Icons/Icons';
+import RegisterCamps from '../../components/Register/components/RegisterCamps/RegisterCamps';
 
 const Camps = () => {
   const seo = getSEOConfig('camps');
@@ -10,10 +10,23 @@ const Camps = () => {
     <>
       <SEO {...seo} />
       <div className={styles.campsPage}>
-        <Register config={campsConfig} />
+        <div className={styles.campsHero}>
+          <div className={styles.heroContent}>
+            <div className={styles.iconWrapper}>
+              <Users size={48} />
+            </div>
+            <h1>Soccer Camp Registration</h1>
+            <p className={styles.heroSubtitle}>Skills, Fun & Development</p>
+            <p className={styles.heroDescription}>
+              Join us for an unforgettable week of soccer, fun, and skill development
+            </p>
+          </div>
+        </div>
+
+        <RegisterCamps />
       </div>
     </>
   );
-}
+};
 
 export default Camps;

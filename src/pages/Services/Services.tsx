@@ -32,7 +32,6 @@ const services = [
     description: 'Reserve premium turf fields for your team or group. Flexible booking options available.',
     icon: Calendar,
     path: '/services/field-rental',
-    color: '#98ED66',
   },
   {
     id: 'leagues',
@@ -40,7 +39,6 @@ const services = [
     description: 'Join competitive adult and youth leagues. Multiple divisions and skill levels available.',
     icon: Trophy,
     path: '/services/leagues',
-    color: '#98ED66',
   },
   {
     id: 'pickup',
@@ -48,7 +46,6 @@ const services = [
     description: 'Drop in and play with other soccer enthusiasts. No commitment required.',
     icon: Zap,
     path: '/services/pickup',
-    color: '#98ED66',
   },
   {
     id: 'birthday-parties',
@@ -56,7 +53,6 @@ const services = [
     description: 'Host an unforgettable soccer-themed birthday party with professional staff and activities.',
     icon: Cake,
     path: '/services/birthday-parties',
-    color: '#98ED66',
   },
   {
     id: 'camps',
@@ -64,7 +60,6 @@ const services = [
     description: 'Professional coaching camps for all ages and skill levels. Single day to week-long options.',
     icon: Users,
     path: '/services/camps',
-    color: '#98ED66',
   },
   {
     id: 'training',
@@ -72,7 +67,6 @@ const services = [
     description: 'Personalized training sessions focused on skill development and technique improvement.',
     icon: Target,
     path: '/services/training',
-    color: '#98ED66',
   },
 ];
 
@@ -94,16 +88,21 @@ const Services = () => {
       <SEO {...seo} />
 
       <div className={styles.servicesPage}>
-        <div className={styles.container}>
-          {/* Page header */}
-          <div className={styles.header}>
-            <h1 className={styles.title}>Our Services</h1>
-            <p className={styles.subtitle}>
+        <div className={styles.servicesHero}>
+          <div className={styles.heroContent}>
+            <div className={styles.iconWrapper}>
+              <Zap size={48} />
+            </div>
+            <h1>Our Services</h1>
+            <p className={styles.heroSubtitle}>Everything You Need to Play</p>
+            <p className={styles.heroDescription}>
               Discover all the ways Small Sided can help you play, compete, and develop your soccer skills
             </p>
           </div>
+        </div>
 
-          {/* Service offerings grid */}
+        {/* Service offerings grid */}
+        <div className={styles.serviceContent}>
           <div className={styles.serviceGrid}>
             {services.map((service) => {
               const Icon = service.icon;
@@ -113,7 +112,7 @@ const Services = () => {
                   className={styles.serviceCard}
                   onClick={() => handleServiceClick(service.path)}
                 >
-                  <div className={styles.iconWrapper}>
+                  <div className={styles.cardIconWrapper}>
                     <Icon size={32} className={styles.icon} />
                   </div>
                   <h3 className={styles.serviceTitle}>{service.title}</h3>

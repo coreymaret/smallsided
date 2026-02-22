@@ -518,11 +518,6 @@ const RegisterPickup: React.FC = () => {
         </>
       )}
 
-      <div className={styles.header}>
-        <h1>Pickup Games</h1>
-        <p>Join friendly matches at your skill level. Drop in for a game whenever you're free!</p>
-      </div>
-
       <div className={styles.pickupContainer}>
         <div className={styles.contentCard}>
           {/* Progress Bar */}
