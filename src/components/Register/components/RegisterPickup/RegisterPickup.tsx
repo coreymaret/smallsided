@@ -592,18 +592,22 @@ const RegisterPickup: React.FC = () => {
                 </button>
               </div>
 
-              <div className={styles.scheduleGrid}>
+              <div className={styles.scheduleVertical}>
                 {weekDates.map((date, index) => {
                   const games = getGamesForDate(date);
                   const isToday = date.toDateString() === new Date().toDateString();
                   
                   return (
-                    <div key={index} className={`${styles.dayColumn} ${isToday ? styles.today : ''}`}>
-                      <div className={styles.dayHeader}>
+                    <div 
+                      key={index} 
+                      className={`${styles.dayRow} ${isToday ? styles.today : ''} ${index % 2 === 1 ? styles.alt : ''}`}
+                    >
+                      <div className={styles.dayLabel}>
                         <span className={styles.dayName}>{formatDayName(date)}</span>
                         <span className={styles.dayDate}>{formatDate(date)}</span>
+                        {isToday && <span className={styles.todayBadge}>Today</span>}
                       </div>
-                      <div className={styles.gamesList}>
+                      <div className={styles.gamesRow}>
                         {games.length === 0 ? (
                           <div className={styles.noGames}>No games scheduled</div>
                         ) : (
@@ -613,26 +617,32 @@ const RegisterPickup: React.FC = () => {
                               className={`${styles.gameCard} ${selectedGame?.id === game.id ? styles.selected : ''}`}
                               onClick={() => handleGameSelect(game)}
                             >
-                              <div className={styles.gameInfo}>
-                                <Clock size={16} />
-                                {game.time}
+                              <div className={styles.gameCardTop}>
+                                <div className={styles.gameTime}>
+                                  <Clock size={15} />
+                                  {game.time}
+                                </div>
+                                <div className={styles.gamePrice}>${game.pricePerPlayer}/player</div>
                               </div>
-                              <div className={styles.gameInfo}>
-                                <Trophy size={16} />
-                                {game.format}
-                              </div>
-                              <div className={styles.gameInfo}>
-                                <MapPin size={16} />
-                                {game.location}
-                              </div>
-                              <div className={styles.gameSkill}>{game.skillLevel}</div>
-                              <div className={styles.gameInfo}>
-                                <Users size={16} />
-                                <span className={game.spotsAvailable <= 3 ? styles.spotsLow : ''}>
-                                  {game.spotsAvailable}/{game.spotsTotal} spots
+                              <div className={styles.gameCardMiddle}>
+                                <span className={styles.formatBadge}>
+                                  <Trophy size={12} />
+                                  {game.format}
                                 </span>
+                                <span className={styles.gameSkill}>{game.skillLevel}</span>
                               </div>
-                              <div className={styles.gamePrice}>${game.pricePerPlayer}/player</div>
+                              <div className={styles.gameCardBottom}>
+                                <div className={styles.gameInfo}>
+                                  <MapPin size={14} />
+                                  {game.location}
+                                </div>
+                                <div className={styles.gameSpots}>
+                                  <Users size={14} />
+                                  <span className={game.spotsAvailable <= 3 ? styles.spotsLow : ''}>
+                                    {game.spotsAvailable}/{game.spotsTotal} spots
+                                  </span>
+                                </div>
+                              </div>
                             </div>
                           ))
                         )}
