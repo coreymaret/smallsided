@@ -1,5 +1,5 @@
 import styles from "./StatRow.module.scss";
-import iso1Image from '../../../public/images/iso1.webp'
+import iso1Image from '../../assets//images/iso1.webp'
 
 interface StatRowProps {
   id?: string;
