@@ -1,5 +1,3 @@
-// postcss.config.js
-
 import purgecss from '@fullhuman/postcss-purgecss';
 
 const purge = purgecss({
@@ -7,16 +5,16 @@ const purge = purgecss({
     './index.html',
     './src/**/*.{js,jsx,ts,tsx}',
   ],
-  defaultExtractor: (content) =>
-    content.match(/[\w-/:]+(?<!:)/g) || [],
   safelist: {
     standard: [
+      /^_/,
       /^is-/,
       /^has-/,
       /^active/,
       /^show/,
       /^open/,
     ],
+    deep: [/./], // prevents CSS module hashes from being wiped
   },
 });
 
