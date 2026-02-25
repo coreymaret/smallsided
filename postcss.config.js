@@ -1,13 +1,14 @@
 // postcss.config.js
 
-const purgecss = require('@fullhuman/postcss-purgecss')({
+import purgecss from '@fullhuman/postcss-purgecss';
+
+const purge = purgecss({
   content: [
     './index.html',
     './src/**/*.{js,jsx,ts,tsx}',
   ],
-  defaultExtractor: (content) => {
-    return content.match(/[\w-/:]+(?<!:)/g) || [];
-  },
+  defaultExtractor: (content) =>
+    content.match(/[\w-/:]+(?<!:)/g) || [],
   safelist: {
     standard: [
       /^is-/,
@@ -19,8 +20,8 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
   },
 });
 
-module.exports = {
+export default {
   plugins: [
-    ...(process.env.NODE_ENV === 'production' ? [purgecss] : []),
+    ...(process.env.NODE_ENV === 'production' ? [purge] : []),
   ],
 };
