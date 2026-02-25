@@ -25,10 +25,6 @@
     
     <!-- Resource hints for Mailchimp (Subscribe component) -->
     <link rel="dns-prefetch" href="https://smallsided.us9.list-manage.com">
-
-    <!-- Preload LCP Content -->
-    <link rel="preload" href="/public/images/iso1.webp" as="image" type="image/webp" fetchpriority="high" />
-
     
     <!-- 
       NOTE: All SEO meta tags (title, description, keywords, OG tags, Twitter cards, 
@@ -171,7 +167,9 @@
 
     <!-- Google Analytics - Lazy loaded after 3 seconds or on first interaction -->
     <!-- Note: Console error when blocked by ad blocker is expected and harmless -->
-    <script>
+    <!-- Google Analytics - Only loaded on first user interaction -->
+<!-- Note: Console error when blocked by ad blocker is expected and harmless -->
+<script>
   (function() {
     var loaded = false;
 
@@ -195,20 +193,8 @@
       document.head.appendChild(s);
     }
 
-    function loadWhenIdle() {
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(load);
-      } else {
-        setTimeout(load, 2000);
-      }
-    }
-
-    // Load after page fully finishes
-    window.addEventListener('load', loadWhenIdle);
-
-    // Also load on first user interaction (whichever happens first)
     ['click', 'scroll', 'keypress', 'touchstart'].forEach(function(e) {
-      document.addEventListener(e, loadWhenIdle, { once: true, passive: true });
+      document.addEventListener(e, function() { setTimeout(load, 100); }, { once: true, passive: true });
     });
   })();
 </script>

@@ -113,38 +113,47 @@ export default defineConfig({
                 chunkFileNames: 'assets/js/[name]-[hash].js',
                 entryFileNames: 'assets/js/[name]-[hash].js',
                 manualChunks: (id) => {
-                    if (id.includes('node_modules')) {
-                        if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler')) {
-                            return 'react-core';
-                        }
-                        if (id.includes('react-router')) {
-                            return 'react-router';
-                        }
-                        if (id.includes('google-maps') || id.includes('@react-google-maps')) {
-                            return 'google-maps';
-                        }
-                        if (id.includes('lottie')) {
-                            return 'lottie';
-                        }
-                        if (id.includes('react-markdown') ||
-                            id.includes('gray-matter') ||
-                            id.includes('rehype') ||
-                            id.includes('remark') ||
-                            id.includes('unified')) {
-                            return 'markdown';
-                        }
-                        if (id.includes('highlight')) {
-                            return 'highlight';
-                        }
-                        if (id.includes('lucide-react')) {
-                            return 'lucide';
-                        }
-                        if (id.includes('react-helmet')) {
-                            return 'seo';
-                        }
-                        return 'vendor';
-                    }
-                },
+    if (id.includes('node_modules')) {
+        if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler')) {
+            return 'react-core';
+        }
+        if (id.includes('react-router')) {
+            return 'react-router';
+        }
+        if (id.includes('google-maps') || id.includes('@react-google-maps')) {
+            return 'google-maps';
+        }
+        if (id.includes('lottie')) {
+            return 'lottie';
+        }
+        if (id.includes('react-markdown') ||
+            id.includes('gray-matter') ||
+            id.includes('rehype') ||
+            id.includes('remark') ||
+            id.includes('unified')) {
+            return 'markdown';
+        }
+        if (id.includes('highlight')) {
+            return 'highlight';
+        }
+        if (id.includes('lucide-react')) {
+            return 'lucide';
+        }
+        if (id.includes('react-helmet')) {
+            return 'seo';
+        }
+        if (id.includes('@stripe') || id.includes('stripe')) {
+            return 'stripe';
+        }
+        if (id.includes('supabase')) {
+            return 'supabase';
+        }
+        if (id.includes('@fontsource')) {
+            return 'fonts';
+        }
+        return 'vendor';
+    }
+},
                 compact: true,
                 interop: 'auto',
                 sourcemap: false,
