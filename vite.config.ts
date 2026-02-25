@@ -106,29 +106,38 @@ export default defineConfig({
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
 
-        manualChunks: (id) => {
+                manualChunks: (id) => {
           if (id.includes('node_modules')) {
-            if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler')) {
+            if (
+              id.includes('react/') ||
+              id.includes('react-dom/') ||
+              id.includes('scheduler')
+            ) {
               return 'react-core';
             }
             
             if (id.includes('react-router')) {
-              return 'react-router';
+              return 'router';
+            }
+            
+            if (
+              id.includes('lottie-react') ||
+              id.includes('lottie-web')
+            ) {
+              return 'lottie';
             }
             
             if (id.includes('google-maps') || id.includes('@react-google-maps')) {
               return 'google-maps';
             }
             
-            if (id.includes('lottie')) {
-              return 'lottie';
-            }
-            
-            if (id.includes('react-markdown') || 
-                id.includes('gray-matter') ||
-                id.includes('rehype') || 
-                id.includes('remark') ||
-                id.includes('unified')) {
+            if (
+              id.includes('react-markdown') || 
+              id.includes('gray-matter') ||
+              id.includes('rehype') || 
+              id.includes('remark') ||
+              id.includes('unified')
+            ) {
               return 'markdown';
             }
             

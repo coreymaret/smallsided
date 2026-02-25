@@ -200,7 +200,7 @@ const ReviewsSection = () => {
                       {review.name.split(' ').map(n => n[0]).join('')}
                     </div>
                     <div className="reviewer-details">
-                      <h4>{review.name}</h4>
+                      <p>{review.name}</p>
                       <span>{review.role}</span>
                     </div>
                   </div>

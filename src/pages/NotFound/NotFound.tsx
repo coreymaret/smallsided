@@ -2,8 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 // Import navigation hook from react-router
 import { useNavigate } from 'react-router-dom';
-// Import Lottie for loading animations
-import lottie from 'lottie-web';
 // Import component-specific styles
 import styles from './NotFound.module.scss';
 
@@ -20,12 +18,19 @@ const NotFound: React.FC = () => {
 
   // useEffect runs once on mount (empty dependency array)
   useEffect(() => {
+    // Track mount state to prevent setting state after unmount
+    let isMounted = true;
+
     // Define async function to load the Lottie animation
     const loadAnimation = async () => {
       // If container doesn't exist yet, exit early
       if (!animationContainer.current) return;
 
       try {
+        // 🔥 Lazy-load lottie-web instead of bundling it in the initial vendor chunk
+        const lottieModule = await import('lottie-web');
+        const lottie = lottieModule.default;
+
         // Fetch the animation JSON file from the public folder
         const response = await fetch('/NotFound.json');
         // Throw error if response is not OK (HTTP error)
@@ -41,17 +46,22 @@ const NotFound: React.FC = () => {
         }
 
         // Load and start the Lottie animation
-        animationInstance.current = lottie.loadAnimation({
-          container: animationContainer.current, // Target container
-          renderer: 'svg', // Render animation as SVG
-          loop: true, // Loop forever
-          autoplay: true, // Start automatically
-          animationData: animationData // Animation JSON
-        });
+        if (isMounted) {
+          animationInstance.current = lottie.loadAnimation({
+            container: animationContainer.current, // Target container
+            renderer: 'svg', // Render animation as SVG
+            loop: true, // Loop forever
+            autoplay: true, // Start automatically
+            animationData: animationData // Animation JSON
+          });
+        }
+
       } catch (err) {
         // Log the error and show a user-friendly message
         console.error('Failed to load animation:', err);
-        setError('Animation failed to load');
+        if (isMounted) {
+          setError('Animation failed to load');
+        }
       }
     };
 
@@ -60,6 +70,9 @@ const NotFound: React.FC = () => {
 
     // Cleanup function runs on unmount
     return () => {
+      // Mark component as unmounted
+      isMounted = false;
+
       // Destroy animation instance to prevent memory leaks
       if (animationInstance.current) {
         animationInstance.current.destroy();
