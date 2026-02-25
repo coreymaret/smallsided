@@ -22,6 +22,7 @@ const StatRow = ({ id, stat, description, imageAlt, reversed = false }: StatRowP
           width="400"
           height="400"
           loading="lazy"
+          fetchPriority="high"
         />
       </div>
       <div className={styles.textColumn}>
