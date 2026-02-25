@@ -81,6 +81,7 @@ export default defineConfig({
   },
 
   build: {
+    modulePreload: false,
     outDir: 'dist',
     sourcemap: false,
     minify: 'esbuild',
@@ -106,7 +107,7 @@ export default defineConfig({
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
 
-                manualChunks: (id) => {
+        manualChunks: (id) => {
           if (id.includes('node_modules')) {
             if (
               id.includes('react/') ||
@@ -118,13 +119,6 @@ export default defineConfig({
             
             if (id.includes('react-router')) {
               return 'router';
-            }
-            
-            if (
-              id.includes('lottie-react') ||
-              id.includes('lottie-web')
-            ) {
-              return 'lottie';
             }
             
             if (id.includes('google-maps') || id.includes('@react-google-maps')) {

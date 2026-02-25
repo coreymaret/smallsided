@@ -1,5 +1,5 @@
 import styles from "./IntroHero.module.scss";
-import iso1Image from '../../assets/images/iso1.webp'
+import iso1Image from '../../../public/images/iso1.webp'
 
 const IntroHero = () => {
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>) => {
