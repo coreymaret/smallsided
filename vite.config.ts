@@ -121,8 +121,22 @@ export default defineConfig({
               return 'router';
             }
             
+            if (
+              id.includes('lottie-react') ||
+              id.includes('lottie-web')
+            ) {
+              return 'lottie';
+            }
+            
             if (id.includes('google-maps') || id.includes('@react-google-maps')) {
               return 'google-maps';
+            }
+            
+            if (
+              id.includes('@supabase') ||
+              id.includes('supabase-js')
+            ) {
+              return 'supabase';
             }
             
             if (
@@ -145,6 +159,14 @@ export default defineConfig({
             
             if (id.includes('react-helmet')) {
               return 'seo';
+            }
+            
+            if (id.includes('date-fns')) {
+              return 'date-fns';
+            }
+            
+            if (id.includes('stripe') || id.includes('@stripe')) {
+              return 'stripe';
             }
             
             return 'vendor';
