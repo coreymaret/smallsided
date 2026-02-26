@@ -54,14 +54,6 @@ export default defineConfig({
         }),
     ],
     assetsInclude: ['**/*.md'],
-    resolve: {
-        alias: {
-            buffer: 'buffer/'
-        }
-    },
-    define: {
-        'global': 'globalThis',
-    },
     esbuild: {
         drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
         legalComments: 'inline',
@@ -156,7 +148,6 @@ export default defineConfig({
             'react',
             'react-dom',
             'react-router-dom',
-            'buffer',
         ],
         exclude: [],
     },

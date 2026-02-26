@@ -24,8 +24,6 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     <meta name="format-detection" content="telephone=no">
     
-    <!-- Fonts are self-hosted via @fontsource/inter (imported in main.tsx) -->
-    
     <!-- Resource hints for Mailchimp (Subscribe component) -->
     <link rel="dns-prefetch" href="https://smallsided.us9.list-manage.com">
     
@@ -37,124 +35,90 @@
 
     <!-- Critical inline styles for instant first paint -->
     <style>
-      /* Base reset and dark background - prevents white flash */
+      /* Base reset and dark background */
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       html { -webkit-text-size-adjust: 100%; }
       body { margin: 0; padding: 0; overflow-x: hidden; background-color: #15141a; color: #fff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
       #root { min-height: 100vh; }
-      
-      /* Spinner animation */
-      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* Skeleton hero — matches IntroHero.module.scss */
+      .skeleton-hero { display: flex; flex-direction: row; width: 100%; }
+      .skeleton-hero-img {
+        flex: 0 0 50%; width: 50%; background-color: #f8f9fa;
+        display: flex; align-items: center; justify-content: center;
+        padding: 60px; position: relative; overflow: hidden;
+      }
+      .skeleton-hero-img img { width: 400px; height: 400px; object-fit: cover; }
+      .skeleton-hero-text {
+        flex: 0 0 50%; width: 50%; background-color: #f8f9fa;
+        display: flex; align-items: center; justify-content: center; padding: 80px;
+      }
+      .skeleton-hero-text-inner { max-width: 520px; width: 100%; }
+      .skeleton-hero-text h1 {
+        font-family: 'Inter', sans-serif; font-size: 3.5rem; font-weight: 900;
+        color: #15141a; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.02em;
+      }
+      .skeleton-hero-text p {
+        font-size: 1.25rem; line-height: 1.7; color: #15141a;
+        font-weight: 400; margin-bottom: 32px;
+      }
+      .skeleton-hero-text a {
+        display: inline-block; padding: 16px 32px; font-family: 'Inter', sans-serif;
+        font-size: 1rem; font-weight: 600; background-color: transparent;
+        border: 2px solid #15141a; border-radius: 0.5rem;
+        text-decoration: none; color: #15141a;
+      }
+      @media (max-width: 768px) {
+        .skeleton-hero { flex-direction: column; }
+        .skeleton-hero-img, .skeleton-hero-text { flex: 1 1 auto; width: 100%; }
+        .skeleton-hero-img { order: 1; padding: 40px 24px; }
+        .skeleton-hero-text { order: 2; padding: 40px 24px; }
+        .skeleton-hero-img img { width: 300px; height: 300px; }
+        .skeleton-hero-text h1 { font-size: 2.5rem; }
+      }
     </style>
   </head>
 
   <body>
     <div id="root">
-      <!-- OPTIMIZED: Minimal skeleton to prevent layout shift -->
-      <div style="
-        min-height: 100vh;
-        background-color: #15141a;
-        color: #fff;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
-        display: flex;
-        flex-direction: column;
-      ">
-        <!-- Header skeleton - matches actual header -->
-        <header style="
-          height: 112px;
-          flex-shrink: 0;
-          display: flex;
-          align-items: center;
-          padding: 0 2rem;
-          background-color: #15141a;
-        ">
-          <!-- Logo placeholder -->
-          <div style="width: 160px; height: 40px;"></div>
+      <!-- Static shell with real hero content for instant LCP -->
+      <div style="min-height:100vh; background-color:#15141a; color:#fff; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif; display:flex; flex-direction:column;">
+        
+        <!-- Header skeleton -->
+        <header style="height:112px; flex-shrink:0; display:flex; align-items:center; padding:0 2rem; background-color:#15141a;">
+          <div style="width:160px; height:40px;"></div>
         </header>
         
-        <!-- Main content skeleton -->
-        <main style="
-          flex: 1;
-          display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          padding: 3rem 2rem;
-          max-width: 1200px;
-          width: 100%;
-          margin: 0 auto;
-          box-sizing: border-box;
-        ">
-          <div style="
-            width: 100%;
-            max-width: 800px;
-          ">
-            <!-- Page title skeleton -->
-            <div style="
-              width: 60%;
-              height: 2.5rem;
-              background: rgba(255, 255, 255, 0.03);
-              border-radius: 4px;
-              margin-bottom: 1rem;
-            "></div>
-            
-            <!-- Subtitle skeleton -->
-            <div style="
-              width: 50%;
-              height: 1.75rem;
-              background: rgba(255, 255, 255, 0.03);
-              border-radius: 4px;
-              margin-bottom: 2rem;
-            "></div>
-            
-            <!-- Content paragraphs skeleton -->
-            <div style="
-              width: 100%;
-              height: 1rem;
-              background: rgba(255, 255, 255, 0.03);
-              border-radius: 4px;
-              margin-bottom: 0.75rem;
-            "></div>
-            <div style="
-              width: 95%;
-              height: 1rem;
-              background: rgba(255, 255, 255, 0.03);
-              border-radius: 4px;
-              margin-bottom: 0.75rem;
-            "></div>
-            <div style="
-              width: 98%;
-              height: 1rem;
-              background: rgba(255, 255, 255, 0.03);
-              border-radius: 4px;
-              margin-bottom: 2rem;
-            "></div>
-            
-            <!-- Loading spinner -->
-            <div style="
-              display: flex;
-              justify-content: center;
-              padding: 2rem 0;
-            ">
-              <div style="
-                width: 40px;
-                height: 40px;
-                border: 3px solid rgba(255, 255, 255, 0.1);
-                border-top-color: #fff;
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-              "></div>
+        <!-- Real hero content — matches IntroHero component exactly -->
+        <main style="flex:1;">
+          <section class="skeleton-hero">
+            <div class="skeleton-hero-img">
+              <img 
+                src="/images/iso1.webp" 
+                alt="Small-sided soccer isometric illustration" 
+                width="400" 
+                height="400" 
+                fetchpriority="high"
+              />
             </div>
-          </div>
+            <div class="skeleton-hero-text">
+              <div class="skeleton-hero-text-inner">
+                <h1>The Future of Youth Soccer is Small-Sided</h1>
+                <p>More touches. More decisions. More development. Discover why the world's best academies are choosing small-sided formats to develop tomorrow's stars.</p>
+                <a href="#row1">Learn More</a>
+              </div>
+            </div>
+          </section>
         </main>
       </div>
     </div>
 
     <!-- Noscript fallback -->
     <noscript>
-      <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #15141a; color: #fff; padding: 20px; text-align: center;">
+      <div style="display:flex; align-items:center; justify-content:center; min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background-color:#15141a; color:#fff; padding:20px; text-align:center;">
         <div>
-          <h1 style="margin: 0 0 10px 0;">Smallsided</h1>
-          <p style="margin: 0;">Please enable JavaScript to use this site.</p>
+          <h1 style="margin:0 0 10px 0;">Smallsided</h1>
+          <p style="margin:0;">Please enable JavaScript to use this site.</p>
         </div>
       </div>
     </noscript>
@@ -163,31 +127,23 @@
     <script type="module" src="/src/main.tsx"></script>
 
     <!-- Google Analytics - Only loaded on first user interaction -->
-    <!-- Note: Console error when blocked by ad blocker is expected and harmless -->
     <script>
       (function() {
         var loaded = false;
-
         function load() {
           if (loaded) return;
           loaded = true;
-
           var s = document.createElement('script');
           s.async = true;
           s.src = 'https://www.googletagmanager.com/gtag/js?id=G-6RDDRZT1DN';
-
           s.onload = function() {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-6RDDRZT1DN', {
-              'anonymize_ip': true
-            });
+            gtag('config', 'G-6RDDRZT1DN', { 'anonymize_ip': true });
           };
-
           document.head.appendChild(s);
         }
-
         ['click', 'scroll', 'keypress', 'touchstart'].forEach(function(e) {
           document.addEventListener(e, function() { setTimeout(load, 100); }, { once: true, passive: true });
         });
