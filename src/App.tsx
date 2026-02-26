@@ -10,12 +10,12 @@ import { MobileMenuProvider } from './contexts/MobileMenuContext';
 
 // Layout Components
 import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
-import Subscribe from './components/Subscribe/Subscribe';
+const Footer = lazy(() => import('./components/Footer/Footer'));
+const Subscribe = lazy(() => import('./components/Subscribe/Subscribe'));
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import PageLoader from './components/PageLoader/PageLoader';
-import CookiePopup from './components/CookiePopup/CookiePopup';
-import Register from './components/Register/Register';
+const CookiePopup = lazy(() => import('./components/CookiePopup/CookiePopup'));
+const Register = lazy(() => import('./components/Register/Register'));
 
 // ─── Lazy-Loaded Pages ───
 const Home            = lazy(() => import('./pages/Home/Home'));

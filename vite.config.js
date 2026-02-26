@@ -9,10 +9,6 @@ import viteImagemin from 'vite-plugin-imagemin';
 import viteCompression from 'vite-plugin-compression';
 // Bundle analyzer to visualize bundle composition
 import { visualizer } from 'rollup-plugin-visualizer';
-// HTML Meta Prerendering
-import { htmlPrerender } from 'vite-plugin-html-prerender'
-import path from 'path'
-
 export default defineConfig({
     plugins: [
         react(),
@@ -56,26 +52,6 @@ export default defineConfig({
             brotliSize: true,
             filename: 'dist/stats.html',
         }),
-        htmlPrerender({
-            staticDir: path.join(__dirname, 'dist'),
-            routes: [
-                '/',
-                '/about',
-                '/services',
-                '/work',
-                '/contact',
-                '/services/field-rental',
-                '/services/birthday-parties',
-                '/services/leagues',
-                '/services/pickup',
-                '/services/camps',
-                '/services/training',
-                '/blog',
-                '/PrivacyPolicy',
-                '/TOS',
-                '/CookiePolicy',
-            ],
-            }),
     ],
     assetsInclude: ['**/*.md'],
     resolve: {
@@ -91,6 +67,7 @@ export default defineConfig({
         legalComments: 'inline',
     },
     build: {
+        modulePreload: false,
         outDir: 'dist',
         sourcemap: false,
         minify: 'esbuild',
@@ -113,47 +90,51 @@ export default defineConfig({
                 chunkFileNames: 'assets/js/[name]-[hash].js',
                 entryFileNames: 'assets/js/[name]-[hash].js',
                 manualChunks: (id) => {
-    if (id.includes('node_modules')) {
-        if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler')) {
-            return 'react-core';
-        }
-        if (id.includes('react-router')) {
-            return 'react-router';
-        }
-        if (id.includes('google-maps') || id.includes('@react-google-maps')) {
-            return 'google-maps';
-        }
-        if (id.includes('lottie')) {
-            return 'lottie';
-        }
-        if (id.includes('react-markdown') ||
-            id.includes('gray-matter') ||
-            id.includes('rehype') ||
-            id.includes('remark') ||
-            id.includes('unified')) {
-            return 'markdown';
-        }
-        if (id.includes('highlight')) {
-            return 'highlight';
-        }
-        if (id.includes('lucide-react')) {
-            return 'lucide';
-        }
-        if (id.includes('react-helmet')) {
-            return 'seo';
-        }
-        if (id.includes('@stripe') || id.includes('stripe')) {
-            return 'stripe';
-        }
-        if (id.includes('supabase')) {
-            return 'supabase';
-        }
-        if (id.includes('@fontsource')) {
-            return 'fonts';
-        }
-        return 'vendor';
-    }
-},
+                    if (id.includes('node_modules')) {
+                        if (id.includes('react/') ||
+                            id.includes('react-dom/') ||
+                            id.includes('scheduler')) {
+                            return 'react-core';
+                        }
+                        if (id.includes('react-router')) {
+                            return 'router';
+                        }
+                        if (id.includes('lottie-react') ||
+                            id.includes('lottie-web')) {
+                            return 'lottie';
+                        }
+                        if (id.includes('google-maps') || id.includes('@react-google-maps')) {
+                            return 'google-maps';
+                        }
+                        if (id.includes('@supabase') ||
+                            id.includes('supabase-js')) {
+                            return 'supabase';
+                        }
+                        if (id.includes('react-markdown') ||
+                            id.includes('gray-matter') ||
+                            id.includes('rehype') ||
+                            id.includes('remark') ||
+                            id.includes('unified')) {
+                            return 'markdown';
+                        }
+                        if (id.includes('highlight')) {
+                            return 'highlight';
+                        }
+                        if (id.includes('lucide-react')) {
+                            return 'lucide';
+                        }
+                        if (id.includes('react-helmet')) {
+                            return 'seo';
+                        }
+                        if (id.includes('date-fns')) {
+                            return 'date-fns';
+                        }
+                        if (id.includes('stripe') || id.includes('@stripe')) {
+                            return 'stripe';
+                        }
+                        return 'vendor';
+                    }
+                },
                 compact: true,
                 interop: 'auto',
                 sourcemap: false,

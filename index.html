@@ -17,7 +17,7 @@
     <meta name="msapplication-TileImage" content="/favicon-144x144.png">
 
     <!-- Preload the LCP hero image so the browser discovers it immediately -->
-    <link rel="preload" as="image" href="public/images/iso1.webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/iso1.webp" fetchpriority="high" />
 
     <!-- Performance / Accessibility -->
     <meta name="color-scheme" content="light dark">
@@ -34,6 +34,18 @@
       canonical, robots, structured data) are now managed by react-helmet-async 
       on a per-page basis. Do not add them here as they will conflict.
     -->
+
+    <!-- Critical inline styles for instant first paint -->
+    <style>
+      /* Base reset and dark background - prevents white flash */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { -webkit-text-size-adjust: 100%; }
+      body { margin: 0; padding: 0; overflow-x: hidden; background-color: #15141a; color: #fff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
+      #root { min-height: 100vh; }
+      
+      /* Spinner animation */
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
   </head>
 
   <body>
@@ -137,24 +149,6 @@
       </div>
     </div>
 
-    <!-- Spin animation for loader -->
-    <style>
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-      
-      /* Ensure smooth transition when React takes over */
-      #root {
-        min-height: 100vh;
-      }
-      
-      body {
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-      }
-    </style>
-
     <!-- Noscript fallback -->
     <noscript>
       <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #15141a; color: #fff; padding: 20px; text-align: center;">
@@ -168,38 +162,36 @@
     <!-- React App -->
     <script type="module" src="/src/main.tsx"></script>
 
-    <!-- Google Analytics - Lazy loaded after 3 seconds or on first interaction -->
-    <!-- Note: Console error when blocked by ad blocker is expected and harmless -->
     <!-- Google Analytics - Only loaded on first user interaction -->
-<!-- Note: Console error when blocked by ad blocker is expected and harmless -->
-<script>
-  (function() {
-    var loaded = false;
+    <!-- Note: Console error when blocked by ad blocker is expected and harmless -->
+    <script>
+      (function() {
+        var loaded = false;
 
-    function load() {
-      if (loaded) return;
-      loaded = true;
+        function load() {
+          if (loaded) return;
+          loaded = true;
 
-      var s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-6RDDRZT1DN';
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-6RDDRZT1DN';
 
-      s.onload = function() {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-6RDDRZT1DN', {
-          'anonymize_ip': true
+          s.onload = function() {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-6RDDRZT1DN', {
+              'anonymize_ip': true
+            });
+          };
+
+          document.head.appendChild(s);
+        }
+
+        ['click', 'scroll', 'keypress', 'touchstart'].forEach(function(e) {
+          document.addEventListener(e, function() { setTimeout(load, 100); }, { once: true, passive: true });
         });
-      };
-
-      document.head.appendChild(s);
-    }
-
-    ['click', 'scroll', 'keypress', 'touchstart'].forEach(function(e) {
-      document.addEventListener(e, function() { setTimeout(load, 100); }, { once: true, passive: true });
-    });
-  })();
-</script>
+      })();
+    </script>
   </body>
 </html>
