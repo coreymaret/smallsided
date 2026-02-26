@@ -99,7 +99,10 @@ export default defineConfig({
 
         manualChunks: (id) => {
           if (id.includes('node_modules')) {
-            // === CORE: Always needed on every page ===
+            // WHITELIST: Only packages needed on EVERY page get a named chunk.
+            // Everything else returns undefined so Rollup bundles it with
+            // whatever lazy route actually imports it.
+            
             if (
               id.includes('react/') ||
               id.includes('react-dom/') ||
@@ -108,11 +111,11 @@ export default defineConfig({
               return 'react-core';
             }
             
-            if (id.includes('react-router')) {
+            if (id.includes('react-router') || id.includes('@remix-run/router')) {
               return 'router';
             }
             
-            if (id.includes('react-helmet')) {
+            if (id.includes('react-helmet') || id.includes('react-fast-compare') || id.includes('invariant') || id.includes('shallowequal')) {
               return 'seo';
             }
 
@@ -120,62 +123,9 @@ export default defineConfig({
               return 'lucide';
             }
 
-            // === LAZY-ROUTE PACKAGES: Do NOT assign a chunk name ===
-            // Let Rollup naturally bundle these with their lazy consumers.
-            // Assigning a manual chunk would force them to load eagerly.
-            if (
-              id.includes('lottie-react') ||
-              id.includes('lottie-web')
-            ) {
-              return undefined; // stays with NotFound lazy chunk
-            }
-            
-            if (
-              id.includes('google-maps') || 
-              id.includes('@react-google-maps') ||
-              id.includes('googlemaps')
-            ) {
-              return undefined; // stays with ContactMap lazy chunk
-            }
-            
-            if (
-              id.includes('@supabase') ||
-              id.includes('supabase-js')
-            ) {
-              return undefined; // stays with admin lazy chunks
-            }
-            
-            if (
-              id.includes('react-big-calendar')
-            ) {
-              return undefined; // stays with AdminDashboard lazy chunk
-            }
-            
-            if (
-              id.includes('react-markdown') || 
-              id.includes('gray-matter') ||
-              id.includes('rehype') || 
-              id.includes('remark') ||
-              id.includes('unified')
-            ) {
-              return undefined; // stays with BlogPost lazy chunk
-            }
-            
-            if (id.includes('highlight')) {
-              return undefined; // stays with BlogPost lazy chunk
-            }
-            
-            if (id.includes('date-fns')) {
-              return undefined; // stays with admin lazy chunks
-            }
-            
-            if (id.includes('stripe') || id.includes('@stripe')) {
-              return undefined; // stays with Register lazy chunks
-            }
-
-            // Everything else that's not caught above
-            // goes into a small vendor chunk (should be minimal now)
-            return 'vendor';
+            // Everything else: let Rollup code-split naturally
+            // with lazy routes. Do NOT put in a 'vendor' catch-all.
+            return undefined;
           }
         },
 
