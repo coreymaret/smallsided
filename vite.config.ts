@@ -99,6 +99,7 @@ export default defineConfig({
 
         manualChunks: (id) => {
           if (id.includes('node_modules')) {
+            // === CORE: Always needed on every page ===
             if (
               id.includes('react/') ||
               id.includes('react-dom/') ||
@@ -111,22 +112,43 @@ export default defineConfig({
               return 'router';
             }
             
+            if (id.includes('react-helmet')) {
+              return 'seo';
+            }
+
+            if (id.includes('lucide-react')) {
+              return 'lucide';
+            }
+
+            // === LAZY-ROUTE PACKAGES: Do NOT assign a chunk name ===
+            // Let Rollup naturally bundle these with their lazy consumers.
+            // Assigning a manual chunk would force them to load eagerly.
             if (
               id.includes('lottie-react') ||
               id.includes('lottie-web')
             ) {
-              return 'lottie';
+              return undefined; // stays with NotFound lazy chunk
             }
             
-            if (id.includes('google-maps') || id.includes('@react-google-maps')) {
-              return 'google-maps';
+            if (
+              id.includes('google-maps') || 
+              id.includes('@react-google-maps') ||
+              id.includes('googlemaps')
+            ) {
+              return undefined; // stays with ContactMap lazy chunk
             }
             
             if (
               id.includes('@supabase') ||
               id.includes('supabase-js')
             ) {
-              return 'supabase';
+              return undefined; // stays with admin lazy chunks
+            }
+            
+            if (
+              id.includes('react-big-calendar')
+            ) {
+              return undefined; // stays with AdminDashboard lazy chunk
             }
             
             if (
@@ -136,29 +158,23 @@ export default defineConfig({
               id.includes('remark') ||
               id.includes('unified')
             ) {
-              return 'markdown';
+              return undefined; // stays with BlogPost lazy chunk
             }
             
             if (id.includes('highlight')) {
-              return 'highlight';
-            }
-            
-            if (id.includes('lucide-react')) {
-              return 'lucide';
-            }
-            
-            if (id.includes('react-helmet')) {
-              return 'seo';
+              return undefined; // stays with BlogPost lazy chunk
             }
             
             if (id.includes('date-fns')) {
-              return 'date-fns';
+              return undefined; // stays with admin lazy chunks
             }
             
             if (id.includes('stripe') || id.includes('@stripe')) {
-              return 'stripe';
+              return undefined; // stays with Register lazy chunks
             }
-            
+
+            // Everything else that's not caught above
+            // goes into a small vendor chunk (should be minimal now)
             return 'vendor';
           }
         },
