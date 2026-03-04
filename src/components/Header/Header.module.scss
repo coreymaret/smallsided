@@ -247,18 +247,19 @@
         transition: transform 0.5s ease, opacity 0.5s ease, visibility 0s 0s;
       }
       
-      .linksSection ul li:nth-child(1) a { transition-delay: 0.1s, 0.1s, 0.1s; }
-      .linksSection ul li:nth-child(2) a { transition-delay: 0.2s, 0.2s, 0.2s; }
-      .linksSection ul li:nth-child(3) a { transition-delay: 0.3s, 0.3s, 0.3s; }
-      .linksSection ul li:nth-child(4) button { transition-delay: 0.4s, 0.4s, 0.4s; }
-      .linksSection ul li:nth-child(5) a { transition-delay: 0.5s, 0.5s, 0.5s; }
-      .linksSection ul li:nth-child(6) a { transition-delay: 0.6s, 0.6s, 0.6s; }
-      .linksSection ul li:nth-child(7) a { transition-delay: 0.7s, 0.7s, 0.7s; }
+      .linksSection ul li:nth-child(1) a { transition-delay: 0.15s, 0.15s, 0.15s; }
+      .linksSection ul li:nth-child(2) a { transition-delay: 0.25s, 0.25s, 0.25s; }
+      .linksSection ul li:nth-child(3) button { transition-delay: 0.35s, 0.35s, 0.35s; }
+      .linksSection ul li:nth-child(4) a { transition-delay: 0.45s, 0.45s, 0.45s; }
+      .linksSection ul li:nth-child(5) a { transition-delay: 0.55s, 0.55s, 0.55s; }
+      .linksSection ul li:nth-child(6) a { transition-delay: 0.65s, 0.65s, 0.65s; }
+      .linksSection ul li:nth-child(7) a { transition-delay: 0.75s, 0.75s, 0.75s; }
 
+      // Social and language toggle slide in together after links
       .socialSection {
         transform: translateY(0);
         opacity: 1;
-        transition-delay: 0.7s;
+        transition-delay: 0.85s;
       }
     }
 
@@ -269,10 +270,11 @@
 
       .linksSection ul li a,
       .linksSection ul li button { 
-        transform: translateY(-20px);
+        transform: translateY(30px);
         opacity: 0;
-        transition: transform 0.5s ease-in, opacity 0.5s ease-in;
-        transition-delay: 0s; 
+        visibility: hidden;
+        transition: transform 0.4s ease-in, opacity 0.4s ease-in, visibility 0s 0.4s;
+        transition-delay: 0s;
       }
 
       .socialSection {
@@ -746,4 +748,9 @@
       font-size: 0.9375rem;
     }
   }
+}
+// ── Language toggle desktop li ────────────────────────────────
+.languageToggleItem {
+  display: flex;
+  align-items: center;
 }

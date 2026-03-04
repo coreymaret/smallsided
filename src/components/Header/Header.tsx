@@ -4,6 +4,7 @@ import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, C
 import styles from "./Header.module.scss";
 import Logo from "../../assets/logo.svg";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
+import { DesktopLanguageToggle, MobileLanguageToggle } from "../../components/LanguageToggle/LanguageToggle";
 
 const Header = () => {
   const location = useLocation();
@@ -92,10 +93,10 @@ const Header = () => {
       setMenuAnimationComplete(false);
     } else {
       setMenuState("open");
-      // Enable hover effects after the longest animation completes (0.7s + 0.5s animation + 0.1s buffer)
+      // Enable hover effects after the longest animation completes (0.85s delay + 0.6s animation + 0.1s buffer)
       setTimeout(() => {
         setMenuAnimationComplete(true);
-      }, 1300);
+      }, 1550);
     }
   };
 
@@ -267,6 +268,11 @@ const Header = () => {
                       Get Started
                     </Link>
                   </li>
+
+                  {/* ── Desktop language toggle ── */}
+                  <li className={styles.languageToggleItem}>
+                    <DesktopLanguageToggle />
+                  </li>
                 </ul>
               </div>
             </nav>
@@ -384,6 +390,9 @@ const Header = () => {
               <Twitter size={28} aria-hidden="true" />
             </a>
           </div>
+
+          {/* ── Mobile language toggle — slides in after social icons ── */}
+          <MobileLanguageToggle menuIsOpen={isOpen} />
         </nav>
       )}
     </>

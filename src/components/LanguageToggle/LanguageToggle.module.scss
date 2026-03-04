@@ -1,0 +1,161 @@
+// ── Shared pill base ─────────────────────────────────────────
+.pill {
+  position: relative;
+  border-radius: 999px;
+  background: #0e0d13;
+  border: 1.5px solid rgba(152, 237, 102, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    border-color: rgba(152, 237, 102, 0.6);
+    box-shadow: 0 0 0 1px rgba(152, 237, 102, 0.2),
+                0 8px 32px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(152, 237, 102, 0.08);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// ── Sliding thumb ─────────────────────────────────────────────
+.thumb {
+  position: absolute;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    rgba(152, 237, 102, 0.22),
+    rgba(152, 237, 102, 0.44)
+  );
+  border: 1px solid rgba(152, 237, 102, 0.6);
+  box-shadow: 0 2px 16px rgba(152, 237, 102, 0.3),
+              inset 0 1px 0 rgba(152, 237, 102, 0.4);
+  transition: left 0.38s cubic-bezier(0.77, 0, 0.18, 1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+// ── Each half of the pill ─────────────────────────────────────
+.side {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  transition: opacity 0.35s ease;
+
+  &.inactive {
+    opacity: 0.3;
+  }
+}
+
+// Absolutely centered content inside each side
+.sideInner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.label {
+  font-family: Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  transition: color 0.35s ease;
+}
+
+.labelActive {
+  color: #98ed66;
+}
+
+.labelInactive {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+// ── Desktop variant ───────────────────────────────────────────
+.desktop {
+  width: 80px;
+  height: 30px;
+  padding: 0 3px;
+  border-width: 1px;
+
+  .thumb {
+    width: 36px;
+    height: 24px;
+  }
+
+  .side {
+    width: 37px;
+    height: 24px;
+  }
+
+  .sideInner {
+    gap: 1px;
+  }
+
+  .label {
+    font-size: 7px;
+  }
+}
+
+// ── Mobile variant ────────────────────────────────────────────
+.mobile {
+  width: 160px;
+  height: 52px;
+  padding: 0 6px;
+
+  .thumb {
+    width: 72px;
+    height: 40px;
+  }
+
+  .side {
+    width: 72px;
+    height: 40px;
+  }
+
+  .sideInner {
+    gap: 3px;
+  }
+
+  .label {
+    font-size: 9px;
+  }
+}
+
+// ── Mobile wrapper (label + pill + slide-in animation) ────────
+.mobileWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: .25rem;
+  transform: translateY(40px);
+  opacity: 0;
+  transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+
+  &.visible {
+    transform: translateY(0);
+    opacity: 1;
+    transition-delay: 0.85s;
+  }
+}
+
+.mobileLabel {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(152, 237, 102, 0.5);
+  margin: 0;
+}
