@@ -111,13 +111,13 @@ export const DesktopLanguageToggle = () => {
       <div
         className={styles.thumb}
         style={{
-          width: 36,
-          height: 24,
-          left: isSpanish ? "calc(100% - 39px)" : "3px",
+          width: 46,
+          height: 30,
+          left: isSpanish ? "calc(100% - 50px)" : "4px",
         }}
       />
-      <Side lang="en" label="EN" active={!isSpanish} flagSize={16} sideWidth={37} sideHeight={24} />
-      <Side lang="es" label="ES" active={isSpanish}  flagSize={16} sideWidth={37} sideHeight={24} />
+      <Side lang="en" label="EN" active={!isSpanish} flagSize={20} sideWidth={46} sideHeight={30} />
+      <Side lang="es" label="ES" active={isSpanish}  flagSize={20} sideWidth={46} sideHeight={30} />
     </div>
   );
 };
