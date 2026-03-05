@@ -1,9 +1,28 @@
+import { memo } from "react";
 import styles from "./LanguageToggle.module.scss";
 import { useLanguage } from "../../contexts/LanguageContext";
 
+// ── Pre-computed US flag stars (computed once at module level, not on every render) ──
+const CANTON_H = (40 * 7) / 13;
+const US_STARS = (() => {
+  const stars: { key: string; x: number; y: number }[] = [];
+  for (let row = 0; row < 9; row++) {
+    const cols = row % 2 === 0 ? 6 : 5;
+    const xStart = row % 2 === 0 ? 2 : 4.4;
+    for (let col = 0; col < cols; col++) {
+      stars.push({
+        key: `${row}-${col}`,
+        x: xStart + col * 4,
+        y: CANTON_H * (row + 0.7) / 9,
+      });
+    }
+  }
+  return stars;
+})();
+
 // ── Flag SVGs ─────────────────────────────────────────────────
 
-const USFlag = ({ size }: { size: number }) => (
+const USFlag = memo(({ size }: { size: number }) => (
   <svg
     viewBox="0 0 60 40"
     width={size}
@@ -21,34 +40,16 @@ const USFlag = ({ size }: { size: number }) => (
         fill={i % 2 === 0 ? "#B22234" : "#FFFFFF"}
       />
     ))}
-    <rect x="0" y="0" width="24" height={(40 * 7) / 13} fill="#3C3B6E" />
-    {(() => {
-      const stars = [];
-      const cantonH = (40 * 7) / 13;
-      for (let row = 0; row < 9; row++) {
-        const cols = row % 2 === 0 ? 6 : 5;
-        const xStart = row % 2 === 0 ? 2 : 4.4;
-        for (let col = 0; col < cols; col++) {
-          stars.push(
-            <text
-              key={`${row}-${col}`}
-              x={xStart + col * 4}
-              y={cantonH * (row + 0.7) / 9}
-              fontSize="3"
-              fill="white"
-              textAnchor="middle"
-            >
-              ★
-            </text>
-          );
-        }
-      }
-      return stars;
-    })()}
+    <rect x="0" y="0" width="24" height={CANTON_H} fill="#3C3B6E" />
+    {US_STARS.map(({ key, x, y }) => (
+      <text key={key} x={x} y={y} fontSize="3" fill="white" textAnchor="middle">
+        ★
+      </text>
+    ))}
   </svg>
-);
+));
 
-const MXFlag = ({ size }: { size: number }) => (
+const MXFlag = memo(({ size }: { size: number }) => (
   <svg
     viewBox="0 0 60 40"
     width={size}
@@ -67,7 +68,7 @@ const MXFlag = ({ size }: { size: number }) => (
       <ellipse cx="0" cy="6"  rx="5" ry="2.5"  fill="#2D7A2D" opacity="0.8" />
     </g>
   </svg>
-);
+));
 
 // ── Shared pill internals ─────────────────────────────────────
 

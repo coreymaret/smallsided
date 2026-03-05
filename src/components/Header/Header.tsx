@@ -1,10 +1,16 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, lazy, Suspense } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, ChevronDown,ChartNoAxesCombined, Smile } from '../../components/Icons/Icons';
 import styles from "./Header.module.scss";
 import Logo from "../../assets/logo.svg";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
-import { DesktopLanguageToggle, MobileLanguageToggle } from "../../components/LanguageToggle/LanguageToggle";
+
+const DesktopLanguageToggle = lazy(() =>
+  import("../../components/LanguageToggle/LanguageToggle").then(m => ({ default: m.DesktopLanguageToggle }))
+);
+const MobileLanguageToggle = lazy(() =>
+  import("../../components/LanguageToggle/LanguageToggle").then(m => ({ default: m.MobileLanguageToggle }))
+);
 
 const Header = () => {
   const location = useLocation();
@@ -93,10 +99,10 @@ const Header = () => {
       setMenuAnimationComplete(false);
     } else {
       setMenuState("open");
-      // Enable hover effects after the longest animation completes (0.85s delay + 0.6s animation + 0.1s buffer)
+      // Enable hover effects after the longest animation completes (0.7s + 0.5s animation + 0.1s buffer)
       setTimeout(() => {
         setMenuAnimationComplete(true);
-      }, 1550);
+      }, 1300);
     }
   };
 
@@ -271,7 +277,9 @@ const Header = () => {
 
                   {/* ── Desktop language toggle ── */}
                   <li className={styles.languageToggleItem}>
-                    <DesktopLanguageToggle />
+                    <Suspense fallback={null}>
+                      <DesktopLanguageToggle />
+                    </Suspense>
                   </li>
                 </ul>
               </div>
@@ -392,7 +400,9 @@ const Header = () => {
           </div>
 
           {/* ── Mobile language toggle — slides in after social icons ── */}
-          <MobileLanguageToggle menuIsOpen={isOpen} />
+          <Suspense fallback={null}>
+            <MobileLanguageToggle menuIsOpen={isOpen} />
+          </Suspense>
         </nav>
       )}
     </>
