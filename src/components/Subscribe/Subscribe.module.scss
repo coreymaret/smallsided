@@ -91,7 +91,7 @@
 }
 
 .subscribe-title {
-  font-family: 'Inter', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
   font-size: 2rem;                  /* Default title size */
   font-weight: 700;                 /* Bold */
   color: #98ED66;                   /* Green accent */
@@ -108,7 +108,7 @@
 }
 
 .subscribe-description {
-  font-family: 'Inter', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
   font-size: 1rem;                  /* Regular text */
   font-weight: 400;
   color: #ffffff;                   /* White text */
@@ -145,7 +145,7 @@
 .subscribe-input {
   flex: 1;                          /* Fill available width */
   padding: 1rem 1.25rem;
-  font-family: 'Inter', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
   font-size: 1rem;
   color: #ffffff;                   /* Text color */
   background-color: #15141a;        /* Dark input background */
@@ -175,7 +175,7 @@
 
 .subscribe-button {
   padding: 1rem 2rem;
-  font-family: 'Inter', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: #15141a;                   /* Text contrast */
@@ -205,7 +205,7 @@
 }
 
 .subscribe-message {
-  font-family: 'Inter', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
   font-size: 0.875rem;              /* Small feedback text */
   margin: 0;
   padding: 0.5rem 1rem;

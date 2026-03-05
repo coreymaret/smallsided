@@ -89,7 +89,7 @@
   width: 100%;
   padding: 1rem;
   font-size: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   background: #ffffff;
@@ -158,7 +158,7 @@
 .errorMessage {
   display: block;
   margin-top: 0.5rem;
-  font-family: 'Inter', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
   font-size: 0.875rem;
   color: #dc3545;
   font-weight: 500;
