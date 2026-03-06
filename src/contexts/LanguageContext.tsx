@@ -1,6 +1,7 @@
 // LanguageContext.tsx
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import i18n from "../i18n";
 
 interface LanguageContextType {
   isSpanish: boolean;
@@ -17,11 +18,16 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return localStorage.getItem("lang") === "es";
   });
 
+  // Sync i18n with the initial language on mount
+  useEffect(() => {
+    i18n.changeLanguage(isSpanish ? "es" : "en");
+  }, []);
+
   const toggleLanguage = () => {
     setIsSpanish((prev) => {
       const next = !prev;
       localStorage.setItem("lang", next ? "es" : "en");
-      // i18n.changeLanguage() will go here once react-i18next is installed
+      i18n.changeLanguage(next ? "es" : "en");
       return next;
     });
   };

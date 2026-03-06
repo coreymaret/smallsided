@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "blog": "Blog",
+    "contact": "Contact",
+    "getStarted": "Get Started"
+  },
+  "services": {
+    "fieldRentals": { "title": "Field Rentals", "description": "Book premium small-sided fields" },
+    "leagues": { "title": "Leagues", "description": "Join competitive small-sided leagues" },
+    "pickup": { "title": "Pickup", "description": "Drop-in games and open play" },
+    "birthdayParties": { "title": "Birthday Parties", "description": "Unforgettable soccer celebrations" },
+    "camps": { "title": "Camps", "description": "Skill development programs" },
+    "training": { "title": "Training", "description": "Skill development programs" }
+  }
+}

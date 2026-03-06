@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, lazy, Suspense } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, ChevronDown,ChartNoAxesCombined, Smile } from '../../components/Icons/Icons';
 import styles from "./Header.module.scss";
 import Logo from "../../assets/logo.svg";
@@ -14,6 +15,7 @@ const MobileLanguageToggle = lazy(() =>
 
 const Header = () => {
   const location = useLocation();
+  const { t } = useTranslation();
   const { setIsHeaderMenuOpen } = useMobileMenu();
   const [menuState, setMenuState] = useState<"open" | "closing" | "closed" | undefined>("closed");
   const isOpen = menuState === "open";
@@ -159,43 +161,43 @@ const Header = () => {
   };
 
   const serviceItems = [
-    {
-      title: "Field Rentals",
-      path: "/services/field-rental",
-      icon: Calendar,
-      description: "Book premium small-sided fields"
-    },
-    {
-      title: "Leagues",
-      path: "/services/leagues",
-      icon: Trophy,
-      description: "Join competitive small-sided leagues"
-    },
-    {
-      title: "Pickup",
-      path: "/services/pickup",
-      icon: Users,
-      description: "Drop-in games and open play"
-    },
-    {
-      title: "Birthday Parties",
-      path: "/services/birthday-parties",
-      icon: Cake,
-      description: "Unforgettable soccer celebrations"
-    },
-    {
-      title: "Camps",
-      path: "/services/camps",
-      icon: Smile,
-      description: "Skill development programs"
-    },
-    {
-      title: "Training",
-      path: "/services/training",
-      icon: ChartNoAxesCombined,
-      description: "Skill development programs"
-    }
-  ];
+  {
+    title: t('services.fieldRentals.title'),
+    path: "/services/field-rental",
+    icon: Calendar,
+    description: t('services.fieldRentals.description')
+  },
+  {
+    title: t('services.leagues.title'),
+    path: "/services/leagues",
+    icon: Trophy,
+    description: t('services.leagues.description')
+  },
+  {
+    title: t('services.pickup.title'),
+    path: "/services/pickup",
+    icon: Users,
+    description: t('services.pickup.description')
+  },
+  {
+    title: t('services.birthdayParties.title'),
+    path: "/services/birthday-parties",
+    icon: Cake,
+    description: t('services.birthdayParties.description')
+  },
+  {
+    title: t('services.camps.title'),
+    path: "/services/camps",
+    icon: Smile,
+    description: t('services.camps.description')
+  },
+  {
+    title: t('services.training.title'),
+    path: "/services/training",
+    icon: ChartNoAxesCombined,
+    description: t('services.training.description')
+  }
+];
 
   return (
     <>
@@ -214,12 +216,12 @@ const Header = () => {
                 <ul>
                   <li>
                     <Link to="/" onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>
-                      Home
+                      {t('nav.home')}
                     </Link>
                   </li>
                   <li>
                     <Link to="/about" onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>
-                      About
+                      {t('nav.about')}
                     </Link>
                   </li>
                   <li
@@ -228,7 +230,7 @@ const Header = () => {
                     onMouseLeave={handleServicesMouseLeave}
                   >
                     <span className={`${styles.servicesLabel} ${isActive("/services") ? styles.active : ""}`}>
-                      Services
+                      {t('nav.services')}
                     </span>
                     
                     {/* Desktop Mega Menu */}
@@ -260,18 +262,18 @@ const Header = () => {
                   </li>
                   <li>
                     <Link to="/blog" onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>
-                      Blog
+                      {t('nav.blog')}
                     </Link>
                   </li>
                   <li>
                     <Link to="/contact" onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>
-                      Contact
+                      {t('nav.contact')}
                     </Link>
                   </li>
 
                   <li className={styles.ctaItem}>
                     <Link to="/services" onClick={handleLinkClick} className={styles.ctaButton}>
-                      Get Started
+                      {t('nav.getStarted')}
                     </Link>
                   </li>
 
@@ -321,12 +323,12 @@ const Header = () => {
             <ul>
               <li>
                 <Link to="/" onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>
-                  Home
+                  {t('nav.home')}
                 </Link>
               </li>
               <li>
                 <Link to="/about" onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>
-                  About
+                  {t('nav.about')}
                 </Link>
               </li>
               <li className={styles.servicesItem}>
@@ -334,7 +336,7 @@ const Header = () => {
                   className={styles.servicesToggle}
                   onClick={toggleMobileServices}
                 >
-                  <span>Services</span>
+                  <span>{t('nav.services')}</span>
                   <ChevronDown 
                     size={20} 
                     className={`${styles.chevron} ${mobileServicesOpen ? styles.chevronOpen : ''}`}
@@ -367,18 +369,18 @@ const Header = () => {
               </li>
               <li>
                 <Link to="/blog" onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>
-                  Blog
+                  {t('nav.blog')}
                 </Link>
               </li>
               <li>
                 <Link to="/contact" onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>
-                  Contact
+                  {t('nav.contact')}
                 </Link>
               </li>
 
               <li className={styles.ctaItem}>
                 <Link to="/services" onClick={handleLinkClick} className={styles.ctaButton}>
-                  Get Started
+                  {t('nav.getStarted')}
                 </Link>
               </li>
             </ul>

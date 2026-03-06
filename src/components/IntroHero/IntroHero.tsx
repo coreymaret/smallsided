@@ -19,7 +19,7 @@ const IntroHero = () => {
           width="400"
           height="400"
           loading="eager"
-          fetchPriority="high"
+          {...{ fetchpriority: "high" }}
         />
       </div>
       <div className={styles.textColumn}>

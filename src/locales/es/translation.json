@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "about": "Nosotros",
+    "services": "Servicios",
+    "blog": "Blog",
+    "contact": "Contacto",
+    "getStarted": "Comenzar"
+  },
+  "services": {
+    "fieldRentals": { "title": "Alquiler de Canchas", "description": "Reserva canchas pequeñas de primera" },
+    "leagues": { "title": "Ligas", "description": "Únete a ligas competitivas de fútbol" },
+    "pickup": { "title": "Partido Libre", "description": "Juegos abiertos sin reserva" },
+    "birthdayParties": { "title": "Fiestas de Cumpleaños", "description": "Celebraciones de fútbol inolvidables" },
+    "camps": { "title": "Campamentos", "description": "Programas de desarrollo de habilidades" },
+    "training": { "title": "Entrenamiento", "description": "Programas de desarrollo de habilidades" }
+  }
+}
