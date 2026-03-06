@@ -1,6 +1,8 @@
 import { memo } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./LanguageToggle.module.scss";
 import { useLanguage } from "../../contexts/LanguageContext";
+import { routePairs } from "../../constants/routePairs";
 
 // ── Pre-computed US flag stars (computed once at module level, not on every render) ──
 const CANTON_H = (40 * 7) / 13;
@@ -95,19 +97,35 @@ const Side = ({ lang, label, active, flagSize, sideWidth, sideHeight }: SideProp
   </div>
 );
 
+// ── Shared hook for toggle + navigate ────────────────────────
+
+const useToggleWithNavigation = () => {
+  const { isSpanish, toggleLanguage } = useLanguage();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleToggle = () => {
+    const paired = routePairs[location.pathname];
+    toggleLanguage();
+    if (paired) navigate(paired);
+  };
+
+  return { isSpanish, handleToggle };
+};
+
 // ── Desktop toggle ────────────────────────────────────────────
 
 export const DesktopLanguageToggle = () => {
-  const { isSpanish, toggleLanguage } = useLanguage();
+  const { isSpanish, handleToggle } = useToggleWithNavigation();
 
   return (
     <div
       className={`${styles.pill} ${styles.desktop}`}
-      onClick={toggleLanguage}
+      onClick={handleToggle}
       role="button"
       aria-label={isSpanish ? "Switch to English" : "Cambiar a Español"}
       tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && toggleLanguage()}
+      onKeyDown={(e) => e.key === "Enter" && handleToggle()}
     >
       <div
         className={styles.thumb}
@@ -130,18 +148,18 @@ interface MobileLanguageToggleProps {
 }
 
 export const MobileLanguageToggle = ({ menuIsOpen }: MobileLanguageToggleProps) => {
-  const { isSpanish, toggleLanguage } = useLanguage();
+  const { isSpanish, handleToggle } = useToggleWithNavigation();
 
   return (
     <div className={`${styles.mobileWrapper} ${menuIsOpen ? styles.visible : ""}`}>
       <p className={styles.mobileLabel}>Language / Idioma</p>
       <div
         className={`${styles.pill} ${styles.mobile}`}
-        onClick={toggleLanguage}
+        onClick={handleToggle}
         role="button"
         aria-label={isSpanish ? "Switch to English" : "Cambiar a Español"}
         tabIndex={0}
-        onKeyDown={(e) => e.key === "Enter" && toggleLanguage()}
+        onKeyDown={(e) => e.key === "Enter" && handleToggle()}
       >
         <div
           className={styles.thumb}

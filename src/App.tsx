@@ -69,17 +69,27 @@ const App = () => {
 
                 {/* Core Pages */}
                 <Route path="/" element={<Home />} />
+                <Route path="/es/" element={<Home />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/es/nosotros" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/es/contacto" element={<Contact />} />
                 <Route path="/services" element={<Services />} />
+                <Route path="/es/servicios" element={<Services />} />
 
                 {/* Service Landing Pages */}
                 <Route path="/services/field-rental" element={<FieldRental />} />
+                <Route path="/es/canchas" element={<FieldRental />} />
                 <Route path="/services/leagues" element={<Leagues />} />
+                <Route path="/es/ligas" element={<Leagues />} />
                 <Route path="/services/pickup" element={<Pickup />} />
+                <Route path="/es/partido-libre" element={<Pickup />} />
                 <Route path="/services/birthday-parties" element={<BirthdayParties />} />
+                <Route path="/es/fiestas" element={<BirthdayParties />} />
                 <Route path="/services/camps" element={<Camps />} />
+                <Route path="/es/campamentos" element={<Camps />} />
                 <Route path="/services/training" element={<Training />} />
+                <Route path="/es/entrenamiento" element={<Training />} />
 
                 {/* Registration Routes */}
                 <Route path="/services/field-rental/book" element={<Register config={{ type: 'fieldRental', title: '', subtitle: '', component: () => null }} />} />
@@ -91,6 +101,7 @@ const App = () => {
 
                 {/* Blog */}
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/es/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
 
                 {/* Legal */}

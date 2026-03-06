@@ -5,6 +5,8 @@ import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, C
 import styles from "./Header.module.scss";
 import Logo from "../../assets/logo.svg";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
+import { useLanguage } from "../../contexts/LanguageContext";
+import { routePairs } from "../../constants/routePairs";
 
 const DesktopLanguageToggle = lazy(() =>
   import("../../components/LanguageToggle/LanguageToggle").then(m => ({ default: m.DesktopLanguageToggle }))
@@ -16,6 +18,7 @@ const MobileLanguageToggle = lazy(() =>
 const Header = () => {
   const location = useLocation();
   const { t } = useTranslation();
+  const { isSpanish } = useLanguage();
   const { setIsHeaderMenuOpen } = useMobileMenu();
   const [menuState, setMenuState] = useState<"open" | "closing" | "closed" | undefined>("closed");
   const isOpen = menuState === "open";
@@ -27,6 +30,9 @@ const Header = () => {
   const [menuAnimationComplete, setMenuAnimationComplete] = useState(false);
   const [servicesAnimationComplete, setServicesAnimationComplete] = useState(false);
   const megaMenuTimeoutRef = useRef<number | null>(null);
+
+  // Returns the localized path based on current language
+  const lp = (enPath: string) => isSpanish ? (routePairs[enPath] ?? enPath) : enPath;
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 785);
@@ -205,7 +211,7 @@ const Header = () => {
         className={`${styles.header} ${visible ? styles.show : styles.hide}`}
       >
         <div className={styles.headerContent}>
-          <Link to="/" className={styles.logo} onClick={handleLinkClick}>
+          <Link to={isSpanish ? "/es/" : "/"} className={styles.logo} onClick={handleLinkClick}>
             <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
           </Link>
 
@@ -215,12 +221,12 @@ const Header = () => {
               <div className={styles.linksSection}>
                 <ul>
                   <li>
-                    <Link to="/" onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>
+                    <Link to={lp("/")} onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>
                       {t('nav.home')}
                     </Link>
                   </li>
                   <li>
-                    <Link to="/about" onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>
+                    <Link to={lp("/about")} onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>
                       {t('nav.about')}
                     </Link>
                   </li>
@@ -243,7 +249,7 @@ const Header = () => {
                         {serviceItems.map((item, index) => (
                           <Link
                             key={item.path}
-                            to={item.path}
+                            to={lp(item.path)}
                             className={`${styles.megaMenuItem} ${isActive(item.path) ? styles.active : ''}`}
                             onClick={handleLinkClick}
                             style={{ transitionDelay: `${index * 0.05}s` }}
@@ -261,18 +267,18 @@ const Header = () => {
                     </div>
                   </li>
                   <li>
-                    <Link to="/blog" onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>
+                    <Link to={lp("/blog")} onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>
                       {t('nav.blog')}
                     </Link>
                   </li>
                   <li>
-                    <Link to="/contact" onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>
+                    <Link to={lp("/contact")} onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>
                       {t('nav.contact')}
                     </Link>
                   </li>
 
                   <li className={styles.ctaItem}>
-                    <Link to="/services" onClick={handleLinkClick} className={styles.ctaButton}>
+                    <Link to={lp("/services")} onClick={handleLinkClick} className={styles.ctaButton}>
                       {t('nav.getStarted')}
                     </Link>
                   </li>
@@ -322,12 +328,12 @@ const Header = () => {
           <div className={styles.linksSection}>
             <ul>
               <li>
-                <Link to="/" onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>
+                <Link to={lp("/")} onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>
                   {t('nav.home')}
                 </Link>
               </li>
               <li>
-                <Link to="/about" onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>
+                <Link to={lp("/about")} onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>
                   {t('nav.about')}
                 </Link>
               </li>
@@ -351,7 +357,7 @@ const Header = () => {
                   {serviceItems.map((item, index) => (
                     <Link
                       key={item.path}
-                      to={item.path}
+                      to={lp(item.path)}
                       className={`${styles.mobileServiceCard} ${isActive(item.path) ? styles.active : ''}`}
                       onClick={handleLinkClick}
                       style={{ transitionDelay: mobileServicesOpen ? `${index * 0.05}s` : '0s' }}
@@ -368,18 +374,18 @@ const Header = () => {
                 </div>
               </li>
               <li>
-                <Link to="/blog" onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>
+                <Link to={lp("/blog")} onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>
                   {t('nav.blog')}
                 </Link>
               </li>
               <li>
-                <Link to="/contact" onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>
+                <Link to={lp("/contact")} onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>
                   {t('nav.contact')}
                 </Link>
               </li>
 
               <li className={styles.ctaItem}>
-                <Link to="/services" onClick={handleLinkClick} className={styles.ctaButton}>
+                <Link to={lp("/services")} onClick={handleLinkClick} className={styles.ctaButton}>
                   {t('nav.getStarted')}
                 </Link>
               </li>

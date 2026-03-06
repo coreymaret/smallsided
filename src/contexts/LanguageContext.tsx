@@ -6,16 +6,18 @@ import i18n from "../i18n";
 interface LanguageContextType {
   isSpanish: boolean;
   toggleLanguage: () => void;
+  setLanguage: (spanish: boolean) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType>({
   isSpanish: false,
   toggleLanguage: () => {},
+  setLanguage: () => {},
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [isSpanish, setIsSpanish] = useState<boolean>(() => {
-    return localStorage.getItem("lang") === "es";
+    return window.location.pathname.startsWith('/es');
   });
 
   // Sync i18n with the initial language on mount
@@ -23,17 +25,18 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     i18n.changeLanguage(isSpanish ? "es" : "en");
   }, []);
 
+  const setLanguage = (spanish: boolean) => {
+    setIsSpanish(spanish);
+    localStorage.setItem("lang", spanish ? "es" : "en");
+    i18n.changeLanguage(spanish ? "es" : "en");
+  };
+
   const toggleLanguage = () => {
-    setIsSpanish((prev) => {
-      const next = !prev;
-      localStorage.setItem("lang", next ? "es" : "en");
-      i18n.changeLanguage(next ? "es" : "en");
-      return next;
-    });
+    setLanguage(!isSpanish);
   };
 
   return (
-    <LanguageContext.Provider value={{ isSpanish, toggleLanguage }}>
+    <LanguageContext.Provider value={{ isSpanish, toggleLanguage, setLanguage }}>
       {children}
     </LanguageContext.Provider>
   );
