@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Calendar, CalendarDays, Clock, Users, MapPin, ChevronRight, Check, Pointer, CreditCard, Lock } from '../../../../components/Icons/Icons';
 import styles from './RegisterFieldRental.module.scss';
 import { api } from '../../../../services/api';
@@ -8,6 +9,8 @@ import { useValidation } from '../shared/useValidation';
 import { useFormFormatters } from '../shared/useFormFormatters';
 
 const RegisterFieldRental: React.FC = () => {
+  const { t } = useTranslation();
+
   // Use shared validation and formatting hooks
   const validation = useValidation();
   const formatters = useFormFormatters();
@@ -62,12 +65,12 @@ const RegisterFieldRental: React.FC = () => {
     let isValid = true;
 
     if (!validation.validateEmail(formData.email)) {
-      errors.email = 'Please enter a valid email address';
+      errors.email = t('register.fieldRental.errors.invalidEmail');
       isValid = false;
     }
 
     if (!validation.validatePhone(formData.phone)) {
-      errors.phone = 'Phone number must be 10 digits';
+      errors.phone = t('register.fieldRental.errors.invalidPhone');
       isValid = false;
     }
 
@@ -80,22 +83,22 @@ const RegisterFieldRental: React.FC = () => {
     let isValid = true;
 
     if (!validation.validateCardNumber(formData.cardNumber)) {
-      errors.cardNumber = 'Card number must be 16 digits';
+      errors.cardNumber = t('register.fieldRental.errors.invalidCard');
       isValid = false;
     }
 
     if (!validation.validateCardExpiry(formData.cardExpiry)) {
-      errors.cardExpiry = 'Invalid expiry date (MM/YY)';
+      errors.cardExpiry = t('register.fieldRental.errors.invalidExpiry');
       isValid = false;
     }
 
     if (!validation.validateCVV(formData.cardCVV)) {
-      errors.cardCVV = 'CVV must be 3 digits';
+      errors.cardCVV = t('register.fieldRental.errors.invalidCVV');
       isValid = false;
     }
 
     if (!validation.validateZipCode(formData.billingZip)) {
-      errors.billingZip = 'ZIP code must be 5 digits';
+      errors.billingZip = t('register.fieldRental.errors.invalidZip');
       isValid = false;
     }
 
@@ -104,9 +107,9 @@ const RegisterFieldRental: React.FC = () => {
   };
 
   const fields = [
-    { id: 'field-1', name: 'Field 1', size: '40x60', capacity: '5v5', surface: 'Turf' },
-    { id: 'field-2', name: 'Field 2', size: '50x80', capacity: '7v7', surface: 'Turf' },
-    { id: 'field-3', name: 'Field 3', size: '60x100', capacity: '9v9', surface: 'Turf' }
+    { id: 'field-1', name: t('register.fieldRental.fields.field1'), size: '40x60', capacity: '5v5', surface: t('register.fieldRental.fields.surface') },
+    { id: 'field-2', name: t('register.fieldRental.fields.field2'), size: '50x80', capacity: '7v7', surface: t('register.fieldRental.fields.surface') },
+    { id: 'field-3', name: t('register.fieldRental.fields.field3'), size: '60x100', capacity: '9v9', surface: t('register.fieldRental.fields.surface') }
   ];
 
   const generateTimeSlots = () => {
@@ -149,18 +152,18 @@ const RegisterFieldRental: React.FC = () => {
   const currentDay = currentDate.getDate();
 
   const months = [
-    { value: '1', label: 'January' },
-    { value: '2', label: 'February' },
-    { value: '3', label: 'March' },
-    { value: '4', label: 'April' },
-    { value: '5', label: 'May' },
-    { value: '6', label: 'June' },
-    { value: '7', label: 'July' },
-    { value: '8', label: 'August' },
-    { value: '9', label: 'September' },
-    { value: '10', label: 'October' },
-    { value: '11', label: 'November' },
-    { value: '12', label: 'December' }
+    { value: '1', label: t('register.months.january') },
+    { value: '2', label: t('register.months.february') },
+    { value: '3', label: t('register.months.march') },
+    { value: '4', label: t('register.months.april') },
+    { value: '5', label: t('register.months.may') },
+    { value: '6', label: t('register.months.june') },
+    { value: '7', label: t('register.months.july') },
+    { value: '8', label: t('register.months.august') },
+    { value: '9', label: t('register.months.september') },
+    { value: '10', label: t('register.months.october') },
+    { value: '11', label: t('register.months.november') },
+    { value: '12', label: t('register.months.december') },
   ];
 
   const getDaysInMonth = (month: string, year: string) => {
@@ -338,7 +341,7 @@ const RegisterFieldRental: React.FC = () => {
       setMaxStepReached(1);
     } catch (error) {
       console.error('Booking failed:', error);
-      alert('Failed to complete booking. Please try again.');
+      alert(t('register.fieldRental.errors.bookingFailed'));
     } finally {
       setIsProcessing(false);
     }
@@ -383,8 +386,8 @@ const RegisterFieldRental: React.FC = () => {
                 <Check size={32} strokeWidth={3} color="#15141a" />
               </div>
               <div className={styles.bannerText}>
-                <h2 className={styles.bannerTitle}>Field Booked!</h2>
-                <p className={styles.bannerSubtitle}>Your rental is confirmed</p>
+                <h2 className={styles.bannerTitle}>{t('register.fieldRental.success.title')}</h2>
+                <p className={styles.bannerSubtitle}>{t('register.fieldRental.success.subtitle')}</p>
               </div>
             </div>
             
@@ -393,21 +396,21 @@ const RegisterFieldRental: React.FC = () => {
                 <div className={styles.detailItem}>
                   <MapPin size={18} className={styles.detailIcon} />
                   <div className={styles.detailContent}>
-                    <span className={styles.detailLabel}>Field</span>
+                    <span className={styles.detailLabel}>{t('register.fieldRental.success.field')}</span>
                     <span className={styles.detailValue}>{getSelectedField()?.name}</span>
                   </div>
                 </div>
                 <div className={styles.detailItem}>
                   <Calendar size={18} className={styles.detailIcon} />
                   <div className={styles.detailContent}>
-                    <span className={styles.detailLabel}>Date</span>
+                    <span className={styles.detailLabel}>{t('register.fieldRental.success.date')}</span>
                     <span className={styles.detailValue}>{getFormattedDate()}</span>
                   </div>
                 </div>
                 <div className={styles.detailItem}>
                   <Clock size={18} className={styles.detailIcon} />
                   <div className={styles.detailContent}>
-                    <span className={styles.detailLabel}>Time</span>
+                    <span className={styles.detailLabel}>{t('register.fieldRental.success.time')}</span>
                     <span className={styles.detailValue}>{getSelectedTimeSlot()?.time}</span>
                   </div>
                 </div>
@@ -418,7 +421,7 @@ const RegisterFieldRental: React.FC = () => {
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M2 4l6 4 6-4M2 4v8h12V4M2 4h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <span>Confirmation email sent to {formData.email}</span>
+              <span>{t('register.fieldRental.success.emailNotice', { email: formData.email })}</span>
             </div>
           </div>
         </>
@@ -440,10 +443,10 @@ const RegisterFieldRental: React.FC = () => {
                   {completedSteps.has(s) ? <Check size={16} /> : s}
                 </div>
                 <span className={styles.progressLabel}>
-                  {s === 1 && 'Select Field'}
-                  {s === 2 && 'Date & Time'}
-                  {s === 3 && 'Your Info'}
-                  {s === 4 && 'Payment'}
+                  {s === 1 && t('register.fieldRental.steps.selectField')}
+                  {s === 2 && t('register.fieldRental.steps.dateTime')}
+                  {s === 3 && t('register.fieldRental.steps.yourInfo')}
+                  {s === 4 && t('register.fieldRental.steps.payment')}
                 </span>
               </div>
             ))}
@@ -461,14 +464,14 @@ const RegisterFieldRental: React.FC = () => {
           {/* Step 1: Select Field */}
           {step === 1 && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Select Your Field</h2>
+              <h2 className={styles.title}>{t('register.fieldRental.steps.selectField')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <MapPin size={20} />
                   </div>
-                  Available Fields
+                  {t('register.fieldRental.fields.availableFields')}
                 </h3>
                 <div className={styles.fields}>
                   {fields.map((field) => (
@@ -483,15 +486,15 @@ const RegisterFieldRental: React.FC = () => {
                         </div>
                         <h3 className={styles.fieldName}>{field.name}</h3>
                       </div>
-                      <p className={styles.fieldSurface}>{field.surface} Surface</p>
+                      <p className={styles.fieldSurface}>{field.surface} {t('register.fieldRental.fields.surfaceLabel')}</p>
                       <ul className={styles.fieldDetails}>
                         <li>
                           <MapPin size={14} color="#15141a" />
-                          Size: {field.size}
+                          {t('register.fieldRental.fields.size')}: {field.size}
                         </li>
                         <li>
                           <Users size={14} color="#15141a" />
-                          Capacity: {field.capacity}
+                          {t('register.fieldRental.fields.capacity')}: {field.capacity}
                         </li>
                       </ul>
                     </button>
@@ -504,14 +507,14 @@ const RegisterFieldRental: React.FC = () => {
           {/* Step 2: Date & Time Selection */}
           {step === 2 && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Select Date & Time</h2>
+              <h2 className={styles.title}>{t('register.fieldRental.steps.dateTime')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <Calendar size={20} />
                   </div>
-                  Choose a Date
+                  {t('register.fieldRental.date.chooseDate')}
                 </h3>
                 
                 <div className={styles.dateDropdowns}>
@@ -521,7 +524,7 @@ const RegisterFieldRental: React.FC = () => {
                     onChange={handleInputChange}
                     className={styles.dropdown}
                   >
-                    <option value="">Select Month</option>
+                    <option value="">{t('register.months.selectMonth')}</option>
                     {months.map(month => (
                       <option key={month.value} value={month.value}>{month.label}</option>
                     ))}
@@ -534,7 +537,7 @@ const RegisterFieldRental: React.FC = () => {
                     className={styles.dropdown}
                     disabled={!formData.month}
                   >
-                    <option value="">Day</option>
+                    <option value="">{t('register.months.day')}</option>
                     {getAvailableDays().map(day => (
                       <option key={day} value={day}>{day}</option>
                     ))}
@@ -546,7 +549,7 @@ const RegisterFieldRental: React.FC = () => {
                     onChange={handleInputChange}
                     className={styles.dropdown}
                   >
-                    <option value="">Year</option>
+                    <option value="">{t('register.months.year')}</option>
                     <option value={String(currentYear)}>{currentYear}</option>
                     <option value={String(currentYear + 1)}>{currentYear + 1}</option>
                   </select>
@@ -557,7 +560,7 @@ const RegisterFieldRental: React.FC = () => {
                 <>
                   <div className={styles.section}>
                     <div className={styles.durationSelector}>
-                      <label>Duration (hours)</label>
+                      <label>{t('register.fieldRental.date.duration')}</label>
                       <select
                         name="duration"
                         value={formData.duration}
@@ -565,7 +568,9 @@ const RegisterFieldRental: React.FC = () => {
                         className={styles.durationDropdown}
                       >
                         {[1, 2, 3, 4].map(hours => (
-                          <option key={hours} value={hours}>{hours} {hours === 1 ? 'hour' : 'hours'}</option>
+                          <option key={hours} value={hours}>
+                            {hours} {hours === 1 ? t('register.fieldRental.date.hour') : t('register.fieldRental.date.hours')}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -576,7 +581,7 @@ const RegisterFieldRental: React.FC = () => {
                       <div className={styles.iconCircle}>
                         <Clock size={20} />
                       </div>
-                      Available Time Slots
+                      {t('register.fieldRental.date.availableSlots')}
                     </h3>
                     
                     <div className={styles.timeSlots}>
@@ -609,14 +614,11 @@ const RegisterFieldRental: React.FC = () => {
                                   r={4}
                                   fill="#d3d3d3"
                                   opacity={0.6}
-                                  style={{
-                                    cursor: 'pointer'
-                                  }}
+                                  style={{ cursor: 'pointer' }}
                                   onClick={() => setTimeSlotsPage(index)}
                                 />
                               );
                             })}
-                            
                             <circle
                               cx={timeSlotsPage * 20 + 10}
                               cy={10}
@@ -636,14 +638,14 @@ const RegisterFieldRental: React.FC = () => {
                             onClick={() => setTimeSlotsPage(Math.max(0, timeSlotsPage - 1))}
                             disabled={timeSlotsPage === 0}
                           >
-                            Previous
+                            {t('register.pagination.previous')}
                           </button>
                           <button
                             className={styles.paginationButton}
                             onClick={() => setTimeSlotsPage(Math.min(totalPages - 1, timeSlotsPage + 1))}
                             disabled={timeSlotsPage === totalPages - 1}
                           >
-                            Next
+                            {t('register.pagination.next')}
                           </button>
                         </div>
                       </>
@@ -657,14 +659,14 @@ const RegisterFieldRental: React.FC = () => {
           {/* Step 3: Contact Info */}
           {step === 3 && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Your Information</h2>
+              <h2 className={styles.title}>{t('register.fieldRental.steps.yourInfo')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <Pointer size={20} />
                   </div>
-                  Contact Details
+                  {t('register.contact.contactDetails')}
                 </h3>
                 <div className={styles.form}>
                   <div className={styles.inputGroup}>
@@ -677,7 +679,7 @@ const RegisterFieldRental: React.FC = () => {
                       placeholder=" "
                     />
                     <label className={`${styles.floatingLabel} ${formData.name ? styles.active : ''}`}>
-                      Full Name *
+                      {t('register.contact.fullName')} *
                     </label>
                   </div>
 
@@ -691,7 +693,7 @@ const RegisterFieldRental: React.FC = () => {
                       placeholder=" "
                     />
                     <label className={`${styles.floatingLabel} ${formData.email ? styles.active : ''}`}>
-                      Email Address *
+                      {t('register.contact.email')} *
                     </label>
                     {validationErrors.email && (
                       <span className={styles.errorMessage}>{validationErrors.email}</span>
@@ -709,7 +711,7 @@ const RegisterFieldRental: React.FC = () => {
                       maxLength={14}
                     />
                     <label className={`${styles.floatingLabel} ${formData.phone ? styles.active : ''}`}>
-                      Phone Number *
+                      {t('register.contact.phone')} *
                     </label>
                     {validationErrors.phone && (
                       <span className={styles.errorMessage}>{validationErrors.phone}</span>
@@ -721,7 +723,7 @@ const RegisterFieldRental: React.FC = () => {
               <div className={styles.section}>
                 <div className={styles.inputGroup}>
                   <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>
-                    Expected Number of Players
+                    {t('register.fieldRental.contact.expectedPlayers')}
                   </label>
                   <input
                     type="number"
@@ -740,14 +742,14 @@ const RegisterFieldRental: React.FC = () => {
           {/* Step 4: Payment */}
           {step === 4 && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Payment Information</h2>
+              <h2 className={styles.title}>{t('register.fieldRental.steps.payment')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <CreditCard size={20} />
                   </div>
-                  Complete Your Booking
+                  {t('register.payment.completeBooking')}
                 </h3>
 
                 <div className={styles.form}>
@@ -762,7 +764,7 @@ const RegisterFieldRental: React.FC = () => {
                       className={`${styles.input} ${validationErrors.cardNumber ? styles.inputError : ''}`}
                     />
                     <label className={`${styles.floatingLabel} ${formData.cardNumber ? styles.active : ''}`}>
-                      Card Number *
+                      {t('register.payment.cardNumber')} *
                     </label>
                     {validationErrors.cardNumber && (
                       <span className={styles.errorMessage}>{validationErrors.cardNumber}</span>
@@ -781,7 +783,7 @@ const RegisterFieldRental: React.FC = () => {
                         className={`${styles.input} ${validationErrors.cardExpiry ? styles.inputError : ''}`}
                       />
                       <label className={`${styles.floatingLabel} ${formData.cardExpiry ? styles.active : ''}`}>
-                        Expiry (MM/YY) *
+                        {t('register.payment.expiry')} *
                       </label>
                       {validationErrors.cardExpiry && (
                         <span className={styles.errorMessage}>{validationErrors.cardExpiry}</span>
@@ -799,7 +801,7 @@ const RegisterFieldRental: React.FC = () => {
                         className={`${styles.input} ${validationErrors.cardCVV ? styles.inputError : ''}`}
                       />
                       <label className={`${styles.floatingLabel} ${formData.cardCVV ? styles.active : ''}`}>
-                        CVV *
+                        {t('register.payment.cvv')} *
                       </label>
                       {validationErrors.cardCVV && (
                         <span className={styles.errorMessage}>{validationErrors.cardCVV}</span>
@@ -818,7 +820,7 @@ const RegisterFieldRental: React.FC = () => {
                       className={`${styles.input} ${validationErrors.billingZip ? styles.inputError : ''}`}
                     />
                     <label className={`${styles.floatingLabel} ${formData.billingZip ? styles.active : ''}`}>
-                      Billing ZIP Code *
+                      {t('register.payment.billingZip')} *
                     </label>
                     {validationErrors.billingZip && (
                       <span className={styles.errorMessage}>{validationErrors.billingZip}</span>
@@ -827,17 +829,17 @@ const RegisterFieldRental: React.FC = () => {
 
                   <div className={styles.securityNotice}>
                     <Lock size={16} />
-                    <span>Your payment information is encrypted and secure</span>
+                    <span>{t('register.payment.securityNotice')}</span>
                   </div>
                 </div>
 
                 <div className={styles.total}>
                   <div className={styles.totalRow}>
-                    <span>Field Rental ({formData.duration}h)</span>
+                    <span>{t('register.fieldRental.payment.rentalLabel', { duration: formData.duration })}</span>
                     <span>${calculateTotal()}</span>
                   </div>
                   <div className={styles.totalMain}>
-                    <span>Total Amount</span>
+                    <span>{t('register.payment.total')}</span>
                     <strong>${calculateTotal()}</strong>
                   </div>
                 </div>
@@ -850,7 +852,7 @@ const RegisterFieldRental: React.FC = () => {
         <div className={styles.actions}>
           {step > 1 && (
             <button className={`${styles.button} ${styles.buttonSecondary}`} onClick={handleBack}>
-              Back
+              {t('register.nav.back')}
             </button>
           )}
           
@@ -860,7 +862,7 @@ const RegisterFieldRental: React.FC = () => {
               onClick={handleNext}
               disabled={!canProceed()}
             >
-              Continue
+              {t('register.nav.continue')}
               <ChevronRight size={20} />
             </button>
           ) : (
@@ -869,7 +871,7 @@ const RegisterFieldRental: React.FC = () => {
               onClick={handleSubmit}
               disabled={isProcessing}
             >
-              {isProcessing ? 'Processing...' : 'Confirm Booking'}
+              {isProcessing ? t('register.nav.processing') : t('register.nav.confirmBooking')}
               {!isProcessing && <Check size={20} />}
             </button>
           )}

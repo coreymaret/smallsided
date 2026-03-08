@@ -13,6 +13,461 @@
     "pickup": { "title": "Pickup", "description": "Drop-in games and open play" },
     "birthdayParties": { "title": "Birthday Parties", "description": "Unforgettable soccer celebrations" },
     "camps": { "title": "Camps", "description": "Skill development programs" },
-    "training": { "title": "Training", "description": "Skill development programs" }
+    "training": { "title": "Training", "description": "Skill development programs" },
+    "page": {
+      "heading": "Our Services",
+      "subtitle": "Everything You Need to Play",
+      "description": "Discover all the ways Small Sided can help you play, compete, and develop your soccer skills",
+      "fieldRentals": { "description": "Reserve premium turf fields for your team or group. Flexible booking options available." },
+      "leagues": { "description": "Join competitive adult and youth leagues. Multiple divisions and skill levels available." },
+      "pickup": { "title": "Pickup Games", "description": "Drop in and play with other soccer enthusiasts. No commitment required." },
+      "birthdayParties": { "description": "Host an unforgettable soccer-themed birthday party with professional staff and activities." },
+      "camps": { "title": "Soccer Camps", "description": "Professional coaching camps for all ages and skill levels. Single day to week-long options." },
+      "training": { "title": "Training Programs", "description": "Personalized training sessions focused on skill development and technique improvement." }
+    }
+  },
+  "about": {
+    "heading": "Why Small-Sided Soccer Works",
+    "subtitle": "The Science Behind Better Player Development",
+    "description": "Discover the key benefits that make small-sided formats the superior choice for youth development",
+    "features": {
+      "championship": {
+        "heading": "Championship Development",
+        "subheading": "Build winning mentalities through structured small-sided play",
+        "items": ["Enhanced competitive spirit", "Victory through teamwork", "Mental toughness training"]
+      },
+      "precision": {
+        "heading": "Precision Training",
+        "subheading": "Focus on technical skills with targeted small-group sessions",
+        "items": ["Individual attention guaranteed", "Skill-specific drills", "Measurable progress tracking"]
+      },
+      "teamChemistry": {
+        "heading": "Team Chemistry",
+        "subheading": "Foster deeper connections through intimate team dynamics",
+        "items": ["Stronger communication bonds", "Enhanced field awareness", "Leadership opportunities"]
+      },
+      "tactical": {
+        "heading": "Tactical Intelligence",
+        "subheading": "Develop soccer IQ through increased decision-making moments",
+        "items": ["Quick thinking under pressure", "Strategic positioning skills", "Game reading abilities"]
+      },
+      "growth": {
+        "heading": "Accelerated Growth",
+        "subheading": "Experience faster skill progression in small-sided formats",
+        "items": ["Rapid technical improvement", "Confidence building through reps", "Consistent performance gains"]
+      },
+      "elite": {
+        "heading": "Elite Preparation",
+        "subheading": "Train like the pros with academy-level methodologies",
+        "items": ["Professional training standards", "College recruitment ready", "Advanced tactical concepts"]
+      }
+    }
+  },
+  "contact": {
+    "heading": "Get in touch.",
+    "subtitle": "We typically respond within 24 hours during business days. Whether you have a question, feedback, or just want to say hello, we're here to help.",
+    "form": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "submit": "Send Message"
+    },
+    "info": {
+      "address": "Address",
+      "addressValue": "123 Small Sided Way, Tampa, FL 33617",
+      "phone": "Phone",
+      "mail": "Mail",
+      "followUs": "Follow Us"
+    },
+    "map": { "loading": "Loading map..." },
+    "faq": {
+      "heading": "FAQs",
+      "items": [
+        { "title": "What are your operating hours?", "content": "We are open Monday through Friday from 9 AM to 6 PM EST. Weekend hours vary by season, so please contact us for current availability." },
+        { "title": "Do you offer group training sessions?", "content": "Yes! We offer group training sessions for teams and individuals. Group sessions can be customized based on skill level and training goals." },
+        { "title": "What age groups do you work with?", "content": "We work with players of all ages, from youth leagues (ages 6+) to adult recreational and competitive players. Our training programs are tailored to each age group." },
+        { "title": "How do I schedule a training session?", "content": "You can schedule a session by filling out the contact form above, calling us directly, or sending us an email. We'll respond within 24 hours to confirm availability." },
+        { "title": "What should I bring to training?", "content": "Please bring comfortable athletic clothing, soccer cleats or turf shoes, shin guards, a water bottle, and a soccer ball. We provide all other necessary training equipment." }
+      ]
+    }
+  },
+  "fieldRental": {
+    "heading": "Field Rental",
+    "subtitle": "Book Your Perfect Field",
+    "description": "Book your perfect field for games, practices, or events"
+  },
+  "pickup": {
+    "heading": "Pickup Games",
+    "subtitle": "Drop In & Play",
+    "description": "Join friendly matches at your skill level. Drop in for a game whenever you're free!"
+  },
+  "camps": {
+    "heading": "Soccer Camp Registration",
+    "subtitle": "Skills, Fun & Development",
+    "description": "Join us for an unforgettable week of soccer, fun, and skill development"
+  },
+  "birthday": {
+    "heading": "Birthday Party Booking",
+    "subtitle": "Celebrate With Us",
+    "description": "Make your child's special day unforgettable with our all-inclusive party packages"
+  },
+  "training": {
+    "heading": "Training Program Registration",
+    "subtitle": "Elevate Your Game",
+    "description": "Personalized soccer training to elevate your game"
+  },
+  "leagues": {
+    "heading": "Register Your Team",
+    "subtitle": "Competitive & Recreational Leagues",
+    "description": "Join one of our competitive leagues in just a few simple steps"
+  },
+  "leagueTable": {
+    "title": "League Standings",
+    "subtitle": "View team standings and match schedules across all leagues",
+    "headers": {
+      "team": "Team",
+      "mp": "MP",
+      "w": "W",
+      "d": "D",
+      "l": "L",
+      "gf": "GF",
+      "ga": "GA",
+      "gd": "+/-",
+      "pts": "PTS"
+    },
+    "record": "Record",
+    "pts": "pts",
+    "matchSchedule": "Match Schedule",
+    "noTeamSelected": "No Team Selected",
+    "noTeamSubtitle": "Click any team from the standings to view their schedule",
+    "result": {
+      "win": "Win",
+      "loss": "Loss",
+      "draw": "Draw"
+    }
+  },
+  "subscribe": {
+    "heading": "Stay in the Loop",
+    "description": "Get the latest updates, exclusive content, and insights delivered straight to your inbox.",
+    "placeholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "subscribing": "Subscribing...",
+    "subscribed": "Subscribed!",
+    "successMessage": "Thanks for subscribing! Check your inbox.",
+    "errors": {
+      "emptyEmail": "Please enter your email address.",
+      "invalidEmail": "Please enter a valid email address.",
+      "generic": "Something went wrong. Please try again.",
+      "network": "Network error. Please try again."
+    }
+  },
+  "footer": {
+    "tagline": "Small field. Big impact.",
+    "quickLinks": "Quick Links",
+    "contactUs": "Contact Us",
+    "privacy": "Privacy Policy",
+    "tos": "Terms of Service",
+    "cookiePolicy": "Cookie Policy",
+    "rights": "All rights reserved."
+  },
+  "home": {
+    "slider": {
+      "slide1": {
+        "heading": "Develop Skills Through Small-Sided Soccer",
+        "subheading": "Research-backed training methods that accelerate player development with more touches, faster decisions, and better technique.",
+        "buttonText": "Start Training"
+      },
+      "slide2": {
+        "heading": "Book Premium 7v7 Soccer Fields",
+        "subheading": "Professional-grade facilities designed specifically for small-sided games. Available for teams, clubs, and training sessions.",
+        "buttonText": "View Fields"
+      },
+      "slide3": {
+        "heading": "Expert Coaching Resources",
+        "subheading": "Access hundreds of training exercises, tactical insights, and proven methodologies from experienced youth soccer coaches.",
+        "buttonText": "Explore Resources"
+      }
+    },
+    "intro": {
+      "heading": "The Future of Youth Soccer is Small-Sided",
+      "subtitle": "More touches. More decisions. More development. Discover why the world's best academies are choosing small-sided formats to develop tomorrow's stars.",
+      "cta": "Learn More",
+      "imageAlt": "Small-sided soccer isometric illustration"
+    },
+    "stats": {
+      "playersLabel": "Youth Players Trained",
+      "sessionsLabel": "Training Sessions",
+      "academiesLabel": "Partner Academies",
+      "satisfactionLabel": "Player Satisfaction"
+    },
+    "statRows": {
+      "learnMore": "Learn More",
+      "row1": {
+        "stat": "500% MORE TOUCHES IN 7V7",
+        "description": "Half your team, double the development. Players get 50% more ball touches in 7v7 vs 11v11. Every touch matters when you're building tomorrow's stars.",
+        "imageAlt": "Youth soccer player dribbling a ball in 7v7 format"
+      },
+      "row2": {
+        "stat": "66% LESS STANDING AROUND",
+        "description": "The ball is out of play 34% of the time in 11v11, but only 8% in 4v4. That means 66% less time standing around and 66% more time developing skills.",
+        "imageAlt": "Youth soccer player running with the ball"
+      }
+    },
+    "reviews": {
+      "heading": "What Coaches & Parents Say",
+      "subheading": "Real feedback from clubs and families embracing small-sided soccer",
+      "items": [
+        { "id": 1, "name": "Sarah Mitchell", "role": "Parent & Coach", "rating": 5, "text": "Switching to 7v7 format has been transformative for our U10 team. The kids get so many more touches on the ball, and I've noticed significant improvements in their decision-making and confidence.", "date": "2 weeks ago" },
+        { "id": 2, "name": "Mike Rodriguez", "role": "Youth Soccer Director", "rating": 5, "text": "The data doesn't lie - our players are getting 3x more 1v1 situations in small-sided games. We've seen tremendous development in technical skills and game awareness since making the switch.", "date": "1 month ago" },
+        { "id": 3, "name": "Jennifer Chang", "role": "Parent", "rating": 5, "text": "My daughter used to spend most of the game standing around. Now she's constantly involved, touching the ball, and having fun. She actually looks forward to practice and games!", "date": "3 weeks ago" },
+        { "id": 4, "name": "David Thompson", "role": "Club Administrator", "rating": 5, "text": "Implementing small-sided soccer across our club has been one of the best decisions we've made. Parents love it, kids love it, and the development results speak for themselves.", "date": "2 months ago" },
+        { "id": 5, "name": "Lisa Anderson", "role": "Coach", "rating": 5, "text": "The statistics on increased scoring opportunities are accurate. Our players are more engaged, making better decisions, and developing faster than ever before. Small-sided soccer just makes sense.", "date": "1 month ago" },
+        { "id": 6, "name": "Robert Kim", "role": "Parent & Former Pro", "rating": 5, "text": "As someone who played professionally, I wish I had access to this format as a kid. The number of meaningful touches and game situations these kids experience is exactly what develops elite players.", "date": "3 weeks ago" }
+      ]
+    }
+  },
+  "register": {
+    "nav": {
+      "back": "Back",
+      "continue": "Continue",
+      "confirmBooking": "Confirm Booking",
+      "processing": "Processing..."
+    },
+    "months": {
+      "selectMonth": "Select Month",
+      "day": "Day",
+      "year": "Year",
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
+    "pagination": { "previous": "Previous", "next": "Next" },
+    "contact": {
+      "contactDetails": "Contact Details",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number"
+    },
+    "payment": {
+      "completeBooking": "Complete Your Booking",
+      "cardNumber": "Card Number",
+      "expiry": "Expiry (MM/YY)",
+      "cvv": "CVV",
+      "billingZip": "Billing ZIP Code",
+      "securityNotice": "Your payment information is encrypted and secure",
+      "total": "Total Amount"
+    },
+    "fieldRental": {
+      "steps": {
+        "selectField": "Select Field",
+        "dateTime": "Date & Time",
+        "yourInfo": "Your Info",
+        "payment": "Payment"
+      },
+      "fields": {
+        "availableFields": "Available Fields",
+        "field1": "Field 1", "field2": "Field 2", "field3": "Field 3",
+        "surface": "Turf", "surfaceLabel": "Surface", "size": "Size", "capacity": "Capacity"
+      },
+      "date": {
+        "chooseDate": "Choose a Date", "duration": "Duration (hours)",
+        "hour": "hour", "hours": "hours", "availableSlots": "Available Time Slots"
+      },
+      "contact": { "expectedPlayers": "Expected Number of Players" },
+      "payment": { "rentalLabel": "Field Rental ({{duration}}h)" },
+      "success": {
+        "title": "Field Booked!", "subtitle": "Your rental is confirmed",
+        "field": "Field", "date": "Date", "time": "Time",
+        "emailNotice": "Confirmation email sent to {{email}}"
+      },
+      "errors": {
+        "invalidEmail": "Please enter a valid email address",
+        "invalidPhone": "Phone number must be 10 digits",
+        "invalidCard": "Card number must be 16 digits",
+        "invalidExpiry": "Invalid expiry date (MM/YY)",
+        "invalidCVV": "CVV must be 3 digits",
+        "invalidZip": "ZIP code must be 5 digits",
+        "bookingFailed": "Failed to complete booking. Please try again."
+      }
+    },
+    "pickup": {
+      "steps": {
+        "selectGame": "Select Game", "details": "Details", "yourInfo": "Your Info",
+        "confirm": "Confirm", "payment": "Payment"
+      },
+      "filters": {
+        "skillLevel": "Skill Level", "allLevels": "All Levels",
+        "beginner": "Beginner", "intermediate": "Intermediate", "advanced": "Advanced",
+        "format": "Format", "allFormats": "All Formats"
+      },
+      "schedule": { "today": "Today", "noGames": "No games scheduled", "perPlayer": "player", "spots": "spots" },
+      "details": {
+        "gameInfo": "Game Information", "spotsAvailable": "spots available",
+        "selectSpots": "Select Spots", "numberOfSpots": "Number of Spots",
+        "spot": "spot", "spots": "spots"
+      },
+      "payment": { "cardDetails": "Card Details" },
+      "success": {
+        "title": "Reservation Confirmed!", "subtitle": "Your spot has been successfully reserved",
+        "date": "Date", "time": "Time", "location": "Location", "format": "Format"
+      },
+      "errors": {
+        "nameRequired": "Name is required", "nameMin": "Name must be at least 2 characters",
+        "emailRequired": "Email is required", "phoneRequired": "Phone number is required"
+      }
+    },
+    "camps": {
+      "steps": {
+        "selectCamp": "Select Camp", "camperInfo": "Camper Info",
+        "parentInfo": "Parent Info", "review": "Review", "payment": "Payment"
+      },
+      "options": {
+        "summerIntensive": {
+          "name": "Summer Intensive", "description": "Full-day camp focused on skill development", "duration": "5 days",
+          "features": ["Daily training sessions", "Lunch included", "Camp t-shirt", "Skills competition"]
+        },
+        "goalkeeper": {
+          "name": "Goalkeeper Academy", "description": "Specialized training for aspiring goalkeepers", "duration": "3 days",
+          "features": ["Expert GK coaching", "Video analysis", "Equipment provided", "Certificate"]
+        },
+        "elite": {
+          "name": "Elite Development", "description": "Advanced camp for competitive players", "duration": "5 days",
+          "features": ["College prep", "Recruiting guidance", "Advanced tactics", "Tournament play"]
+        }
+      },
+      "weeks": {
+        "week1": "Week 1: June 10-14, 2024", "week2": "Week 2: June 17-21, 2024",
+        "week3": "Week 3: June 24-28, 2024", "week4": "Week 4: July 1-5, 2024"
+      },
+      "skillLevels": {
+        "beginner": "New to soccer or learning basics",
+        "intermediate": "Plays recreationally, knows fundamentals",
+        "advanced": "Competitive player, strong technical skills"
+      },
+      "step1": { "chooseProgram": "Choose a Program", "selectWeek": "Select Week", "ages": "Ages", "full": "Full" },
+      "step2": {
+        "basicInfo": "Basic Information", "campDetails": "Camp Details",
+        "firstName": "First Name", "lastName": "Last Name", "age": "Age",
+        "selectGender": "Select Gender", "male": "Male", "female": "Female", "other": "Other",
+        "tshirtSize": "T-Shirt Size", "skillLevel": "Skill Level"
+      },
+      "step3": {
+        "yourInfo": "Your Information", "emergencyContact": "Emergency Contact",
+        "emergencyContactName": "Emergency Contact Name", "emergencyPhone": "Emergency Phone",
+        "medicalInfo": "Medical Information",
+        "medicalConditionsPlaceholder": "Any medical conditions we should know about?",
+        "allergiesPlaceholder": "Any allergies?", "medicationsPlaceholder": "Current medications?",
+        "specialNeedsPlaceholder": "Any special needs or accommodations?"
+      },
+      "step4": {
+        "campDetails": "Camp Details", "camper": "Camper", "age": "Age",
+        "skillLabel": "Skill Level", "tshirt": "T-Shirt",
+        "terms": "By proceeding to payment, you agree to our camp policies including our cancellation policy and medical release forms. Full terms and conditions will be sent via email."
+      },
+      "step5": { "totalDue": "Total Due Today", "completeRegistration": "Complete Registration - ${{price}}" },
+      "success": {
+        "title": "Registration Complete!", "subtitle": "Your camper is all set for an amazing week",
+        "camper": "Camper", "camp": "Camp", "week": "Week"
+      },
+      "errors": {
+        "firstNameRequired": "First name is required", "lastNameRequired": "Last name is required",
+        "emergencyContactRequired": "Emergency contact is required",
+        "emergencyPhoneRequired": "Emergency phone is required"
+      }
+    },
+    "birthday": {
+      "steps": { "package": "Package", "dateTime": "Date & Time", "details": "Details", "review": "Review", "payment": "Payment" },
+      "packages": {
+        "basic": { "name": "Basic Party", "duration": "2 hours", "description": "Perfect for smaller celebrations", "features": ["Field rental", "Up to 15 guests", "Party host", "Basic decorations"] },
+        "deluxe": { "name": "Deluxe Party", "duration": "3 hours", "description": "Our most popular package", "features": ["Field rental", "Up to 25 guests", "Party host", "Premium decorations", "Pizza & drinks", "Party favors"] },
+        "ultimate": { "name": "Ultimate Party", "duration": "4 hours", "description": "The complete celebration experience", "features": ["Field rental", "Up to 35 guests", "Party host", "Premium decorations", "Pizza & drinks", "Party favors", "Custom cake", "Photo session"] }
+      },
+      "cake": { "chocolate": "Chocolate Cake", "vanilla": "Vanilla Cake", "custom": "Custom Design", "none": "No Cake (I'll bring my own)" },
+      "step1": { "title": "Choose Your Party Package" },
+      "step2": { "selectTimeSlot": "Select Time Slot", "booked": "Booked" },
+      "step3": {
+        "birthdayChild": "Birthday Child", "childName": "Child's Name",
+        "parentInfo": "Parent/Guardian Information", "parentName": "Parent Name",
+        "partySize": "Party Size", "expectedGuests": "Expected Number of Guests",
+        "cakePreference": "Cake Preference", "specialRequests": "Special Requests (Optional)",
+        "specialRequestsPlaceholder": "Any special requests, allergies, or dietary restrictions?"
+      },
+      "step4": { "title": "Review Your Booking", "partyPackage": "Party Package", "guestsExpected": "guests expected", "terms": "By proceeding to payment, you agree to our party booking terms and cancellation policy." },
+      "step5": { "partyPackage": "Party Package" },
+      "success": { "title": "Party Booked!", "subtitle": "Your birthday celebration is confirmed", "birthdayChild": "Birthday Child", "date": "Date", "package": "Package" }
+    },
+    "training": {
+      "steps": { "program": "Program", "playerInfo": "Player Info", "preferences": "Preferences", "review": "Review", "payment": "Payment" },
+      "types": {
+        "individual": { "label": "Individual Training", "description": "1-on-1 personalized sessions", "price": "$75/session" },
+        "smallGroup": { "label": "Small Group Training", "description": "Groups of 2-4 players", "price": "$50/session" },
+        "positionSpecific": { "label": "Position-Specific", "description": "Goalkeeper, striker, defender training", "price": "$60/session" }
+      },
+      "skillLevels": { "beginner": "New to soccer", "intermediate": "Playing for 1-2 years", "advanced": "Competitive experience" },
+      "focusAreas": { "ballControl": "Ball Control", "shooting": "Shooting", "passing": "Passing", "dribbling": "Dribbling", "defense": "Defense", "fitness": "Fitness" },
+      "days": { "monday": "Monday", "tuesday": "Tuesday", "wednesday": "Wednesday", "thursday": "Thursday", "friday": "Friday", "saturday": "Saturday", "sunday": "Sunday" },
+      "timeSlots": {
+        "morning": { "label": "Morning", "description": "8AM - 12PM" },
+        "afternoon": { "label": "Afternoon", "description": "12PM - 5PM" },
+        "evening": { "label": "Evening", "description": "5PM - 8PM" }
+      },
+      "step1": { "title": "Select Training Program" },
+      "step2": { "playerName": "Player Name", "focusAreas": "Focus Areas (Select all that apply)" },
+      "step3": {
+        "parentContact": "Parent/Guardian Contact",
+        "preferredDays": "Preferred Days (Select all that apply)",
+        "preferredTime": "Preferred Time of Day",
+        "additionalInfo": "Additional Information (Optional)",
+        "additionalInfoPlaceholder": "Any specific goals, concerns, or information we should know?"
+      },
+      "step4": {
+        "trainingProgram": "Training Program", "player": "Player", "focusAreas": "Focus Areas",
+        "schedulePreferences": "Schedule Preferences",
+        "terms": "By proceeding to payment, you agree to our training terms and cancellation policy. A coach will contact you within 48 hours to schedule your first session."
+      },
+      "step5": { "completeRegistration": "Complete Registration", "completeButton": "Complete Registration", "firstSession": "First Session" },
+      "success": { "title": "Registration Complete!", "subtitle": "Training session scheduled successfully", "player": "Player", "trainingType": "Training Type", "preferredTime": "Preferred Time" }
+    },
+    "leagues": {
+      "steps": { "league": "League", "teamInfo": "Team Info", "preferences": "Preferences", "review": "Review", "payment": "Payment" },
+      "experienceLevels": { "beginner": "New to organized soccer", "intermediate": "Some experience playing", "advanced": "Competitive experience" },
+      "days": {
+        "weekdayEvening": "Weekday Evenings", "weekdayEveningDesc": "Mon-Thu after 6 PM",
+        "friday": "Friday Nights", "fridayDesc": "Friday after 6 PM",
+        "saturday": "Saturday", "saturdayDesc": "Saturday any time",
+        "sunday": "Sunday", "sundayDesc": "Sunday any time"
+      },
+      "step1": {
+        "title": "Select Your League", "chooseCategory": "Choose Category",
+        "adultLeagues": "Adult Leagues", "youthLeagues": "Youth Leagues",
+        "chooseGender": "Choose Gender", "chooseDivision": "Choose Your Division"
+      },
+      "step2": { "teamDetails": "Team Details", "teamName": "Team Name", "captainName": "Team Captain Name", "playerCount": "Expected Number of Players" },
+      "step3": { "experienceLevel": "Experience Level", "preferredDay": "Preferred Game Day", "additionalInfoPlaceholder": "Any additional information or special requests..." },
+      "step4": {
+        "title": "Review & Confirm", "leagueInfo": "League Information", "league": "League", "division": "Division",
+        "teamDetails": "Team Details", "captain": "Captain", "expectedPlayers": "expected players",
+        "level": "Level", "preferred": "Preferred",
+        "terms": "By proceeding to payment, you agree to our league terms and conditions. You will be contacted within 48 hours regarding team placement and next steps."
+      },
+      "step5": { "registrationFee": "Registration Fee - $150", "registrationFeeLabel": "Registration Fee" },
+      "success": {
+        "title": "Registration Complete!", "subtitle": "Your team has been successfully registered",
+        "teamName": "Team Name", "league": "League", "captain": "Captain",
+        "preferredDay": "Preferred Day", "experienceLevel": "Experience Level",
+        "teamSize": "Team Size", "players": "players", "additionalInfo": "Additional Info"
+      }
+    }
   }
 }

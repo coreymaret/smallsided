@@ -1,7 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import styles from "./IntroHero.module.scss";
 import iso1Image from '/images/iso1.webp'
 
 const IntroHero = () => {
+  const { t } = useTranslation();
+
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const target = document.querySelector('#row1');
@@ -15,7 +18,7 @@ const IntroHero = () => {
       <div className={styles.imageColumn}>
         <img 
           src={iso1Image}
-          alt="Small-sided soccer isometric illustration"
+          alt={t('home.intro.imageAlt')}
           width="400"
           height="400"
           loading="eager"
@@ -24,13 +27,10 @@ const IntroHero = () => {
       </div>
       <div className={styles.textColumn}>
         <div className={styles.textContent}>
-          <h1 className={styles.heroTitle}>The Future of Youth Soccer is Small-Sided</h1>
-          <p className={styles.heroSubtitle}>
-            More touches. More decisions. More development. Discover why the world's best 
-            academies are choosing small-sided formats to develop tomorrow's stars.
-          </p>
+          <h1 className={styles.heroTitle}>{t('home.intro.heading')}</h1>
+          <p className={styles.heroSubtitle}>{t('home.intro.subtitle')}</p>
           <a href="#row1" className={styles.ctaButton} onClick={scrollToSection}>
-            Learn More
+            {t('home.intro.cta')}
           </a>
         </div>
       </div>

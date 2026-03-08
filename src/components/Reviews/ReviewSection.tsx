@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Star } from '../../components/Icons/Icons';
 import './ReviewSection.scss';
 
@@ -11,58 +12,11 @@ interface Review {
   date: string;
 }
 
-const reviews: Review[] = [
-  {
-    id: 1,
-    name: "Sarah Mitchell",
-    role: "Parent & Coach",
-    rating: 5,
-    text: "Switching to 7v7 format has been transformative for our U10 team. The kids get so many more touches on the ball, and I've noticed significant improvements in their decision-making and confidence.",
-    date: "2 weeks ago"
-  },
-  {
-    id: 2,
-    name: "Mike Rodriguez",
-    role: "Youth Soccer Director",
-    rating: 5,
-    text: "The data doesn't lie - our players are getting 3x more 1v1 situations in small-sided games. We've seen tremendous development in technical skills and game awareness since making the switch.",
-    date: "1 month ago"
-  },
-  {
-    id: 3,
-    name: "Jennifer Chang",
-    role: "Parent",
-    rating: 5,
-    text: "My daughter used to spend most of the game standing around. Now she's constantly involved, touching the ball, and having fun. She actually looks forward to practice and games!",
-    date: "3 weeks ago"
-  },
-  {
-    id: 4,
-    name: "David Thompson",
-    role: "Club Administrator",
-    rating: 5,
-    text: "Implementing small-sided soccer across our club has been one of the best decisions we've made. Parents love it, kids love it, and the development results speak for themselves.",
-    date: "2 months ago"
-  },
-  {
-    id: 5,
-    name: "Lisa Anderson",
-    role: "Coach",
-    rating: 5,
-    text: "The statistics on increased scoring opportunities are accurate. Our players are more engaged, making better decisions, and developing faster than ever before. Small-sided soccer just makes sense.",
-    date: "1 month ago"
-  },
-  {
-    id: 6,
-    name: "Robert Kim",
-    role: "Parent & Former Pro",
-    rating: 5,
-    text: "As someone who played professionally, I wish I had access to this format as a kid. The number of meaningful touches and game situations these kids experience is exactly what develops elite players.",
-    date: "3 weeks ago"
-  }
-];
-
 const ReviewsSection = () => {
+  const { t } = useTranslation();
+
+  const reviews: Review[] = t('home.reviews.items', { returnObjects: true }) as Review[];
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const autoScrollRef = useRef<number>();
@@ -92,7 +46,6 @@ const ReviewsSection = () => {
       const currentScroll = scrollContainerRef.current.scrollLeft;
       const currentPosition = Math.round(currentScroll / cardWidth);
       
-      // Move to next position
       scrollToIndex(currentPosition + 1, true);
       
       const nextIndex = (currentIndex + 1) % reviews.length;
@@ -110,10 +63,7 @@ const ReviewsSection = () => {
   };
 
   useEffect(() => {
-    // Initialize position to middle set
     scrollToIndex(reviews.length, false);
-    
-    // Start auto scroll
     resetAutoScroll();
 
     return () => {
@@ -129,7 +79,6 @@ const ReviewsSection = () => {
       const scrollLeft = scrollContainerRef.current.scrollLeft;
       const index = Math.round(scrollLeft / cardWidth);
       
-      // Check if we've scrolled to the first or last set, reset position
       if (index <= 0) {
         setTimeout(() => {
           scrollToIndex(reviews.length, false);
@@ -140,7 +89,6 @@ const ReviewsSection = () => {
         }, 50);
       }
       
-      // Update current index based on scroll position
       const actualIndex = index % reviews.length;
       if (actualIndex !== currentIndex) {
         setCurrentIndex(actualIndex);
@@ -175,8 +123,8 @@ const ReviewsSection = () => {
     <section className="reviews-section">
       <div className="reviews-container">
         <div className="reviews-header">
-          <h2>What Coaches & Parents Say</h2>
-          <p>Real feedback from clubs and families embracing small-sided soccer</p>
+          <h2>{t('home.reviews.heading')}</h2>
+          <p>{t('home.reviews.subheading')}</p>
         </div>
 
         <div className="reviews-carousel">
@@ -197,7 +145,7 @@ const ReviewsSection = () => {
                 <div className="review-footer">
                   <div className="reviewer-info">
                     <div className="reviewer-avatar">
-                      {review.name.split(' ').map(n => n[0]).join('')}
+                      {review.name.split(' ').map((n: string) => n[0]).join('')}
                     </div>
                     <div className="reviewer-details">
                       <p>{review.name}</p>
@@ -216,25 +164,19 @@ const ReviewsSection = () => {
               height={20}
               style={{ overflow: 'visible' }}
             >
-              {/* Render static background dots */}
-              {reviews.map((_, index) => {
-                return (
-                  <circle
-                    key={`dot-${index}`}
-                    cx={index * 20 + 10}
-                    cy={10}
-                    r={4}
-                    fill="#d3d3d3"
-                    opacity={0.6}
-                    style={{
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => goToSlide(index)}
-                  />
-                );
-              })}
+              {reviews.map((_, index) => (
+                <circle
+                  key={`dot-${index}`}
+                  cx={index * 20 + 10}
+                  cy={10}
+                  r={4}
+                  fill="#d3d3d3"
+                  opacity={0.6}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => goToSlide(index)}
+                />
+              ))}
               
-              {/* Animated liquid blob that moves between dots */}
               <circle
                 cx={currentIndex * 20 + 10}
                 cy={10}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from "./StatRow.module.scss";
 import iso1Image from '/images/iso1.webp'
 
@@ -10,6 +11,8 @@ interface StatRowProps {
 }
 
 const StatRow = ({ id, stat, description, imageAlt, reversed = false }: StatRowProps) => {
+  const { t } = useTranslation();
+
   return (
     <section 
       id={id}
@@ -29,7 +32,7 @@ const StatRow = ({ id, stat, description, imageAlt, reversed = false }: StatRowP
         <div className={styles.textContent}>
           <h2 className={styles.statHighlight}>{stat}</h2>
           <p className={styles.description}>{description}</p>
-          <button className={styles.ctaButton}>Learn More</button>
+          <button className={styles.ctaButton}>{t('home.statRows.learnMore')}</button>
         </div>
       </div>
     </section>

@@ -10,10 +10,18 @@ import Logo from "../../assets/logo.svg";
 import { Link, useLocation } from "react-router-dom"; 
 // React Router link component for client-side navigation
 
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { routePairs } from '../../constants/routePairs';
+
 
 // Footer component
 const Footer = () => {
   const location = useLocation();
+  const { t } = useTranslation();
+  const { isSpanish } = useLanguage();
+
+  const lp = (enPath: string) => isSpanish ? (routePairs[enPath] ?? enPath) : enPath;
 
   // Scroll to top of the page when clicking a link inside the footer
   const handleLinkClick = () => {
@@ -42,7 +50,7 @@ const Footer = () => {
             width="150"
             height="33"
           />
-          <p>Small field. Big impact.</p>
+          <p>{t('footer.tagline')}</p>
 
           {/* Social media icons linking to external pages */}
           <div className={styles.socialLinks}>
@@ -85,27 +93,26 @@ const Footer = () => {
 
           {/* Quick Links column */}
           <div className={styles.footerSection}>
-            <h3 className={styles.footerHeading}>Quick Links</h3>
+            <h3 className={styles.footerHeading}>{t('footer.quickLinks')}</h3>
             <ul>
-              {/* Internal links to pages; scrolls to top on click */}
-              <li><Link to="/" onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>Home</Link></li>
-              <li><Link to="/about" onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>About</Link></li>
-              <li><Link to="/services" onClick={handleLinkClick} className={isActive("/services") ? styles.active : ""}>Services</Link></li>
-              <li><Link to="/blog" onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>Blog</Link></li>
-              <li><Link to="/contact" onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>Contact</Link></li>
+              <li><Link to={lp("/")} onClick={handleLinkClick} className={isActive("/") ? styles.active : ""}>{t('nav.home')}</Link></li>
+              <li><Link to={lp("/about")} onClick={handleLinkClick} className={isActive("/about") ? styles.active : ""}>{t('nav.about')}</Link></li>
+              <li><Link to={lp("/services")} onClick={handleLinkClick} className={isActive("/services") ? styles.active : ""}>{t('nav.services')}</Link></li>
+              <li><Link to={lp("/blog")} onClick={handleLinkClick} className={isActive("/blog") ? styles.active : ""}>{t('nav.blog')}</Link></li>
+              <li><Link to={lp("/contact")} onClick={handleLinkClick} className={isActive("/contact") ? styles.active : ""}>{t('nav.contact')}</Link></li>
             </ul>
           </div>
 
           {/* Services column */}
           <div className={styles.footerSection}>
-            <h3 className={styles.footerHeading}>Services</h3>
+            <h3 className={styles.footerHeading}>{t('nav.services')}</h3>
             <ul>
-              <li><Link to="/services/field-rental" onClick={handleLinkClick} className={isActive("/services/field-rental") ? styles.active : ""}>Field Rental</Link></li>
-              <li><Link to="/services/leagues" onClick={handleLinkClick} className={isActive("/services/leagues") ? styles.active : ""}>Leagues</Link></li>
-              <li><Link to="/services/pickup" onClick={handleLinkClick} className={isActive("/services/pickup") ? styles.active : ""}>Pickup</Link></li>
-              <li><Link to="/services/birthday-parties" onClick={handleLinkClick} className={isActive("/services/birthday-parties") ? styles.active : ""}>Birthday Parties</Link></li>
-              <li><Link to="/services/camps" onClick={handleLinkClick} className={isActive("/services/camps") ? styles.active : ""}>Camps</Link></li>
-              <li><Link to="/services/training" onClick={handleLinkClick} className={isActive("/services/training") ? styles.active : ""}>Training</Link></li>
+              <li><Link to={lp("/services/field-rental")} onClick={handleLinkClick} className={isActive("/services/field-rental") ? styles.active : ""}>{t('services.fieldRentals.title')}</Link></li>
+              <li><Link to={lp("/services/leagues")} onClick={handleLinkClick} className={isActive("/services/leagues") ? styles.active : ""}>{t('services.leagues.title')}</Link></li>
+              <li><Link to={lp("/services/pickup")} onClick={handleLinkClick} className={isActive("/services/pickup") ? styles.active : ""}>{t('services.pickup.title')}</Link></li>
+              <li><Link to={lp("/services/birthday-parties")} onClick={handleLinkClick} className={isActive("/services/birthday-parties") ? styles.active : ""}>{t('services.birthdayParties.title')}</Link></li>
+              <li><Link to={lp("/services/camps")} onClick={handleLinkClick} className={isActive("/services/camps") ? styles.active : ""}>{t('services.camps.title')}</Link></li>
+              <li><Link to={lp("/services/training")} onClick={handleLinkClick} className={isActive("/services/training") ? styles.active : ""}>{t('services.training.title')}</Link></li>
             </ul>
           </div>
 
@@ -114,7 +121,7 @@ const Footer = () => {
 
         {/* == RIGHT SECTION: Contact details == */}
         <div className={styles.footerSection}>
-          <h3 className={styles.footerHeading}>Contact Us</h3>
+          <h3 className={styles.footerHeading}>{t('footer.contactUs')}</h3>
 
           <div className={styles.contactInfo}>
 
@@ -155,14 +162,14 @@ const Footer = () => {
       <div className={styles.footerBottom}>
         {/* Additional links: Privacy, Terms, Cookies */}
         <div className={styles.footerLinks}>
-          <Link to="/PrivacyPolicy" onClick={handleLinkClick} className={isActive("/PrivacyPolicy") ? styles.active : ""}>Privacy Policy</Link>
+          <Link to="/PrivacyPolicy" onClick={handleLinkClick} className={isActive("/PrivacyPolicy") ? styles.active : ""}>{t('footer.privacy')}</Link>
           <span>|</span>
-          <Link to="/TOS" onClick={handleLinkClick} className={isActive("/TOS") ? styles.active : ""}>Terms of Service</Link>
+          <Link to="/TOS" onClick={handleLinkClick} className={isActive("/TOS") ? styles.active : ""}>{t('footer.tos')}</Link>
           <span>|</span>
-          <Link to="/CookiePolicy" onClick={handleLinkClick} className={isActive("/CookiePolicy") ? styles.active : ""}>Cookie Policy</Link>
+          <Link to="/CookiePolicy" onClick={handleLinkClick} className={isActive("/CookiePolicy") ? styles.active : ""}>{t('footer.cookiePolicy')}</Link>
         </div>
 
-        <p>&copy; {new Date().getFullYear()} Small Sided, LLC. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Small Sided, LLC. {t('footer.rights')}</p>
       </div>
 
     </footer>

@@ -1,4 +1,5 @@
 import styles from "./FieldRental.module.scss";
+import { useTranslation } from 'react-i18next';
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/SEO/SEO';
 import { Calendar } from '../../components/Icons/Icons';
@@ -6,6 +7,8 @@ import RegisterFieldRental from '../../components/Register/components/RegisterFi
 
 const FieldRental = () => {
   const seo = getSEOConfig('fieldRental');
+  const { t } = useTranslation();
+
   return (
     <>
       <SEO {...seo} />
@@ -15,11 +18,9 @@ const FieldRental = () => {
             <div className={styles.iconWrapper}>
               <Calendar size={48} />
             </div>
-            <h1>Field Rental</h1>
-            <p className={styles.heroSubtitle}>Book Your Perfect Field</p>
-            <p className={styles.heroDescription}>
-              Book your perfect field for games, practices, or events
-            </p>
+            <h1>{t('fieldRental.heading')}</h1>
+            <p className={styles.heroSubtitle}>{t('fieldRental.subtitle')}</p>
+            <p className={styles.heroDescription}>{t('fieldRental.description')}</p>
           </div>
         </div>
 

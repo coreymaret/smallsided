@@ -1,4 +1,5 @@
 import styles from "./Camps.module.scss";
+import { useTranslation } from 'react-i18next';
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/SEO/SEO';
 import { Smile } from '../../components/Icons/Icons';
@@ -6,6 +7,8 @@ import RegisterCamps from '../../components/Register/components/RegisterCamps/Re
 
 const Camps = () => {
   const seo = getSEOConfig('camps');
+  const { t } = useTranslation();
+
   return (
     <>
       <SEO {...seo} />
@@ -15,11 +18,9 @@ const Camps = () => {
             <div className={styles.iconWrapper}>
               <Smile size={48} />
             </div>
-            <h1>Soccer Camp Registration</h1>
-            <p className={styles.heroSubtitle}>Skills, Fun & Development</p>
-            <p className={styles.heroDescription}>
-              Join us for an unforgettable week of soccer, fun, and skill development
-            </p>
+            <h1>{t('camps.heading')}</h1>
+            <p className={styles.heroSubtitle}>{t('camps.subtitle')}</p>
+            <p className={styles.heroDescription}>{t('camps.description')}</p>
           </div>
         </div>
 

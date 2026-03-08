@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Calendar, Users, Clock, MapPin, Trophy, Mail, Phone, User, CreditCard, Lock, Heart, Check } from '../../../../components/Icons/Icons';
 import styles from './RegisterCamps.module.scss';
 import { api } from '../../../../services/api';
@@ -17,41 +18,56 @@ interface CampOption {
   features: string[];
 }
 
-const CAMP_OPTIONS: CampOption[] = [
-  {
-    id: 'summer-intensive',
-    name: 'Summer Intensive',
-    description: 'Full-day camp focused on skill development',
-    duration: '5 days',
-    ageRange: '8-14',
-    price: 399,
-    features: ['Daily training sessions', 'Lunch included', 'Camp t-shirt', 'Skills competition']
-  },
-  {
-    id: 'goalkeeper',
-    name: 'Goalkeeper Academy',
-    description: 'Specialized training for aspiring goalkeepers',
-    duration: '3 days',
-    ageRange: '10-16',
-    price: 299,
-    features: ['Expert GK coaching', 'Video analysis', 'Equipment provided', 'Certificate']
-  },
-  {
-    id: 'elite',
-    name: 'Elite Development',
-    description: 'Advanced camp for competitive players',
-    duration: '5 days',
-    ageRange: '12-17',
-    price: 499,
-    features: ['College prep', 'Recruiting guidance', 'Advanced tactics', 'Tournament play']
-  }
-];
-
 const RegisterCamps: React.FC = () => {
-  // Use shared validation and formatting hooks
+  const { t } = useTranslation();
   const validation = useValidation();
   const formatters = useFormFormatters();
-  
+
+  const CAMP_OPTIONS: CampOption[] = [
+    {
+      id: 'summer-intensive',
+      name: t('register.camps.options.summerIntensive.name'),
+      description: t('register.camps.options.summerIntensive.description'),
+      duration: t('register.camps.options.summerIntensive.duration'),
+      ageRange: '8-14',
+      price: 399,
+      features: t('register.camps.options.summerIntensive.features', { returnObjects: true }) as string[]
+    },
+    {
+      id: 'goalkeeper',
+      name: t('register.camps.options.goalkeeper.name'),
+      description: t('register.camps.options.goalkeeper.description'),
+      duration: t('register.camps.options.goalkeeper.duration'),
+      ageRange: '10-16',
+      price: 299,
+      features: t('register.camps.options.goalkeeper.features', { returnObjects: true }) as string[]
+    },
+    {
+      id: 'elite',
+      name: t('register.camps.options.elite.name'),
+      description: t('register.camps.options.elite.description'),
+      duration: t('register.camps.options.elite.duration'),
+      ageRange: '12-17',
+      price: 499,
+      features: t('register.camps.options.elite.features', { returnObjects: true }) as string[]
+    }
+  ];
+
+  const availableWeeks = [
+    { id: 'week1', label: t('register.camps.weeks.week1'), available: true },
+    { id: 'week2', label: t('register.camps.weeks.week2'), available: true },
+    { id: 'week3', label: t('register.camps.weeks.week3'), available: false },
+    { id: 'week4', label: t('register.camps.weeks.week4'), available: true },
+  ];
+
+  const tshirtSizes = ['Youth S', 'Youth M', 'Youth L', 'Adult S', 'Adult M', 'Adult L', 'Adult XL'];
+
+  const skillLevels = [
+    { value: 'beginner', label: t('register.pickup.filters.beginner'), description: t('register.camps.skillLevels.beginner') },
+    { value: 'intermediate', label: t('register.pickup.filters.intermediate'), description: t('register.camps.skillLevels.intermediate') },
+    { value: 'advanced', label: t('register.pickup.filters.advanced'), description: t('register.camps.skillLevels.advanced') }
+  ];
+
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 5;
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
@@ -103,25 +119,9 @@ const RegisterCamps: React.FC = () => {
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
-  const availableWeeks = [
-    { id: 'week1', label: 'Week 1: June 10-14, 2024', available: true },
-    { id: 'week2', label: 'Week 2: June 17-21, 2024', available: true },
-    { id: 'week3', label: 'Week 3: June 24-28, 2024', available: false },
-    { id: 'week4', label: 'Week 4: July 1-5, 2024', available: true },
-  ];
-
-  const tshirtSizes = ['Youth S', 'Youth M', 'Youth L', 'Adult S', 'Adult M', 'Adult L', 'Adult XL'];
-  const skillLevels = [
-    { value: 'beginner', label: 'Beginner', description: 'New to soccer or learning basics' },
-    { value: 'intermediate', label: 'Intermediate', description: 'Plays recreationally, knows fundamentals' },
-    { value: 'advanced', label: 'Advanced', description: 'Competitive player, strong technical skills' }
-  ];
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
-    // Clear error when user starts typing
     if (errors[name as keyof typeof errors]) {
       const newErrors = { ...errors };
       delete newErrors[name as keyof typeof errors];
@@ -172,29 +172,29 @@ const RegisterCamps: React.FC = () => {
   const validateStep3 = (): boolean => {
     const newErrors: typeof errors = {};
     
-    if (!formData.parentFirstName.trim()) newErrors.parentFirstName = 'First name is required';
-    if (!formData.parentLastName.trim()) newErrors.parentLastName = 'Last name is required';
+    if (!formData.parentFirstName.trim()) newErrors.parentFirstName = t('register.camps.errors.firstNameRequired');
+    if (!formData.parentLastName.trim()) newErrors.parentLastName = t('register.camps.errors.lastNameRequired');
     
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = t('register.pickup.errors.emailRequired');
     } else if (!validation.validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = t('register.fieldRental.errors.invalidEmail');
     }
     
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = t('register.pickup.errors.phoneRequired');
     } else if (!validation.validatePhone(formData.phone)) {
-      newErrors.phone = 'Please enter a valid 10-digit phone number';
+      newErrors.phone = t('register.fieldRental.errors.invalidPhone');
     }
     
     if (!formData.emergencyContact.trim()) {
-      newErrors.emergencyContact = 'Emergency contact is required';
+      newErrors.emergencyContact = t('register.camps.errors.emergencyContactRequired');
     }
     
     if (!formData.emergencyPhone.trim()) {
-      newErrors.emergencyPhone = 'Emergency phone is required';
+      newErrors.emergencyPhone = t('register.camps.errors.emergencyPhoneRequired');
     } else if (!validation.validatePhone(formData.emergencyPhone)) {
-      newErrors.emergencyPhone = 'Please enter a valid 10-digit phone number';
+      newErrors.emergencyPhone = t('register.fieldRental.errors.invalidPhone');
     }
     
     setErrors(newErrors);
@@ -204,28 +204,17 @@ const RegisterCamps: React.FC = () => {
   const validateStep5 = (): boolean => {
     const newErrors: typeof errors = {};
     
-    if (!formData.cardNumber.trim()) {
-      newErrors.cardNumber = 'Card number is required';
-    } else if (!validation.validateCardNumber(formData.cardNumber)) {
-      newErrors.cardNumber = 'Please enter a valid 16-digit card number';
+    if (!formData.cardNumber.trim() || !validation.validateCardNumber(formData.cardNumber)) {
+      newErrors.cardNumber = t('register.fieldRental.errors.invalidCard');
     }
-    
-    if (!formData.cardExpiry.trim()) {
-      newErrors.cardExpiry = 'Expiry date is required';
-    } else if (!validation.validateCardExpiry(formData.cardExpiry)) {
-      newErrors.cardExpiry = 'Please enter a valid expiry date';
+    if (!formData.cardExpiry.trim() || !validation.validateCardExpiry(formData.cardExpiry)) {
+      newErrors.cardExpiry = t('register.fieldRental.errors.invalidExpiry');
     }
-    
-    if (!formData.cardCVV.trim()) {
-      newErrors.cardCVV = 'CVV is required';
-    } else if (!validation.validateCVV(formData.cardCVV)) {
-      newErrors.cardCVV = 'Please enter a valid 3-digit CVV';
+    if (!formData.cardCVV.trim() || !validation.validateCVV(formData.cardCVV)) {
+      newErrors.cardCVV = t('register.fieldRental.errors.invalidCVV');
     }
-    
-    if (!formData.billingZip.trim()) {
-      newErrors.billingZip = 'ZIP code is required';
-    } else if (!validation.validateZipCode(formData.billingZip)) {
-      newErrors.billingZip = 'Please enter a valid 5-digit ZIP code';
+    if (!formData.billingZip.trim() || !validation.validateZipCode(formData.billingZip)) {
+      newErrors.billingZip = t('register.fieldRental.errors.invalidZip');
     }
     
     setErrors(newErrors);
@@ -270,21 +259,15 @@ const RegisterCamps: React.FC = () => {
     
     const nextStep = currentStep + 1;
     setCurrentStep(nextStep);
-    if (nextStep > maxStepReached) {
-      setMaxStepReached(nextStep);
-    }
+    if (nextStep > maxStepReached) setMaxStepReached(nextStep);
   };
 
   const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
   const handleStepClick = (step: number) => {
-    if (step <= maxStepReached) {
-      setCurrentStep(step);
-    }
+    if (step <= maxStepReached) setCurrentStep(step);
   };
 
   const handleSubmit = async () => {
@@ -331,34 +314,18 @@ const RegisterCamps: React.FC = () => {
       
       setShowSuccessAnimation(true);
       
-      // Reset form
       setFormData({
-        camperFirstName: '',
-        camperLastName: '',
-        camperAge: '',
-        camperGender: '',
-        tshirtSize: '',
-        skillLevel: '',
-        parentFirstName: '',
-        parentLastName: '',
-        email: '',
-        phone: '',
-        emergencyContact: '',
-        emergencyPhone: '',
-        medicalConditions: '',
-        allergies: '',
-        medications: '',
-        specialNeeds: '',
-        cardNumber: '',
-        cardExpiry: '',
-        cardCVV: '',
-        billingZip: ''
+        camperFirstName: '', camperLastName: '', camperAge: '', camperGender: '',
+        tshirtSize: '', skillLevel: '', parentFirstName: '', parentLastName: '',
+        email: '', phone: '', emergencyContact: '', emergencyPhone: '',
+        medicalConditions: '', allergies: '', medications: '', specialNeeds: '',
+        cardNumber: '', cardExpiry: '', cardCVV: '', billingZip: ''
       });
       setSelectedCamp(null);
       setSelectedWeek('');
     } catch (error) {
       console.error('Registration failed:', error);
-      alert('Failed to complete registration. Please try again.');
+      alert(t('register.fieldRental.errors.bookingFailed'));
     } finally {
       setIsSubmitting(false);
     }
@@ -400,8 +367,8 @@ const RegisterCamps: React.FC = () => {
                 <Check size={32} strokeWidth={3} color="#15141a" />
               </div>
               <div className={styles.bannerText}>
-                <h2 className={styles.bannerTitle}>Registration Complete!</h2>
-                <p className={styles.bannerSubtitle}>Your camper is all set for an amazing week</p>
+                <h2 className={styles.bannerTitle}>{t('register.camps.success.title')}</h2>
+                <p className={styles.bannerSubtitle}>{t('register.camps.success.subtitle')}</p>
               </div>
             </div>
             
@@ -410,21 +377,21 @@ const RegisterCamps: React.FC = () => {
                 <div className={styles.detailItem}>
                   <Heart size={18} className={styles.detailIcon} />
                   <div className={styles.detailContent}>
-                    <span className={styles.detailLabel}>Camper</span>
+                    <span className={styles.detailLabel}>{t('register.camps.success.camper')}</span>
                     <span className={styles.detailValue}>{formData.camperFirstName} {formData.camperLastName}</span>
                   </div>
                 </div>
                 <div className={styles.detailItem}>
                   <Trophy size={18} className={styles.detailIcon} />
                   <div className={styles.detailContent}>
-                    <span className={styles.detailLabel}>Camp</span>
+                    <span className={styles.detailLabel}>{t('register.camps.success.camp')}</span>
                     <span className={styles.detailValue}>{selectedCamp?.name}</span>
                   </div>
                 </div>
                 <div className={styles.detailItem}>
                   <Calendar size={18} className={styles.detailIcon} />
                   <div className={styles.detailContent}>
-                    <span className={styles.detailLabel}>Week</span>
+                    <span className={styles.detailLabel}>{t('register.camps.success.week')}</span>
                     <span className={styles.detailValue}>{availableWeeks.find(w => w.id === selectedWeek)?.label.split(':')[1]}</span>
                   </div>
                 </div>
@@ -433,7 +400,7 @@ const RegisterCamps: React.FC = () => {
             
             <div className={styles.emailNotice}>
               <Mail size={16} />
-              <span>Confirmation email sent to {formData.email}</span>
+              <span>{t('register.fieldRental.success.emailNotice', { email: formData.email })}</span>
             </div>
           </div>
         </>
@@ -455,11 +422,11 @@ const RegisterCamps: React.FC = () => {
                   {completedSteps.includes(step) ? <Check size={16} /> : step}
                 </div>
                 <span className={styles.progressLabel}>
-                  {step === 1 && 'Select Camp'}
-                  {step === 2 && 'Camper Info'}
-                  {step === 3 && 'Parent Info'}
-                  {step === 4 && 'Review'}
-                  {step === 5 && 'Payment'}
+                  {step === 1 && t('register.camps.steps.selectCamp')}
+                  {step === 2 && t('register.camps.steps.camperInfo')}
+                  {step === 3 && t('register.camps.steps.parentInfo')}
+                  {step === 4 && t('register.camps.steps.review')}
+                  {step === 5 && t('register.camps.steps.payment')}
                 </span>
               </div>
             ))}
@@ -477,14 +444,14 @@ const RegisterCamps: React.FC = () => {
           {/* Step 1: Select Camp */}
           {currentStep === 1 && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Select Your Camp</h2>
+              <h2 className={styles.title}>{t('register.camps.steps.selectCamp')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <Trophy size={20} />
                   </div>
-                  Choose a Program
+                  {t('register.camps.step1.chooseProgram')}
                 </h3>
                 <div className={styles.campTypes}>
                   {CAMP_OPTIONS.map((camp) => (
@@ -497,7 +464,7 @@ const RegisterCamps: React.FC = () => {
                         <h4 className={styles.campTypeName}>{camp.name}</h4>
                         <span className={styles.campTypePrice}>${camp.price}</span>
                       </div>
-                      <p className={styles.campTypeDuration}>{camp.duration} • Ages {camp.ageRange}</p>
+                      <p className={styles.campTypeDuration}>{camp.duration} • {t('register.camps.step1.ages')} {camp.ageRange}</p>
                       <p className={styles.campTypeDescription}>{camp.description}</p>
                       <ul className={styles.campTypeFeatures}>
                         {camp.features.map((feature, idx) => (
@@ -518,7 +485,7 @@ const RegisterCamps: React.FC = () => {
                     <div className={styles.iconCircle}>
                       <Calendar size={20} />
                     </div>
-                    Select Week
+                    {t('register.camps.step1.selectWeek')}
                   </h3>
                   <div className={styles.campDates}>
                     {availableWeeks.map((week) => (
@@ -530,7 +497,7 @@ const RegisterCamps: React.FC = () => {
                         }`}
                       >
                         <span className={styles.campDateText}>{week.label}</span>
-                        {!week.available && <span className={styles.campDateStatus}>Full</span>}
+                        {!week.available && <span className={styles.campDateStatus}>{t('register.camps.step1.full')}</span>}
                       </div>
                     ))}
                   </div>
@@ -542,14 +509,14 @@ const RegisterCamps: React.FC = () => {
           {/* Step 2: Camper Information */}
           {currentStep === 2 && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Camper Information</h2>
+              <h2 className={styles.title}>{t('register.camps.steps.camperInfo')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <User size={20} />
                   </div>
-                  Basic Information
+                  {t('register.camps.step2.basicInfo')}
                 </h3>
                 <div className={styles.form}>
                   <div className={styles.formRow}>
@@ -563,7 +530,7 @@ const RegisterCamps: React.FC = () => {
                         placeholder=" "
                       />
                       <label className={`${styles.floatingLabel} ${formData.camperFirstName ? styles.active : ''}`}>
-                        First Name *
+                        {t('register.contact.fullName').split(' ')[0]} *
                       </label>
                       {errors.camperFirstName && <span className={styles.errorMessage}>{errors.camperFirstName}</span>}
                     </div>
@@ -578,7 +545,7 @@ const RegisterCamps: React.FC = () => {
                         placeholder=" "
                       />
                       <label className={`${styles.floatingLabel} ${formData.camperLastName ? styles.active : ''}`}>
-                        Last Name *
+                        {t('register.camps.step2.lastName')} *
                       </label>
                       {errors.camperLastName && <span className={styles.errorMessage}>{errors.camperLastName}</span>}
                     </div>
@@ -597,7 +564,7 @@ const RegisterCamps: React.FC = () => {
                         max="18"
                       />
                       <label className={`${styles.floatingLabel} ${formData.camperAge ? styles.active : ''}`}>
-                        Age *
+                        {t('register.camps.step2.age')} *
                       </label>
                       {errors.camperAge && <span className={styles.errorMessage}>{errors.camperAge}</span>}
                     </div>
@@ -609,10 +576,10 @@ const RegisterCamps: React.FC = () => {
                         onChange={handleInputChange}
                         className={styles.input}
                       >
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
+                        <option value="">{t('register.camps.step2.selectGender')}</option>
+                        <option value="male">{t('register.camps.step2.male')}</option>
+                        <option value="female">{t('register.camps.step2.female')}</option>
+                        <option value="other">{t('register.camps.step2.other')}</option>
                       </select>
                     </div>
                   </div>
@@ -624,13 +591,13 @@ const RegisterCamps: React.FC = () => {
                   <div className={styles.iconCircle}>
                     <Trophy size={20} />
                   </div>
-                  Camp Details
+                  {t('register.camps.step2.campDetails')}
                 </h3>
                 
                 <div className={styles.form}>
                   <div className={styles.inputGroup}>
                     <label style={{ display: 'block', marginBottom: '0.75rem', fontWeight: 600, color: '#15141a' }}>
-                      T-Shirt Size *
+                      {t('register.camps.step2.tshirtSize')} *
                     </label>
                     <div className={styles.shirtSizes}>
                       {tshirtSizes.map((size) => (
@@ -647,7 +614,7 @@ const RegisterCamps: React.FC = () => {
 
                   <div className={styles.inputGroup}>
                     <label style={{ display: 'block', marginBottom: '0.75rem', fontWeight: 600, color: '#15141a' }}>
-                      Skill Level *
+                      {t('register.camps.step2.skillLevel')} *
                     </label>
                     <div className={styles.skillLevels}>
                       {skillLevels.map((level) => (
@@ -670,14 +637,14 @@ const RegisterCamps: React.FC = () => {
           {/* Step 3: Parent/Guardian Information */}
           {currentStep === 3 && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Parent/Guardian Information</h2>
+              <h2 className={styles.title}>{t('register.camps.steps.parentInfo')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <User size={20} />
                   </div>
-                  Your Information
+                  {t('register.camps.step3.yourInfo')}
                 </h3>
                 <div className={styles.form}>
                   <div className={styles.formRow}>
@@ -691,7 +658,7 @@ const RegisterCamps: React.FC = () => {
                         placeholder=" "
                       />
                       <label className={`${styles.floatingLabel} ${formData.parentFirstName ? styles.active : ''}`}>
-                        First Name *
+                        {t('register.camps.step2.firstName')} *
                       </label>
                       {errors.parentFirstName && <span className={styles.errorMessage}>{errors.parentFirstName}</span>}
                     </div>
@@ -706,7 +673,7 @@ const RegisterCamps: React.FC = () => {
                         placeholder=" "
                       />
                       <label className={`${styles.floatingLabel} ${formData.parentLastName ? styles.active : ''}`}>
-                        Last Name *
+                        {t('register.camps.step2.lastName')} *
                       </label>
                       {errors.parentLastName && <span className={styles.errorMessage}>{errors.parentLastName}</span>}
                     </div>
@@ -722,7 +689,7 @@ const RegisterCamps: React.FC = () => {
                       placeholder=" "
                     />
                     <label className={`${styles.floatingLabel} ${formData.email ? styles.active : ''}`}>
-                      Email Address *
+                      {t('register.contact.email')} *
                     </label>
                     {errors.email && <span className={styles.errorMessage}>{errors.email}</span>}
                   </div>
@@ -738,7 +705,7 @@ const RegisterCamps: React.FC = () => {
                       maxLength={14}
                     />
                     <label className={`${styles.floatingLabel} ${formData.phone ? styles.active : ''}`}>
-                      Phone Number *
+                      {t('register.contact.phone')} *
                     </label>
                     {errors.phone && <span className={styles.errorMessage}>{errors.phone}</span>}
                   </div>
@@ -750,7 +717,7 @@ const RegisterCamps: React.FC = () => {
                   <div className={styles.iconCircle}>
                     <Phone size={20} />
                   </div>
-                  Emergency Contact
+                  {t('register.camps.step3.emergencyContact')}
                 </h3>
                 <div className={styles.form}>
                   <div className={styles.inputGroup}>
@@ -763,7 +730,7 @@ const RegisterCamps: React.FC = () => {
                       placeholder=" "
                     />
                     <label className={`${styles.floatingLabel} ${formData.emergencyContact ? styles.active : ''}`}>
-                      Emergency Contact Name *
+                      {t('register.camps.step3.emergencyContactName')} *
                     </label>
                     {errors.emergencyContact && <span className={styles.errorMessage}>{errors.emergencyContact}</span>}
                   </div>
@@ -779,7 +746,7 @@ const RegisterCamps: React.FC = () => {
                       maxLength={14}
                     />
                     <label className={`${styles.floatingLabel} ${formData.emergencyPhone ? styles.active : ''}`}>
-                      Emergency Phone *
+                      {t('register.camps.step3.emergencyPhone')} *
                     </label>
                     {errors.emergencyPhone && <span className={styles.errorMessage}>{errors.emergencyPhone}</span>}
                   </div>
@@ -791,7 +758,7 @@ const RegisterCamps: React.FC = () => {
                   <div className={styles.iconCircle}>
                     <Heart size={20} />
                   </div>
-                  Medical Information
+                  {t('register.camps.step3.medicalInfo')}
                 </h3>
                 <div className={styles.form}>
                   <div className={styles.inputGroup}>
@@ -801,10 +768,9 @@ const RegisterCamps: React.FC = () => {
                       onChange={handleInputChange}
                       className={styles.textarea}
                       rows={3}
-                      placeholder="Any medical conditions we should know about?"
+                      placeholder={t('register.camps.step3.medicalConditionsPlaceholder')}
                     />
                   </div>
-
                   <div className={styles.inputGroup}>
                     <textarea
                       name="allergies"
@@ -812,10 +778,9 @@ const RegisterCamps: React.FC = () => {
                       onChange={handleInputChange}
                       className={styles.textarea}
                       rows={2}
-                      placeholder="Any allergies?"
+                      placeholder={t('register.camps.step3.allergiesPlaceholder')}
                     />
                   </div>
-
                   <div className={styles.inputGroup}>
                     <textarea
                       name="medications"
@@ -823,10 +788,9 @@ const RegisterCamps: React.FC = () => {
                       onChange={handleInputChange}
                       className={styles.textarea}
                       rows={2}
-                      placeholder="Current medications?"
+                      placeholder={t('register.camps.step3.medicationsPlaceholder')}
                     />
                   </div>
-
                   <div className={styles.inputGroup}>
                     <textarea
                       name="specialNeeds"
@@ -834,7 +798,7 @@ const RegisterCamps: React.FC = () => {
                       onChange={handleInputChange}
                       className={styles.textarea}
                       rows={2}
-                      placeholder="Any special needs or accommodations?"
+                      placeholder={t('register.camps.step3.specialNeedsPlaceholder')}
                     />
                   </div>
                 </div>
@@ -845,41 +809,41 @@ const RegisterCamps: React.FC = () => {
           {/* Step 4: Review */}
           {currentStep === 4 && selectedCamp && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Review Registration</h2>
+              <h2 className={styles.title}>{t('register.camps.steps.review')}</h2>
               
               <div className={styles.confirmation}>
                 <div className={styles.summary}>
                   <div className={styles.summarySection}>
-                    <h3>Camp Details</h3>
+                    <h3>{t('register.camps.step4.campDetails')}</h3>
                     <div className={styles.summaryItem}>
                       <div className={styles.iconCircle}>
                         <Trophy size={18} />
                       </div>
                       <div>
                         <strong>{selectedCamp.name}</strong>
-                        <span>{selectedCamp.duration} • Ages {selectedCamp.ageRange}</span>
+                        <span>{selectedCamp.duration} • {t('register.camps.step1.ages')} {selectedCamp.ageRange}</span>
                         <span>{availableWeeks.find(w => w.id === selectedWeek)?.label}</span>
                       </div>
                     </div>
                   </div>
 
                   <div className={styles.summarySection}>
-                    <h3>Camper</h3>
+                    <h3>{t('register.camps.step4.camper')}</h3>
                     <div className={styles.summaryItem}>
                       <div className={styles.iconCircle}>
                         <User size={18} />
                       </div>
                       <div>
                         <strong>{formData.camperFirstName} {formData.camperLastName}</strong>
-                        <span>Age {formData.camperAge} • {formData.camperGender}</span>
-                        <span>Skill Level: {formData.skillLevel}</span>
-                        <span>T-Shirt: {formData.tshirtSize}</span>
+                        <span>{t('register.camps.step4.age')} {formData.camperAge} • {formData.camperGender}</span>
+                        <span>{t('register.camps.step4.skillLabel')}: {formData.skillLevel}</span>
+                        <span>{t('register.camps.step4.tshirt')}: {formData.tshirtSize}</span>
                       </div>
                     </div>
                   </div>
 
                   <div className={styles.summarySection}>
-                    <h3>Parent/Guardian</h3>
+                    <h3>{t('register.camps.steps.parentInfo')}</h3>
                     <div className={styles.summaryItem}>
                       <div className={styles.iconCircle}>
                         <Mail size={18} />
@@ -893,7 +857,7 @@ const RegisterCamps: React.FC = () => {
                   </div>
 
                   <div className={styles.summarySection}>
-                    <h3>Emergency Contact</h3>
+                    <h3>{t('register.camps.step3.emergencyContact')}</h3>
                     <div className={styles.summaryItem}>
                       <div className={styles.iconCircle}>
                         <Phone size={18} />
@@ -908,16 +872,13 @@ const RegisterCamps: React.FC = () => {
 
                 <div className={styles.total}>
                   <div className={styles.totalMain}>
-                    <span>Total</span>
+                    <span>{t('register.payment.total')}</span>
                     <strong>${selectedCamp.price}</strong>
                   </div>
                 </div>
 
                 <div className={styles.terms}>
-                  <p>
-                    By proceeding to payment, you agree to our camp policies including our cancellation policy 
-                    and medical release forms. Full terms and conditions will be sent via email.
-                  </p>
+                  <p>{t('register.camps.step4.terms')}</p>
                 </div>
               </div>
             </div>
@@ -926,14 +887,14 @@ const RegisterCamps: React.FC = () => {
           {/* Step 5: Payment */}
           {currentStep === 5 && selectedCamp && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Payment Information</h2>
+              <h2 className={styles.title}>{t('register.camps.steps.payment')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <CreditCard size={20} />
                   </div>
-                  Card Details
+                  {t('register.pickup.payment.cardDetails')}
                 </h3>
                 <div className={styles.form}>
                   <div className={styles.inputGroup}>
@@ -947,7 +908,7 @@ const RegisterCamps: React.FC = () => {
                       maxLength={19}
                     />
                     <label className={`${styles.floatingLabel} ${formData.cardNumber ? styles.active : ''}`}>
-                      Card Number *
+                      {t('register.payment.cardNumber')} *
                     </label>
                     {errors.cardNumber && <span className={styles.errorMessage}>{errors.cardNumber}</span>}
                   </div>
@@ -964,7 +925,7 @@ const RegisterCamps: React.FC = () => {
                         maxLength={5}
                       />
                       <label className={`${styles.floatingLabel} ${formData.cardExpiry ? styles.active : ''}`}>
-                        Expiry (MM/YY) *
+                        {t('register.payment.expiry')} *
                       </label>
                       {errors.cardExpiry && <span className={styles.errorMessage}>{errors.cardExpiry}</span>}
                     </div>
@@ -980,7 +941,7 @@ const RegisterCamps: React.FC = () => {
                         maxLength={3}
                       />
                       <label className={`${styles.floatingLabel} ${formData.cardCVV ? styles.active : ''}`}>
-                        CVV *
+                        {t('register.payment.cvv')} *
                       </label>
                       {errors.cardCVV && <span className={styles.errorMessage}>{errors.cardCVV}</span>}
                     </div>
@@ -997,7 +958,7 @@ const RegisterCamps: React.FC = () => {
                       maxLength={5}
                     />
                     <label className={`${styles.floatingLabel} ${formData.billingZip ? styles.active : ''}`}>
-                      Billing ZIP Code *
+                      {t('register.payment.billingZip')} *
                     </label>
                     {errors.billingZip && <span className={styles.errorMessage}>{errors.billingZip}</span>}
                   </div>
@@ -1005,13 +966,13 @@ const RegisterCamps: React.FC = () => {
 
                 <div className={styles.securityNotice}>
                   <Lock size={16} />
-                  <span>Your payment information is secure and encrypted</span>
+                  <span>{t('register.payment.securityNotice')}</span>
                 </div>
               </div>
 
               <div className={styles.total}>
                 <div className={styles.totalMain}>
-                  <span>Total Due Today</span>
+                  <span>{t('register.camps.step5.totalDue')}</span>
                   <strong>${selectedCamp.price}</strong>
                 </div>
               </div>
@@ -1026,7 +987,7 @@ const RegisterCamps: React.FC = () => {
               className={`${styles.button} ${styles.buttonSecondary}`}
               onClick={handleBack}
             >
-              Back
+              {t('register.nav.back')}
             </button>
           )}
           
@@ -1036,7 +997,7 @@ const RegisterCamps: React.FC = () => {
               onClick={handleNext}
               disabled={!canProceed()}
             >
-              Continue
+              {t('register.nav.continue')}
             </button>
           ) : (
             <button
@@ -1044,7 +1005,7 @@ const RegisterCamps: React.FC = () => {
               onClick={handleSubmit}
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Processing...' : `Complete Registration - $${selectedCamp?.price}`}
+              {isSubmitting ? t('register.nav.processing') : t('register.camps.step5.completeRegistration', { price: selectedCamp?.price })}
             </button>
           )}
         </div>

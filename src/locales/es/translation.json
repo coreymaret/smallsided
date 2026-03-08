@@ -13,6 +13,355 @@
     "pickup": { "title": "Partido Libre", "description": "Juegos abiertos sin reserva" },
     "birthdayParties": { "title": "Fiestas de Cumpleaños", "description": "Celebraciones de fútbol inolvidables" },
     "camps": { "title": "Campamentos", "description": "Programas de desarrollo de habilidades" },
-    "training": { "title": "Entrenamiento", "description": "Programas de desarrollo de habilidades" }
+    "training": { "title": "Entrenamiento", "description": "Programas de desarrollo de habilidades" },
+    "page": {
+      "heading": "Nuestros Servicios",
+      "subtitle": "Todo lo que Necesitas para Jugar",
+      "description": "Descubre todas las formas en que Small Sided puede ayudarte a jugar, competir y desarrollar tus habilidades",
+      "fieldRentals": { "description": "Reserva canchas de césped de primera para tu equipo o grupo. Opciones de reserva flexibles disponibles." },
+      "leagues": { "description": "Únete a ligas competitivas para adultos y jóvenes. Múltiples divisiones y niveles de habilidad disponibles." },
+      "pickup": { "title": "Partidos Libres", "description": "Únete y juega con otros entusiastas del fútbol. Sin compromiso." },
+      "birthdayParties": { "description": "Organiza una fiesta de cumpleaños temática de fútbol inolvidable con personal profesional y actividades." },
+      "camps": { "title": "Campamentos de Fútbol", "description": "Campamentos de entrenamiento profesional para todas las edades y niveles. Opciones de un día a una semana." },
+      "training": { "title": "Programas de Entrenamiento", "description": "Sesiones de entrenamiento personalizadas enfocadas en el desarrollo de habilidades y mejora de técnica." }
+    }
+  },
+  "about": {
+    "heading": "Por Qué Funciona el Fútbol en Formato Reducido",
+    "subtitle": "La Ciencia Detrás del Mejor Desarrollo de Jugadores",
+    "description": "Descubre los beneficios clave que hacen del formato reducido la mejor opción para el desarrollo juvenil",
+    "features": {
+      "championship": {
+        "heading": "Desarrollo de Campeones",
+        "subheading": "Construye mentalidades ganadoras mediante el juego reducido estructurado",
+        "items": ["Espíritu competitivo mejorado", "Victoria a través del trabajo en equipo", "Entrenamiento de fortaleza mental"]
+      },
+      "precision": {
+        "heading": "Entrenamiento de Precisión",
+        "subheading": "Enfócate en habilidades técnicas con sesiones dirigidas en grupos pequeños",
+        "items": ["Atención individual garantizada", "Ejercicios específicos por habilidad", "Seguimiento de progreso medible"]
+      },
+      "teamChemistry": {
+        "heading": "Química de Equipo",
+        "subheading": "Fomenta conexiones más profundas a través de dinámicas de equipo íntimas",
+        "items": ["Vínculos de comunicación más fuertes", "Mayor conciencia del campo", "Oportunidades de liderazgo"]
+      },
+      "tactical": {
+        "heading": "Inteligencia Táctica",
+        "subheading": "Desarrolla el coeficiente intelectual futbolístico mediante más momentos de toma de decisiones",
+        "items": ["Pensamiento rápido bajo presión", "Habilidades de posicionamiento estratégico", "Capacidad de lectura del juego"]
+      },
+      "growth": {
+        "heading": "Crecimiento Acelerado",
+        "subheading": "Experimenta una progresión de habilidades más rápida en formatos reducidos",
+        "items": ["Mejora técnica rápida", "Construcción de confianza mediante repetición", "Ganancias de rendimiento consistentes"]
+      },
+      "elite": {
+        "heading": "Preparación de Élite",
+        "subheading": "Entrena como los profesionales con metodologías de nivel académico",
+        "items": ["Estándares de entrenamiento profesional", "Listo para el reclutamiento universitario", "Conceptos tácticos avanzados"]
+      }
+    }
+  },
+  "contact": {
+    "heading": "Contáctanos.",
+    "subtitle": "Normalmente respondemos en 24 horas durante días hábiles. Ya sea que tengas una pregunta, comentario o simplemente quieras saludar, estamos aquí para ayudarte.",
+    "form": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "message": "Mensaje",
+      "submit": "Enviar mensaje"
+    },
+    "info": {
+      "address": "Dirección",
+      "addressValue": "123 Small Sided Way, Tampa, FL 33617",
+      "phone": "Teléfono",
+      "mail": "Correo",
+      "followUs": "Síguenos"
+    },
+    "map": { "loading": "Cargando mapa..." },
+    "faq": {
+      "heading": "Preguntas frecuentes",
+      "items": [
+        { "title": "¿Cuáles son sus horarios de atención?", "content": "Estamos abiertos de lunes a viernes de 9 AM a 6 PM EST. Los horarios de fin de semana varían según la temporada, por favor contáctenos para disponibilidad actual." },
+        { "title": "¿Ofrecen sesiones de entrenamiento en grupo?", "content": "¡Sí! Ofrecemos sesiones de entrenamiento grupal para equipos e individuos. Las sesiones grupales se pueden personalizar según el nivel de habilidad y los objetivos de entrenamiento." },
+        { "title": "¿Con qué grupos de edad trabajan?", "content": "Trabajamos con jugadores de todas las edades, desde ligas juveniles (a partir de 6 años) hasta jugadores adultos recreativos y competitivos. Nuestros programas están adaptados a cada grupo de edad." },
+        { "title": "¿Cómo programo una sesión de entrenamiento?", "content": "Puedes programar una sesión completando el formulario de contacto, llamándonos directamente o enviándonos un correo. Responderemos en 24 horas para confirmar disponibilidad." },
+        { "title": "¿Qué debo traer al entrenamiento?", "content": "Por favor trae ropa deportiva cómoda, tacos o zapatillas de césped, espinilleras, una botella de agua y un balón de fútbol. Nosotros proporcionamos todo el equipo de entrenamiento adicional." }
+      ]
+    }
+  },
+  "fieldRental": {
+    "heading": "Alquiler de Canchas",
+    "subtitle": "Reserva Tu Cancha Ideal",
+    "description": "Reserva tu cancha ideal para juegos, prácticas o eventos"
+  },
+  "pickup": {
+    "heading": "Partidos Libres",
+    "subtitle": "Únete y Juega",
+    "description": "Únete a partidos amistosos en tu nivel de habilidad. ¡Apúntate a un partido cuando quieras!"
+  },
+  "camps": {
+    "heading": "Inscripción al Campamento de Fútbol",
+    "subtitle": "Habilidades, Diversión y Desarrollo",
+    "description": "Únete a nosotros para una semana inolvidable de fútbol, diversión y desarrollo de habilidades"
+  },
+  "birthday": {
+    "heading": "Reserva de Fiesta de Cumpleaños",
+    "subtitle": "Celebra Con Nosotros",
+    "description": "Haz el día especial de tu hijo inolvidable con nuestros paquetes de fiesta todo incluido"
+  },
+  "training": {
+    "heading": "Inscripción al Programa de Entrenamiento",
+    "subtitle": "Eleva Tu Juego",
+    "description": "Entrenamiento de fútbol personalizado para elevar tu juego"
+  },
+  "leagues": {
+    "heading": "Registra Tu Equipo",
+    "subtitle": "Ligas Competitivas y Recreativas",
+    "description": "Únete a una de nuestras ligas competitivas en pocos pasos simples"
+  },
+  "leagueTable": {
+    "title": "Clasificación de la Liga",
+    "subtitle": "Ver clasificaciones y calendarios de partidos en todas las ligas",
+    "headers": {
+      "team": "Equipo",
+      "mp": "PJ",
+      "w": "G",
+      "d": "E",
+      "l": "P",
+      "gf": "GF",
+      "ga": "GC",
+      "gd": "+/-",
+      "pts": "PTS"
+    },
+    "record": "Récord",
+    "pts": "pts",
+    "matchSchedule": "Calendario de Partidos",
+    "noTeamSelected": "Ningún Equipo Seleccionado",
+    "noTeamSubtitle": "Haz clic en cualquier equipo de la clasificación para ver su calendario",
+    "result": {
+      "win": "Victoria",
+      "loss": "Derrota",
+      "draw": "Empate"
+    }
+  },
+  "subscribe": {
+    "heading": "Mantente Informado",
+    "description": "Recibe las últimas actualizaciones, contenido exclusivo e información directamente en tu bandeja de entrada.",
+    "placeholder": "Ingresa tu correo",
+    "subscribe": "Suscribirse",
+    "subscribing": "Suscribiendo...",
+    "subscribed": "¡Suscrito!",
+    "successMessage": "¡Gracias por suscribirte! Revisa tu bandeja de entrada.",
+    "errors": {
+      "emptyEmail": "Por favor ingresa tu correo electrónico.",
+      "invalidEmail": "Por favor ingresa un correo electrónico válido.",
+      "generic": "Algo salió mal. Por favor intenta de nuevo.",
+      "network": "Error de red. Por favor intenta de nuevo."
+    }
+  },
+  "footer": {
+    "tagline": "Campo pequeño. Gran impacto.",
+    "quickLinks": "Enlaces Rápidos",
+    "contactUs": "Contáctanos",
+    "privacy": "Política de Privacidad",
+    "tos": "Términos de Servicio",
+    "cookiePolicy": "Política de Cookies",
+    "rights": "Todos los derechos reservados."
+  },
+  "home": {
+    "slider": {
+      "slide1": {
+        "heading": "Desarrolla Habilidades con Fútbol en Formato Reducido",
+        "subheading": "Métodos de entrenamiento respaldados por investigación que aceleran el desarrollo con más toques, decisiones más rápidas y mejor técnica.",
+        "buttonText": "Comenzar Entrenamiento"
+      },
+      "slide2": {
+        "heading": "Reserva Canchas Premium de Fútbol 7v7",
+        "subheading": "Instalaciones de nivel profesional diseñadas específicamente para juegos en formato reducido. Disponibles para equipos, clubes y sesiones de entrenamiento.",
+        "buttonText": "Ver Canchas"
+      },
+      "slide3": {
+        "heading": "Recursos de Entrenamiento Experto",
+        "subheading": "Accede a cientos de ejercicios de entrenamiento, análisis tácticos y metodologías probadas de entrenadores experimentados de fútbol juvenil.",
+        "buttonText": "Explorar Recursos"
+      }
+    },
+    "intro": {
+      "heading": "El Futuro del Fútbol Juvenil es el Formato Reducido",
+      "subtitle": "Más toques. Más decisiones. Más desarrollo. Descubre por qué las mejores academias del mundo eligen el formato reducido para desarrollar las estrellas del mañana.",
+      "cta": "Saber Más",
+      "imageAlt": "Ilustración isométrica de fútbol en formato reducido"
+    },
+    "stats": {
+      "playersLabel": "Jugadores Juveniles Entrenados",
+      "sessionsLabel": "Sesiones de Entrenamiento",
+      "academiesLabel": "Academias Asociadas",
+      "satisfactionLabel": "Satisfacción de Jugadores"
+    },
+    "statRows": {
+      "learnMore": "Saber Más",
+      "row1": {
+        "stat": "500% MÁS TOQUES EN 7V7",
+        "description": "La mitad del equipo, el doble del desarrollo. Los jugadores tienen un 50% más de toques en 7v7 vs 11v11. Cada toque importa cuando estás formando las estrellas del mañana.",
+        "imageAlt": "Jugador juvenil driblando en formato 7v7"
+      },
+      "row2": {
+        "stat": "66% MENOS TIEMPO PARADO",
+        "description": "El balón está fuera de juego el 34% del tiempo en 11v11, pero solo el 8% en 4v4. Eso significa un 66% menos de tiempo parado y un 66% más de tiempo desarrollando habilidades.",
+        "imageAlt": "Jugador juvenil corriendo con el balón"
+      }
+    },
+    "reviews": {
+      "heading": "Lo Que Dicen Entrenadores y Padres",
+      "subheading": "Opiniones reales de clubes y familias que han adoptado el fútbol en formato reducido",
+      "items": [
+        { "id": 1, "name": "Sarah Mitchell", "role": "Madre y Entrenadora", "rating": 5, "text": "Cambiar al formato 7v7 ha sido transformador para nuestro equipo Sub-10. Los niños tienen muchos más toques con el balón y he notado mejoras significativas en su toma de decisiones y confianza.", "date": "Hace 2 semanas" },
+        { "id": 2, "name": "Mike Rodriguez", "role": "Director de Fútbol Juvenil", "rating": 5, "text": "Los datos no mienten: nuestros jugadores tienen 3 veces más situaciones de 1v1 en los juegos en formato reducido. Hemos visto un desarrollo enorme en habilidades técnicas y conciencia del juego.", "date": "Hace 1 mes" },
+        { "id": 3, "name": "Jennifer Chang", "role": "Madre", "rating": 5, "text": "Mi hija solía pasar la mayor parte del partido parada. Ahora está constantemente involucrada, tocando el balón y divirtiéndose. ¡Realmente espera con ansias los entrenamientos y partidos!", "date": "Hace 3 semanas" },
+        { "id": 4, "name": "David Thompson", "role": "Administrador de Club", "rating": 5, "text": "Implementar el fútbol en formato reducido en todo nuestro club ha sido una de las mejores decisiones que hemos tomado. A los padres les encanta, a los niños les encanta y los resultados hablan por sí solos.", "date": "Hace 2 meses" },
+        { "id": 5, "name": "Lisa Anderson", "role": "Entrenadora", "rating": 5, "text": "Las estadísticas sobre el aumento de oportunidades de gol son precisas. Nuestros jugadores están más comprometidos, tomando mejores decisiones y desarrollándose más rápido que nunca.", "date": "Hace 1 mes" },
+        { "id": 6, "name": "Robert Kim", "role": "Padre y Ex Profesional", "rating": 5, "text": "Como alguien que jugó profesionalmente, desearía haber tenido acceso a este formato de niño. La cantidad de toques significativos y situaciones de juego que experimentan estos niños es exactamente lo que desarrolla jugadores de élite.", "date": "Hace 3 semanas" }
+      ]
+    }
+  },
+  "register": {
+    "nav": {
+      "back": "Atrás",
+      "continue": "Continuar",
+      "confirmBooking": "Confirmar Reserva",
+      "processing": "Procesando..."
+    },
+    "months": {
+      "selectMonth": "Seleccionar Mes",
+      "day": "Día",
+      "year": "Año",
+      "january": "Enero",
+      "february": "Febrero",
+      "march": "Marzo",
+      "april": "Abril",
+      "may": "Mayo",
+      "june": "Junio",
+      "july": "Julio",
+      "august": "Agosto",
+      "september": "Septiembre",
+      "october": "Octubre",
+      "november": "Noviembre",
+      "december": "Diciembre"
+    },
+    "pagination": { "previous": "Anterior", "next": "Siguiente" },
+    "contact": {
+      "contactDetails": "Datos de Contacto",
+      "fullName": "Nombre Completo",
+      "email": "Correo Electrónico",
+      "phone": "Número de Teléfono"
+    },
+    "payment": {
+      "completeBooking": "Completa Tu Reserva",
+      "cardNumber": "Número de Tarjeta",
+      "expiry": "Vencimiento (MM/AA)",
+      "cvv": "CVV",
+      "billingZip": "Código Postal de Facturación",
+      "securityNotice": "Tu información de pago está encriptada y segura",
+      "total": "Total a Pagar"
+    },
+    "fieldRental": {
+      "steps": { "selectField": "Elegir Cancha", "dateTime": "Fecha y Hora", "yourInfo": "Tus Datos", "payment": "Pago" },
+      "fields": {
+        "availableFields": "Canchas Disponibles",
+        "field1": "Cancha 1", "field2": "Cancha 2", "field3": "Cancha 3",
+        "surface": "Césped", "surfaceLabel": "Superficie", "size": "Tamaño", "capacity": "Capacidad"
+      },
+      "date": { "chooseDate": "Elige una Fecha", "duration": "Duración (horas)", "hour": "hora", "hours": "horas", "availableSlots": "Horarios Disponibles" },
+      "contact": { "expectedPlayers": "Número de Jugadores Esperado" },
+      "payment": { "rentalLabel": "Alquiler de Cancha ({{duration}}h)" },
+      "success": { "title": "¡Cancha Reservada!", "subtitle": "Tu reserva está confirmada", "field": "Cancha", "date": "Fecha", "time": "Hora", "emailNotice": "Correo de confirmación enviado a {{email}}" },
+      "errors": {
+        "invalidEmail": "Por favor ingresa un correo electrónico válido",
+        "invalidPhone": "El número de teléfono debe tener 10 dígitos",
+        "invalidCard": "El número de tarjeta debe tener 16 dígitos",
+        "invalidExpiry": "Fecha de vencimiento inválida (MM/AA)",
+        "invalidCVV": "El CVV debe tener 3 dígitos",
+        "invalidZip": "El código postal debe tener 5 dígitos",
+        "bookingFailed": "No se pudo completar la reserva. Por favor intenta de nuevo."
+      }
+    },
+    "pickup": {
+      "steps": { "selectGame": "Elegir Partido", "details": "Detalles", "yourInfo": "Tus Datos", "confirm": "Confirmar", "payment": "Pago" },
+      "filters": { "skillLevel": "Nivel de Habilidad", "allLevels": "Todos los Niveles", "beginner": "Principiante", "intermediate": "Intermedio", "advanced": "Avanzado", "format": "Formato", "allFormats": "Todos los Formatos" },
+      "schedule": { "today": "Hoy", "noGames": "No hay partidos programados", "perPlayer": "jugador", "spots": "lugares" },
+      "details": { "gameInfo": "Información del Partido", "spotsAvailable": "lugares disponibles", "selectSpots": "Seleccionar Lugares", "numberOfSpots": "Número de Lugares", "spot": "lugar", "spots": "lugares" },
+      "payment": { "cardDetails": "Datos de la Tarjeta" },
+      "success": { "title": "¡Reserva Confirmada!", "subtitle": "Tu lugar ha sido reservado exitosamente", "date": "Fecha", "time": "Hora", "location": "Ubicación", "format": "Formato" },
+      "errors": { "nameRequired": "El nombre es obligatorio", "nameMin": "El nombre debe tener al menos 2 caracteres", "emailRequired": "El correo es obligatorio", "phoneRequired": "El número de teléfono es obligatorio" }
+    },
+    "camps": {
+      "steps": { "selectCamp": "Elegir Campamento", "camperInfo": "Info del Campista", "parentInfo": "Info del Padre", "review": "Revisar", "payment": "Pago" },
+      "options": {
+        "summerIntensive": { "name": "Intensivo de Verano", "description": "Campamento de día completo enfocado en el desarrollo de habilidades", "duration": "5 días", "features": ["Sesiones de entrenamiento diarias", "Almuerzo incluido", "Camiseta del campamento", "Competencia de habilidades"] },
+        "goalkeeper": { "name": "Academia de Porteros", "description": "Entrenamiento especializado para porteros aspirantes", "duration": "3 días", "features": ["Entrenamiento experto de porteros", "Análisis de video", "Equipo proporcionado", "Certificado"] },
+        "elite": { "name": "Desarrollo de Élite", "description": "Campamento avanzado para jugadores competitivos", "duration": "5 días", "features": ["Preparación universitaria", "Orientación de reclutamiento", "Tácticas avanzadas", "Torneo"] }
+      },
+      "weeks": { "week1": "Semana 1: 10-14 de junio, 2024", "week2": "Semana 2: 17-21 de junio, 2024", "week3": "Semana 3: 24-28 de junio, 2024", "week4": "Semana 4: 1-5 de julio, 2024" },
+      "skillLevels": { "beginner": "Nuevo en el fútbol o aprendiendo lo básico", "intermediate": "Juega recreativamente, conoce los fundamentos", "advanced": "Jugador competitivo, sólidas habilidades técnicas" },
+      "step1": { "chooseProgram": "Elige un Programa", "selectWeek": "Selecciona la Semana", "ages": "Edades", "full": "Lleno" },
+      "step2": { "basicInfo": "Información Básica", "campDetails": "Detalles del Campamento", "firstName": "Nombre", "lastName": "Apellido", "age": "Edad", "selectGender": "Seleccionar Género", "male": "Masculino", "female": "Femenino", "other": "Otro", "tshirtSize": "Talla de Camiseta", "skillLevel": "Nivel de Habilidad" },
+      "step3": { "yourInfo": "Tu Información", "emergencyContact": "Contacto de Emergencia", "emergencyContactName": "Nombre del Contacto de Emergencia", "emergencyPhone": "Teléfono de Emergencia", "medicalInfo": "Información Médica", "medicalConditionsPlaceholder": "¿Alguna condición médica que debamos conocer?", "allergiesPlaceholder": "¿Alguna alergia?", "medicationsPlaceholder": "¿Medicamentos actuales?", "specialNeedsPlaceholder": "¿Necesidades especiales o adaptaciones?" },
+      "step4": { "campDetails": "Detalles del Campamento", "camper": "Campista", "age": "Edad", "skillLabel": "Nivel de Habilidad", "tshirt": "Camiseta", "terms": "Al proceder al pago, aceptas nuestras políticas de campamento incluyendo la política de cancelación y los formularios de autorización médica. Los términos y condiciones completos se enviarán por correo electrónico." },
+      "step5": { "totalDue": "Total a Pagar Hoy", "completeRegistration": "Completar Inscripción - ${{price}}" },
+      "success": { "title": "¡Inscripción Completa!", "subtitle": "Tu campista está listo para una semana increíble", "camper": "Campista", "camp": "Campamento", "week": "Semana" },
+      "errors": { "firstNameRequired": "El nombre es obligatorio", "lastNameRequired": "El apellido es obligatorio", "emergencyContactRequired": "El contacto de emergencia es obligatorio", "emergencyPhoneRequired": "El teléfono de emergencia es obligatorio" }
+    },
+    "birthday": {
+      "steps": { "package": "Paquete", "dateTime": "Fecha y Hora", "details": "Detalles", "review": "Revisar", "payment": "Pago" },
+      "packages": {
+        "basic": { "name": "Fiesta Básica", "duration": "2 horas", "description": "Perfecta para celebraciones más pequeñas", "features": ["Alquiler de cancha", "Hasta 15 invitados", "Animador de fiesta", "Decoraciones básicas"] },
+        "deluxe": { "name": "Fiesta Deluxe", "duration": "3 horas", "description": "Nuestro paquete más popular", "features": ["Alquiler de cancha", "Hasta 25 invitados", "Animador de fiesta", "Decoraciones premium", "Pizza y bebidas", "Recuerdos de fiesta"] },
+        "ultimate": { "name": "Fiesta Ultimate", "duration": "4 horas", "description": "La experiencia de celebración completa", "features": ["Alquiler de cancha", "Hasta 35 invitados", "Animador de fiesta", "Decoraciones premium", "Pizza y bebidas", "Recuerdos de fiesta", "Pastel personalizado", "Sesión de fotos"] }
+      },
+      "cake": { "chocolate": "Pastel de Chocolate", "vanilla": "Pastel de Vainilla", "custom": "Diseño Personalizado", "none": "Sin Pastel (traeré el mío)" },
+      "step1": { "title": "Elige Tu Paquete de Fiesta" },
+      "step2": { "selectTimeSlot": "Seleccionar Horario", "booked": "Reservado" },
+      "step3": { "birthdayChild": "Niño de Cumpleaños", "childName": "Nombre del Niño", "parentInfo": "Información del Padre/Tutor", "parentName": "Nombre del Padre", "partySize": "Tamaño de la Fiesta", "expectedGuests": "Número de Invitados Esperado", "cakePreference": "Preferencia de Pastel", "specialRequests": "Solicitudes Especiales (Opcional)", "specialRequestsPlaceholder": "¿Alguna solicitud especial, alergia o restricción dietética?" },
+      "step4": { "title": "Revisar Tu Reserva", "partyPackage": "Paquete de Fiesta", "guestsExpected": "invitados esperados", "terms": "Al proceder al pago, aceptas nuestros términos de reserva de fiesta y política de cancelación." },
+      "step5": { "partyPackage": "Paquete de Fiesta" },
+      "success": { "title": "¡Fiesta Reservada!", "subtitle": "Tu celebración de cumpleaños está confirmada", "birthdayChild": "Niño de Cumpleaños", "date": "Fecha", "package": "Paquete" }
+    },
+    "training": {
+      "steps": { "program": "Programa", "playerInfo": "Info del Jugador", "preferences": "Preferencias", "review": "Revisar", "payment": "Pago" },
+      "types": {
+        "individual": { "label": "Entrenamiento Individual", "description": "Sesiones personalizadas 1 a 1", "price": "$75/sesión" },
+        "smallGroup": { "label": "Entrenamiento en Grupo Pequeño", "description": "Grupos de 2 a 4 jugadores", "price": "$50/sesión" },
+        "positionSpecific": { "label": "Específico por Posición", "description": "Entrenamiento para porteros, delanteros, defensas", "price": "$60/sesión" }
+      },
+      "skillLevels": { "beginner": "Nuevo en el fútbol", "intermediate": "Jugando entre 1 y 2 años", "advanced": "Experiencia competitiva" },
+      "focusAreas": { "ballControl": "Control de Balón", "shooting": "Tiro", "passing": "Pase", "dribbling": "Regate", "defense": "Defensa", "fitness": "Condición Física" },
+      "days": { "monday": "Lunes", "tuesday": "Martes", "wednesday": "Miércoles", "thursday": "Jueves", "friday": "Viernes", "saturday": "Sábado", "sunday": "Domingo" },
+      "timeSlots": {
+        "morning": { "label": "Mañana", "description": "8AM - 12PM" },
+        "afternoon": { "label": "Tarde", "description": "12PM - 5PM" },
+        "evening": { "label": "Noche", "description": "5PM - 8PM" }
+      },
+      "step1": { "title": "Seleccionar Programa de Entrenamiento" },
+      "step2": { "playerName": "Nombre del Jugador", "focusAreas": "Áreas de Enfoque (Selecciona todas las que apliquen)" },
+      "step3": { "parentContact": "Contacto del Padre/Tutor", "preferredDays": "Días Preferidos (Selecciona todos los que apliquen)", "preferredTime": "Horario Preferido del Día", "additionalInfo": "Información Adicional (Opcional)", "additionalInfoPlaceholder": "¿Algún objetivo específico, preocupación o información que debamos saber?" },
+      "step4": { "trainingProgram": "Programa de Entrenamiento", "player": "Jugador", "focusAreas": "Áreas de Enfoque", "schedulePreferences": "Preferencias de Horario", "terms": "Al proceder al pago, aceptas nuestros términos de entrenamiento y política de cancelación. Un entrenador se pondrá en contacto contigo en 48 horas para programar tu primera sesión." },
+      "step5": { "completeRegistration": "Completar Inscripción", "completeButton": "Completar Inscripción", "firstSession": "Primera Sesión" },
+      "success": { "title": "¡Inscripción Completa!", "subtitle": "Sesión de entrenamiento programada exitosamente", "player": "Jugador", "trainingType": "Tipo de Entrenamiento", "preferredTime": "Horario Preferido" }
+    },
+    "leagues": {
+      "steps": { "league": "Liga", "teamInfo": "Info del Equipo", "preferences": "Preferencias", "review": "Revisar", "payment": "Pago" },
+      "experienceLevels": { "beginner": "Nuevo en el fútbol organizado", "intermediate": "Algo de experiencia jugando", "advanced": "Experiencia competitiva" },
+      "days": { "weekdayEvening": "Tardes de Semana", "weekdayEveningDesc": "Lun-Jue después de las 6 PM", "friday": "Viernes por la Noche", "fridayDesc": "Viernes después de las 6 PM", "saturday": "Sábado", "saturdayDesc": "Sábado cualquier hora", "sunday": "Domingo", "sundayDesc": "Domingo cualquier hora" },
+      "step1": { "title": "Selecciona Tu Liga", "chooseCategory": "Elegir Categoría", "adultLeagues": "Ligas Adultos", "youthLeagues": "Ligas Juveniles", "chooseGender": "Elegir Género", "chooseDivision": "Elige Tu División" },
+      "step2": { "teamDetails": "Detalles del Equipo", "teamName": "Nombre del Equipo", "captainName": "Nombre del Capitán", "playerCount": "Número de Jugadores Esperado" },
+      "step3": { "experienceLevel": "Nivel de Experiencia", "preferredDay": "Día de Juego Preferido", "additionalInfoPlaceholder": "Cualquier información adicional o solicitudes especiales..." },
+      "step4": { "title": "Revisar y Confirmar", "leagueInfo": "Información de la Liga", "league": "Liga", "division": "División", "teamDetails": "Detalles del Equipo", "captain": "Capitán", "expectedPlayers": "jugadores esperados", "level": "Nivel", "preferred": "Preferido", "terms": "Al proceder al pago, aceptas nuestros términos y condiciones de la liga. Se te contactará en 48 horas sobre la asignación del equipo y los próximos pasos." },
+      "step5": { "registrationFee": "Cuota de Inscripción - $150", "registrationFeeLabel": "Cuota de Inscripción" },
+      "success": { "title": "¡Inscripción Completa!", "subtitle": "Tu equipo ha sido registrado exitosamente", "teamName": "Nombre del Equipo", "league": "Liga", "captain": "Capitán", "preferredDay": "Día Preferido", "experienceLevel": "Nivel de Experiencia", "teamSize": "Tamaño del Equipo", "players": "jugadores", "additionalInfo": "Info Adicional" }
+    }
   }
 }

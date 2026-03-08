@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Calendar, Users, Clock, MapPin, Trophy, ChevronLeft, ChevronRight, Check, CreditCard, Lock, User, Mail } from '../../../../components/Icons/Icons';
 import styles from './RegisterPickup.module.scss';
 import { api } from '../../../../services/api';
@@ -77,7 +78,7 @@ const generateMockGames = (): PickupGame[] => {
 const MOCK_GAMES: PickupGame[] = generateMockGames();
 
 const RegisterPickup: React.FC = () => {
-  // Use shared validation and formatting hooks
+  const { t } = useTranslation();
   const validation = useValidation();
   const formatters = useFormFormatters();
   
@@ -115,6 +116,17 @@ const RegisterPickup: React.FC = () => {
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [confirmedGame, setConfirmedGame] = useState<PickupGame | null>(null);
+
+  // Translates hardcoded English skill level strings from mock data
+  const translateSkillLevel = (level: string): string => {
+    const map: Record<string, string> = {
+      'Beginner': t('register.pickup.filters.beginner'),
+      'Intermediate': t('register.pickup.filters.intermediate'),
+      'Advanced': t('register.pickup.filters.advanced'),
+      'All Levels': t('register.pickup.filters.allLevels'),
+    };
+    return map[level] ?? level;
+  };
 
   const getWeekDates = (weekOffset: number): Date[] => {
     const today = new Date();
@@ -158,52 +170,9 @@ const RegisterPickup: React.FC = () => {
     }, 400);
   };
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePhone = (phone: string): boolean => {
-    const phoneRegex = /^[\d\s\-\+\(\)]+$/;
-    const digits = phone.replace(/\D/g, '');
-    return phoneRegex.test(phone) && digits.length === 10;
-  };
-
-  const validateCardNumber = (cardNumber: string): boolean => {
-    const digitsOnly = cardNumber.replace(/\D/g, '');
-    return digitsOnly.length === 16;
-  };
-
-  const validateCardExpiry = (expiry: string): boolean => {
-    const digitsOnly = expiry.replace(/\D/g, '');
-    if (digitsOnly.length !== 4) return false;
-    
-    const month = parseInt(digitsOnly.slice(0, 2));
-    const year = parseInt(digitsOnly.slice(2, 4));
-    const currentYear = new Date().getFullYear() % 100;
-    const currentMonth = new Date().getMonth() + 1;
-    
-    if (month < 1 || month > 12) return false;
-    if (year < currentYear) return false;
-    if (year === currentYear && month < currentMonth) return false;
-    
-    return true;
-  };
-
-  const validateZipCode = (zip: string): boolean => {
-    const digitsOnly = zip.replace(/\D/g, '');
-    return digitsOnly.length === 5;
-  };
-
-  const validateCVV = (cvv: string): boolean => {
-    const digitsOnly = cvv.replace(/\D/g, '');
-    return digitsOnly.length === 3;
-  };
-
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatters.formatPhoneNumber(e.target.value, formData.phone);
     setFormData({ ...formData, phone: formatted });
-    
     if (validation.validatePhone(formatted)) {
       const newErrors = { ...errors };
       delete newErrors.phone;
@@ -214,7 +183,6 @@ const RegisterPickup: React.FC = () => {
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatters.formatCardNumber(e.target.value);
     setFormData({ ...formData, cardNumber: formatted });
-    
     if (validation.validateCardNumber(formatted)) {
       const newErrors = { ...errors };
       delete newErrors.cardNumber;
@@ -225,7 +193,6 @@ const RegisterPickup: React.FC = () => {
   const handleCardExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatters.formatCardExpiry(e.target.value);
     setFormData({ ...formData, cardExpiry: formatted });
-    
     if (validation.validateCardExpiry(formatted)) {
       const newErrors = { ...errors };
       delete newErrors.cardExpiry;
@@ -236,11 +203,9 @@ const RegisterPickup: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
     if (name === 'cardCVV' && validation.validateCVV(value)) {
       setErrors(prev => ({ ...prev, cardCVV: undefined }));
     }
-    
     if (name === 'billingZip' && validation.validateZipCode(value)) {
       setErrors(prev => ({ ...prev, billingZip: undefined }));
     }
@@ -250,21 +215,21 @@ const RegisterPickup: React.FC = () => {
     const newErrors: typeof errors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = t('register.pickup.errors.nameRequired');
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
+      newErrors.name = t('register.pickup.errors.nameMin');
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = t('register.pickup.errors.emailRequired');
     } else if (!validation.validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = t('register.fieldRental.errors.invalidEmail');
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = t('register.pickup.errors.phoneRequired');
     } else if (!validation.validatePhone(formData.phone)) {
-      newErrors.phone = 'Phone number must be 10 digits';
+      newErrors.phone = t('register.fieldRental.errors.invalidPhone');
     }
 
     setErrors(newErrors);
@@ -275,19 +240,16 @@ const RegisterPickup: React.FC = () => {
     const newErrors: typeof errors = {};
 
     if (!validation.validateCardNumber(formData.cardNumber)) {
-      newErrors.cardNumber = 'Card number must be 16 digits';
+      newErrors.cardNumber = t('register.fieldRental.errors.invalidCard');
     }
-
     if (!validation.validateCardExpiry(formData.cardExpiry)) {
-      newErrors.cardExpiry = 'Invalid expiry date (MM/YY)';
+      newErrors.cardExpiry = t('register.fieldRental.errors.invalidExpiry');
     }
-
     if (!validation.validateCVV(formData.cardCVV)) {
-      newErrors.cardCVV = 'CVV must be 3 digits';
+      newErrors.cardCVV = t('register.fieldRental.errors.invalidCVV');
     }
-
     if (!validation.validateZipCode(formData.billingZip)) {
-      newErrors.billingZip = 'ZIP code must be 5 digits';
+      newErrors.billingZip = t('register.fieldRental.errors.invalidZip');
     }
 
     setErrors(newErrors);
@@ -296,37 +258,24 @@ const RegisterPickup: React.FC = () => {
 
   const canProceed = () => {
     switch (step) {
-      case 1:
-        return selectedGame !== null;
-      case 2:
-        return true; // Game details review
-      case 3:
-        return formData.name !== '' && formData.email !== '' && formData.phone !== '';
-      case 4:
-        return true; // Confirm step - just reviewing
-      case 5:
-        return formData.cardNumber !== '' && formData.cardExpiry !== '' && formData.cardCVV !== '' && formData.billingZip !== '';
-      default:
-        return false;
+      case 1: return selectedGame !== null;
+      case 2: return true;
+      case 3: return formData.name !== '' && formData.email !== '' && formData.phone !== '';
+      case 4: return true;
+      case 5: return formData.cardNumber !== '' && formData.cardExpiry !== '' && formData.cardCVV !== '' && formData.billingZip !== '';
+      default: return false;
     }
   };
 
   const handleNext = () => {
-    if (step === 3 && !validateStep3()) {
-      return;
-    }
-    
-    if (step === 5 && !validateStep4()) {
-      return;
-    }
+    if (step === 3 && !validateStep3()) return;
+    if (step === 5 && !validateStep4()) return;
     
     if (canProceed() && step < 5) {
       setCompletedSteps(prev => new Set([...prev, step]));
       const nextStep = step + 1;
       setStep(nextStep);
-      if (nextStep > maxStepReached) {
-        setMaxStepReached(nextStep);
-      }
+      if (nextStep > maxStepReached) setMaxStepReached(nextStep);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -350,9 +299,7 @@ const RegisterPickup: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep4()) {
-      return;
-    }
+    if (!validateStep4()) return;
 
     setIsSubmitting(true);
 
@@ -393,7 +340,7 @@ const RegisterPickup: React.FC = () => {
       }, 3000);
     } catch (error) {
       console.error('Booking error:', error);
-      alert('There was an error processing your booking. Please try again.');
+      alert(t('register.fieldRental.errors.bookingFailed'));
     } finally {
       setIsSubmitting(false);
     }
@@ -440,19 +387,12 @@ const RegisterPickup: React.FC = () => {
               <div className={styles.bannerIcon}>
                 <svg viewBox="0 0 24 24" width="24" height="24">
                   <circle cx="12" cy="12" r="10" fill="none" stroke="white" strokeWidth="2"/>
-                  <path 
-                    d="M9 12l2 2 4-4"
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  <path d="M9 12l2 2 4-4" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
               <div className={styles.bannerText}>
-                <h3 className={styles.bannerTitle}>Reservation Confirmed!</h3>
-                <p className={styles.bannerSubtitle}>Your spot has been successfully reserved</p>
+                <h3 className={styles.bannerTitle}>{t('register.pickup.success.title')}</h3>
+                <p className={styles.bannerSubtitle}>{t('register.pickup.success.subtitle')}</p>
               </div>
             </div>
             
@@ -464,7 +404,7 @@ const RegisterPickup: React.FC = () => {
                     <path d="M16 2v4M8 2v4M3 10h18"/>
                   </svg>
                   <div className={styles.detailContent}>
-                    <span className={styles.detailLabel}>Date</span>
+                    <span className={styles.detailLabel}>{t('register.pickup.success.date')}</span>
                     <span className={styles.detailValue}>{getFormattedDate(confirmedGame.date)}</span>
                   </div>
                 </div>
@@ -475,7 +415,7 @@ const RegisterPickup: React.FC = () => {
                     <path d="M12 6v6l4 2"/>
                   </svg>
                   <div className={styles.detailContent}>
-                    <span className={styles.detailLabel}>Time</span>
+                    <span className={styles.detailLabel}>{t('register.pickup.success.time')}</span>
                     <span className={styles.detailValue}>{confirmedGame.time}</span>
                   </div>
                 </div>
@@ -486,7 +426,7 @@ const RegisterPickup: React.FC = () => {
                     <circle cx="12" cy="10" r="3"/>
                   </svg>
                   <div className={styles.detailContent}>
-                    <span className={styles.detailLabel}>Location</span>
+                    <span className={styles.detailLabel}>{t('register.pickup.success.location')}</span>
                     <span className={styles.detailValue}>{confirmedGame.location}</span>
                   </div>
                 </div>
@@ -501,8 +441,8 @@ const RegisterPickup: React.FC = () => {
                     <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
                   </svg>
                   <div className={styles.detailContent}>
-                    <span className={styles.detailLabel}>Format</span>
-                    <span className={styles.detailValue}>{confirmedGame.format} - {confirmedGame.skillLevel}</span>
+                    <span className={styles.detailLabel}>{t('register.pickup.success.format')}</span>
+                    <span className={styles.detailValue}>{confirmedGame.format} - {translateSkillLevel(confirmedGame.skillLevel)}</span>
                   </div>
                 </div>
               </div>
@@ -511,7 +451,7 @@ const RegisterPickup: React.FC = () => {
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                 </svg>
-                <span>Confirmation email sent to {formData.email}</span>
+                <span>{t('register.fieldRental.success.emailNotice', { email: formData.email })}</span>
               </div>
             </div>
           </div>
@@ -536,11 +476,11 @@ const RegisterPickup: React.FC = () => {
                       {isCompleted ? <Check size={16} /> : s}
                     </div>
                     <span className={styles.progressLabel}>
-                      {s === 1 && 'Select Game'}
-                      {s === 2 && 'Details'}
-                      {s === 3 && 'Your Info'}
-                      {s === 4 && 'Confirm'}
-                      {s === 5 && 'Payment'}
+                      {s === 1 && t('register.pickup.steps.selectGame')}
+                      {s === 2 && t('register.pickup.steps.details')}
+                      {s === 3 && t('register.pickup.steps.yourInfo')}
+                      {s === 4 && t('register.pickup.steps.confirm')}
+                      {s === 5 && t('register.pickup.steps.payment')}
                     </span>
                   </div>
                 );
@@ -556,18 +496,18 @@ const RegisterPickup: React.FC = () => {
             <div className={styles.step}>
               <div className={styles.filtersSection}>
                 <div className={styles.filterGroup}>
-                  <label>Skill Level</label>
+                  <label>{t('register.pickup.filters.skillLevel')}</label>
                   <select value={filterSkillLevel} onChange={(e) => setFilterSkillLevel(e.target.value)}>
-                    <option value="all">All Levels</option>
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
+                    <option value="all">{t('register.pickup.filters.allLevels')}</option>
+                    <option value="beginner">{t('register.pickup.filters.beginner')}</option>
+                    <option value="intermediate">{t('register.pickup.filters.intermediate')}</option>
+                    <option value="advanced">{t('register.pickup.filters.advanced')}</option>
                   </select>
                 </div>
                 <div className={styles.filterGroup}>
-                  <label>Format</label>
+                  <label>{t('register.pickup.filters.format')}</label>
                   <select value={filterFormat} onChange={(e) => setFilterFormat(e.target.value)}>
-                    <option value="all">All Formats</option>
+                    <option value="all">{t('register.pickup.filters.allFormats')}</option>
                     <option value="5v5">5v5</option>
                     <option value="7v7">7v7</option>
                   </select>
@@ -605,11 +545,11 @@ const RegisterPickup: React.FC = () => {
                       <div className={styles.dayLabel}>
                         <span className={styles.dayName}>{formatDayName(date)}</span>
                         <span className={styles.dayDate}>{formatDate(date)}</span>
-                        {isToday && <span className={styles.todayBadge}>Today</span>}
+                        {isToday && <span className={styles.todayBadge}>{t('register.pickup.schedule.today')}</span>}
                       </div>
                       <div className={styles.gamesRow}>
                         {games.length === 0 ? (
-                          <div className={styles.noGames}>No games scheduled</div>
+                          <div className={styles.noGames}>{t('register.pickup.schedule.noGames')}</div>
                         ) : (
                           games.map(game => (
                             <div 
@@ -622,14 +562,14 @@ const RegisterPickup: React.FC = () => {
                                   <Clock size={15} />
                                   {game.time}
                                 </div>
-                                <div className={styles.gamePrice}>${game.pricePerPlayer}/player</div>
+                                <div className={styles.gamePrice}>${game.pricePerPlayer}/{t('register.pickup.schedule.perPlayer')}</div>
                               </div>
                               <div className={styles.gameCardMiddle}>
                                 <span className={styles.formatBadge}>
                                   <Trophy size={12} />
                                   {game.format}
                                 </span>
-                                <span className={styles.gameSkill}>{game.skillLevel}</span>
+                                <span className={styles.gameSkill}>{translateSkillLevel(game.skillLevel)}</span>
                               </div>
                               <div className={styles.gameCardBottom}>
                                 <div className={styles.gameInfo}>
@@ -639,7 +579,7 @@ const RegisterPickup: React.FC = () => {
                                 <div className={styles.gameSpots}>
                                   <Users size={14} />
                                   <span className={game.spotsAvailable <= 3 ? styles.spotsLow : ''}>
-                                    {game.spotsAvailable}/{game.spotsTotal} spots
+                                    {game.spotsAvailable}/{game.spotsTotal} {t('register.pickup.schedule.spots')}
                                   </span>
                                 </div>
                               </div>
@@ -657,14 +597,14 @@ const RegisterPickup: React.FC = () => {
           {/* Step 2: Game Details */}
           {step === 2 && selectedGame && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Game Details</h2>
+              <h2 className={styles.title}>{t('register.pickup.steps.details')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <Trophy size={20} />
                   </div>
-                  Game Information
+                  {t('register.pickup.details.gameInfo')}
                 </h3>
                 
                 <div className={styles.gameDetails}>
@@ -682,11 +622,11 @@ const RegisterPickup: React.FC = () => {
                   </div>
                   <div className={styles.detailRow}>
                     <Trophy size={20} />
-                    <span>{selectedGame.format} - {selectedGame.skillLevel}</span>
+                    <span>{selectedGame.format} - {translateSkillLevel(selectedGame.skillLevel)}</span>
                   </div>
                   <div className={styles.detailRow}>
                     <Users size={20} />
-                    <span>{selectedGame.spotsAvailable} spots available</span>
+                    <span>{selectedGame.spotsAvailable} {t('register.pickup.details.spotsAvailable')}</span>
                   </div>
                 </div>
               </div>
@@ -696,7 +636,7 @@ const RegisterPickup: React.FC = () => {
                   <div className={styles.iconCircle}>
                     <Users size={20} />
                   </div>
-                  Select Spots
+                  {t('register.pickup.details.selectSpots')}
                 </h3>
                 
                 <div className={styles.formGroup}>
@@ -706,11 +646,13 @@ const RegisterPickup: React.FC = () => {
                     className={styles.input}
                   >
                     {Array.from({ length: Math.min(selectedGame.spotsAvailable, 4) }, (_, i) => i + 1).map(num => (
-                      <option key={num} value={num}>{num} spot{num > 1 ? 's' : ''}</option>
+                      <option key={num} value={num}>
+                        {num} {num > 1 ? t('register.pickup.details.spots') : t('register.pickup.details.spot')}
+                      </option>
                     ))}
                   </select>
                   <label className={`${styles.floatingLabel} ${styles.active}`}>
-                    Number of Spots
+                    {t('register.pickup.details.numberOfSpots')}
                   </label>
                 </div>
 
@@ -724,14 +666,14 @@ const RegisterPickup: React.FC = () => {
           {/* Step 3: Your Info */}
           {step === 3 && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Your Information</h2>
+              <h2 className={styles.title}>{t('register.pickup.steps.yourInfo')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <User size={20} />
                   </div>
-                  Contact Details
+                  {t('register.contact.contactDetails')}
                 </h3>
                 
                 <div className={styles.form}>
@@ -743,19 +685,15 @@ const RegisterPickup: React.FC = () => {
                       value={formData.name}
                       onChange={(e) => {
                         setFormData({ ...formData, name: e.target.value });
-                        if (errors.name) {
-                          setErrors({ ...errors, name: undefined });
-                        }
+                        if (errors.name) setErrors({ ...errors, name: undefined });
                       }}
-                      placeholder="Full Name"
+                      placeholder={t('register.contact.fullName')}
                       className={`${styles.input} ${errors.name ? styles.error : ''}`}
                     />
                     <label className={`${styles.floatingLabel} ${formData.name ? styles.active : ''}`}>
-                      Full Name *
+                      {t('register.contact.fullName')} *
                     </label>
-                    {errors.name && (
-                      <span className={styles.errorMessage}>{errors.name}</span>
-                    )}
+                    {errors.name && <span className={styles.errorMessage}>{errors.name}</span>}
                   </div>
                   <div className={styles.formGroup}>
                     <input
@@ -765,19 +703,15 @@ const RegisterPickup: React.FC = () => {
                       value={formData.email}
                       onChange={(e) => {
                         setFormData({ ...formData, email: e.target.value });
-                        if (errors.email) {
-                          setErrors({ ...errors, email: undefined });
-                        }
+                        if (errors.email) setErrors({ ...errors, email: undefined });
                       }}
-                      placeholder="Email Address"
+                      placeholder={t('register.contact.email')}
                       className={`${styles.input} ${errors.email ? styles.error : ''}`}
                     />
                     <label className={`${styles.floatingLabel} ${formData.email ? styles.active : ''}`}>
-                      Email Address *
+                      {t('register.contact.email')} *
                     </label>
-                    {errors.email && (
-                      <span className={styles.errorMessage}>{errors.email}</span>
-                    )}
+                    {errors.email && <span className={styles.errorMessage}>{errors.email}</span>}
                   </div>
                   <div className={styles.formGroup}>
                     <input
@@ -785,15 +719,13 @@ const RegisterPickup: React.FC = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handlePhoneChange}
-                      placeholder="Phone Number"
+                      placeholder={t('register.contact.phone')}
                       className={`${styles.input} ${errors.phone ? styles.error : ''}`}
                     />
                     <label className={`${styles.floatingLabel} ${formData.phone ? styles.active : ''}`}>
-                      Phone Number *
+                      {t('register.contact.phone')} *
                     </label>
-                    {errors.phone && (
-                      <span className={styles.errorMessage}>{errors.phone}</span>
-                    )}
+                    {errors.phone && <span className={styles.errorMessage}>{errors.phone}</span>}
                   </div>
                 </div>
               </div>
@@ -803,7 +735,7 @@ const RegisterPickup: React.FC = () => {
           {/* Step 4: Confirm */}
           {step === 4 && selectedGame && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Confirm Your Booking</h2>
+              <h2 className={styles.title}>{t('register.pickup.steps.confirm')}</h2>
               <div className={styles.bookingDetailsWrapper}>
                 <div className={styles.bookingDetails}>
                   <div className={styles.detailRow}>
@@ -820,7 +752,7 @@ const RegisterPickup: React.FC = () => {
                   </div>
                   <div className={styles.detailRow}>
                     <Trophy size={20} />
-                    <span>{selectedGame.format} - {selectedGame.skillLevel}</span>
+                    <span>{selectedGame.format} - {translateSkillLevel(selectedGame.skillLevel)}</span>
                   </div>
                   <div className={styles.detailRow}>
                     <User size={20} />
@@ -832,7 +764,7 @@ const RegisterPickup: React.FC = () => {
                   </div>
                 </div>
                 <div className={styles.bookingSummary}>
-                  <span>Total:</span>
+                  <span>{t('register.payment.total')}:</span>
                   <span className={styles.totalPrice}>${selectedGame.pricePerPlayer * formData.spots}</span>
                 </div>
               </div>
@@ -842,14 +774,14 @@ const RegisterPickup: React.FC = () => {
           {/* Step 5: Payment */}
           {step === 5 && selectedGame && (
             <div className={styles.step}>
-              <h2 className={styles.title}>Payment Information</h2>
+              <h2 className={styles.title}>{t('register.pickup.steps.payment')}</h2>
               
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}>
                     <CreditCard size={20} />
                   </div>
-                  Card Details
+                  {t('register.pickup.payment.cardDetails')}
                 </h3>
                 
                 <div className={styles.form}>
@@ -859,16 +791,14 @@ const RegisterPickup: React.FC = () => {
                       name="cardNumber"
                       value={formData.cardNumber}
                       onChange={handleCardNumberChange}
-                      placeholder="Card Number"
+                      placeholder={t('register.payment.cardNumber')}
                       maxLength={19}
                       className={`${styles.input} ${errors.cardNumber ? styles.error : ''}`}
                     />
                     <label className={`${styles.floatingLabel} ${formData.cardNumber ? styles.active : ''}`}>
-                      Card Number *
+                      {t('register.payment.cardNumber')} *
                     </label>
-                    {errors.cardNumber && (
-                      <span className={styles.errorMessage}>{errors.cardNumber}</span>
-                    )}
+                    {errors.cardNumber && <span className={styles.errorMessage}>{errors.cardNumber}</span>}
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -878,16 +808,14 @@ const RegisterPickup: React.FC = () => {
                         name="cardExpiry"
                         value={formData.cardExpiry}
                         onChange={handleCardExpiryChange}
-                        placeholder="Expiry Date"
+                        placeholder={t('register.payment.expiry')}
                         maxLength={5}
                         className={`${styles.input} ${errors.cardExpiry ? styles.error : ''}`}
                       />
                       <label className={`${styles.floatingLabel} ${formData.cardExpiry ? styles.active : ''}`}>
-                        Expiry (MM/YY) *
+                        {t('register.payment.expiry')} *
                       </label>
-                      {errors.cardExpiry && (
-                        <span className={styles.errorMessage}>{errors.cardExpiry}</span>
-                      )}
+                      {errors.cardExpiry && <span className={styles.errorMessage}>{errors.cardExpiry}</span>}
                     </div>
 
                     <div className={styles.formGroup}>
@@ -896,16 +824,14 @@ const RegisterPickup: React.FC = () => {
                         name="cardCVV"
                         value={formData.cardCVV}
                         onChange={handleInputChange}
-                        placeholder="CVV"
+                        placeholder={t('register.payment.cvv')}
                         maxLength={3}
                         className={`${styles.input} ${errors.cardCVV ? styles.error : ''}`}
                       />
                       <label className={`${styles.floatingLabel} ${formData.cardCVV ? styles.active : ''}`}>
-                        CVV *
+                        {t('register.payment.cvv')} *
                       </label>
-                      {errors.cardCVV && (
-                        <span className={styles.errorMessage}>{errors.cardCVV}</span>
-                      )}
+                      {errors.cardCVV && <span className={styles.errorMessage}>{errors.cardCVV}</span>}
                     </div>
                   </div>
 
@@ -915,20 +841,18 @@ const RegisterPickup: React.FC = () => {
                       name="billingZip"
                       value={formData.billingZip}
                       onChange={handleInputChange}
-                      placeholder="Billing ZIP Code"
+                      placeholder={t('register.payment.billingZip')}
                       maxLength={10}
                       className={`${styles.input} ${errors.billingZip ? styles.error : ''}`}
                     />
                     <label className={`${styles.floatingLabel} ${formData.billingZip ? styles.active : ''}`}>
-                      Billing ZIP Code *
+                      {t('register.payment.billingZip')} *
                     </label>
-                    {errors.billingZip && (
-                      <span className={styles.errorMessage}>{errors.billingZip}</span>
-                    )}
+                    {errors.billingZip && <span className={styles.errorMessage}>{errors.billingZip}</span>}
                   </div>
 
                   <div className={styles.bookingSummary}>
-                    <span>Total Amount:</span>
+                    <span>{t('register.payment.total')}:</span>
                     <span className={styles.totalPrice}>${selectedGame.pricePerPlayer * formData.spots}</span>
                   </div>
                 </div>
@@ -940,7 +864,7 @@ const RegisterPickup: React.FC = () => {
           <div className={styles.actions}>
             {step > 1 && (
               <button className={`${styles.button} ${styles.buttonSecondary}`} onClick={handleBack}>
-                Back
+                {t('register.nav.back')}
               </button>
             )}
             
@@ -950,7 +874,7 @@ const RegisterPickup: React.FC = () => {
                 onClick={handleNext}
                 disabled={!canProceed()}
               >
-                Continue
+                {t('register.nav.continue')}
                 <ChevronRight size={20} />
               </button>
             ) : (
@@ -959,7 +883,7 @@ const RegisterPickup: React.FC = () => {
                 onClick={handleSubmit}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Processing...' : 'Confirm Booking'}
+                {isSubmitting ? t('register.nav.processing') : t('register.nav.confirmBooking')}
                 {!isSubmitting && <Check size={20} />}
               </button>
             )}

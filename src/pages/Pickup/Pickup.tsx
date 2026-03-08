@@ -1,4 +1,5 @@
 import styles from "./Pickup.module.scss";
+import { useTranslation } from 'react-i18next';
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/SEO/SEO';
 import { Users } from '../../components/Icons/Icons';
@@ -6,6 +7,8 @@ import RegisterPickup from '../../components/Register/components/RegisterPickup/
 
 const Pickup = () => {
   const seo = getSEOConfig('pickup');
+  const { t } = useTranslation();
+
   return (
     <>
       <SEO {...seo} />
@@ -15,11 +18,9 @@ const Pickup = () => {
             <div className={styles.iconWrapper}>
               <Users size={48} />
             </div>
-            <h1>Pickup Games</h1>
-            <p className={styles.heroSubtitle}>Drop In & Play</p>
-            <p className={styles.heroDescription}>
-              Join friendly matches at your skill level. Drop in for a game whenever you're free!
-            </p>
+            <h1>{t('pickup.heading')}</h1>
+            <p className={styles.heroSubtitle}>{t('pickup.subtitle')}</p>
+            <p className={styles.heroDescription}>{t('pickup.description')}</p>
           </div>
         </div>
 

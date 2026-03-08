@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from "./StatSection.module.scss";
 
 // Animated counter hook
@@ -15,7 +16,6 @@ const useCountUp = (end: number, duration: number = 2000, isVisible: boolean) =>
       if (startTime === null) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
       
-      // Ease-in-out function
       const easeInOutQuad = (t: number) => 
         t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
       
@@ -34,7 +34,7 @@ const useCountUp = (end: number, duration: number = 2000, isVisible: boolean) =>
 };
 
 const StatsSection = () => {
-  // Intersection Observer for triggering animation
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const statsRef = useRef<HTMLElement>(null);
 
@@ -68,19 +68,19 @@ const StatsSection = () => {
     <section ref={statsRef} className={styles.statsSection}>
       <div className={styles.statColumn}>
         <div className={styles.statNumber}>{stat1.toLocaleString()}+</div>
-        <div className={styles.statLabel}>Youth Players Trained</div>
+        <div className={styles.statLabel}>{t('home.stats.playersLabel')}</div>
       </div>
       <div className={styles.statColumn}>
         <div className={styles.statNumber}>{stat2.toLocaleString()}+</div>
-        <div className={styles.statLabel}>Training Sessions</div>
+        <div className={styles.statLabel}>{t('home.stats.sessionsLabel')}</div>
       </div>
       <div className={styles.statColumn}>
         <div className={styles.statNumber}>{stat3}+</div>
-        <div className={styles.statLabel}>Partner Academies</div>
+        <div className={styles.statLabel}>{t('home.stats.academiesLabel')}</div>
       </div>
       <div className={styles.statColumn}>
         <div className={styles.statNumber}>{stat4}%</div>
-        <div className={styles.statLabel}>Player Satisfaction</div>
+        <div className={styles.statLabel}>{t('home.stats.satisfactionLabel')}</div>
       </div>
     </section>
   );

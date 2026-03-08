@@ -1,4 +1,5 @@
 import styles from "./BirthdayParties.module.scss";
+import { useTranslation } from 'react-i18next';
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/SEO/SEO';
 import { Cake } from '../../components/Icons/Icons';
@@ -6,6 +7,8 @@ import RegisterBirthday from '../../components/Register/components/RegisterBirth
 
 const BirthdayParties = () => {
   const seo = getSEOConfig('birthdayParties');
+  const { t } = useTranslation();
+
   return (
     <>
       <SEO {...seo} />
@@ -15,11 +18,9 @@ const BirthdayParties = () => {
             <div className={styles.iconWrapper}>
               <Cake size={48} />
             </div>
-            <h1>Birthday Party Booking</h1>
-            <p className={styles.heroSubtitle}>Celebrate With Us</p>
-            <p className={styles.heroDescription}>
-              Make your child's special day unforgettable with our all-inclusive party packages
-            </p>
+            <h1>{t('birthday.heading')}</h1>
+            <p className={styles.heroSubtitle}>{t('birthday.subtitle')}</p>
+            <p className={styles.heroDescription}>{t('birthday.description')}</p>
           </div>
         </div>
 

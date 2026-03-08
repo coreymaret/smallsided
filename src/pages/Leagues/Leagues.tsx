@@ -1,4 +1,5 @@
 import styles from "./Leagues.module.scss";
+import { useTranslation } from 'react-i18next';
 import { getSEOConfig } from '../../config/seo';
 import SEO from '../../components/SEO/SEO';
 import { Trophy } from '../../components/Icons/Icons';
@@ -7,6 +8,8 @@ import RegisterLeague from '../../components/Register/components/RegisterLeague/
 
 const Leagues = () => {
   const seo = getSEOConfig('leagues');
+  const { t } = useTranslation();
+
   return (
     <>
       <SEO {...seo} />
@@ -16,11 +19,9 @@ const Leagues = () => {
             <div className={styles.iconWrapper}>
               <Trophy size={48} />
             </div>
-            <h1>Register Your Team</h1>
-            <p className={styles.heroSubtitle}>Competitive & Recreational Leagues</p>
-            <p className={styles.heroDescription}>
-              Join one of our competitive leagues in just a few simple steps
-            </p>
+            <h1>{t('leagues.heading')}</h1>
+            <p className={styles.heroSubtitle}>{t('leagues.subtitle')}</p>
+            <p className={styles.heroDescription}>{t('leagues.description')}</p>
           </div>
         </div>
 

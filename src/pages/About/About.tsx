@@ -3,6 +3,9 @@
 // Styles
 import styles from "./About.module.scss";
 
+// i18n
+import { useTranslation } from 'react-i18next';
+
 // SEO
 import SEO from '../../components/SEO/SEO';
 import { getSEOConfig } from '../../config/seo';
@@ -19,6 +22,7 @@ import FeaturesSection from '../../components/FeaturesSection/FeaturesSection';
  */
 const About = () => {
   const seo = getSEOConfig('about');
+  const { t } = useTranslation();
 
   return (
     <>
@@ -31,11 +35,9 @@ const About = () => {
             <div className={styles.iconWrapper}>
               <Trophy size={48} />
             </div>
-            <h1>Why Small-Sided Soccer Works</h1>
-            <p className={styles.heroSubtitle}>The Science Behind Better Player Development</p>
-            <p className={styles.heroDescription}>
-              Discover the key benefits that make small-sided formats the superior choice for youth development
-            </p>
+            <h1>{t('about.heading')}</h1>
+            <p className={styles.heroSubtitle}>{t('about.subtitle')}</p>
+            <p className={styles.heroDescription}>{t('about.description')}</p>
           </div>
         </div>
 

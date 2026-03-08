@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 // React state + lifecycle hooks
 
+import { useTranslation } from 'react-i18next';
+
 import { BellRing, AlertCircle, Smile } from '../../components/Icons/Icons';
 // Icons used in the component UI
 
@@ -20,6 +22,8 @@ declare global {
 
 
 const Subscribe = () => {
+  const { t } = useTranslation();
+
   // The email value typed by the user
   const [email, setEmail] = useState("");
 
@@ -76,7 +80,7 @@ const Subscribe = () => {
         setStatus("error");
 
         // Clean up Mailchimp's error message (removes digits + HTML)
-        const errorMsg = data.msg || "Something went wrong. Please try again.";
+        const errorMsg = data.msg || t('subscribe.errors.generic');
         setError(errorMsg.replace(/\d+ - /, "").replace(/<[^>]*>/g, ""));
       }
     };
@@ -90,7 +94,7 @@ const Subscribe = () => {
       console.error("❌ [Mailchimp] Script load failed");
       setIsSubmitting(false);
       setStatus("error");
-      setError("Network error. Please try again.");
+      setError(t('subscribe.errors.network'));
     };
 
     // Add to page so it executes
@@ -122,14 +126,14 @@ const Subscribe = () => {
     // Empty email validation
     if (!email.trim()) {
       console.log("⚠️ [Validation] Empty email");
-      setError("Please enter your email address.");
+      setError(t('subscribe.errors.emptyEmail'));
       return;
     }
 
     // Basic email pattern check
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       console.log("⚠️ [Validation] Invalid email format");
-      setError("Please enter a valid email address.");
+      setError(t('subscribe.errors.invalidEmail'));
       return;
     }
 
@@ -164,12 +168,11 @@ const Subscribe = () => {
           <div className={styles["subscribe-content"]}>
             <div className={styles["subscribe-title-wrapper"]}>
               <BellRing className={styles["subscribe-icon"]} />
-              <h2 className={styles["subscribe-title"]}>Stay in the Loop</h2>
+              <h2 className={styles["subscribe-title"]}>{t('subscribe.heading')}</h2>
             </div>
 
             <p className={styles["subscribe-description"]}>
-              Get the latest updates, exclusive content, and insights delivered
-              straight to your inbox.
+              {t('subscribe.description')}
             </p>
           </div>
 
@@ -183,7 +186,7 @@ const Subscribe = () => {
               <input
                 type="email"
                 className={styles["subscribe-input"]}
-                placeholder="Enter your email"
+                placeholder={t('subscribe.placeholder')}
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -198,10 +201,10 @@ const Subscribe = () => {
                 disabled={status === "success" || isSubmitting}
               >
                 {isSubmitting
-                  ? "Subscribing..." // during request
+                  ? t('subscribe.subscribing')
                   : status === "success"
-                  ? "Subscribed!"   // after success
-                  : "Subscribe" /* default */}
+                  ? t('subscribe.subscribed')
+                  : t('subscribe.subscribe')}
               </button>
             </div>
 
@@ -223,7 +226,7 @@ const Subscribe = () => {
                   size={16}
                   style={{ marginRight: "6px", verticalAlign: "middle" }}
                 />
-                Thanks for subscribing! Check your inbox.
+                {t('subscribe.successMessage')}
               </p>
             )}
           </form>

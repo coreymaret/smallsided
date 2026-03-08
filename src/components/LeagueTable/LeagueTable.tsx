@@ -1,24 +1,22 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Calendar, X, ChevronDown } from '../../components/Icons/Icons';
 import styles from './LeagueTable.module.scss';
 
-// Generate mock teams for each group
+// Generate mock teams for each group — team names are intentionally NOT translated
 const generateTeams = (groupName: string, count: number) => {
   const teamNames: Record<string, string[]> = {
-    // Adult teams
     Men: ['Thunder FC', 'Lightning United', 'Phoenix Squad', 'Storm FC', 'Titans United', 'Warriors FC', 'Dragons United', 'Eagles FC'],
     Women: ['Victory FC', 'Diamond United', 'Phoenix FC', 'Thunder Squad', 'Lightning FC', 'Galaxy United', 'Stars FC', 'Comets United'],
     Coed: ['Unity FC', 'Fusion United', 'Harmony FC', 'Balance Squad', 'Synergy United', 'Alliance FC', 'Blend United', 'Together FC'],
     'Over 40': ['Veterans FC', 'Legends United', 'Classic FC', 'Vintage Squad', 'Experience United', 'Wisdom FC', 'Elite Squad', 'Prime FC'],
     'Over 50': ['Golden FC', 'Masters United', 'Senior Squad', 'Platinum FC', 'Legacy United', 'Diamond FC', 'Silver Squad', 'Grand FC'],
-    // Youth teams - Male
     'Male U8': ['Mini Thunder', 'Little Lightning', 'Junior Phoenix', 'Young Storm', 'Tiny Titans', 'Small Warriors', 'Baby Dragons', 'Kid Eagles'],
     'Male U10': ['Thunder Youth', 'Lightning Kids', 'Phoenix Juniors', 'Storm Youth', 'Titans Kids', 'Warriors Youth', 'Dragons Juniors', 'Eagles Kids'],
     'Male U12': ['Thunder Academy', 'Lightning Academy', 'Phoenix Academy', 'Storm Academy', 'Titans Academy', 'Warriors Academy', 'Dragons Academy', 'Eagles Academy'],
     'Male U14': ['Thunder Elite', 'Lightning Elite', 'Phoenix Elite', 'Storm Elite', 'Titans Elite', 'Warriors Elite', 'Dragons Elite', 'Eagles Elite'],
     'Male U16': ['Thunder Select', 'Lightning Select', 'Phoenix Select', 'Storm Select', 'Titans Select', 'Warriors Select', 'Dragons Select', 'Eagles Select'],
     'Male U18': ['Thunder Premier', 'Lightning Premier', 'Phoenix Premier', 'Storm Premier', 'Titans Premier', 'Warriors Premier', 'Dragons Premier', 'Eagles Premier'],
-    // Youth teams - Female
     'Female U8': ['Star Strikers', 'Dream Team', 'Mighty Girls', 'Soccer Sisters', 'Pink Panthers', 'Goal Getters', 'Victory Squad', 'Champion Girls'],
     'Female U10': ['Thunder Girls', 'Lightning Ladies', 'Phoenix Stars', 'Storm Girls', 'Titans Youth', 'Warriors Girls', 'Dragons Youth', 'Eagles Girls'],
     'Female U12': ['Star Academy', 'Dream Academy', 'Phoenix Girls', 'Storm Academy', 'Titans Girls', 'Warriors Academy', 'Dragons Girls', 'Eagles Academy'],
@@ -119,6 +117,8 @@ type LeagueData = {
 };
 
 const LeagueTable: React.FC = () => {
+  const { t } = useTranslation();
+
   const [category, setCategory] = useState<LeagueCategory>('Adult');
   const [youthGender, setYouthGender] = useState<YouthGender>('Male');
   const [selectedGroup, setSelectedGroup] = useState<string>('Men');
@@ -127,12 +127,10 @@ const LeagueTable: React.FC = () => {
 
   const currentLeagues: LeagueData = category === 'Adult' ? adultLeagues : youthLeagues;
   
-  // Get league groups based on category and gender
   const getLeagueGroups = (): string[] => {
     if (category === 'Adult') {
       return Object.keys(adultLeagues);
     } else {
-      // Filter youth leagues by selected gender
       return Object.keys(youthLeagues).filter(key => key.startsWith(youthGender));
     }
   };
@@ -172,7 +170,6 @@ const LeagueTable: React.FC = () => {
     setSelectedTeam({ ...team, schedule });
   };
 
-  // Extract just the age group for display (e.g., "Male U12" -> "U12")
   const getDisplayGroup = (group: string): string => {
     if (category === 'Youth') {
       return group.replace('Male ', '').replace('Female ', '');
@@ -180,15 +177,19 @@ const LeagueTable: React.FC = () => {
     return group;
   };
 
+  const getResultLabel = (result: string): string => {
+    if (result === 'W') return t('leagueTable.result.win');
+    if (result === 'L') return t('leagueTable.result.loss');
+    return t('leagueTable.result.draw');
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         {/* Header */}
         <div className={styles.header}>
-          <h1 className={styles.title}>League Standings</h1>
-          <p className={styles.subtitle}>
-            View team standings and match schedules across all leagues
-          </p>
+          <h1 className={styles.title}>{t('leagueTable.title')}</h1>
+          <p className={styles.subtitle}>{t('leagueTable.subtitle')}</p>
         </div>
 
         {/* Category Cards */}
@@ -197,14 +198,14 @@ const LeagueTable: React.FC = () => {
             onClick={() => handleCategoryChange('Adult')}
             className={`${styles.categoryCard} ${category === 'Adult' ? styles.categoryCardActive : ''}`}
           >
-            <div className={styles.categoryTitle}>Adult Leagues</div>
+            <div className={styles.categoryTitle}>{t('register.leagues.step1.adultLeagues')}</div>
             <div className={styles.categorySubtitle}>Men • Women • Coed • Over 40 • Over 50</div>
           </button>
           <button
             onClick={() => handleCategoryChange('Youth')}
             className={`${styles.categoryCard} ${category === 'Youth' ? styles.categoryCardActive : ''}`}
           >
-            <div className={styles.categoryTitle}>Youth Leagues</div>
+            <div className={styles.categoryTitle}>{t('register.leagues.step1.youthLeagues')}</div>
             <div className={styles.categorySubtitle}>U8 • U10 • U12 • U14 • U16 • U18</div>
           </button>
         </div>
@@ -216,13 +217,13 @@ const LeagueTable: React.FC = () => {
               onClick={() => handleYouthGenderChange('Male')}
               className={`${styles.genderTab} ${youthGender === 'Male' ? styles.genderTabActive : ''}`}
             >
-              Male
+              {t('register.camps.step2.male')}
             </button>
             <button
               onClick={() => handleYouthGenderChange('Female')}
               className={`${styles.genderTab} ${youthGender === 'Female' ? styles.genderTabActive : ''}`}
             >
-              Female
+              {t('register.camps.step2.female')}
             </button>
           </div>
         )}
@@ -272,21 +273,20 @@ const LeagueTable: React.FC = () => {
               <thead>
                 <tr className={styles.tableHeader}>
                   <th className={styles.colRank}>#</th>
-                  <th className={styles.colTeam}>Team</th>
-                  <th className={styles.colStat}>MP</th>
-                  <th className={styles.colStat}>W</th>
-                  <th className={styles.colStat}>D</th>
-                  <th className={styles.colStat}>L</th>
-                  <th className={styles.colStat}>GF</th>
-                  <th className={styles.colStat}>GA</th>
-                  <th className={styles.colStat}>+/-</th>
-                  <th className={styles.colPoints}>PTS</th>
+                  <th className={styles.colTeam}>{t('leagueTable.headers.team')}</th>
+                  <th className={styles.colStat}>{t('leagueTable.headers.mp')}</th>
+                  <th className={styles.colStat}>{t('leagueTable.headers.w')}</th>
+                  <th className={styles.colStat}>{t('leagueTable.headers.d')}</th>
+                  <th className={styles.colStat}>{t('leagueTable.headers.l')}</th>
+                  <th className={styles.colStat}>{t('leagueTable.headers.gf')}</th>
+                  <th className={styles.colStat}>{t('leagueTable.headers.ga')}</th>
+                  <th className={styles.colStat}>{t('leagueTable.headers.gd')}</th>
+                  <th className={styles.colPoints}>{t('leagueTable.headers.pts')}</th>
                 </tr>
               </thead>
               <tbody>
                 {currentLeagues[selectedGroup]?.map((team: Team, index: number) => {
                   const goalDiff = team.gf - team.ga;
-                  
                   return (
                     <tr
                       key={team.id}
@@ -323,10 +323,10 @@ const LeagueTable: React.FC = () => {
                 <div>
                   <h2 className={styles.scheduleTitle}>{selectedTeam.name}</h2>
                   <p className={styles.scheduleRecord}>
-                    Record: {selectedTeam.w}-{selectedTeam.t}-{selectedTeam.l} • <span className={styles.schedulePoints}>{selectedTeam.p} pts</span>
+                    {t('leagueTable.record')}: {selectedTeam.w}-{selectedTeam.t}-{selectedTeam.l} • <span className={styles.schedulePoints}>{selectedTeam.p} {t('leagueTable.pts')}</span>
                   </p>
                 </div>
-                <button 
+                <button
                   onClick={() => setSelectedTeam(null)}
                   className={styles.closeButton}
                 >
@@ -336,7 +336,7 @@ const LeagueTable: React.FC = () => {
 
               <div className={styles.scheduleLabel}>
                 <Calendar className={styles.calendarIcon} />
-                Match Schedule
+                {t('leagueTable.matchSchedule')}
               </div>
 
               <div className={styles.scheduleList}>
@@ -356,7 +356,7 @@ const LeagueTable: React.FC = () => {
                         {match.teamScore} - {match.opponentScore}
                       </div>
                       <div className={styles.matchOutcome}>
-                        {match.result === 'W' ? 'Win' : match.result === 'L' ? 'Loss' : 'Draw'}
+                        {getResultLabel(match.result)}
                       </div>
                     </div>
                   </div>
@@ -369,8 +369,8 @@ const LeagueTable: React.FC = () => {
                 <div className={styles.emptyIcon}>
                   <Calendar className={styles.calendarIconLarge} />
                 </div>
-                <p className={styles.emptyTitle}>No Team Selected</p>
-                <p className={styles.emptySubtitle}>Click any team from the standings to view their schedule</p>
+                <p className={styles.emptyTitle}>{t('leagueTable.noTeamSelected')}</p>
+                <p className={styles.emptySubtitle}>{t('leagueTable.noTeamSubtitle')}</p>
               </div>
             </div>
           )}

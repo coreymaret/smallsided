@@ -1,13 +1,14 @@
 // src/App.tsx
 
 // React
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
 // Context
 import { MobileMenuProvider } from './contexts/MobileMenuContext';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { useLanguage } from './contexts/LanguageContext';
 
 // Layout Components
 import Header from './components/Header/Header';
@@ -47,6 +48,21 @@ const AdminBirthdayParties = lazy(() => import('./components/admin/AdminBirthday
 const AdminTraining       = lazy(() => import('./components/admin/AdminTraining'));
 const AdminCamps          = lazy(() => import('./components/admin/AdminCamps'));
 
+// ── Syncs language state to URL on every navigation ──────────
+const LanguageSyncer = () => {
+  const { isSpanish, setLanguage } = useLanguage();
+  const location = useLocation();
+
+  useEffect(() => {
+    const shouldBeSpanish = location.pathname.startsWith('/es');
+    if (shouldBeSpanish !== isSpanish) {
+      setLanguage(shouldBeSpanish);
+    }
+  }, [location.pathname]);
+
+  return null;
+};
+
 /**
  * Root application component.
  * Handles routing, layout structure, and lazy-loaded page rendering.
@@ -60,6 +76,7 @@ const App = () => {
     <MobileMenuProvider>
       <LanguageProvider>
         <HelmetProvider>
+          <LanguageSyncer />
           <ScrollToTop />
           <Header />
 
@@ -79,7 +96,7 @@ const App = () => {
 
                 {/* Service Landing Pages */}
                 <Route path="/services/field-rental" element={<FieldRental />} />
-                <Route path="/es/canchas" element={<FieldRental />} />
+                <Route path="/es/servicios/canchas" element={<FieldRental />} />
                 <Route path="/services/leagues" element={<Leagues />} />
                 <Route path="/es/ligas" element={<Leagues />} />
                 <Route path="/services/pickup" element={<Pickup />} />

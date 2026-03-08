@@ -6,9 +6,16 @@ import styles from "./Services.module.scss";
 // Navigation
 import { useNavigate } from 'react-router-dom';
 
+// i18n
+import { useTranslation } from 'react-i18next';
+
 // SEO
 import SEO from '../../components/SEO/SEO';
 import { getSEOConfig } from '../../config/seo';
+
+// Context
+import { useLanguage } from '../../contexts/LanguageContext';
+import { routePairs } from '../../constants/routePairs';
 
 // Icons
 import {
@@ -22,64 +29,64 @@ import {
 } from '../../components/Icons/Icons';
 
 /**
- * Service card data for the offerings grid.
- * Each entry maps to a dedicated service detail page.
- */
-const services = [
-  {
-    id: 'field-rentals',
-    title: 'Field Rentals',
-    description: 'Reserve premium turf fields for your team or group. Flexible booking options available.',
-    icon: Calendar,
-    path: '/services/field-rental',
-  },
-  {
-    id: 'leagues',
-    title: 'Leagues',
-    description: 'Join competitive adult and youth leagues. Multiple divisions and skill levels available.',
-    icon: Trophy,
-    path: '/services/leagues',
-  },
-  {
-    id: 'pickup',
-    title: 'Pickup Games',
-    description: 'Drop in and play with other soccer enthusiasts. No commitment required.',
-    icon: Zap,
-    path: '/services/pickup',
-  },
-  {
-    id: 'birthday-parties',
-    title: 'Birthday Parties',
-    description: 'Host an unforgettable soccer-themed birthday party with professional staff and activities.',
-    icon: Cake,
-    path: '/services/birthday-parties',
-  },
-  {
-    id: 'camps',
-    title: 'Soccer Camps',
-    description: 'Professional coaching camps for all ages and skill levels. Single day to week-long options.',
-    icon: Users,
-    path: '/services/camps',
-  },
-  {
-    id: 'training',
-    title: 'Training Programs',
-    description: 'Personalized training sessions focused on skill development and technique improvement.',
-    icon: Target,
-    path: '/services/training',
-  },
-];
-
-/**
  * Services overview page displaying a grid of clickable
  * service cards, each linking to its detail page.
  */
 const Services = () => {
   const seo = getSEOConfig('services');
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { isSpanish } = useLanguage();
+
+  const lp = (enPath: string) => isSpanish ? (routePairs[enPath] ?? enPath) : enPath;
+
+  const services = [
+    {
+      id: 'field-rentals',
+      title: t('services.fieldRentals.title'),
+      description: t('services.page.fieldRentals.description'),
+      icon: Calendar,
+      path: '/services/field-rental',
+    },
+    {
+      id: 'leagues',
+      title: t('services.leagues.title'),
+      description: t('services.page.leagues.description'),
+      icon: Trophy,
+      path: '/services/leagues',
+    },
+    {
+      id: 'pickup',
+      title: t('services.page.pickup.title'),
+      description: t('services.page.pickup.description'),
+      icon: Zap,
+      path: '/services/pickup',
+    },
+    {
+      id: 'birthday-parties',
+      title: t('services.birthdayParties.title'),
+      description: t('services.page.birthdayParties.description'),
+      icon: Cake,
+      path: '/services/birthday-parties',
+    },
+    {
+      id: 'camps',
+      title: t('services.page.camps.title'),
+      description: t('services.page.camps.description'),
+      icon: Users,
+      path: '/services/camps',
+    },
+    {
+      id: 'training',
+      title: t('services.page.training.title'),
+      description: t('services.page.training.description'),
+      icon: Target,
+      path: '/services/training',
+    },
+  ];
 
   const handleServiceClick = (path: string) => {
-    navigate(path);
+    navigate(lp(path));
   };
 
   return (
@@ -93,11 +100,9 @@ const Services = () => {
             <div className={styles.iconWrapper}>
               <Zap size={48} />
             </div>
-            <h1>Our Services</h1>
-            <p className={styles.heroSubtitle}>Everything You Need to Play</p>
-            <p className={styles.heroDescription}>
-              Discover all the ways Small Sided can help you play, compete, and develop your soccer skills
-            </p>
+            <h1>{t('services.page.heading')}</h1>
+            <p className={styles.heroSubtitle}>{t('services.page.subtitle')}</p>
+            <p className={styles.heroDescription}>{t('services.page.description')}</p>
           </div>
         </div>
 

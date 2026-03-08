@@ -6,6 +6,9 @@ import styles from './Contact.module.scss';
 // React
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 
+// i18n
+import { useTranslation } from 'react-i18next';
+
 // SEO
 import SEO from '../../components/SEO/SEO';
 import { getSEOConfig } from '../../config/seo';
@@ -36,6 +39,7 @@ import {
  */
 const Contact: React.FC = () => {
   const seo = getSEOConfig('contact');
+  const { t } = useTranslation();
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -85,23 +89,20 @@ const Contact: React.FC = () => {
         <div className={styles.contactLeft}>
           <div className={styles.leftContent}>
             <div className={styles.decorativeLine}></div>
-            <h1>Get in touch.</h1>
-            <p className={styles.subtitle}>
-              We typically respond within 24 hours during business days. Whether you have a question,
-              feedback, or just want to say hello, we're here to help.
-            </p>
+            <h1>{t('contact.heading')}</h1>
+            <p className={styles.subtitle}>{t('contact.subtitle')}</p>
 
             <form className={styles.contactForm} onSubmit={handleSubmit}>
               {/* Name row */}
               <div className={styles.formRow}>
                 <div className={styles.inputGroup}>
                   <label className={`${styles.floatingLabel} ${(focusedField === 'firstName' || formData.firstName) ? styles.active : ''}`}>
-                    First Name
+                    {t('contact.form.firstName')}
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="First Name"
+                    placeholder={t('contact.form.firstName')}
                     value={formData.firstName}
                     onChange={(e) => handleChange('firstName', e.target.value)}
                     onFocus={() => handleFocus('firstName')}
@@ -112,12 +113,12 @@ const Contact: React.FC = () => {
 
                 <div className={styles.inputGroup}>
                   <label className={`${styles.floatingLabel} ${(focusedField === 'lastName' || formData.lastName) ? styles.active : ''}`}>
-                    Last Name
+                    {t('contact.form.lastName')}
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="Last Name"
+                    placeholder={t('contact.form.lastName')}
                     value={formData.lastName}
                     onChange={(e) => handleChange('lastName', e.target.value)}
                     onFocus={() => handleFocus('lastName')}
@@ -130,12 +131,12 @@ const Contact: React.FC = () => {
               {/* Email */}
               <div className={styles.inputGroup}>
                 <label className={`${styles.floatingLabel} ${(focusedField === 'email' || formData.email) ? styles.active : ''}`}>
-                  Email
+                  {t('contact.form.email')}
                 </label>
                 <input
                   type="email"
                   required
-                  placeholder="Email"
+                  placeholder={t('contact.form.email')}
                   value={formData.email}
                   onChange={(e) => handleChange('email', e.target.value)}
                   onFocus={() => handleFocus('email')}
@@ -147,12 +148,12 @@ const Contact: React.FC = () => {
               {/* Phone */}
               <div className={styles.inputGroup}>
                 <label className={`${styles.floatingLabel} ${(focusedField === 'phone' || formData.phone) ? styles.active : ''}`}>
-                  Phone
+                  {t('contact.form.phone')}
                 </label>
                 <input
                   type="tel"
                   required
-                  placeholder="Phone"
+                  placeholder={t('contact.form.phone')}
                   value={formData.phone}
                   onChange={(e) => handleChange('phone', e.target.value)}
                   onFocus={() => handleFocus('phone')}
@@ -164,11 +165,11 @@ const Contact: React.FC = () => {
               {/* Message */}
               <div className={styles.inputGroup}>
                 <label className={`${styles.floatingLabel} ${(focusedField === 'message' || formData.message) ? styles.active : ''}`}>
-                  Message
+                  {t('contact.form.message')}
                 </label>
                 <textarea
                   required
-                  placeholder="Message"
+                  placeholder={t('contact.form.message')}
                   value={formData.message}
                   onChange={(e) => handleChange('message', e.target.value)}
                   onFocus={() => handleFocus('message')}
@@ -178,7 +179,7 @@ const Contact: React.FC = () => {
                 />
               </div>
 
-              <button type="submit" className={styles.submitButton}>Send Message</button>
+              <button type="submit" className={styles.submitButton}>{t('contact.form.submit')}</button>
             </form>
           </div>
         </div>
@@ -188,15 +189,15 @@ const Contact: React.FC = () => {
           <div className={styles.contactRow}>
             <MapPin className={styles.contactIcon} size={32} />
             <div className={styles.contactInfo}>
-              <h3>Address</h3>
-              <p>123 Small Sided Way, Tampa, FL 33617</p>
+              <h3>{t('contact.info.address')}</h3>
+              <p>{t('contact.info.addressValue')}</p>
             </div>
           </div>
 
           <div className={styles.contactRow}>
             <Phone className={styles.contactIcon} size={32} />
             <div className={styles.contactInfo}>
-              <h3>Phone</h3>
+              <h3>{t('contact.info.phone')}</h3>
               <p>(727) 4-SOCCER</p>
             </div>
           </div>
@@ -204,7 +205,7 @@ const Contact: React.FC = () => {
           <div className={styles.contactRow}>
             <Mail className={styles.contactIcon} size={32} />
             <div className={styles.contactInfo}>
-              <h3>Mail</h3>
+              <h3>{t('contact.info.mail')}</h3>
               <p>admin@smallsided.com</p>
             </div>
           </div>
@@ -212,7 +213,7 @@ const Contact: React.FC = () => {
           <div className={styles.contactRow}>
             <ThumbsUp className={styles.contactIcon} size={32} />
             <div className={styles.contactInfo}>
-              <h3>Follow Us</h3>
+              <h3>{t('contact.info.followUs')}</h3>
               <div className={styles.socialIcons}>
                 <Facebook size={24} className={styles.socialIcon} />
                 <Instagram size={24} className={styles.socialIcon} />
@@ -237,7 +238,7 @@ const Contact: React.FC = () => {
             color: '#fff',
             fontSize: '1rem',
           }}>
-            Loading map...
+            {t('contact.map.loading')}
           </div>
         }>
           <ContactMap />

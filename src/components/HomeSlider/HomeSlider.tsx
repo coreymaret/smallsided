@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from '../../components/Icons/Icons';
 import styles from './HomeSlider.module.scss';
 
@@ -11,34 +12,36 @@ interface Slide {
   background: string;
 }
 
-const slides: Slide[] = [
-  {
-    id: 1,
-    heading: 'Develop Skills Through Small-Sided Soccer',
-    subheading: 'Research-backed training methods that accelerate player development with more touches, faster decisions, and better technique.',
-    buttonText: 'Start Training',
-    buttonLink: '/pricing',
-    background: 'linear-gradient(135deg, #15141a 0%, #2a2930 100%)'
-  },
-  {
-    id: 2,
-    heading: 'Book Premium 7v7 Soccer Fields',
-    subheading: 'Professional-grade facilities designed specifically for small-sided games. Available for teams, clubs, and training sessions.',
-    buttonText: 'View Fields',
-    buttonLink: '/booking',
-    background: 'linear-gradient(135deg, #1a2820 0%, #15141a 100%)'
-  },
-  {
-    id: 3,
-    heading: 'Expert Coaching Resources',
-    subheading: 'Access hundreds of training exercises, tactical insights, and proven methodologies from experienced youth soccer coaches.',
-    buttonText: 'Explore Resources',
-    buttonLink: '/blog',
-    background: 'linear-gradient(135deg, #15141a 0%, #1f1e26 100%)'
-  }
-];
-
 const IntroHero: React.FC = () => {
+  const { t } = useTranslation();
+
+  const slides: Slide[] = [
+    {
+      id: 1,
+      heading: t('home.slider.slide1.heading'),
+      subheading: t('home.slider.slide1.subheading'),
+      buttonText: t('home.slider.slide1.buttonText'),
+      buttonLink: '/pricing',
+      background: 'linear-gradient(135deg, #15141a 0%, #2a2930 100%)'
+    },
+    {
+      id: 2,
+      heading: t('home.slider.slide2.heading'),
+      subheading: t('home.slider.slide2.subheading'),
+      buttonText: t('home.slider.slide2.buttonText'),
+      buttonLink: '/booking',
+      background: 'linear-gradient(135deg, #1a2820 0%, #15141a 100%)'
+    },
+    {
+      id: 3,
+      heading: t('home.slider.slide3.heading'),
+      subheading: t('home.slider.slide3.subheading'),
+      buttonText: t('home.slider.slide3.buttonText'),
+      buttonLink: '/blog',
+      background: 'linear-gradient(135deg, #15141a 0%, #1f1e26 100%)'
+    }
+  ];
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
@@ -55,12 +58,12 @@ const IntroHero: React.FC = () => {
   const nextSlide = useCallback(() => {
     setDirection('next');
     setCurrentSlide((prev) => (prev + 1) % slides.length);
-  }, []);
+  }, [slides.length]);
 
   const prevSlide = useCallback(() => {
     setDirection('prev');
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  }, []);
+  }, [slides.length]);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -76,7 +79,6 @@ const IntroHero: React.FC = () => {
     setIsAutoPlaying(false);
   };
 
-  // Touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -94,10 +96,8 @@ const IntroHero: React.FC = () => {
     if (Math.abs(diff) > minSwipeDistance) {
       handleUserInteraction();
       if (diff > 0) {
-        // Swiped left - go to next slide
         nextSlide();
       } else {
-        // Swiped right - go to previous slide
         prevSlide();
       }
     }
@@ -140,7 +140,6 @@ const IntroHero: React.FC = () => {
         ))}
       </div>
 
-      {/* Navigation Controls */}
       <button
         className={`${styles.navButton} ${styles.prevButton}`}
         onClick={() => {
@@ -163,7 +162,6 @@ const IntroHero: React.FC = () => {
         <ChevronRight />
       </button>
 
-      {/* Liquid Pagination Dots */}
       <div className={styles.pagination}>
         <svg width="80" height="20" viewBox="0 0 80 20">
           <defs>
@@ -205,7 +203,6 @@ const IntroHero: React.FC = () => {
         </svg>
       </div>
 
-      {/* Progress Bar */}
       {isAutoPlaying && (
         <div className={styles.progressBar}>
           <div 
