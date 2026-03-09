@@ -27,7 +27,7 @@ import { fileURLToPath } from 'url';
 // Re-create __filename and __dirname for ES modules
 // --------------------------------------------------
 
-// Convert the current file’s URL into a real file path
+// Convert the current file's URL into a real file path
 const __filename = fileURLToPath(import.meta.url);
 
 // Extract the directory name from the file path
@@ -55,7 +55,7 @@ function generatePostsIndex() {
   // Ensure the blog directory exists
   // --------------------------------------------------
   // This prevents crashes if the directory
-  // hasn’t been created yet (e.g. fresh install)
+  // hasn't been created yet (e.g. fresh install)
   if (!fs.existsSync(BLOG_DIR)) {
     console.log('📁 Creating blog directory...');
     fs.mkdirSync(BLOG_DIR, { recursive: true });
@@ -64,10 +64,12 @@ function generatePostsIndex() {
   // --------------------------------------------------
   // Read all files in the blog directory
   // --------------------------------------------------
-  // Filter to only include Markdown files
+  // Filter to only include English Markdown files.
+  // Locale-specific files (e.g. post.es.md) are excluded
+  // because they are indexed separately in posts.es.json.
   const files = fs
     .readdirSync(BLOG_DIR)
-    .filter(file => file.endsWith('.md'));
+    .filter(file => file.endsWith('.md') && !/\.[a-z]{2}\.md$/.test(file));
 
   // --------------------------------------------------
   // Handle the case where no markdown files exist
