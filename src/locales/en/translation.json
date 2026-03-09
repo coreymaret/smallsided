@@ -142,11 +142,32 @@
     "matchSchedule": "Match Schedule",
     "noTeamSelected": "No Team Selected",
     "noTeamSubtitle": "Click any team from the standings to view their schedule",
-    "result": {
-      "win": "Win",
-      "loss": "Loss",
-      "draw": "Draw"
-    }
+    "result": { "win": "Win", "loss": "Loss", "draw": "Draw" }
+  },
+  "blog": {
+    "heading": "Blog",
+    "subtitle": "News & Insights",
+    "description": "Insights, tutorials, and updates from our team",
+    "loading": "Loading blog posts...",
+    "loadingPost": "Loading post...",
+    "allPosts": "All Posts",
+    "showLess": "Show less",
+    "showMore": "+{{count}} more",
+    "noPosts": "No blog posts yet. Check back soon!",
+    "noResults": "No posts match \"{{query}}\"",
+    "searchPlaceholder": "Search posts by title, tag, or author...",
+    "featured": "Featured",
+    "readMore": "Read more →",
+    "moreTags": "more",
+    "postNotFound": "Post Not Found",
+    "postNotFoundDesc": "The blog post you're looking for doesn't exist.",
+    "backToBlog": "Back to all posts",
+    "shareArticle": "Share this article",
+    "shareOn": "Share on {{platform}}",
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "relatedArticles": "Related Articles",
+    "authorBio": "Passionate writer and developer sharing insights on technology, design, and innovation."
   },
   "subscribe": {
     "heading": "Stay in the Loop",
@@ -269,28 +290,16 @@
       "total": "Total Amount"
     },
     "fieldRental": {
-      "steps": {
-        "selectField": "Select Field",
-        "dateTime": "Date & Time",
-        "yourInfo": "Your Info",
-        "payment": "Payment"
-      },
+      "steps": { "selectField": "Select Field", "dateTime": "Date & Time", "yourInfo": "Your Info", "payment": "Payment" },
       "fields": {
         "availableFields": "Available Fields",
         "field1": "Field 1", "field2": "Field 2", "field3": "Field 3",
         "surface": "Turf", "surfaceLabel": "Surface", "size": "Size", "capacity": "Capacity"
       },
-      "date": {
-        "chooseDate": "Choose a Date", "duration": "Duration (hours)",
-        "hour": "hour", "hours": "hours", "availableSlots": "Available Time Slots"
-      },
+      "date": { "chooseDate": "Choose a Date", "duration": "Duration (hours)", "hour": "hour", "hours": "hours", "availableSlots": "Available Time Slots" },
       "contact": { "expectedPlayers": "Expected Number of Players" },
       "payment": { "rentalLabel": "Field Rental ({{duration}}h)" },
-      "success": {
-        "title": "Field Booked!", "subtitle": "Your rental is confirmed",
-        "field": "Field", "date": "Date", "time": "Time",
-        "emailNotice": "Confirmation email sent to {{email}}"
-      },
+      "success": { "title": "Field Booked!", "subtitle": "Your rental is confirmed", "field": "Field", "date": "Date", "time": "Time", "emailNotice": "Confirmation email sent to {{email}}" },
       "errors": {
         "invalidEmail": "Please enter a valid email address",
         "invalidPhone": "Phone number must be 10 digits",
@@ -302,89 +311,30 @@
       }
     },
     "pickup": {
-      "steps": {
-        "selectGame": "Select Game", "details": "Details", "yourInfo": "Your Info",
-        "confirm": "Confirm", "payment": "Payment"
-      },
-      "filters": {
-        "skillLevel": "Skill Level", "allLevels": "All Levels",
-        "beginner": "Beginner", "intermediate": "Intermediate", "advanced": "Advanced",
-        "format": "Format", "allFormats": "All Formats"
-      },
+      "steps": { "selectGame": "Select Game", "details": "Details", "yourInfo": "Your Info", "confirm": "Confirm", "payment": "Payment" },
+      "filters": { "skillLevel": "Skill Level", "allLevels": "All Levels", "beginner": "Beginner", "intermediate": "Intermediate", "advanced": "Advanced", "format": "Format", "allFormats": "All Formats" },
       "schedule": { "today": "Today", "noGames": "No games scheduled", "perPlayer": "player", "spots": "spots" },
-      "details": {
-        "gameInfo": "Game Information", "spotsAvailable": "spots available",
-        "selectSpots": "Select Spots", "numberOfSpots": "Number of Spots",
-        "spot": "spot", "spots": "spots"
-      },
+      "details": { "gameInfo": "Game Information", "spotsAvailable": "spots available", "selectSpots": "Select Spots", "numberOfSpots": "Number of Spots", "spot": "spot", "spots": "spots" },
       "payment": { "cardDetails": "Card Details" },
-      "success": {
-        "title": "Reservation Confirmed!", "subtitle": "Your spot has been successfully reserved",
-        "date": "Date", "time": "Time", "location": "Location", "format": "Format"
-      },
-      "errors": {
-        "nameRequired": "Name is required", "nameMin": "Name must be at least 2 characters",
-        "emailRequired": "Email is required", "phoneRequired": "Phone number is required"
-      }
+      "success": { "title": "Reservation Confirmed!", "subtitle": "Your spot has been successfully reserved", "date": "Date", "time": "Time", "location": "Location", "format": "Format" },
+      "errors": { "nameRequired": "Name is required", "nameMin": "Name must be at least 2 characters", "emailRequired": "Email is required", "phoneRequired": "Phone number is required" }
     },
     "camps": {
-      "steps": {
-        "selectCamp": "Select Camp", "camperInfo": "Camper Info",
-        "parentInfo": "Parent Info", "review": "Review", "payment": "Payment"
-      },
+      "steps": { "selectCamp": "Select Camp", "camperInfo": "Camper Info", "parentInfo": "Parent Info", "review": "Review", "payment": "Payment" },
       "options": {
-        "summerIntensive": {
-          "name": "Summer Intensive", "description": "Full-day camp focused on skill development", "duration": "5 days",
-          "features": ["Daily training sessions", "Lunch included", "Camp t-shirt", "Skills competition"]
-        },
-        "goalkeeper": {
-          "name": "Goalkeeper Academy", "description": "Specialized training for aspiring goalkeepers", "duration": "3 days",
-          "features": ["Expert GK coaching", "Video analysis", "Equipment provided", "Certificate"]
-        },
-        "elite": {
-          "name": "Elite Development", "description": "Advanced camp for competitive players", "duration": "5 days",
-          "features": ["College prep", "Recruiting guidance", "Advanced tactics", "Tournament play"]
-        }
+        "summerIntensive": { "name": "Summer Intensive", "description": "Full-day camp focused on skill development", "duration": "5 days", "features": ["Daily training sessions", "Lunch included", "Camp t-shirt", "Skills competition"] },
+        "goalkeeper": { "name": "Goalkeeper Academy", "description": "Specialized training for aspiring goalkeepers", "duration": "3 days", "features": ["Expert GK coaching", "Video analysis", "Equipment provided", "Certificate"] },
+        "elite": { "name": "Elite Development", "description": "Advanced camp for competitive players", "duration": "5 days", "features": ["College prep", "Recruiting guidance", "Advanced tactics", "Tournament play"] }
       },
-      "weeks": {
-        "week1": "Week 1: June 10-14, 2024", "week2": "Week 2: June 17-21, 2024",
-        "week3": "Week 3: June 24-28, 2024", "week4": "Week 4: July 1-5, 2024"
-      },
-      "skillLevels": {
-        "beginner": "New to soccer or learning basics",
-        "intermediate": "Plays recreationally, knows fundamentals",
-        "advanced": "Competitive player, strong technical skills"
-      },
+      "weeks": { "week1": "Week 1: June 10-14, 2024", "week2": "Week 2: June 17-21, 2024", "week3": "Week 3: June 24-28, 2024", "week4": "Week 4: July 1-5, 2024" },
+      "skillLevels": { "beginner": "New to soccer or learning basics", "intermediate": "Plays recreationally, knows fundamentals", "advanced": "Competitive player, strong technical skills" },
       "step1": { "chooseProgram": "Choose a Program", "selectWeek": "Select Week", "ages": "Ages", "full": "Full" },
-      "step2": {
-        "basicInfo": "Basic Information", "campDetails": "Camp Details",
-        "firstName": "First Name", "lastName": "Last Name", "age": "Age",
-        "selectGender": "Select Gender", "male": "Male", "female": "Female", "other": "Other",
-        "tshirtSize": "T-Shirt Size", "skillLevel": "Skill Level"
-      },
-      "step3": {
-        "yourInfo": "Your Information", "emergencyContact": "Emergency Contact",
-        "emergencyContactName": "Emergency Contact Name", "emergencyPhone": "Emergency Phone",
-        "medicalInfo": "Medical Information",
-        "medicalConditionsPlaceholder": "Any medical conditions we should know about?",
-        "allergiesPlaceholder": "Any allergies?", "medicationsPlaceholder": "Current medications?",
-        "specialNeedsPlaceholder": "Any special needs or accommodations?"
-      },
-      "step4": {
-        "campDetails": "Camp Details", "camper": "Camper", "age": "Age",
-        "skillLabel": "Skill Level", "tshirt": "T-Shirt",
-        "terms": "By proceeding to payment, you agree to our camp policies including our cancellation policy and medical release forms. Full terms and conditions will be sent via email."
-      },
+      "step2": { "basicInfo": "Basic Information", "campDetails": "Camp Details", "firstName": "First Name", "lastName": "Last Name", "age": "Age", "selectGender": "Select Gender", "male": "Male", "female": "Female", "other": "Other", "tshirtSize": "T-Shirt Size", "skillLevel": "Skill Level" },
+      "step3": { "yourInfo": "Your Information", "emergencyContact": "Emergency Contact", "emergencyContactName": "Emergency Contact Name", "emergencyPhone": "Emergency Phone", "medicalInfo": "Medical Information", "medicalConditionsPlaceholder": "Any medical conditions we should know about?", "allergiesPlaceholder": "Any allergies?", "medicationsPlaceholder": "Current medications?", "specialNeedsPlaceholder": "Any special needs or accommodations?" },
+      "step4": { "campDetails": "Camp Details", "camper": "Camper", "age": "Age", "skillLabel": "Skill Level", "tshirt": "T-Shirt", "terms": "By proceeding to payment, you agree to our camp policies including our cancellation policy and medical release forms. Full terms and conditions will be sent via email." },
       "step5": { "totalDue": "Total Due Today", "completeRegistration": "Complete Registration - ${{price}}" },
-      "success": {
-        "title": "Registration Complete!", "subtitle": "Your camper is all set for an amazing week",
-        "camper": "Camper", "camp": "Camp", "week": "Week"
-      },
-      "errors": {
-        "firstNameRequired": "First name is required", "lastNameRequired": "Last name is required",
-        "emergencyContactRequired": "Emergency contact is required",
-        "emergencyPhoneRequired": "Emergency phone is required"
-      }
+      "success": { "title": "Registration Complete!", "subtitle": "Your camper is all set for an amazing week", "camper": "Camper", "camp": "Camp", "week": "Week" },
+      "errors": { "firstNameRequired": "First name is required", "lastNameRequired": "Last name is required", "emergencyContactRequired": "Emergency contact is required", "emergencyPhoneRequired": "Emergency phone is required" }
     },
     "birthday": {
       "steps": { "package": "Package", "dateTime": "Date & Time", "details": "Details", "review": "Review", "payment": "Payment" },
@@ -396,13 +346,7 @@
       "cake": { "chocolate": "Chocolate Cake", "vanilla": "Vanilla Cake", "custom": "Custom Design", "none": "No Cake (I'll bring my own)" },
       "step1": { "title": "Choose Your Party Package" },
       "step2": { "selectTimeSlot": "Select Time Slot", "booked": "Booked" },
-      "step3": {
-        "birthdayChild": "Birthday Child", "childName": "Child's Name",
-        "parentInfo": "Parent/Guardian Information", "parentName": "Parent Name",
-        "partySize": "Party Size", "expectedGuests": "Expected Number of Guests",
-        "cakePreference": "Cake Preference", "specialRequests": "Special Requests (Optional)",
-        "specialRequestsPlaceholder": "Any special requests, allergies, or dietary restrictions?"
-      },
+      "step3": { "birthdayChild": "Birthday Child", "childName": "Child's Name", "parentInfo": "Parent/Guardian Information", "parentName": "Parent Name", "partySize": "Party Size", "expectedGuests": "Expected Number of Guests", "cakePreference": "Cake Preference", "specialRequests": "Special Requests (Optional)", "specialRequestsPlaceholder": "Any special requests, allergies, or dietary restrictions?" },
       "step4": { "title": "Review Your Booking", "partyPackage": "Party Package", "guestsExpected": "guests expected", "terms": "By proceeding to payment, you agree to our party booking terms and cancellation policy." },
       "step5": { "partyPackage": "Party Package" },
       "success": { "title": "Party Booked!", "subtitle": "Your birthday celebration is confirmed", "birthdayChild": "Birthday Child", "date": "Date", "package": "Package" }
@@ -417,57 +361,24 @@
       "skillLevels": { "beginner": "New to soccer", "intermediate": "Playing for 1-2 years", "advanced": "Competitive experience" },
       "focusAreas": { "ballControl": "Ball Control", "shooting": "Shooting", "passing": "Passing", "dribbling": "Dribbling", "defense": "Defense", "fitness": "Fitness" },
       "days": { "monday": "Monday", "tuesday": "Tuesday", "wednesday": "Wednesday", "thursday": "Thursday", "friday": "Friday", "saturday": "Saturday", "sunday": "Sunday" },
-      "timeSlots": {
-        "morning": { "label": "Morning", "description": "8AM - 12PM" },
-        "afternoon": { "label": "Afternoon", "description": "12PM - 5PM" },
-        "evening": { "label": "Evening", "description": "5PM - 8PM" }
-      },
+      "timeSlots": { "morning": { "label": "Morning", "description": "8AM - 12PM" }, "afternoon": { "label": "Afternoon", "description": "12PM - 5PM" }, "evening": { "label": "Evening", "description": "5PM - 8PM" } },
       "step1": { "title": "Select Training Program" },
       "step2": { "playerName": "Player Name", "focusAreas": "Focus Areas (Select all that apply)" },
-      "step3": {
-        "parentContact": "Parent/Guardian Contact",
-        "preferredDays": "Preferred Days (Select all that apply)",
-        "preferredTime": "Preferred Time of Day",
-        "additionalInfo": "Additional Information (Optional)",
-        "additionalInfoPlaceholder": "Any specific goals, concerns, or information we should know?"
-      },
-      "step4": {
-        "trainingProgram": "Training Program", "player": "Player", "focusAreas": "Focus Areas",
-        "schedulePreferences": "Schedule Preferences",
-        "terms": "By proceeding to payment, you agree to our training terms and cancellation policy. A coach will contact you within 48 hours to schedule your first session."
-      },
+      "step3": { "parentContact": "Parent/Guardian Contact", "preferredDays": "Preferred Days (Select all that apply)", "preferredTime": "Preferred Time of Day", "additionalInfo": "Additional Information (Optional)", "additionalInfoPlaceholder": "Any specific goals, concerns, or information we should know?" },
+      "step4": { "trainingProgram": "Training Program", "player": "Player", "focusAreas": "Focus Areas", "schedulePreferences": "Schedule Preferences", "terms": "By proceeding to payment, you agree to our training terms and cancellation policy. A coach will contact you within 48 hours to schedule your first session." },
       "step5": { "completeRegistration": "Complete Registration", "completeButton": "Complete Registration", "firstSession": "First Session" },
       "success": { "title": "Registration Complete!", "subtitle": "Training session scheduled successfully", "player": "Player", "trainingType": "Training Type", "preferredTime": "Preferred Time" }
     },
     "leagues": {
       "steps": { "league": "League", "teamInfo": "Team Info", "preferences": "Preferences", "review": "Review", "payment": "Payment" },
       "experienceLevels": { "beginner": "New to organized soccer", "intermediate": "Some experience playing", "advanced": "Competitive experience" },
-      "days": {
-        "weekdayEvening": "Weekday Evenings", "weekdayEveningDesc": "Mon-Thu after 6 PM",
-        "friday": "Friday Nights", "fridayDesc": "Friday after 6 PM",
-        "saturday": "Saturday", "saturdayDesc": "Saturday any time",
-        "sunday": "Sunday", "sundayDesc": "Sunday any time"
-      },
-      "step1": {
-        "title": "Select Your League", "chooseCategory": "Choose Category",
-        "adultLeagues": "Adult Leagues", "youthLeagues": "Youth Leagues",
-        "chooseGender": "Choose Gender", "chooseDivision": "Choose Your Division"
-      },
+      "days": { "weekdayEvening": "Weekday Evenings", "weekdayEveningDesc": "Mon-Thu after 6 PM", "friday": "Friday Nights", "fridayDesc": "Friday after 6 PM", "saturday": "Saturday", "saturdayDesc": "Saturday any time", "sunday": "Sunday", "sundayDesc": "Sunday any time" },
+      "step1": { "title": "Select Your League", "chooseCategory": "Choose Category", "adultLeagues": "Adult Leagues", "youthLeagues": "Youth Leagues", "chooseGender": "Choose Gender", "chooseDivision": "Choose Your Division" },
       "step2": { "teamDetails": "Team Details", "teamName": "Team Name", "captainName": "Team Captain Name", "playerCount": "Expected Number of Players" },
       "step3": { "experienceLevel": "Experience Level", "preferredDay": "Preferred Game Day", "additionalInfoPlaceholder": "Any additional information or special requests..." },
-      "step4": {
-        "title": "Review & Confirm", "leagueInfo": "League Information", "league": "League", "division": "Division",
-        "teamDetails": "Team Details", "captain": "Captain", "expectedPlayers": "expected players",
-        "level": "Level", "preferred": "Preferred",
-        "terms": "By proceeding to payment, you agree to our league terms and conditions. You will be contacted within 48 hours regarding team placement and next steps."
-      },
+      "step4": { "title": "Review & Confirm", "leagueInfo": "League Information", "league": "League", "division": "Division", "teamDetails": "Team Details", "captain": "Captain", "expectedPlayers": "expected players", "level": "Level", "preferred": "Preferred", "terms": "By proceeding to payment, you agree to our league terms and conditions. You will be contacted within 48 hours regarding team placement and next steps." },
       "step5": { "registrationFee": "Registration Fee - $150", "registrationFeeLabel": "Registration Fee" },
-      "success": {
-        "title": "Registration Complete!", "subtitle": "Your team has been successfully registered",
-        "teamName": "Team Name", "league": "League", "captain": "Captain",
-        "preferredDay": "Preferred Day", "experienceLevel": "Experience Level",
-        "teamSize": "Team Size", "players": "players", "additionalInfo": "Additional Info"
-      }
+      "success": { "title": "Registration Complete!", "subtitle": "Your team has been successfully registered", "teamName": "Team Name", "league": "League", "captain": "Captain", "preferredDay": "Preferred Day", "experienceLevel": "Experience Level", "teamSize": "Team Size", "players": "players", "additionalInfo": "Additional Info" }
     }
   }
 }

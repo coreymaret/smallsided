@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Comenzando con Nuestro Nuevo Blog",
+    "date": "2025-12-18",
+    "description": "¡Bienvenido a nuestro blog! Conoce lo que cubriremos y cómo mantenerte actualizado.",
+    "slug": "getting-started",
+    "author": "Admin",
+    "tags": ["anuncio", "bienvenida"],
+    "featured": true,
+    "fileName": "2025-12-18-getting-started.es.md"
+  }
+]

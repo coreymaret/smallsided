@@ -120,6 +120,7 @@ const App = () => {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/es/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/es/blog/:slug" element={<BlogPost />} />
 
                 {/* Legal */}
                 <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />

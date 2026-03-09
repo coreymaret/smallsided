@@ -142,11 +142,32 @@
     "matchSchedule": "Calendario de Partidos",
     "noTeamSelected": "Ningún Equipo Seleccionado",
     "noTeamSubtitle": "Haz clic en cualquier equipo de la clasificación para ver su calendario",
-    "result": {
-      "win": "Victoria",
-      "loss": "Derrota",
-      "draw": "Empate"
-    }
+    "result": { "win": "Victoria", "loss": "Derrota", "draw": "Empate" }
+  },
+  "blog": {
+    "heading": "Blog",
+    "subtitle": "Noticias y Perspectivas",
+    "description": "Perspectivas, tutoriales y actualizaciones de nuestro equipo",
+    "loading": "Cargando publicaciones...",
+    "loadingPost": "Cargando publicación...",
+    "allPosts": "Todas las Publicaciones",
+    "showLess": "Ver menos",
+    "showMore": "+{{count}} más",
+    "noPosts": "Aún no hay publicaciones. ¡Vuelve pronto!",
+    "noResults": "No hay publicaciones que coincidan con \"{{query}}\"",
+    "searchPlaceholder": "Buscar por título, etiqueta o autor...",
+    "featured": "Destacado",
+    "readMore": "Leer más →",
+    "moreTags": "más",
+    "postNotFound": "Publicación No Encontrada",
+    "postNotFoundDesc": "La publicación que buscas no existe.",
+    "backToBlog": "Volver a todas las publicaciones",
+    "shareArticle": "Compartir este artículo",
+    "shareOn": "Compartir en {{platform}}",
+    "copyLink": "Copiar Enlace",
+    "copied": "¡Copiado!",
+    "relatedArticles": "Artículos Relacionados",
+    "authorBio": "Escritor apasionado y desarrollador que comparte perspectivas sobre tecnología, diseño e innovación."
   },
   "subscribe": {
     "heading": "Mantente Informado",
@@ -340,11 +361,7 @@
       "skillLevels": { "beginner": "Nuevo en el fútbol", "intermediate": "Jugando entre 1 y 2 años", "advanced": "Experiencia competitiva" },
       "focusAreas": { "ballControl": "Control de Balón", "shooting": "Tiro", "passing": "Pase", "dribbling": "Regate", "defense": "Defensa", "fitness": "Condición Física" },
       "days": { "monday": "Lunes", "tuesday": "Martes", "wednesday": "Miércoles", "thursday": "Jueves", "friday": "Viernes", "saturday": "Sábado", "sunday": "Domingo" },
-      "timeSlots": {
-        "morning": { "label": "Mañana", "description": "8AM - 12PM" },
-        "afternoon": { "label": "Tarde", "description": "12PM - 5PM" },
-        "evening": { "label": "Noche", "description": "5PM - 8PM" }
-      },
+      "timeSlots": { "morning": { "label": "Mañana", "description": "8AM - 12PM" }, "afternoon": { "label": "Tarde", "description": "12PM - 5PM" }, "evening": { "label": "Noche", "description": "5PM - 8PM" } },
       "step1": { "title": "Seleccionar Programa de Entrenamiento" },
       "step2": { "playerName": "Nombre del Jugador", "focusAreas": "Áreas de Enfoque (Selecciona todas las que apliquen)" },
       "step3": { "parentContact": "Contacto del Padre/Tutor", "preferredDays": "Días Preferidos (Selecciona todos los que apliquen)", "preferredTime": "Horario Preferido del Día", "additionalInfo": "Información Adicional (Opcional)", "additionalInfoPlaceholder": "¿Algún objetivo específico, preocupación o información que debamos saber?" },

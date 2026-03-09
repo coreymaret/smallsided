@@ -107,7 +107,10 @@ const useToggleWithNavigation = () => {
   const handleToggle = () => {
     const paired = routePairs[location.pathname];
     toggleLanguage();
-    if (paired) navigate(paired);
+    if (paired) {
+      // Pass a flag in location state so ScrollToTop can skip the scroll
+      navigate(paired, { state: { isLanguageToggle: true } });
+    }
   };
 
   return { isSpanish, handleToggle };

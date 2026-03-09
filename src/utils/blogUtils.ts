@@ -1,66 +1,98 @@
 // src/utils/blogUtils.ts
 
 import type { BlogPostMetadata } from '../types/blog';
+import enPostsIndex from '../content/blog/posts.json';
 
-// Import the generated posts index
-import postsIndex from '../content/blog/posts.json';
+let esPostsIndex: BlogPostMetadata[] = [];
+try {
+  esPostsIndex = (await import('../content/blog/posts.es.json')).default as BlogPostMetadata[];
+} catch {
+  esPostsIndex = [];
+}
 
-export const getAllPosts = (): BlogPostMetadata[] => {
-  return (postsIndex as BlogPostMetadata[])
+/**
+ * Merge EN and ES indexes.
+ * ES entries override EN entries for the same slug (translated metadata).
+ * EN entries with no ES equivalent are included as-is (fallback).
+ */
+const getMergedPosts = (language: string): BlogPostMetadata[] => {
+  if (language !== 'es') return enPostsIndex as BlogPostMetadata[];
+
+  const enPosts = enPostsIndex as BlogPostMetadata[];
+  const esMap = new Map(esPostsIndex.map(p => [p.slug, p]));
+
+  return enPosts.map(post => esMap.get(post.slug) ?? post);
+};
+
+export const getAllPosts = (language = 'en'): BlogPostMetadata[] => {
+  return getMergedPosts(language)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
-export const getPostBySlug = async (slug: string) => {
-  const post = (postsIndex as BlogPostMetadata[]).find(p => p.slug === slug);
-  
-  if (!post) {
+export const getPostBySlug = async (slug: string, language = 'en') => {
+  const posts = getMergedPosts(language);
+  const post = posts.find(p => p.slug === slug);
+
+  if (!post) return null;
+
+  const modules = (import.meta as any).glob('../content/blog/*.md', { as: 'raw' });
+
+  // post.fileName already points to the correct file for the current language
+  // (the ES index has the .es.md filename, EN index has the .md filename).
+  // Fall back to the EN post's fileName if the resolved file doesn't exist.
+  const primaryPath = `../content/blog/${post.fileName}`;
+
+  // Fallback: find the EN version of this post by slug
+  const enPost = (enPostsIndex as BlogPostMetadata[]).find(p => p.slug === slug);
+  const fallbackPath = enPost ? `../content/blog/${enPost.fileName}` : null;
+
+  const modulePath = modules[primaryPath]
+    ? primaryPath
+    : fallbackPath && modules[fallbackPath]
+    ? fallbackPath
+    : null;
+
+  if (!modulePath) {
+    console.error('Markdown file not found:', primaryPath);
+    console.error('Available modules:', Object.keys(modules));
     return null;
   }
 
   try {
-    // Import markdown files directly - Vite will handle this at build time
-    const modules = (import.meta as any).glob('../content/blog/*.md', { as: 'raw' });
-    const path = `../content/blog/${post.fileName}`;
-    
-    if (!modules[path]) {
-      console.error('Markdown file not found:', path);
-      console.error('Available modules:', Object.keys(modules));
-      return null;
-    }
-
-    // Load the raw markdown content
-    const rawContent = await modules[path]();
-    
-    // Extract content after frontmatter (simple approach)
-    // Split by --- and take everything after the second ---
+    const rawContent = await modules[modulePath]();
     const parts = rawContent.split('---');
     const content = parts.length >= 3 ? parts.slice(2).join('---').trim() : rawContent;
-    
-    return {
-      ...post,
-      content: content
-    };
+
+    return { ...post, content };
   } catch (error) {
     console.error('Error loading post:', error);
     return null;
   }
 };
 
-export const getFeaturedPosts = (): BlogPostMetadata[] => {
-  return getAllPosts().filter(post => post.featured);
+export const getFeaturedPosts = (language = 'en'): BlogPostMetadata[] => {
+  return getAllPosts(language).filter(post => post.featured);
 };
 
-export const getPostsByTag = (tag: string): BlogPostMetadata[] => {
-  return getAllPosts().filter(post => 
+export const getPostsByTag = (tag: string, language = 'en'): BlogPostMetadata[] => {
+  return getAllPosts(language).filter(post =>
     post.tags.map(t => t.toLowerCase()).includes(tag.toLowerCase())
   );
 };
 
-export const formatDate = (dateString: string): string => {
+/**
+ * Format a date string using the appropriate locale.
+ */
+export const formatDate = (dateString: string, language = 'en'): string => {
+  const localeMap: Record<string, string> = {
+    en: 'en-US',
+    es: 'es-ES',
+  };
+  const locale = localeMap[language] ?? 'en-US';
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   });
 };

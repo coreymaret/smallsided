@@ -1,25 +1,16 @@
 // src/components/Blog/BlogPost.tsx
 
-// Styles
 import styles from './BlogPost.module.scss';
-
-// React
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-
-// SEO
+import { useEffect, useState, useRef } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../contexts/LanguageContext';
 import SEO from '../SEO/SEO';
-
-// Components
 import MarkdownRenderer from '../MarkdownRenderer/MarkdownRenderer';
-
-// Markdown Plugins
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
-
-// Icons
 import {
   Twitter,
   Linkedin,
@@ -28,25 +19,44 @@ import {
   Check,
   ArrowLeft,
 } from '../../components/Icons/Icons';
-
-// Utilities & Types
 import { getPostBySlug, getAllPosts, formatDate } from '../../utils/blogUtils';
 import type { BlogPost as BlogPostType } from '../../types/blog';
 
-/**
- * Individual blog post page with reading progress bar,
- * floating share buttons, author box, and related posts.
- */
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { t } = useTranslation();
+  const { isSpanish } = useLanguage();
+  const language = isSpanish ? 'es' : 'en';
+  const navigate = useNavigate();
+
   const [post, setPost] = useState<BlogPostType | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPostType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(false);
 
-  /** Load post and find related posts by matching tags */
+  // Track whether this is the initial mount or a language change
+  const isInitialMount = useRef(true);
+
+  // When language toggles, navigate to the correct URL for the same slug
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    if (!slug) return;
+
+    const targetUrl = isSpanish ? `/es/blog/${slug}` : `/blog/${slug}`;
+
+    // Only navigate if we're not already on the correct URL
+    if (window.location.pathname !== targetUrl) {
+      navigate(targetUrl, { replace: true });
+    }
+  }, [isSpanish]);
+
+  // Load post content whenever slug or language changes
   useEffect(() => {
     const loadPost = async () => {
       if (!slug) {
@@ -55,12 +65,15 @@ const BlogPost: React.FC = () => {
         return;
       }
 
+      setLoading(true);
+      setError(false);
+
       try {
-        const postData = await getPostBySlug(slug);
+        const postData = await getPostBySlug(slug, language);
         if (postData) {
           setPost(postData);
 
-          const allPosts = await getAllPosts();
+          const allPosts = getAllPosts(language);
           const related = allPosts
             .filter(p => p.slug !== slug)
             .map(p => ({
@@ -72,7 +85,7 @@ const BlogPost: React.FC = () => {
             .slice(0, 5)
             .map(p => p.post);
 
-          setRelatedPosts(related);
+          setRelatedPosts(related as BlogPostType[]);
         } else {
           setError(true);
         }
@@ -85,9 +98,8 @@ const BlogPost: React.FC = () => {
     };
 
     loadPost();
-  }, [slug]);
+  }, [slug, language]);
 
-  /** Track scroll progress for reading progress bar */
   useEffect(() => {
     const handleScroll = () => {
       const windowHeight = window.innerHeight;
@@ -95,7 +107,7 @@ const BlogPost: React.FC = () => {
       const scrollTop = window.scrollY;
       const trackLength = documentHeight - windowHeight;
       const progress = (scrollTop / trackLength) * 100;
-      setScrollProgress(Math.min(progress, 100));
+      setScrollProgress(Math.min(progress, 100) as any);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -105,44 +117,39 @@ const BlogPost: React.FC = () => {
   const shareUrl = window.location.href;
   const shareTitle = post?.title || '';
 
-  /** Open share dialog for the given platform */
   const handleShare = (platform: string) => {
     const urls: Record<string, string> = {
       twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
     };
-
     if (urls[platform]) {
       window.open(urls[platform], '_blank', 'width=600,height=400');
     }
   };
 
-  /** Copy current URL to clipboard */
   const handleCopyLink = () => {
     navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  /* Loading state */
   if (loading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
-        <p>Loading post...</p>
+        <p>{t('blog.loadingPost')}</p>
       </div>
     );
   }
 
-  /* Error state */
   if (error || !post) {
     return (
       <div className={styles.error}>
-        <h1>Post Not Found</h1>
-        <p>The blog post you're looking for doesn't exist.</p>
-        <Link to="/blog" className={styles.backLink}>
-          ← Back to Blog
+        <h1>{t('blog.postNotFound')}</h1>
+        <p>{t('blog.postNotFoundDesc')}</p>
+        <Link to={isSpanish ? '/es/blog' : '/blog'} className={styles.backLink}>
+          ← {t('blog.backToBlog')}
         </Link>
       </div>
     );
@@ -150,7 +157,6 @@ const BlogPost: React.FC = () => {
 
   return (
     <>
-      {/* SEO meta tags */}
       <SEO
         title={`${post.title} | Small Sided`}
         description={post.description}
@@ -161,18 +167,13 @@ const BlogPost: React.FC = () => {
         tags={post.tags}
       />
 
-      {/* Reading progress bar */}
       <div className={styles.progressBar}>
-        <div
-          className={styles.progressFill}
-          style={{ width: `${scrollProgress}%` }}
-        ></div>
+        <div className={styles.progressFill} style={{ width: `${scrollProgress}%` }}></div>
       </div>
 
       <article className={styles.article}>
         <div className={styles.container}>
 
-          {/* Hero image */}
           <div
             className={styles.heroImage}
             style={{
@@ -185,28 +186,26 @@ const BlogPost: React.FC = () => {
             }}
           ></div>
 
-          {/* Floating share buttons (desktop only) */}
           <div className={styles.floatingShare}>
-            <button onClick={() => handleShare('twitter')} aria-label="Share on Twitter">
+            <button onClick={() => handleShare('twitter')} aria-label={t('blog.shareOn', { platform: 'Twitter' })}>
               <Twitter size={20} />
             </button>
-            <button onClick={() => handleShare('linkedin')} aria-label="Share on LinkedIn">
+            <button onClick={() => handleShare('linkedin')} aria-label={t('blog.shareOn', { platform: 'LinkedIn' })}>
               <Linkedin size={20} />
             </button>
-            <button onClick={() => handleShare('facebook')} aria-label="Share on Facebook">
+            <button onClick={() => handleShare('facebook')} aria-label={t('blog.shareOn', { platform: 'Facebook' })}>
               <Facebook size={20} />
             </button>
-            <button onClick={handleCopyLink} aria-label="Copy link">
+            <button onClick={handleCopyLink} aria-label={t('blog.copyLink')}>
               {copied ? <Check size={20} /> : <LinkIcon size={20} />}
             </button>
           </div>
 
-          {/* Post header */}
           <header className={styles.header}>
             <h1 className={styles.title}>{post.title}</h1>
 
             <div className={styles.meta}>
-              <time dateTime={post.date}>{formatDate(post.date)}</time>
+              <time dateTime={post.date}>{formatDate(post.date, language)}</time>
               <span className={styles.separator}>•</span>
               <div className={styles.authorWrapper}>
                 {post.authorImage ? (
@@ -243,7 +242,6 @@ const BlogPost: React.FC = () => {
             )}
           </header>
 
-          {/* Markdown content */}
           <div className={styles.content}>
             <MarkdownRenderer
               content={post.content || ''}
@@ -263,22 +261,18 @@ const BlogPost: React.FC = () => {
             />
           </div>
 
-          {/* Author box */}
           <div className={styles.authorBox}>
             <div className={styles.authorBoxAvatar}>
               {post.author.charAt(0).toUpperCase()}
             </div>
             <div>
               <h3 className={styles.authorBoxName}>{post.author}</h3>
-              <p className={styles.authorBoxBio}>
-                Passionate writer and developer sharing insights on technology, design, and innovation.
-              </p>
+              <p className={styles.authorBoxBio}>{t('blog.authorBio')}</p>
             </div>
           </div>
 
-          {/* Share section */}
           <div className={styles.shareSection}>
-            <h3 className={styles.shareTitle}>Share this article</h3>
+            <h3 className={styles.shareTitle}>{t('blog.shareArticle')}</h3>
             <div className={styles.shareButtons}>
               <button className={styles.shareButtonLarge} onClick={() => handleShare('twitter')}>
                 <Twitter size={18} /> Twitter
@@ -290,21 +284,21 @@ const BlogPost: React.FC = () => {
                 <Facebook size={18} /> Facebook
               </button>
               <button className={styles.shareButtonLarge} onClick={handleCopyLink}>
-                {copied ? <Check size={18} /> : <LinkIcon size={18} />} {copied ? 'Copied!' : 'Copy Link'}
+                {copied ? <Check size={18} /> : <LinkIcon size={18} />}
+                {copied ? t('blog.copied') : t('blog.copyLink')}
               </button>
             </div>
           </div>
 
-          {/* Related posts */}
           {relatedPosts.length > 0 && (
             <div className={styles.relatedPosts}>
-              <h2 className={styles.relatedPostsTitle}>Related Articles</h2>
+              <h2 className={styles.relatedPostsTitle}>{t('blog.relatedArticles')}</h2>
               <div className={styles.relatedCarousel}>
                 <div className={styles.relatedTrack}>
                   {relatedPosts.map((relatedPost) => (
                     <Link
                       key={relatedPost.slug}
-                      to={`/blog/${relatedPost.slug}`}
+                      to={isSpanish ? `/es/blog/${relatedPost.slug}` : `/blog/${relatedPost.slug}`}
                       className={styles.relatedCard}
                     >
                       <div className={styles.relatedTags}>
@@ -315,7 +309,7 @@ const BlogPost: React.FC = () => {
                       <h3 className={styles.relatedCardTitle}>{relatedPost.title}</h3>
                       <p className={styles.relatedCardDescription}>{relatedPost.description}</p>
                       <div className={styles.relatedCardMeta}>
-                        <time>{formatDate(relatedPost.date)}</time>
+                        <time>{formatDate(relatedPost.date, language)}</time>
                         <span className={styles.relatedArrow}>→</span>
                       </div>
                     </Link>
@@ -325,11 +319,10 @@ const BlogPost: React.FC = () => {
             </div>
           )}
 
-          {/* Back to blog */}
           <footer className={styles.footer}>
-            <Link to="/blog" className={styles.footerLink}>
+            <Link to={isSpanish ? '/es/blog' : '/blog'} className={styles.footerLink}>
               <ArrowLeft size={20} />
-              Back to all posts
+              {t('blog.backToBlog')}
             </Link>
           </footer>
 
