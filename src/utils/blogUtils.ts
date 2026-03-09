@@ -2,13 +2,11 @@
 
 import type { BlogPostMetadata } from '../types/blog';
 import enPostsIndex from '../content/blog/posts.json';
+import esPostsIndexRaw from '../content/blog/posts.es.json';
 
-let esPostsIndex: BlogPostMetadata[] = [];
-try {
-  esPostsIndex = (await import('../content/blog/posts.es.json')).default as BlogPostMetadata[];
-} catch {
-  esPostsIndex = [];
-}
+// Static imports — Vite resolves JSON at build time, no await needed.
+// Keep posts.es.json present as at minimum an empty array [].
+const esPostsIndex: BlogPostMetadata[] = esPostsIndexRaw as BlogPostMetadata[];
 
 /**
  * Merge EN and ES indexes.
@@ -35,14 +33,12 @@ export const getPostBySlug = async (slug: string, language = 'en') => {
 
   if (!post) return null;
 
-  const modules = (import.meta as any).glob('../content/blog/*.md', { as: 'raw' });
+  const modules = (import.meta as any).glob('../content/blog/*.md', { query: '?raw', import: 'default' });
 
   // post.fileName already points to the correct file for the current language
-  // (the ES index has the .es.md filename, EN index has the .md filename).
-  // Fall back to the EN post's fileName if the resolved file doesn't exist.
   const primaryPath = `../content/blog/${post.fileName}`;
 
-  // Fallback: find the EN version of this post by slug
+  // Fallback: find the EN version by slug
   const enPost = (enPostsIndex as BlogPostMetadata[]).find(p => p.slug === slug);
   const fallbackPath = enPost ? `../content/blog/${enPost.fileName}` : null;
 
