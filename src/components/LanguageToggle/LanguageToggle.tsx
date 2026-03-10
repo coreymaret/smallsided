@@ -2,6 +2,7 @@ import { memo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./LanguageToggle.module.scss";
 import { useLanguage } from "../../contexts/LanguageContext";
+import { useNavigation } from "../../contexts/NavigationContext";
 import { routePairs } from "../../constants/routePairs";
 
 // ── Pre-computed US flag stars (computed once at module level, not on every render) ──
@@ -101,16 +102,17 @@ const Side = ({ lang, label, active, flagSize, sideWidth, sideHeight }: SideProp
 
 const useToggleWithNavigation = () => {
   const { isSpanish, toggleLanguage } = useLanguage();
+  const { setLanguageToggle } = useNavigation();
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleToggle = () => {
     const paired = routePairs[location.pathname];
+    // Flag this as a language toggle BEFORE navigating
+    // so ScrollToTop sees it when the pathname change fires
+    setLanguageToggle();
     toggleLanguage();
-    if (paired) {
-      // Pass a flag in location state so ScrollToTop can skip the scroll
-      navigate(paired, { state: { isLanguageToggle: true } });
-    }
+    if (paired) navigate(paired);
   };
 
   return { isSpanish, handleToggle };

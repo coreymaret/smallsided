@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useNavigation } from '../../contexts/NavigationContext';
 
 const ScrollToTop = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
+  const { isLanguageToggle } = useNavigation();
 
   useEffect(() => {
-    // Skip scroll when the navigation was triggered by a language toggle
-    if ((location.state as any)?.isLanguageToggle) return;
+    if (isLanguageToggle()) return;
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, [pathname]);
 
   return null;
 };

@@ -1,14 +1,14 @@
 // src/App.tsx
 
 // React
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
 // Context
 import { MobileMenuProvider } from './contexts/MobileMenuContext';
 import { LanguageProvider } from './contexts/LanguageContext';
-import { useLanguage } from './contexts/LanguageContext';
+import { NavigationProvider } from './contexts/NavigationContext';
 
 // Layout Components
 import Header from './components/Header/Header';
@@ -48,21 +48,6 @@ const AdminBirthdayParties = lazy(() => import('./components/admin/AdminBirthday
 const AdminTraining       = lazy(() => import('./components/admin/AdminTraining'));
 const AdminCamps          = lazy(() => import('./components/admin/AdminCamps'));
 
-// ── Syncs language state to URL on every navigation ──────────
-const LanguageSyncer = () => {
-  const { isSpanish, setLanguage } = useLanguage();
-  const location = useLocation();
-
-  useEffect(() => {
-    const shouldBeSpanish = location.pathname.startsWith('/es');
-    if (shouldBeSpanish !== isSpanish) {
-      setLanguage(shouldBeSpanish);
-    }
-  }, [location.pathname]);
-
-  return null;
-};
-
 /**
  * Root application component.
  * Handles routing, layout structure, and lazy-loaded page rendering.
@@ -75,83 +60,84 @@ const App = () => {
   return (
     <MobileMenuProvider>
       <LanguageProvider>
-        <HelmetProvider>
-          <LanguageSyncer />
-          <ScrollToTop />
-          <Header />
+        <NavigationProvider>
+          <HelmetProvider>
+            <ScrollToTop />
+            <Header />
 
-          <main className="main-content" style={{ minHeight: '100vh' }}>
-            <Suspense fallback={<PageLoader />}>
-              <Routes location={location} key={location.pathname}>
+            <main className="main-content" style={{ minHeight: '100vh' }}>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
 
-                {/* Core Pages */}
-                <Route path="/" element={<Home />} />
-                <Route path="/es/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/es/nosotros" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/es/contacto" element={<Contact />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/es/servicios" element={<Services />} />
+                  {/* Core Pages */}
+                  <Route path="/" element={<Home />} />
+                  <Route path="/es/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/es/nosotros" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/es/contacto" element={<Contact />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/es/servicios" element={<Services />} />
 
-                {/* Service Landing Pages */}
-                <Route path="/services/field-rental" element={<FieldRental />} />
-                <Route path="/es/servicios/canchas" element={<FieldRental />} />
-                <Route path="/services/leagues" element={<Leagues />} />
-                <Route path="/es/ligas" element={<Leagues />} />
-                <Route path="/services/pickup" element={<Pickup />} />
-                <Route path="/es/partido-libre" element={<Pickup />} />
-                <Route path="/services/birthday-parties" element={<BirthdayParties />} />
-                <Route path="/es/fiestas" element={<BirthdayParties />} />
-                <Route path="/services/camps" element={<Camps />} />
-                <Route path="/es/campamentos" element={<Camps />} />
-                <Route path="/services/training" element={<Training />} />
-                <Route path="/es/entrenamiento" element={<Training />} />
+                  {/* Service Landing Pages */}
+                  <Route path="/services/field-rental" element={<FieldRental />} />
+                  <Route path="/es/servicios/canchas" element={<FieldRental />} />
+                  <Route path="/services/leagues" element={<Leagues />} />
+                  <Route path="/es/ligas" element={<Leagues />} />
+                  <Route path="/services/pickup" element={<Pickup />} />
+                  <Route path="/es/partido-libre" element={<Pickup />} />
+                  <Route path="/services/birthday-parties" element={<BirthdayParties />} />
+                  <Route path="/es/fiestas" element={<BirthdayParties />} />
+                  <Route path="/services/camps" element={<Camps />} />
+                  <Route path="/es/campamentos" element={<Camps />} />
+                  <Route path="/services/training" element={<Training />} />
+                  <Route path="/es/entrenamiento" element={<Training />} />
 
-                {/* Registration Routes */}
-                <Route path="/services/field-rental/book" element={<Register config={{ type: 'fieldRental', title: '', subtitle: '', component: () => null }} />} />
-                <Route path="/services/pickup/book" element={<Register config={{ type: 'pickup', title: '', subtitle: '', component: () => null }} />} />
-                <Route path="/services/leagues/register" element={<Register config={{ type: 'league', title: '', subtitle: '', component: () => null }} />} />
-                <Route path="/services/training/register" element={<Register config={{ type: 'training', title: '', subtitle: '', component: () => null }} />} />
-                <Route path="/services/camps/register" element={<Register config={{ type: 'camps', title: '', subtitle: '', component: () => null }} />} />
-                <Route path="/services/birthday-parties/register" element={<Register config={{ type: 'birthday', title: '', subtitle: '', component: () => null }} />} />
+                  {/* Registration Routes */}
+                  <Route path="/services/field-rental/book" element={<Register config={{ type: 'fieldRental', title: '', subtitle: '', component: () => null }} />} />
+                  <Route path="/services/pickup/book" element={<Register config={{ type: 'pickup', title: '', subtitle: '', component: () => null }} />} />
+                  <Route path="/services/leagues/register" element={<Register config={{ type: 'league', title: '', subtitle: '', component: () => null }} />} />
+                  <Route path="/services/training/register" element={<Register config={{ type: 'training', title: '', subtitle: '', component: () => null }} />} />
+                  <Route path="/services/camps/register" element={<Register config={{ type: 'camps', title: '', subtitle: '', component: () => null }} />} />
+                  <Route path="/services/birthday-parties/register" element={<Register config={{ type: 'birthday', title: '', subtitle: '', component: () => null }} />} />
 
-                {/* Blog */}
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/es/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/es/blog/:slug" element={<BlogPost />} />
+                  {/* Blog */}
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/es/blog" element={<Blog />} />
+                  <Route path="/blog/:slug" element={<BlogPost />} />
+                  <Route path="/es/blog/:slug" element={<BlogPost />} />
 
-                {/* Legal */}
-                <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-                <Route path="/TOS" element={<TOS />} />
-                <Route path="/CookiePolicy" element={<CookiePolicy />} />
+                  {/* Legal */}
+                  <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+                  <Route path="/TOS" element={<TOS />} />
+                  <Route path="/CookiePolicy" element={<CookiePolicy />} />
 
-                {/* Admin */}
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<AdminDashboard />} />
-                  <Route path="field-rentals" element={<AdminFieldRentals />} />
-                  <Route path="leagues" element={<AdminLeagues />} />
-                  <Route path="pickup" element={<AdminPickup />} />
-                  <Route path="birthday-parties" element={<AdminBirthdayParties />} />
-                  <Route path="training" element={<AdminTraining />} />
-                  <Route path="camps" element={<AdminCamps />} />
-                </Route>
+                  {/* Admin */}
+                  <Route path="/admin/login" element={<AdminLogin />} />
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<AdminDashboard />} />
+                    <Route path="field-rentals" element={<AdminFieldRentals />} />
+                    <Route path="leagues" element={<AdminLeagues />} />
+                    <Route path="pickup" element={<AdminPickup />} />
+                    <Route path="birthday-parties" element={<AdminBirthdayParties />} />
+                    <Route path="training" element={<AdminTraining />} />
+                    <Route path="camps" element={<AdminCamps />} />
+                  </Route>
 
-                {/* 404 */}
-                <Route path="*" element={<NotFound />} />
+                  {/* 404 */}
+                  <Route path="*" element={<NotFound />} />
 
-              </Routes>
-            </Suspense>
-          </main>
+                </Routes>
+              </Suspense>
+            </main>
 
-          {/* Global sections — hidden on admin routes */}
-          {!isAdminRoute && <Subscribe />}
-          {!isAdminRoute && <Footer />}
-          <CookiePopup />
+            {/* Global sections — hidden on admin routes */}
+            {!isAdminRoute && <Subscribe />}
+            {!isAdminRoute && <Footer />}
+            <CookiePopup />
 
-        </HelmetProvider>
+          </HelmetProvider>
+        </NavigationProvider>
       </LanguageProvider>
     </MobileMenuProvider>
   );

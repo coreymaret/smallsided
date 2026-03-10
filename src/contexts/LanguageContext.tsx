@@ -1,6 +1,7 @@
 // LanguageContext.tsx
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { useLocation } from "react-router-dom";
 import i18n from "../i18n";
 
 interface LanguageContextType {
@@ -16,9 +17,22 @@ const LanguageContext = createContext<LanguageContextType>({
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+  const location = useLocation();
+
   const [isSpanish, setIsSpanish] = useState<boolean>(() => {
     return window.location.pathname.startsWith('/es');
   });
+
+  // URL is the single source of truth.
+  // Whenever the pathname changes, sync language state to match it.
+  // This replaces the external LanguageSyncer component.
+  useEffect(() => {
+    const shouldBeSpanish = location.pathname.startsWith('/es');
+    if (shouldBeSpanish !== isSpanish) {
+      setIsSpanish(shouldBeSpanish);
+      i18n.changeLanguage(shouldBeSpanish ? "es" : "en");
+    }
+  }, [location.pathname]);
 
   // Sync i18n with the initial language on mount
   useEffect(() => {

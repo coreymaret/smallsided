@@ -1,10 +1,11 @@
 // src/components/Blog/BlogPost.tsx
 
 import styles from './BlogPost.module.scss';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useNavigation } from '../../contexts/NavigationContext';
 import SEO from '../SEO/SEO';
 import MarkdownRenderer from '../MarkdownRenderer/MarkdownRenderer';
 import rehypeSlug from 'rehype-slug';
@@ -26,6 +27,7 @@ const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useTranslation();
   const { isSpanish } = useLanguage();
+  const { setLanguageToggle } = useNavigation();
   const language = isSpanish ? 'es' : 'en';
   const navigate = useNavigate();
 
@@ -34,27 +36,7 @@ const BlogPost: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(false);
-
-  // Track whether this is the initial mount or a language change
-  const isInitialMount = useRef(true);
-
-  // When language toggles, navigate to the correct URL for the same slug
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
-
-    if (!slug) return;
-
-    const targetUrl = isSpanish ? `/es/blog/${slug}` : `/blog/${slug}`;
-
-    // Only navigate if we're not already on the correct URL
-    if (window.location.pathname !== targetUrl) {
-      navigate(targetUrl, { replace: true });
-    }
-  }, [isSpanish]);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   // Load post content whenever slug or language changes
   useEffect(() => {
@@ -100,6 +82,19 @@ const BlogPost: React.FC = () => {
     loadPost();
   }, [slug, language]);
 
+  // When on an English blog post URL and language toggles to Spanish,
+  // navigate to the /es/blog/:slug URL (and vice versa).
+  // Uses setLanguageToggle so ScrollToTop skips the scroll.
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    const expectedPath = isSpanish ? `/es/blog/${slug}` : `/blog/${slug}`;
+
+    if (currentPath !== expectedPath) {
+      setLanguageToggle();
+      navigate(expectedPath, { replace: true });
+    }
+  }, [isSpanish]);
+
   useEffect(() => {
     const handleScroll = () => {
       const windowHeight = window.innerHeight;
@@ -107,7 +102,7 @@ const BlogPost: React.FC = () => {
       const scrollTop = window.scrollY;
       const trackLength = documentHeight - windowHeight;
       const progress = (scrollTop / trackLength) * 100;
-      setScrollProgress(Math.min(progress, 100) as any);
+      setScrollProgress(Math.min(progress, 100));
     };
 
     window.addEventListener('scroll', handleScroll);

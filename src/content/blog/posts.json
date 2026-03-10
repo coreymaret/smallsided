@@ -5,7 +5,10 @@
     "description": "Welcome to our blog! Learn what we'll be covering and how to stay updated.",
     "slug": "getting-started",
     "author": "Admin",
-    "tags": ["announcement", "welcome"],
+    "tags": [
+      "announcement",
+      "welcome"
+    ],
     "featured": true,
     "fileName": "2025-12-18-getting-started.md"
   },
@@ -15,7 +18,11 @@
     "description": "Lorem ipsum dolorat.",
     "slug": "this-is-cleanother-post",
     "author": "Admin",
-    "tags": ["tactical", "announcement", "welcome"],
+    "tags": [
+      "tactical",
+      "announcement",
+      "welcome"
+    ],
     "featured": false,
     "fileName": "2025-12-18-this-is-another-post.md"
   },
@@ -25,7 +32,12 @@
     "description": "Earlier post.",
     "slug": "this-is-an-earlier-post",
     "author": "Admin",
-    "tags": ["technical", "physical", "announcement", "welcome"],
+    "tags": [
+      "technical",
+      "physical",
+      "announcement",
+      "welcome"
+    ],
     "featured": false,
     "fileName": "2025-12-17-this-is-an-earlier-post.md"
   }
