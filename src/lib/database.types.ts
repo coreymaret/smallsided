@@ -26,6 +26,7 @@ export interface Database {
           participants: number | null
           total_amount: number
           payment_status: 'pending' | 'paid' | 'refunded' | 'failed'
+          booking_status: 'pending' | 'confirmed' | 'completed' | 'no_show' | 'cancelled'
           stripe_payment_intent_id: string | null
           stripe_charge_id: string | null
           metadata: Json
@@ -46,6 +47,7 @@ export interface Database {
           participants?: number | null
           total_amount: number
           payment_status?: 'pending' | 'paid' | 'refunded' | 'failed'
+          booking_status?: 'pending' | 'confirmed' | 'completed' | 'no_show' | 'cancelled'
           stripe_payment_intent_id?: string | null
           stripe_charge_id?: string | null
           metadata?: Json
@@ -70,6 +72,91 @@ export interface Database {
           stripe_charge_id?: string | null
           metadata?: Json
           special_requests?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      booking_notes: {
+        Row: {
+          id: string
+          booking_id: string
+          admin_user_id: string
+          note: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          booking_id: string
+          admin_user_id: string
+          note: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          booking_id?: string
+          admin_user_id?: string
+          note?: string
+          created_at?: string
+        }
+      }
+      training_registrations: {
+        Row: {
+          id: string
+          training_type: string
+          player_name: string
+          player_age: number
+          parent_name: string
+          parent_email: string
+          parent_phone: string
+          skill_level: string
+          focus_areas: string[]
+          preferred_days: string[]
+          preferred_time: string
+          additional_info: string | null
+          total_amount: number
+          status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
+          stripe_payment_intent_id: string | null
+          session_date: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          training_type: string
+          player_name: string
+          player_age: number
+          parent_name: string
+          parent_email: string
+          parent_phone: string
+          skill_level: string
+          focus_areas?: string[]
+          preferred_days?: string[]
+          preferred_time: string
+          additional_info?: string | null
+          total_amount: number
+          status?: 'pending' | 'confirmed' | 'cancelled' | 'completed'
+          stripe_payment_intent_id?: string | null
+          session_date?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          training_type?: string
+          player_name?: string
+          player_age?: number
+          parent_name?: string
+          parent_email?: string
+          parent_phone?: string
+          skill_level?: string
+          focus_areas?: string[]
+          preferred_days?: string[]
+          preferred_time?: string
+          additional_info?: string | null
+          total_amount?: number
+          status?: 'pending' | 'confirmed' | 'cancelled' | 'completed'
+          stripe_payment_intent_id?: string | null
+          session_date?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -334,37 +421,69 @@ export interface Database {
           updated_at?: string
         }
       }
+      locations: {
+        Row: {
+          id: string
+          name: string
+          address: string | null
+          timezone: string
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          address?: string | null
+          timezone?: string
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          address?: string | null
+          timezone?: string
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
       admin_users: {
         Row: {
           id: string
           email: string
-          role: 'super_admin' | 'admin' | 'staff'
+          role: 'super_admin' | 'manager' | 'staff' | 'readonly'
           full_name: string
           phone: string | null
           is_active: boolean
           last_login: string | null
+          location_id: string | null
           created_at: string
           updated_at: string
         }
         Insert: {
           id?: string
           email: string
-          role?: 'super_admin' | 'admin' | 'staff'
+          role?: 'super_admin' | 'manager' | 'staff' | 'readonly'
           full_name: string
           phone?: string | null
           is_active?: boolean
           last_login?: string | null
+          location_id?: string | null
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
           email?: string
-          role?: 'super_admin' | 'admin' | 'staff'
+          role?: 'super_admin' | 'manager' | 'staff' | 'readonly'
           full_name?: string
           phone?: string | null
           is_active?: boolean
           last_login?: string | null
+          location_id?: string | null
           created_at?: string
           updated_at?: string
         }

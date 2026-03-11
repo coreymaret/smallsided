@@ -11,15 +11,10 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [validationErrors, setValidationErrors] = useState<{
-    email?: string;
-  }>({});
+  const [validationErrors, setValidationErrors] = useState<{ email?: string }>({});
 
-  // Validation function
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const validateEmail = (email: string): boolean =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,52 +22,50 @@ const AdminLogin = () => {
     setIsLoading(true);
 
     try {
-      console.log('🔐 Starting login for:', email);
-      
-      // Sign in with Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      console.log('✅ Auth response:', { authData, authError });
+      if (authError) throw new Error(authError.message);
+      if (!authData.user || !authData.session) throw new Error('Login failed. Please try again.');
 
-      if (authError) {
-        throw new Error(authError.message);
-      }
+      await supabase.auth.setSession({
+        access_token: authData.session.access_token,
+        refresh_token: authData.session.refresh_token,
+      });
 
-      console.log('👤 Checking admin status for:', email);
+      console.log('Auth user id:', authData.user.id);
+      console.log('Auth user email:', authData.user.email);
 
-      // Verify user is an admin
+      const { data: testQuery, error: testError } = await supabase
+        .from('admin_users')
+        .select('id, email, role')
+        .eq('id', authData.user.id);
+
+      console.log('Test query result:', testQuery);
+      console.log('Test query error:', testError);
+
       const { data: adminUser, error: adminError } = await supabase
         .from('admin_users')
-        .select('*')
-        .eq('email', email)
+        .select('id, role, is_active')
+        .eq('id', authData.user.id)
         .eq('is_active', true)
         .maybeSingle();
 
-      console.log('📋 Admin query result:', { adminUser, adminError });
-
       if (adminError) {
-        console.error('❌ Admin query error:', adminError);
         await supabase.auth.signOut();
-        throw new Error(`Database error: ${adminError.message}`);
+        throw new Error('Unable to verify admin access. Please try again.');
       }
 
       if (!adminUser) {
-        console.error('❌ No admin user found for:', email);
         await supabase.auth.signOut();
-        throw new Error('You do not have admin access');
+        throw new Error('You do not have admin access.');
       }
 
-      console.log('✅ Admin user found:', adminUser);
-      console.log('🎉 Login successful! Redirecting to /admin');
-      
-      // Redirect to admin dashboard
       navigate('/admin');
     } catch (err) {
-      console.error('💥 Login error:', err);
-      setError(err instanceof Error ? err.message : 'Login failed');
+      setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -81,8 +74,6 @@ const AdminLogin = () => {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     setEmail(newEmail);
-    
-    // Clear error if email becomes valid
     if (validationErrors.email && validateEmail(newEmail)) {
       setValidationErrors(prev => ({ ...prev, email: undefined }));
     }
@@ -102,7 +93,7 @@ const AdminLogin = () => {
             <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
           </div>
         </div>
-        
+
         <div className={styles.cardContent}>
           <div className={styles.header}>
             <h2 className={styles.title}>Admin Login</h2>
@@ -153,8 +144,8 @@ const AdminLogin = () => {
               </label>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={styles.submitButton}
               disabled={isLoading}
             >

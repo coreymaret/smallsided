@@ -1,0 +1,28 @@
+// AdminTraining.module.scss
+// Styles specific to the training registrations page and detail modal.
+// Modal chrome (overlay, header, content, detailGrid etc.) lives in AdminTable.module.scss
+// and is imported directly from there.
+
+// Sub-text under player name (age)
+.subText {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  margin-top: 0.125rem;
+}
+
+// Parent cell contact lines
+.parentCell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contactLine {
+  font-size: 0.8125rem;
+  color: #6b7280;
+
+  // Shrink the icon inside CellWithIcon when used here
+  svg {
+    color: #9ca3af;
+  }
+}

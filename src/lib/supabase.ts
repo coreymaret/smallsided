@@ -43,25 +43,21 @@ export const signOut = async () => {
 };
 
 // Helper function to get current admin user
+// Queries by auth.uid() (id) not email — required for RLS to resolve correctly.
+// The RLS policy is: auth.uid() = id, so the query must filter by id.
 export const getCurrentAdmin = async (): Promise<AdminUser | null> => {
-  // First check if user is authenticated
   const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user || !user.email) {
-    return null;
-  }
 
-  // Get admin record from admin_users table
+  if (!user) return null;
+
   const { data: adminUser, error } = await supabase
     .from('admin_users')
     .select('*')
-    .eq('email', user.email)
+    .eq('id', user.id)        // ← use id, not email
     .eq('is_active', true)
     .single();
 
-  if (error || !adminUser) {
-    return null;
-  }
+  if (error || !adminUser) return null;
 
   return adminUser;
 };

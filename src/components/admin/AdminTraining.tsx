@@ -1,8 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useDateFilter } from '../../hooks/useDateFilter';
+import DateFilterBar from './shared/DateFilterBar';
 import { supabase } from '../../lib/supabase';
+import { useAdmin } from '../../contexts/AdminContext';
 import { Calendar, Target, User, Shield, Mail, Phone } from '../../components/Icons/Icons';
 import AdminDataTable, { type Column } from './shared/AdminDataTable';
-import { CellWithIcon, ArrayCell, StatusBadge } from './shared/TableCells';
+import { CellWithIcon, ArrayCell, StatusBadge, InlineStatusBadge, type BookingStatus as InlineStatus } from './shared/TableCells';
+import BookingDrawer, { type DrawerBooking, type BookingStatus } from './shared/BookingDrawer';
+import ToastContainer from '../Toast/ToastContainer';
+import { useToast } from '../../hooks/useToast';
+import styles from './AdminTraining.module.scss';
 
 interface TrainingRegistration {
   id: string;
@@ -23,98 +30,124 @@ interface TrainingRegistration {
   stripe_payment_intent_id: string;
 }
 
+const formatTrainingType = (type: string) => {
+  const types: Record<string, string> = {
+    individual: 'Individual',
+    'small-group': 'Small Group',
+    'position-specific': 'Position-Specific',
+  };
+  return types[type] || type;
+};
+
+const formatSkillLevel = (level: string) =>
+  level ? level.charAt(0).toUpperCase() + level.slice(1) : level;
+
+const formatFocusAreas = (areas: string[]) => {
+  const areaLabels: Record<string, string> = {
+    'ball-control': 'Ball Control',
+    shooting: 'Shooting',
+    passing: 'Passing',
+    dribbling: 'Dribbling',
+    defense: 'Defense',
+    fitness: 'Fitness',
+  };
+  return (areas || []).map(a => areaLabels[a] || a);
+};
+
+const formatDays = (days: string[]) => {
+  const dayLabels: Record<string, string> = {
+    monday: 'Mon', tuesday: 'Tue', wednesday: 'Wed',
+    thursday: 'Thu', friday: 'Fri', saturday: 'Sat', sunday: 'Sun',
+  };
+  return (days || []).map(d => dayLabels[d] || d);
+};
+
+const formatTime = (time: string) => {
+  const times: Record<string, string> = {
+    morning: 'Morning (8AM–12PM)',
+    afternoon: 'Afternoon (12PM–5PM)',
+    evening: 'Evening (5PM–8PM)',
+  };
+  return times[time] || time;
+};
+
 const AdminTraining = () => {
+  const { admin, can } = useAdmin();
   const [registrations, setRegistrations] = useState<TrainingRegistration[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedRegistration, setSelectedRegistration] = useState<TrainingRegistration | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<DrawerBooking | null>(null);
+  const { toasts, showToast, removeToast } = useToast();
+  const { preset, range, setPreset } = useDateFilter('all');
 
-  useEffect(() => {
-    fetchRegistrations();
-  }, []);
-
-  // Prevent body scroll when modal is open
-  useEffect(() => {
-    if (selectedRegistration) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-    } else {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    };
-  }, [selectedRegistration]);
+  useEffect(() => { fetchRegistrations(); }, [range.from, range.to]);
 
   const fetchRegistrations = async () => {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('training_registrations')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching training registrations:', error);
-      } else {
-        setRegistrations(data || []);
-      }
-    } catch (error) {
-      console.error('Error:', error);
+        .select('*');
+      if (range.from) query = (query as any).gte('created_at', range.from);
+      if (range.to)   query = (query as any).lte('created_at', range.to + 'T23:59:59');
+      const { data, error } = await (query as any).order('created_at', { ascending: false });
+      if (error) throw error;
+      setRegistrations(data || []);
+    } catch (err) {
+      console.error('Error fetching training registrations:', err);
+      showToast('Failed to load training registrations.', 'error');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const formatTrainingType = (type: string) => {
-    const types: Record<string, string> = {
-      individual: 'Individual',
-      'small-group': 'Small Group',
-      'position-specific': 'Position-Specific',
-    };
-    return types[type] || type;
+  const handleStatusChange = useCallback((regId: string, newStatus: BookingStatus) => {
+    setRegistrations(prev => prev.map(r => r.id === regId ? { ...r, status: newStatus } : r));
+    setSelectedBooking(prev => prev?.id === regId ? { ...prev, booking_status: newStatus } : prev);
+  }, []);
+
+  const handleInlineStatusChange = async (regId: string, newStatus: InlineStatus) => {
+    setRegistrations(prev =>
+      prev.map(r => r.id === regId ? { ...r, status: newStatus } : r)
+    );
+    const { error } = await (supabase as any)
+      .from('training_registrations')
+      .update({ status: newStatus })
+      .eq('id', regId);
+    if (error) {
+      fetchRegistrations();
+      showToast('Failed to update status.', 'error');
+    } else {
+      showToast(`Status updated to ${newStatus.replace('_', ' ')}`, 'success');
+    }
   };
 
-  const formatSkillLevel = (level: string) => {
-    return level.charAt(0).toUpperCase() + level.slice(1);
-  };
-
-  const formatFocusAreas = (areas: string[]) => {
-    const areaLabels: Record<string, string> = {
-      'ball-control': 'Ball Control',
-      shooting: 'Shooting',
-      passing: 'Passing',
-      dribbling: 'Dribbling',
-      defense: 'Defense',
-      fitness: 'Fitness',
-    };
-    return areas.map((a) => areaLabels[a] || a);
-  };
-
-  const formatDays = (days: string[]) => {
-    const dayLabels: Record<string, string> = {
-      monday: 'Mon',
-      tuesday: 'Tue',
-      wednesday: 'Wed',
-      thursday: 'Thu',
-      friday: 'Fri',
-      saturday: 'Sat',
-      sunday: 'Sun',
-    };
-    return days.map((d) => dayLabels[d] || d);
-  };
-
-  const formatTime = (time: string) => {
-    const times: Record<string, string> = {
-      morning: 'Morning (8AM-12PM)',
-      afternoon: 'Afternoon (12PM-5PM)',
-      evening: 'Evening (5PM-8PM)',
-    };
-    return times[time] || time;
+  const handleRowClick = (r: TrainingRegistration) => {
+    setSelectedBooking({
+      id: r.id,
+      booking_type: 'training',
+      customer_name: r.parent_name,
+      customer_email: r.parent_email,
+      customer_phone: r.parent_phone,
+      booking_date: r.created_at.split('T')[0],
+      start_time: null,
+      end_time: null,
+      field_id: null,
+      participants: null,
+      total_amount: r.total_amount,
+      payment_status: 'paid', // training registrations go through Stripe
+      booking_status: (r.status as BookingStatus) ?? 'pending',
+      special_requests: r.additional_info,
+      metadata: {
+        player_name: r.player_name,
+        player_age: r.player_age,
+        training_type: formatTrainingType(r.training_type),
+        skill_level: formatSkillLevel(r.skill_level),
+        focus_areas: formatFocusAreas(r.focus_areas).join(', '),
+        preferred_days: formatDays(r.preferred_days).join(', '),
+        preferred_time: formatTime(r.preferred_time),
+      },
+      created_at: r.created_at,
+      stripe_payment_intent_id: r.stripe_payment_intent_id,
+    });
   };
 
   const columns: Column<TrainingRegistration>[] = [
@@ -135,7 +168,7 @@ const AdminTraining = () => {
         <CellWithIcon icon={User}>
           <div>
             <div>{value}</div>
-            <div style={{ fontSize: '0.85em', color: '#666' }}>{row.player_age} yrs</div>
+            <div className={styles.subText}>{row.player_age} yrs</div>
           </div>
         </CellWithIcon>
       ),
@@ -144,21 +177,13 @@ const AdminTraining = () => {
     {
       header: 'Training Type',
       accessor: 'training_type',
-      cell: (value) => (
-        <CellWithIcon icon={Target}>
-          {formatTrainingType(value)}
-        </CellWithIcon>
-      ),
+      cell: (value) => <CellWithIcon icon={Target}>{formatTrainingType(value)}</CellWithIcon>,
       exportFormatter: (value) => formatTrainingType(value),
     },
     {
       header: 'Skill Level',
       accessor: 'skill_level',
-      cell: (value) => (
-        <CellWithIcon icon={Shield}>
-          {formatSkillLevel(value)}
-        </CellWithIcon>
-      ),
+      cell: (value) => <CellWithIcon icon={Shield}>{formatSkillLevel(value)}</CellWithIcon>,
       exportFormatter: (value) => formatSkillLevel(value),
     },
     {
@@ -171,22 +196,18 @@ const AdminTraining = () => {
       header: 'Parent',
       accessor: 'parent_name',
       cell: (value, row) => (
-        <div>
+        <div className={styles.parentCell}>
           <div>{value}</div>
-          <div style={{ fontSize: '0.85em', color: '#666' }}>
-            <CellWithIcon icon={Mail} iconSize={12}>
-              {row.parent_email}
-            </CellWithIcon>
+          <div className={styles.contactLine}>
+            <CellWithIcon icon={Mail} iconSize={12}>{row.parent_email}</CellWithIcon>
           </div>
-          <div style={{ fontSize: '0.85em', color: '#666' }}>
-            <CellWithIcon icon={Phone} iconSize={12}>
-              {row.parent_phone}
-            </CellWithIcon>
+          <div className={styles.contactLine}>
+            <CellWithIcon icon={Phone} iconSize={12}>{row.parent_phone}</CellWithIcon>
           </div>
         </div>
       ),
       sortable: false,
-      exportFormatter: (value, row) => `${value} - ${row.parent_email} - ${row.parent_phone}`,
+      exportFormatter: (value, row) => `${value} — ${row.parent_email} — ${row.parent_phone}`,
     },
     {
       header: 'Preferred Days',
@@ -203,18 +224,27 @@ const AdminTraining = () => {
     {
       header: 'Amount',
       accessor: 'total_amount',
-      cell: (value) => `$${value}`,
-      exportFormatter: (value) => `$${value}`,
+      cell: (value) => `$${Number(value).toFixed(2)}`,
+      exportFormatter: (value) => `$${Number(value).toFixed(2)}`,
     },
     {
       header: 'Status',
       accessor: 'status',
-      cell: (value) => <StatusBadge status={value} />,
+      cell: (value, row) => (
+        <InlineStatusBadge
+          status={value ?? 'pending'}
+          onStatusChange={can('change_booking_status') ? (newStatus) => {
+            handleInlineStatusChange(row.id, newStatus);
+          } : undefined}
+        />
+      ),
+      sortable: false,
     },
   ];
 
   return (
     <>
+      <DateFilterBar preset={preset} onChange={setPreset} resultCount={registrations.length} />
       <AdminDataTable
         data={registrations}
         columns={columns}
@@ -230,8 +260,8 @@ const AdminTraining = () => {
             label: 'All Training Types',
             field: 'training_type',
             options: [
-              { label: 'Individual', value: 'individual' },
-              { label: 'Small Group', value: 'small-group' },
+              { label: 'Individual',        value: 'individual'        },
+              { label: 'Small Group',       value: 'small-group'       },
               { label: 'Position-Specific', value: 'position-specific' },
             ],
           },
@@ -239,9 +269,9 @@ const AdminTraining = () => {
             label: 'All Skill Levels',
             field: 'skill_level',
             options: [
-              { label: 'Beginner', value: 'beginner' },
+              { label: 'Beginner',     value: 'beginner'     },
               { label: 'Intermediate', value: 'intermediate' },
-              { label: 'Advanced', value: 'advanced' },
+              { label: 'Advanced',     value: 'advanced'     },
             ],
           },
           {
@@ -249,7 +279,7 @@ const AdminTraining = () => {
             field: 'status',
             options: [
               { label: 'Confirmed', value: 'confirmed' },
-              { label: 'Pending', value: 'pending' },
+              { label: 'Pending',   value: 'pending'   },
               { label: 'Cancelled', value: 'cancelled' },
               { label: 'Completed', value: 'completed' },
             ],
@@ -257,101 +287,19 @@ const AdminTraining = () => {
         ]}
         loading={isLoading}
         emptyMessage="No training registrations found"
-        onRowClick={(row) => setSelectedRegistration(row)}
+        onRowClick={handleRowClick}
       />
-
-      {/* Modal for detailed view */}
-      {selectedRegistration && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-          }}
-          onClick={() => setSelectedRegistration(null)}
-        >
-          <div
-            style={{
-              backgroundColor: 'white',
-              padding: '2rem',
-              borderRadius: '8px',
-              maxWidth: '600px',
-              maxHeight: '80vh',
-              overflow: 'auto',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2>Training Registration Details</h2>
-            <div style={{ marginTop: '1rem' }}>
-              <p>
-                <strong>Player:</strong> {selectedRegistration.player_name} (
-                {selectedRegistration.player_age} yrs)
-              </p>
-              <p>
-                <strong>Training Type:</strong>{' '}
-                {formatTrainingType(selectedRegistration.training_type)}
-              </p>
-              <p>
-                <strong>Skill Level:</strong>{' '}
-                {formatSkillLevel(selectedRegistration.skill_level)}
-              </p>
-              <p>
-                <strong>Focus Areas:</strong>{' '}
-                {formatFocusAreas(selectedRegistration.focus_areas).join(', ')}
-              </p>
-              <p>
-                <strong>Parent:</strong> {selectedRegistration.parent_name}
-              </p>
-              <p>
-                <strong>Email:</strong> {selectedRegistration.parent_email}
-              </p>
-              <p>
-                <strong>Phone:</strong> {selectedRegistration.parent_phone}
-              </p>
-              <p>
-                <strong>Preferred Days:</strong>{' '}
-                {formatDays(selectedRegistration.preferred_days).join(', ')}
-              </p>
-              <p>
-                <strong>Preferred Time:</strong>{' '}
-                {formatTime(selectedRegistration.preferred_time)}
-              </p>
-              {selectedRegistration.additional_info && (
-                <p>
-                  <strong>Additional Info:</strong> {selectedRegistration.additional_info}
-                </p>
-              )}
-              <p>
-                <strong>Amount:</strong> ${selectedRegistration.total_amount}
-              </p>
-              <p>
-                <strong>Status:</strong> {selectedRegistration.status}
-              </p>
-            </div>
-            <button
-              onClick={() => setSelectedRegistration(null)}
-              style={{
-                marginTop: '1rem',
-                padding: '0.5rem 1rem',
-                backgroundColor: '#15141a',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+      <BookingDrawer
+        booking={selectedBooking}
+        onClose={() => setSelectedBooking(null)}
+        onStatusChange={handleStatusChange}
+        showToast={showToast}
+        canChangeStatus={can('change_booking_status')}
+        canAddNotes={can('add_booking_notes')}
+        adminName={admin?.full_name ?? ''}
+        adminId={admin?.id ?? ''}
+      />
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </>
   );
 };

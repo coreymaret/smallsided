@@ -1,0 +1,68 @@
+// DateFilterBar.module.scss
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 0 1rem;
+  flex-wrap: wrap;
+}
+
+.presets {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.preset {
+  padding: 0.375rem 0.875rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  background: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: #15141a;
+    color: #15141a;
+  }
+}
+
+.active {
+  background: #15141a;
+  border-color: #15141a;
+  color: #98ED66;
+
+  &:hover {
+    background: #15141a;
+    color: #98ED66;
+  }
+}
+
+.count {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .bar {
+    padding: 0 0.5rem 1rem;
+  }
+
+  .preset {
+    padding: 0.3125rem 0.625rem;
+    font-size: 0.8125rem;
+  }
+
+  .count {
+    display: none;
+  }
+}

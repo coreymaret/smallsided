@@ -1,8 +1,8 @@
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import {  
+import {
   Calendar,
-  Trophy, 
+  Trophy,
   Users,
   Cake,
   ChartNoAxesCombined,
@@ -12,55 +12,58 @@ import {
   X,
   Home,
   User,
-  Settings
+  Settings,
+  Search,
+  CalendarDays
 } from '../../components/Icons/Icons';
-import { getCurrentAdmin, signOut } from '../../lib/supabase';
-import type { Database } from '../../lib/database.types';
-import Logo from '../../assets/logo.svg';
-import Footer from '../Footer/Footer';
+import { supabase } from '../../lib/supabase';
+import { useAdmin } from '../../contexts/AdminContext';
 import { useMobileMenu } from '../../contexts/MobileMenuContext';
+import Logo from '../../assets/logo.svg';
 import styles from './AdminLayout.module.scss';
+import { lazy, Suspense } from 'react';
+const AdminGlobalSearch = lazy(() => import('./AdminGlobalSearch'));
 
-type AdminUser = Database['public']['Tables']['admin_users']['Row'];
+const ROLE_STYLES: Record<string, { label: string; bg: string; color: string }> = {
+  super_admin: { label: 'Super Admin', bg: '#15141a', color: '#98ED66' },
+  manager:     { label: 'Manager',     bg: '#1e3a5f', color: '#93c5fd' },
+  staff:       { label: 'Staff',       bg: '#1a2e1a', color: '#86efac' },
+  readonly:    { label: 'Read Only',   bg: '#3b1f1f', color: '#fca5a5' },
+};
 
 const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isHeaderMenuOpen } = useMobileMenu();
-  const [admin, setAdmin] = useState<AdminUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { admin, isLoading, can } = useAdmin();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropup, setActiveDropup] = useState<string | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  // Close dropup when route changes
   useEffect(() => {
     setActiveDropup(null);
   }, [location.pathname]);
 
-  const checkAuth = async () => {
-    try {
-      const currentAdmin = await getCurrentAdmin();
-      
-      if (!currentAdmin) {
-        navigate('/admin/login');
-        return;
-      }
-
-      setAdmin(currentAdmin);
-    } catch (error) {
-      console.error('Auth error:', error);
+  useEffect(() => {
+    if (!isLoading && !admin) {
       navigate('/admin/login');
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, [admin, isLoading, navigate]);
+
+  // Cmd+K / Ctrl+K opens global search
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen(o => !o);
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, []);
 
   const handleSignOut = async () => {
-    await signOut();
+    await supabase.auth.signOut();
     navigate('/admin/login');
   };
 
@@ -68,17 +71,15 @@ const AdminLayout = () => {
     setActiveDropup(activeDropup === menu ? null : menu);
   };
 
-  const isBookingsActive = () => {
-    return location.pathname.includes('/admin/field-rentals') ||
-           location.pathname.includes('/admin/pickup') ||
-           location.pathname.includes('/admin/birthday-parties');
-  };
+  const isBookingsActive = () =>
+    location.pathname.includes('/admin/field-rentals') ||
+    location.pathname.includes('/admin/pickup') ||
+    location.pathname.includes('/admin/birthday-parties');
 
-  const isProgramsActive = () => {
-    return location.pathname.includes('/admin/leagues') ||
-           location.pathname.includes('/admin/camps') ||
-           location.pathname.includes('/admin/training');
-  };
+  const isProgramsActive = () =>
+    location.pathname.includes('/admin/leagues') ||
+    location.pathname.includes('/admin/camps') ||
+    location.pathname.includes('/admin/training');
 
   if (isLoading) {
     return (
@@ -89,35 +90,41 @@ const AdminLayout = () => {
     );
   }
 
+  if (!admin) return null;
+
+  const roleStyle = ROLE_STYLES[admin.role] ?? ROLE_STYLES.staff;
+
   const navItems = [
-    { path: '/admin', label: 'Dashboard', icon: Home, end: true },
-    { path: '/admin/field-rentals', label: 'Field Rentals', icon: Calendar },
-    { path: '/admin/leagues', label: 'Leagues', icon: Trophy },
-    { path: '/admin/pickup', label: 'Pickup Games', icon: Users },
-    { path: '/admin/birthday-parties', label: 'Birthday Parties', icon: Cake },
-    { path: '/admin/training', label: 'Training', icon: ChartNoAxesCombined },
-    { path: '/admin/camps', label: 'Camps', icon: Smile },
+    { path: '/admin',                  label: 'Dashboard',        icon: Home,                end: true  },
+    { path: '/admin/schedule',           label: 'Schedule',         icon: CalendarDays,          end: false },
+    { path: '/admin/staff',              label: 'Staff',            icon: Users,               end: false },
+    { path: '/admin/time-off',           label: 'Time Off',         icon: Calendar,            end: false },
+    { path: '/admin/field-rentals',    label: 'Field Rentals',    icon: Calendar,            end: false },
+    { path: '/admin/leagues',          label: 'Leagues',          icon: Trophy,              end: false },
+    { path: '/admin/pickup',           label: 'Pickup Games',     icon: Users,               end: false },
+    { path: '/admin/birthday-parties', label: 'Birthday Parties', icon: Cake,                end: false },
+    { path: '/admin/training',         label: 'Training',         icon: ChartNoAxesCombined, end: false },
+    { path: '/admin/camps',            label: 'Camps',            icon: Smile,               end: false },
   ];
 
   const bookingsItems = [
-    { path: '/admin/field-rentals', label: 'Field Rentals', icon: Calendar },
-    { path: '/admin/pickup', label: 'Pickup', icon: Users },
-    { path: '/admin/birthday-parties', label: 'Birthday Parties', icon: Cake },
+    { path: '/admin/field-rentals',    label: 'Field Rentals',    icon: Calendar },
+    { path: '/admin/pickup',           label: 'Pickup',           icon: Users    },
+    { path: '/admin/birthday-parties', label: 'Birthday Parties', icon: Cake     },
   ];
 
   const programsItems = [
-    { path: '/admin/leagues', label: 'Leagues', icon: Trophy },
-    { path: '/admin/camps', label: 'Camps', icon: Smile },
-    { path: '/admin/training', label: 'Training', icon: ChartNoAxesCombined },
+    { path: '/admin/leagues',  label: 'Leagues',  icon: Trophy               },
+    { path: '/admin/camps',    label: 'Camps',    icon: Smile                },
+    { path: '/admin/training', label: 'Training', icon: ChartNoAxesCombined  },
   ];
 
   return (
     <div className={styles.adminLayout}>
-      {/* Sidebar */}
       <aside className={`${styles.sidebar} ${isMobileMenuOpen ? styles.open : ''}`}>
         <div className={styles.sidebarHeader}>
           <img src={Logo} alt="Small Sided Logo" className={styles.logo} width="160" height="36" />
-          <button 
+          <button
             className={styles.mobileMenuClose}
             onClick={() => setIsMobileMenuOpen(false)}
             aria-label="Close menu"
@@ -132,7 +139,7 @@ const AdminLayout = () => {
               key={item.path}
               to={item.path}
               end={item.end}
-              className={({ isActive }) => 
+              className={({ isActive }) =>
                 `${styles.navItem} ${isActive ? styles.active : ''}`
               }
               onClick={() => setIsMobileMenuOpen(false)}
@@ -141,31 +148,54 @@ const AdminLayout = () => {
               <span>{item.label}</span>
             </NavLink>
           ))}
+          {can('manage_settings') && (
+            <NavLink
+              to="/admin/settings"
+              className={({ isActive }) =>
+                `${styles.navItem} ${isActive ? styles.active : ''}`
+              }
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <Settings size={20} />
+              <span>Settings</span>
+            </NavLink>
+          )}
         </nav>
+
+        {/* Search shortcut button */}
+        <button
+          className={styles.searchTrigger}
+          onClick={() => setSearchOpen(true)}
+          aria-label="Global search"
+        >
+          <Search size={16} />
+          <span>Search</span>
+          <kbd className={styles.searchKbd}>⌘K</kbd>
+        </button>
 
         <div className={styles.sidebarFooter}>
           <div className={styles.userInfo}>
             <div className={styles.avatar}>
-              {admin?.full_name.charAt(0).toUpperCase()}
+              {admin.full_name.charAt(0).toUpperCase()}
             </div>
             <div className={styles.userDetails}>
-              <p className={styles.userName}>{admin?.full_name}</p>
-              <p className={styles.userRole}>{admin?.role.replace('_', ' ')}</p>
+              <p className={styles.userName}>{admin.full_name}</p>
+              <span
+                className={styles.roleBadge}
+                style={{ backgroundColor: roleStyle.bg, color: roleStyle.color }}
+              >
+                {roleStyle.label}
+              </span>
             </div>
           </div>
-          
-          <button 
-            className={styles.signOutButton}
-            onClick={handleSignOut}
-          >
+          <button className={styles.signOutButton} onClick={handleSignOut}>
             <LogOut size={18} />
             <span>Sign Out</span>
           </button>
         </div>
       </aside>
 
-      {/* Mobile Menu Button */}
-      <button 
+      <button
         className={styles.mobileMenuButton}
         onClick={() => setIsMobileMenuOpen(true)}
         aria-label="Open menu"
@@ -173,25 +203,15 @@ const AdminLayout = () => {
         <Menu size={24} />
       </button>
 
-      {/* Main Content */}
       <main className={styles.mainContent}>
-        <div>
-          <Outlet />
-        </div>
-        <Footer />
+        <Outlet />
       </main>
 
-      {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div 
-          className={styles.overlay}
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
+        <div className={styles.overlay} onClick={() => setIsMobileMenuOpen(false)} />
       )}
 
-      {/* Mobile Bottom Navigation */}
       <nav className={`${styles.mobileBottomNav} ${isHeaderMenuOpen ? styles.hidden : ''}`}>
-        {/* Dashboard */}
         <div className={styles.navButtonWrapper}>
           <button
             className={`${styles.navButton} ${location.pathname === '/admin' ? styles.active : ''}`}
@@ -202,7 +222,6 @@ const AdminLayout = () => {
           </button>
         </div>
 
-        {/* Bookings */}
         <div className={styles.navButtonWrapper}>
           {activeDropup === 'bookings' && (
             <div className={styles.dropup}>
@@ -210,7 +229,7 @@ const AdminLayout = () => {
                 <button
                   key={item.path}
                   className={styles.dropupItem}
-                  onClick={() => navigate(item.path)}
+                  onClick={() => { navigate(item.path); setActiveDropup(null); }}
                 >
                   <item.icon size={20} />
                   <span>{item.label}</span>
@@ -227,7 +246,6 @@ const AdminLayout = () => {
           </button>
         </div>
 
-        {/* Programs */}
         <div className={styles.navButtonWrapper}>
           {activeDropup === 'programs' && (
             <div className={styles.dropup}>
@@ -235,7 +253,7 @@ const AdminLayout = () => {
                 <button
                   key={item.path}
                   className={styles.dropupItem}
-                  onClick={() => navigate(item.path)}
+                  onClick={() => { navigate(item.path); setActiveDropup(null); }}
                 >
                   <item.icon size={20} />
                   <span>{item.label}</span>
@@ -252,36 +270,40 @@ const AdminLayout = () => {
           </button>
         </div>
 
-        {/* Profile */}
         <div className={styles.navButtonWrapper}>
           {activeDropup === 'profile' && (
             <div className={styles.dropup}>
-              <button className={styles.dropupItem} onClick={() => navigate('/admin/settings')}>
-                <Settings size={20} />
-                <span>Settings</span>
-              </button>
+              {can('manage_settings') && (
+                <button
+                  className={styles.dropupItem}
+                  onClick={() => { navigate('/admin/settings'); setActiveDropup(null); }}
+                >
+                  <Settings size={20} />
+                  <span>Settings</span>
+                </button>
+              )}
               <button className={styles.dropupItem} onClick={handleSignOut}>
                 <LogOut size={20} />
                 <span>Sign Out</span>
               </button>
             </div>
           )}
-          <button
-            className={styles.navButton}
-            onClick={() => toggleDropup('profile')}
-          >
+          <button className={styles.navButton} onClick={() => toggleDropup('profile')}>
             <User size={24} />
             <span>Profile</span>
           </button>
         </div>
       </nav>
 
-      {/* Dropup Overlay */}
       {activeDropup && (
-        <div 
-          className={styles.dropupOverlay}
-          onClick={() => setActiveDropup(null)}
-        />
+        <div className={styles.dropupOverlay} onClick={() => setActiveDropup(null)} />
+      )}
+
+      {/* Global Search Palette */}
+      {searchOpen && (
+        <Suspense fallback={null}>
+          <AdminGlobalSearch onClose={() => setSearchOpen(false)} />
+        </Suspense>
       )}
     </div>
   );

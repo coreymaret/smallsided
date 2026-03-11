@@ -633,3 +633,189 @@
     padding: 0;
   }
 }
+
+// ─── Missing classes referenced by AdminDataTable + TableCells ───────────────
+
+// statusPaid alias — TableCells.tsx references this; statusConfirmed is the
+// actual class in the SCSS above, so we alias it here for backwards compat.
+.statusPaid {
+  background: #dcfce7;
+  color: #166534;
+}
+
+// Cell with icon layout (used by CellWithIcon in TableCells.tsx)
+.cellWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg {
+    color: #15141a;
+    flex-shrink: 0;
+  }
+}
+
+// Phone number sub-text in ContactCell
+.phoneNumber {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+// Active sort icon (column currently sorted)
+.sortIconActive {
+  color: #98ED66;
+  flex-shrink: 0;
+}
+
+// Empty table state
+.noData {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+  font-style: italic;
+  font-size: 0.9375rem;
+}
+
+// Filters row (wraps search + filter selects)
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+// Individual filter <select>
+.filterSelect {
+  padding: 0.625rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: #15141a;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  min-width: 160px;
+
+  &:focus {
+    outline: none;
+    border-color: #98ED66;
+  }
+}
+
+// Export CSV button
+.exportButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: #15141a;
+  color: #98ED66;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background: #98ED66;
+    color: #15141a;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// Clickable table rows
+.clickableRow {
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0fdf4 !important;
+  }
+}
+
+// Sortable column header
+.sortable {
+  cursor: pointer;
+  user-select: none;
+
+  &:hover .headerCell {
+    color: #98ED66;
+  }
+}
+
+// ─── Inline Status Badge ──────────────────────────────────────────────────────
+
+.inlineStatusWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.inlineStatusBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 16px;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  // The chevron sits outside the badge pill
+  svg {
+    color: #6b7280;
+    flex-shrink: 0;
+  }
+}
+
+.inlineStatusChevron {
+  color: #6b7280;
+}
+
+.inlineStatusPopover {
+  // position and coordinates are set via inline style (fixed positioning)
+  // to prevent overflow in any scroll context or table position
+  z-index: 9000;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  animation: fadeIn 0.12s ease;
+}
+
+.inlineStatusOption {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.5rem 0.875rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+
+  &:hover {
+    background: #f8f9fa;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #f3f4f6;
+  }
+}
+
+.inlineStatusLabel {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+}

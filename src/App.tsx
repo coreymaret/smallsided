@@ -9,6 +9,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { MobileMenuProvider } from './contexts/MobileMenuContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { NavigationProvider } from './contexts/NavigationContext';
+import { AdminProvider } from './contexts/AdminContext';
 
 // Layout Components
 import Header from './components/Header/Header';
@@ -38,21 +39,19 @@ const CookiePolicy    = lazy(() => import('./pages/CookiePolicy/CookiePolicy'));
 const NotFound        = lazy(() => import('./pages/NotFound/NotFound'));
 
 // ─── Lazy-Loaded Admin Pages ───
-const AdminLogin          = lazy(() => import('./components/admin/AdminLogin'));
-const AdminLayout         = lazy(() => import('./components/admin/AdminLayout'));
-const AdminDashboard      = lazy(() => import('./components/admin/AdminDashboard'));
-const AdminFieldRentals   = lazy(() => import('./components/admin/AdminFieldRentals'));
-const AdminLeagues        = lazy(() => import('./components/admin/AdminLeagues'));
-const AdminPickup         = lazy(() => import('./components/admin/AdminPickup'));
+const AdminLogin           = lazy(() => import('./components/admin/AdminLogin'));
+const AdminLayout          = lazy(() => import('./components/admin/AdminLayout'));
+const AdminDashboard       = lazy(() => import('./components/admin/AdminDashboard'));
+const AdminFieldRentals    = lazy(() => import('./components/admin/AdminFieldRentals'));
+const AdminLeagues         = lazy(() => import('./components/admin/AdminLeagues'));
+const AdminPickup          = lazy(() => import('./components/admin/AdminPickup'));
 const AdminBirthdayParties = lazy(() => import('./components/admin/AdminBirthdayParties'));
-const AdminTraining       = lazy(() => import('./components/admin/AdminTraining'));
-const AdminCamps          = lazy(() => import('./components/admin/AdminCamps'));
+const AdminTraining        = lazy(() => import('./components/admin/AdminTraining'));
+const AdminCamps           = lazy(() => import('./components/admin/AdminCamps'));
+const AdminSchedule           = lazy(() => import('./components/admin/AdminSchedule'));
+const AdminStaff           = lazy(() => import('./components/admin/AdminStaff'));
+const AdminTimeOff           = lazy(() => import('./components/admin/AdminTimeOff'));
 
-/**
- * Root application component.
- * Handles routing, layout structure, and lazy-loaded page rendering.
- * Admin routes hide the Subscribe and Footer sections.
- */
 const App = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
@@ -63,7 +62,7 @@ const App = () => {
         <NavigationProvider>
           <HelmetProvider>
             <ScrollToTop />
-            <Header />
+            {!isAdminRoute && <Header />}
 
             <main className="main-content" style={{ minHeight: '100vh' }}>
               <Suspense fallback={<PageLoader />}>
@@ -112,9 +111,16 @@ const App = () => {
                   <Route path="/TOS" element={<TOS />} />
                   <Route path="/CookiePolicy" element={<CookiePolicy />} />
 
-                  {/* Admin */}
+                  {/* Admin — AdminProvider wraps the entire admin subtree */}
                   <Route path="/admin/login" element={<AdminLogin />} />
-                  <Route path="/admin" element={<AdminLayout />}>
+                  <Route
+                    path="/admin"
+                    element={
+                      <AdminProvider>
+                        <AdminLayout />
+                      </AdminProvider>
+                    }
+                  >
                     <Route index element={<AdminDashboard />} />
                     <Route path="field-rentals" element={<AdminFieldRentals />} />
                     <Route path="leagues" element={<AdminLeagues />} />
@@ -122,6 +128,9 @@ const App = () => {
                     <Route path="birthday-parties" element={<AdminBirthdayParties />} />
                     <Route path="training" element={<AdminTraining />} />
                     <Route path="camps" element={<AdminCamps />} />
+                    <Route path="schedule" element={<AdminSchedule />} />
+                    <Route path="staff" element={<AdminStaff />} />
+                    <Route path="time-off" element={<AdminTimeOff />} />
                   </Route>
 
                   {/* 404 */}
@@ -134,7 +143,7 @@ const App = () => {
             {/* Global sections — hidden on admin routes */}
             {!isAdminRoute && <Subscribe />}
             {!isAdminRoute && <Footer />}
-            <CookiePopup />
+            {!isAdminRoute && <CookiePopup />}
 
           </HelmetProvider>
         </NavigationProvider>

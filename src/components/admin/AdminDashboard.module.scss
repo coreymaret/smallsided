@@ -609,3 +609,20 @@
     grid-template-columns: 1fr;
   }
 }
+
+// Error banner shown when one or more data sources fail to load
+.errorBanner {
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  padding: 0.875rem 1.25rem;
+  margin-bottom: 1.5rem;
+  color: #92400e;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+
+  strong {
+    font-weight: 600;
+  }
+}
