@@ -16,6 +16,7 @@ import Header from './components/Header/Header';
 const Footer = lazy(() => import('./components/Footer/Footer'));
 const Subscribe = lazy(() => import('./components/Subscribe/Subscribe'));
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+const ChatWidget = lazy(() => import('./components/ChatWidget/ChatWidget'));
 import PageLoader from './components/PageLoader/PageLoader';
 const CookiePopup = lazy(() => import('./components/CookiePopup/CookiePopup'));
 const Register = lazy(() => import('./components/Register/Register'));
@@ -48,9 +49,15 @@ const AdminPickup          = lazy(() => import('./components/admin/AdminPickup')
 const AdminBirthdayParties = lazy(() => import('./components/admin/AdminBirthdayParties'));
 const AdminTraining        = lazy(() => import('./components/admin/AdminTraining'));
 const AdminCamps           = lazy(() => import('./components/admin/AdminCamps'));
-const AdminSchedule           = lazy(() => import('./components/admin/AdminSchedule'));
+const AdminSchedule        = lazy(() => import('./components/admin/AdminSchedule'));
 const AdminStaff           = lazy(() => import('./components/admin/AdminStaff'));
-const AdminTimeOff           = lazy(() => import('./components/admin/AdminTimeOff'));
+const AdminTimeOff         = lazy(() => import('./components/admin/AdminTimeOff'));
+const AdminShifts          = lazy(() => import('./components/admin/AdminShifts'));
+const AdminBlackouts       = lazy(() => import('./components/admin/AdminBlackouts'));
+const AdminRevenue         = lazy(() => import('./components/admin/AdminRevenue'));
+const AdminOccupancy       = lazy(() => import('./components/admin/AdminOccupancy'));
+const AdminCustomers       = lazy(() => import('./components/admin/AdminCustomers'));
+const AdminChat            = lazy(() => import('./components/admin/AdminChat'));
 
 const App = () => {
   const location = useLocation();
@@ -111,7 +118,7 @@ const App = () => {
                   <Route path="/TOS" element={<TOS />} />
                   <Route path="/CookiePolicy" element={<CookiePolicy />} />
 
-                  {/* Admin — AdminProvider wraps the entire admin subtree */}
+                  {/* Admin */}
                   <Route path="/admin/login" element={<AdminLogin />} />
                   <Route
                     path="/admin"
@@ -131,6 +138,12 @@ const App = () => {
                     <Route path="schedule" element={<AdminSchedule />} />
                     <Route path="staff" element={<AdminStaff />} />
                     <Route path="time-off" element={<AdminTimeOff />} />
+                    <Route path="shifts" element={<AdminShifts />} />
+                    <Route path="blackouts" element={<AdminBlackouts />} />
+                    <Route path="revenue" element={<AdminRevenue />} />
+                    <Route path="occupancy" element={<AdminOccupancy />} />
+                    <Route path="customers" element={<AdminCustomers />} />
+                    <Route path="chat" element={<AdminChat />} />
                   </Route>
 
                   {/* 404 */}
@@ -140,10 +153,10 @@ const App = () => {
               </Suspense>
             </main>
 
-            {/* Global sections — hidden on admin routes */}
             {!isAdminRoute && <Subscribe />}
             {!isAdminRoute && <Footer />}
             {!isAdminRoute && <CookiePopup />}
+            {!isAdminRoute && <ChatWidget />}
 
           </HelmetProvider>
         </NavigationProvider>

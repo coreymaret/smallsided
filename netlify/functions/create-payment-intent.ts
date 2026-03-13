@@ -1,7 +1,8 @@
 import { Handler } from '@netlify/functions';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+console.log('STRIPE_SECRET_KEY present:', !!process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
 export const handler: Handler = async (event) => {
   const headers = {

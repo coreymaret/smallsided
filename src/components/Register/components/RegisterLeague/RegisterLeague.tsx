@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Users, Calendar, ChevronRight, Check, Trophy, Mail, User, Shield, CreditCard, Lock } from '../../../../components/Icons/Icons';
 import styles from './RegisterLeague.module.scss';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { api } from '../../../../services/api';
+import { useSendEmail } from '../../../../hooks/useSendEmail';
 
 // Shared hooks for validation and formatting
 import { useValidation } from '../shared/useValidation';
@@ -12,8 +15,27 @@ import { useFormFormatters } from '../shared/useFormFormatters';
   const validation = useValidation();
   const formatters = useFormFormatters();
 
-const RegisterLeague: React.FC = () => {
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+const STRIPE_STYLE = {
+  style: {
+    base: {
+      fontSize: '16px',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      color: '#15141a',
+      '::placeholder': { color: '#9ca3af' },
+    },
+    invalid: { color: '#ef4444' },
+  },
+};
+
+const RegisterLeagueInner: React.FC = () => {
   const { t } = useTranslation();
+  const stripe = useStripe();
+  const elements = useElements();
+  const { sendEmail } = useSendEmail();
+  const [cardError, setCardError] = useState<string | null>(null);
+  const [stripeFocused, setStripeFocused] = useState({ cardNumber: false, cardExpiry: false, cardCvc: false });
 
   const [step, setStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set<number>());
@@ -48,10 +70,6 @@ const RegisterLeague: React.FC = () => {
     experienceLevel: '',
     preferredDay: '',
     additionalInfo: '',
-    cardNumber: '',
-    cardExpiry: '',
-    cardCVV: '',
-    billingZip: ''
   });
 
   const [validationErrors, setValidationErrors] = useState<{
@@ -195,9 +213,7 @@ const RegisterLeague: React.FC = () => {
         return formData.experienceLevel !== '' && formData.preferredDay !== '';
       case 4:
         return true;
-      case 5:
-        return formData.cardNumber !== '' && formData.cardExpiry !== '' &&
-               formData.cardCVV !== '' && formData.billingZip !== '';
+      case 5: return true;
       default:
         return false;
     }
@@ -218,28 +234,6 @@ const RegisterLeague: React.FC = () => {
     return isValid;
   };
 
-  const validateStep4Fields = (): boolean => {
-    const errors: typeof validationErrors = {};
-    let isValid = true;
-    if (!validation.validateCardNumber(formData.cardNumber)) {
-      errors.cardNumber = t('register.fieldRental.errors.invalidCard');
-      isValid = false;
-    }
-    if (!validation.validateCardExpiry(formData.cardExpiry)) {
-      errors.cardExpiry = t('register.fieldRental.errors.invalidExpiry');
-      isValid = false;
-    }
-    if (!validation.validateCVV(formData.cardCVV)) {
-      errors.cardCVV = t('register.fieldRental.errors.invalidCVV');
-      isValid = false;
-    }
-    if (!validation.validateZipCode(formData.billingZip)) {
-      errors.billingZip = t('register.fieldRental.errors.invalidZip');
-      isValid = false;
-    }
-    setValidationErrors(errors);
-    return isValid;
-  };
 
   const handleNext = () => {
     setValidationErrors({});
@@ -291,10 +285,32 @@ const RegisterLeague: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!validateStep4Fields()) return;
+    if (!stripe || !elements) return;
+    const cardNumberEl = elements.getElement(CardNumberElement);
+    if (!cardNumberEl) return;
+
     setIsProcessing(true);
+    setCardError(null);
+
     try {
-      const mockPaymentIntent = { id: 'pi_' + Date.now(), status: 'succeeded' };
+      const total = 150;
       const MENS_LEAGUE_ID = '639f41d3-0abb-44c9-8e2f-a51fc7aeb185';
+
+      const { clientSecret } = await api.createPaymentIntent(
+        total * 100,
+        `League Registration - ${formData.teamName}`
+      );
+
+      const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardNumberEl,
+          billing_details: { name: formData.captainName, email: formData.email, phone: formData.phone },
+        },
+      });
+
+      if (stripeError) { setCardError(stripeError.message ?? 'Payment failed.'); return; }
+      if (paymentIntent?.status !== 'succeeded') { setCardError('Payment not completed.'); return; }
+
       const registrationData = {
         league_id: MENS_LEAGUE_ID,
         team_name: formData.teamName,
@@ -305,22 +321,34 @@ const RegisterLeague: React.FC = () => {
         age_division: formData.league,
         skill_level: formData.experienceLevel,
         players: [{ name: formData.captainName }],
-        total_amount: 150,
-        stripe_payment_intent_id: mockPaymentIntent.id,
+        total_amount: total,
+        stripe_payment_intent_id: paymentIntent.id,
         waiver_signed: true,
         hear_about_us: formData.additionalInfo || null,
         additional_notes: null,
       };
-      // @ts-ignore
+
       const result: any = await api.createLeagueRegistration(registrationData);
-      if (result && result.success) {
-        setShowSuccessAnimation(true);
-      } else {
-        throw new Error('Failed to save registration');
-      }
-    } catch (error) {
+      if (!result || !result.success) throw new Error('Failed to save registration');
+
+      await sendEmail({
+        type: 'confirmation',
+        booking: {
+          id: paymentIntent.id,
+          customerName: formData.captainName,
+          customerEmail: formData.email,
+          service: 'league',
+          bookingDate: new Date().toISOString().split('T')[0],
+          totalAmount: total,
+          metadata: { team_name: formData.teamName, league: formData.league },
+        },
+      });
+
+      setShowSuccessAnimation(true);
+      cardNumberEl.clear();
+    } catch (error: any) {
       console.error('Registration error:', error);
-      alert(`${t('register.fieldRental.errors.bookingFailed')}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setCardError(error?.message ?? t('register.fieldRental.errors.bookingFailed'));
     } finally {
       setIsProcessing(false);
     }
@@ -723,30 +751,27 @@ const RegisterLeague: React.FC = () => {
 
                 <div className={styles.form}>
                   <div className={styles.inputGroup}>
-                    <input type="text" name="cardNumber" value={formData.cardNumber} onChange={handleCardNumberChange} placeholder={t('register.payment.cardNumber')} maxLength={19} className={`${styles.input} ${validationErrors.cardNumber ? styles.inputError : ''}`} />
-                    <label className={`${styles.floatingLabel} ${formData.cardNumber ? styles.active : ''}`}>{t('register.payment.cardNumber')} *</label>
-                    {validationErrors.cardNumber && <span className={styles.errorMessage}>{validationErrors.cardNumber}</span>}
+                    <div className={`${styles.stripeInput} ${stripeFocused.cardNumber ? styles.stripeInputFocused : ''}`}>
+                      <CardNumberElement options={STRIPE_STYLE} onFocus={() => setStripeFocused(s => ({...s, cardNumber: true}))} onBlur={() => setStripeFocused(s => ({...s, cardNumber: false}))} />
+                    </div>
+                    <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.payment.cardNumber')} *</label>
                   </div>
 
                   <div className={styles.formRow}>
                     <div className={styles.inputGroup}>
-                      <input type="text" name="cardExpiry" value={formData.cardExpiry} onChange={handleCardExpiryChange} placeholder={t('register.payment.expiry')} maxLength={5} className={`${styles.input} ${validationErrors.cardExpiry ? styles.inputError : ''}`} />
-                      <label className={`${styles.floatingLabel} ${formData.cardExpiry ? styles.active : ''}`}>{t('register.payment.expiry')} *</label>
-                      {validationErrors.cardExpiry && <span className={styles.errorMessage}>{validationErrors.cardExpiry}</span>}
+                      <div className={`${styles.stripeInput} ${stripeFocused.cardExpiry ? styles.stripeInputFocused : ''}`}>
+                        <CardExpiryElement options={STRIPE_STYLE} onFocus={() => setStripeFocused(s => ({...s, cardExpiry: true}))} onBlur={() => setStripeFocused(s => ({...s, cardExpiry: false}))} />
+                      </div>
+                      <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.payment.expiry')} *</label>
                     </div>
-
                     <div className={styles.inputGroup}>
-                      <input type="text" name="cardCVV" value={formData.cardCVV} onChange={handleInputChange} placeholder={t('register.payment.cvv')} maxLength={3} className={`${styles.input} ${validationErrors.cardCVV ? styles.inputError : ''}`} />
-                      <label className={`${styles.floatingLabel} ${formData.cardCVV ? styles.active : ''}`}>{t('register.payment.cvv')} *</label>
-                      {validationErrors.cardCVV && <span className={styles.errorMessage}>{validationErrors.cardCVV}</span>}
+                      <div className={`${styles.stripeInput} ${stripeFocused.cardCvc ? styles.stripeInputFocused : ''}`}>
+                        <CardCvcElement options={STRIPE_STYLE} onFocus={() => setStripeFocused(s => ({...s, cardCvc: true}))} onBlur={() => setStripeFocused(s => ({...s, cardCvc: false}))} />
+                      </div>
+                      <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.payment.cvv')} *</label>
                     </div>
                   </div>
-
-                  <div className={styles.inputGroup}>
-                    <input type="text" name="billingZip" value={formData.billingZip} onChange={handleInputChange} placeholder={t('register.payment.billingZip')} maxLength={10} className={`${styles.input} ${validationErrors.billingZip ? styles.inputError : ''}`} />
-                    <label className={`${styles.floatingLabel} ${formData.billingZip ? styles.active : ''}`}>{t('register.payment.billingZip')} *</label>
-                    {validationErrors.billingZip && <span className={styles.errorMessage}>{validationErrors.billingZip}</span>}
-                  </div>
+                  {cardError && <span className={styles.errorMessage}>{cardError}</span>}
 
                   <div className={styles.securityNotice}>
                     <Lock size={16} />
@@ -792,5 +817,11 @@ const RegisterLeague: React.FC = () => {
     </div>
   );
 };
+
+const RegisterLeague: React.FC = () => (
+  <Elements stripe={stripePromise}>
+    <RegisterLeagueInner />
+  </Elements>
+);
 
 export default RegisterLeague;

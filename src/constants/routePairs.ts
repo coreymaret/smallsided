@@ -6,7 +6,7 @@ export const routePairs: Record<string, string> = {
   "/services":                      "/es/servicios",
   "/es/servicios":                  "/services",
   "/services/field-rental":         "/es/servicios/canchas",
-  "/es/servicios/canchas":                    "/services/field-rental",
+  "/es/servicios/canchas":          "/services/field-rental",
   "/services/leagues":              "/es/ligas",
   "/es/ligas":                      "/services/leagues",
   "/services/pickup":               "/es/partido-libre",

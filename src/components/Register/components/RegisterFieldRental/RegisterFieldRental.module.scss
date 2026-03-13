@@ -1178,3 +1178,23 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+.stripeInput {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: $radius-sm;
+  background: $color-white;
+  transition: border-color $transition-base;
+  cursor: text;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stripeInputFocused {
+  border-color: $color-dark;
+}
+
+  // Match the height of your existing inputs
+  .StripeElement {
+    width: 100%;
+  }

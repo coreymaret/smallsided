@@ -3,15 +3,8 @@
 # -----------------------------
 
 [build]
-  # Build command for your React/Vite app
-  # Runs: npm run build (which executes vite build)
   command = "npm run build"
-  
-  # Directory where built files are output
-  # Vite outputs to dist/ by default
   publish = "dist"
-  
-  # Directory containing serverless functions
   functions = "netlify/functions"
 
 # -------------------------------------
@@ -19,44 +12,30 @@
 # -------------------------------------
 
 [build.environment]
-  # Node version for builds
   NODE_VERSION = "18"
-  
-  # Netlify scans for exposed secrets during builds.
-  # This tells Netlify: "Don't fail the build for these public keys"
-  # 
-  # These keys are INTENDED to be public and are restricted by:
-  # - Domain restrictions (Google Maps)
-  # - Row Level Security (Supabase anon key)
-  # - Read-only permissions (Stripe publishable key)
-  #
-  # ⚠️ WARNING: Never add server-side secret keys here!
-  SECRETS_SCAN_OMIT_KEYS = "VITE_GOOGLE_MAPS_KEY,VITE_SUPABASE_ANON_KEY,VITE_STRIPE_PUBLISHABLE_KEY"
+  SECRETS_SCAN_OMIT_KEYS = "VITE_GOOGLE_MAPS_KEY,VITE_SUPABASE_ANON_KEY,VITE_STRIPE_PUBLISHABLE_KEY,VITE_INTERNAL_SECRET"
 
 # -------------------------------------
 # SERVERLESS FUNCTIONS CONFIGURATION
 # -------------------------------------
 
 [functions]
-  # Use esbuild for faster function bundling
   node_bundler = "esbuild"
-  
-# NOTE: function_timeout has been removed as it's not a valid top-level property
-# Timeouts are configured differently in newer Netlify versions
+
+# Scheduled function — runs daily at 9am UTC (5am EST)
+[functions.send-reminders]
+  schedule = "0 9 * * *"
 
 # -------------------------------------
 # URL REDIRECTS
 # -------------------------------------
 
-# Cleaner API URLs: /api/create-booking → /.netlify/functions/create-booking
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
   force = true
 
-# SPA redirect - send all routes to index.html for React Router
-# This must be LAST so it doesn't override the /api/* redirect
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -66,7 +45,6 @@
 # SECURITY HEADERS
 # -------------------------------------
 
-# Custom headers for security (applied to all pages)
 [[headers]]
   for = "/*"
   [headers.values]
@@ -79,13 +57,11 @@
 # CACHING HEADERS
 # -------------------------------------
 
-# Cache static assets aggressively (images, JS, CSS in /assets/)
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Don't cache the main HTML file (ensures users get updates)
 [[headers]]
   for = "/index.html"
   [headers.values]
@@ -95,11 +71,9 @@
 # CORS HEADERS FOR API
 # -------------------------------------
 
-# CORS headers for serverless functions
-# Allows frontend to call backend functions
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type, Authorization, stripe-signature"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, stripe-signature, x-internal-secret"

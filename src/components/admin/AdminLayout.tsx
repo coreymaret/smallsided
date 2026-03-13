@@ -1,7 +1,11 @@
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
+  AlertCircle,
+  BarChart2,
   Calendar,
+  Clock,
+  DollarSign,
   Trophy,
   Users,
   Cake,
@@ -9,6 +13,7 @@ import {
   Smile,
   LogOut,
   Menu,
+  MessageSquare,
   X,
   Home,
   User,
@@ -99,6 +104,12 @@ const AdminLayout = () => {
     { path: '/admin/schedule',           label: 'Schedule',         icon: CalendarDays,          end: false },
     { path: '/admin/staff',              label: 'Staff',            icon: Users,               end: false },
     { path: '/admin/time-off',           label: 'Time Off',         icon: Calendar,            end: false },
+    { path: '/admin/shifts',             label: 'Shifts',           icon: Clock,               end: false },
+    { path: '/admin/blackouts',          label: 'Blackout Dates',   icon: AlertCircle,         end: false },
+    { path: '/admin/revenue',            label: 'Revenue',          icon: DollarSign,          end: false },
+    { path: '/admin/occupancy',          label: 'Occupancy',        icon: BarChart2,           end: false },
+    { path: '/admin/customers',          label: 'Customers',        icon: Users,               end: false },
+    { path: '/admin/chat',               label: 'Chat Inbox',       icon: MessageSquare,       end: false },
     { path: '/admin/field-rentals',    label: 'Field Rentals',    icon: Calendar,            end: false },
     { path: '/admin/leagues',          label: 'Leagues',          icon: Trophy,              end: false },
     { path: '/admin/pickup',           label: 'Pickup Games',     icon: Users,               end: false },

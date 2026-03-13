@@ -2,14 +2,36 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Users, Calendar, ChevronRight, Check, Trophy, Mail, User, Shield, CreditCard, Lock, Target } from '../../../../components/Icons/Icons';
 import styles from './RegisterTraining.module.scss';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { api } from '../../../../services/api';
+import { useSendEmail } from '../../../../hooks/useSendEmail';
 
 // Shared hooks for validation and formatting
 import { useValidation } from '../shared/useValidation';
 import { useFormFormatters } from '../shared/useFormFormatters';
 
-const RegisterTraining: React.FC = () => {
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+const STRIPE_STYLE = {
+  style: {
+    base: {
+      fontSize: '16px',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      color: '#15141a',
+      '::placeholder': { color: '#9ca3af' },
+    },
+    invalid: { color: '#ef4444' },
+  },
+};
+
+const RegisterTrainingInner: React.FC = () => {
   const { t } = useTranslation();
+  const stripe = useStripe();
+  const elements = useElements();
+  const { sendEmail } = useSendEmail();
+  const [cardError, setCardError] = useState<string | null>(null);
+  const [stripeFocused, setStripeFocused] = useState({ cardNumber: false, cardExpiry: false, cardCvc: false });
   const validation = useValidation();
   const formatters = useFormFormatters();
   
@@ -46,10 +68,6 @@ const RegisterTraining: React.FC = () => {
     preferredDays: [],
     preferredTime: '',
     additionalInfo: '',
-    cardNumber: '',
-    cardExpiry: '',
-    cardCVV: '',
-    billingZip: ''
   });
 
   const [validationErrors, setValidationErrors] = useState<{
@@ -215,28 +233,6 @@ const RegisterTraining: React.FC = () => {
     return isValid;
   };
 
-  const validateStep5Fields = (): boolean => {
-    const errors: typeof validationErrors = {};
-    let isValid = true;
-    if (!validation.validateCardNumber(formData.cardNumber)) {
-      errors.cardNumber = t('register.fieldRental.errors.invalidCard');
-      isValid = false;
-    }
-    if (!validation.validateCardExpiry(formData.cardExpiry)) {
-      errors.cardExpiry = t('register.fieldRental.errors.invalidExpiry');
-      isValid = false;
-    }
-    if (!validation.validateCVV(formData.cardCVV)) {
-      errors.cardCVV = t('register.fieldRental.errors.invalidCVV');
-      isValid = false;
-    }
-    if (!validation.validateZipCode(formData.billingZip)) {
-      errors.billingZip = t('register.fieldRental.errors.invalidZip');
-      isValid = false;
-    }
-    setValidationErrors(errors);
-    return isValid;
-  };
 
   const canProceed = (): boolean => {
     switch(step) {
@@ -245,7 +241,7 @@ const RegisterTraining: React.FC = () => {
       case 3: return formData.parentName !== '' && formData.email !== '' && formData.phone !== '' &&
                      formData.preferredDays.length > 0 && formData.preferredTime !== '';
       case 4: return true;
-      case 5: return formData.cardNumber !== '' && formData.cardExpiry !== '' && formData.cardCVV !== '' && formData.billingZip !== '';
+      case 5: return true;
       default: return false;
     }
   };
@@ -274,27 +270,60 @@ const RegisterTraining: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!validateStep5Fields()) return;
+    if (!stripe || !elements) return;
+    const cardNumberEl = elements.getElement(CardNumberElement);
+    if (!cardNumberEl) return;
+
     setIsProcessing(true);
+    setCardError(null);
 
     try {
-      const selectedTraining = trainingTypes.find(t => t.value === formData.trainingType);
-      // @ts-ignore - API method may not exist yet
-      await api.registerTraining({
-        training: selectedTraining,
-        player: { name: formData.playerName, age: formData.playerAge, skillLevel: formData.skillLevel },
-        parent: { name: formData.parentName, email: formData.email, phone: formData.phone },
-        preferences: {
-          focusAreas: formData.focusAreas,
-          preferredDays: formData.preferredDays,
-          preferredTime: formData.preferredTime,
-          additionalInfo: formData.additionalInfo,
+      const selectedTrainingType = trainingTypes.find(t => t.value === formData.trainingType);
+      // Parse price from translation string - fallback to 0 if not parseable
+      const priceStr = selectedTrainingType?.price || '0';
+      const total = parseInt(String(priceStr).replace(/[^0-9]/g, '')) || 0;
+      const bookingDate = new Date().toISOString().split('T')[0];
+
+      const { clientSecret } = await api.createPaymentIntent(
+        total * 100,
+        `Training - ${selectedTrainingType?.label} - ${formData.playerName}`
+      );
+
+      const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardNumberEl,
+          billing_details: { name: formData.parentName, email: formData.email, phone: formData.phone },
         },
-        payment: {
-          cardNumber: formData.cardNumber,
-          cardExpiry: formData.cardExpiry,
-          cardCVV: formData.cardCVV,
-          billingZip: formData.billingZip,
-        }
+      });
+
+      if (stripeError) { setCardError(stripeError.message ?? 'Payment failed.'); return; }
+      if (paymentIntent?.status !== 'succeeded') { setCardError('Payment not completed.'); return; }
+
+      await api.createTrainingRegistration({
+        training_type: formData.trainingType,
+        player_name: formData.playerName,
+        player_age: parseInt(formData.playerAge) || 0,
+        parent_name: formData.parentName,
+        parent_email: formData.email,
+        parent_phone: formData.phone,
+        skill_level: formData.skillLevel,
+        focus_areas: formData.focusAreas,
+        preferred_schedule: formData.preferredDays,
+        total_amount: total,
+        stripe_payment_intent_id: paymentIntent.id,
+      });
+
+      await sendEmail({
+        type: 'confirmation',
+        booking: {
+          id: paymentIntent.id,
+          customerName: formData.parentName,
+          customerEmail: formData.email,
+          service: 'training',
+          bookingDate,
+          totalAmount: total,
+          metadata: { training_type: selectedTrainingType?.label, player_name: formData.playerName },
+        },
       });
 
       setShowSuccessAnimation(true);
@@ -302,14 +331,14 @@ const RegisterTraining: React.FC = () => {
         trainingType: '', playerName: '', playerAge: '', parentName: '',
         email: '', phone: '', skillLevel: '', focusAreas: [],
         preferredDays: [], preferredTime: '', additionalInfo: '',
-        cardNumber: '', cardExpiry: '', cardCVV: '', billingZip: ''
       });
       setStep(1);
       setCompletedSteps(new Set());
       setMaxStepReached(1);
-    } catch (error) {
+      cardNumberEl.clear();
+    } catch (error: any) {
       console.error('Registration failed:', error);
-      alert(t('register.fieldRental.errors.bookingFailed'));
+      setCardError(error?.message ?? t('register.fieldRental.errors.bookingFailed'));
     } finally {
       setIsProcessing(false);
     }
@@ -664,27 +693,26 @@ const RegisterTraining: React.FC = () => {
                 </h3>
                 <div className={styles.form}>
                   <div className={styles.inputGroup}>
-                    <input type="text" name="cardNumber" value={formData.cardNumber} onChange={handleCardNumberChange} placeholder={t('register.payment.cardNumber')} maxLength={19} className={`${styles.input} ${validationErrors.cardNumber ? styles.inputError : ''}`} />
-                    <label className={`${styles.floatingLabel} ${formData.cardNumber ? styles.active : ''}`}>{t('register.payment.cardNumber')} *</label>
-                    {validationErrors.cardNumber && <span className={styles.errorMessage}>{validationErrors.cardNumber}</span>}
+                    <div className={`${styles.stripeInput} ${stripeFocused.cardNumber ? styles.stripeInputFocused : ''}`}>
+                      <CardNumberElement options={STRIPE_STYLE} onFocus={() => setStripeFocused(s => ({...s, cardNumber: true}))} onBlur={() => setStripeFocused(s => ({...s, cardNumber: false}))} />
+                    </div>
+                    <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.payment.cardNumber')} *</label>
                   </div>
                   <div className={styles.formRow}>
                     <div className={styles.inputGroup}>
-                      <input type="text" name="cardExpiry" value={formData.cardExpiry} onChange={handleCardExpiryChange} placeholder={t('register.payment.expiry')} maxLength={5} className={`${styles.input} ${validationErrors.cardExpiry ? styles.inputError : ''}`} />
-                      <label className={`${styles.floatingLabel} ${formData.cardExpiry ? styles.active : ''}`}>{t('register.payment.expiry')} *</label>
-                      {validationErrors.cardExpiry && <span className={styles.errorMessage}>{validationErrors.cardExpiry}</span>}
+                      <div className={`${styles.stripeInput} ${stripeFocused.cardExpiry ? styles.stripeInputFocused : ''}`}>
+                        <CardExpiryElement options={STRIPE_STYLE} onFocus={() => setStripeFocused(s => ({...s, cardExpiry: true}))} onBlur={() => setStripeFocused(s => ({...s, cardExpiry: false}))} />
+                      </div>
+                      <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.payment.expiry')} *</label>
                     </div>
                     <div className={styles.inputGroup}>
-                      <input type="text" name="cardCVV" value={formData.cardCVV} onChange={handleInputChange} placeholder={t('register.payment.cvv')} maxLength={3} className={`${styles.input} ${validationErrors.cardCVV ? styles.inputError : ''}`} />
-                      <label className={`${styles.floatingLabel} ${formData.cardCVV ? styles.active : ''}`}>{t('register.payment.cvv')} *</label>
-                      {validationErrors.cardCVV && <span className={styles.errorMessage}>{validationErrors.cardCVV}</span>}
+                      <div className={`${styles.stripeInput} ${stripeFocused.cardCvc ? styles.stripeInputFocused : ''}`}>
+                        <CardCvcElement options={STRIPE_STYLE} onFocus={() => setStripeFocused(s => ({...s, cardCvc: true}))} onBlur={() => setStripeFocused(s => ({...s, cardCvc: false}))} />
+                      </div>
+                      <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.payment.cvv')} *</label>
                     </div>
                   </div>
-                  <div className={styles.inputGroup}>
-                    <input type="text" name="billingZip" value={formData.billingZip} onChange={handleInputChange} placeholder={t('register.payment.billingZip')} maxLength={10} className={`${styles.input} ${validationErrors.billingZip ? styles.inputError : ''}`} />
-                    <label className={`${styles.floatingLabel} ${formData.billingZip ? styles.active : ''}`}>{t('register.payment.billingZip')} *</label>
-                    {validationErrors.billingZip && <span className={styles.errorMessage}>{validationErrors.billingZip}</span>}
-                  </div>
+                  {cardError && <span className={styles.errorMessage}>{cardError}</span>}
                   <div className={styles.securityNotice}>
                     <Lock size={16} />
                     <span>{t('register.payment.securityNotice')}</span>
@@ -724,5 +752,11 @@ const RegisterTraining: React.FC = () => {
     </div>
   );
 };
+
+const RegisterTraining: React.FC = () => (
+  <Elements stripe={stripePromise}>
+    <RegisterTrainingInner />
+  </Elements>
+);
 
 export default RegisterTraining;

@@ -1284,3 +1284,18 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+.stripeInput {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px; /* match your existing $radius-sm */
+  background: white;
+  transition: border-color 0.2s;
+  cursor: text;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stripeInputFocused {
+  border-color: #15141a;
+}

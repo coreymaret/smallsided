@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calendar, Users, Clock, MapPin, Trophy, Mail, Phone, User, CreditCard, Lock, Heart, Check } from '../../../../components/Icons/Icons';
 import styles from './RegisterCamps.module.scss';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { api } from '../../../../services/api';
+import { useSendEmail } from '../../../../hooks/useSendEmail';
 
 // Shared hooks for validation and formatting
 import { useValidation } from '../shared/useValidation';
@@ -18,8 +21,27 @@ interface CampOption {
   features: string[];
 }
 
-const RegisterCamps: React.FC = () => {
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+const STRIPE_STYLE = {
+  style: {
+    base: {
+      fontSize: '16px',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      color: '#15141a',
+      '::placeholder': { color: '#9ca3af' },
+    },
+    invalid: { color: '#ef4444' },
+  },
+};
+
+const RegisterCampsInner: React.FC = () => {
   const { t } = useTranslation();
+  const stripe = useStripe();
+  const elements = useElements();
+  const { sendEmail } = useSendEmail();
+  const [cardError, setCardError] = useState<string | null>(null);
+  const [stripeFocused, setStripeFocused] = useState({ cardNumber: false, cardExpiry: false, cardCvc: false });
   const validation = useValidation();
   const formatters = useFormFormatters();
 
@@ -93,10 +115,6 @@ const RegisterCamps: React.FC = () => {
     allergies: '',
     medications: '',
     specialNeeds: '',
-    cardNumber: '',
-    cardExpiry: '',
-    cardCVV: '',
-    billingZip: ''
   });
 
   const [errors, setErrors] = useState<{
@@ -109,10 +127,6 @@ const RegisterCamps: React.FC = () => {
     phone?: string;
     emergencyContact?: string;
     emergencyPhone?: string;
-    cardNumber?: string;
-    cardExpiry?: string;
-    cardCVV?: string;
-    billingZip?: string;
   }>({});
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -149,26 +163,6 @@ const RegisterCamps: React.FC = () => {
     }
   };
 
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatters.formatCardNumber(e.target.value);
-    setFormData({ ...formData, cardNumber: formatted });
-    if (validation.validateCardNumber(formatted)) {
-      const newErrors = { ...errors };
-      delete newErrors.cardNumber;
-      setErrors(newErrors);
-    }
-  };
-
-  const handleCardExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatters.formatCardExpiry(e.target.value);
-    setFormData({ ...formData, cardExpiry: formatted });
-    if (validation.validateCardExpiry(formatted)) {
-      const newErrors = { ...errors };
-      delete newErrors.cardExpiry;
-      setErrors(newErrors);
-    }
-  };
-
   const validateStep3 = (): boolean => {
     const newErrors: typeof errors = {};
     
@@ -201,26 +195,6 @@ const RegisterCamps: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const validateStep5 = (): boolean => {
-    const newErrors: typeof errors = {};
-    
-    if (!formData.cardNumber.trim() || !validation.validateCardNumber(formData.cardNumber)) {
-      newErrors.cardNumber = t('register.fieldRental.errors.invalidCard');
-    }
-    if (!formData.cardExpiry.trim() || !validation.validateCardExpiry(formData.cardExpiry)) {
-      newErrors.cardExpiry = t('register.fieldRental.errors.invalidExpiry');
-    }
-    if (!formData.cardCVV.trim() || !validation.validateCVV(formData.cardCVV)) {
-      newErrors.cardCVV = t('register.fieldRental.errors.invalidCVV');
-    }
-    if (!formData.billingZip.trim() || !validation.validateZipCode(formData.billingZip)) {
-      newErrors.billingZip = t('register.fieldRental.errors.invalidZip');
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const canProceed = (): boolean => {
     if (currentStep === 1) return selectedCamp !== null && selectedWeek !== '';
     if (currentStep === 2) return (
@@ -239,18 +213,12 @@ const RegisterCamps: React.FC = () => {
       formData.emergencyPhone !== ''
     );
     if (currentStep === 4) return true;
-    if (currentStep === 5) return (
-      formData.cardNumber !== '' &&
-      formData.cardExpiry !== '' &&
-      formData.cardCVV !== '' &&
-      formData.billingZip !== ''
-    );
+    if (currentStep === 5) return true;
     return false;
   };
 
   const handleNext = () => {
     if (currentStep === 3 && !validateStep3()) return;
-    if (currentStep === 5 && !validateStep5()) return;
     if (!canProceed()) return;
 
     if (!completedSteps.includes(currentStep)) {
@@ -271,61 +239,79 @@ const RegisterCamps: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep5() || !selectedCamp) return;
-    
+    if (!selectedCamp) return;
+    if (!stripe || !elements) return;
+    const cardNumberEl = elements.getElement(CardNumberElement);
+    if (!cardNumberEl) return;
+
     setIsSubmitting(true);
-    
+    setCardError(null);
+
     try {
-      // @ts-ignore - API method may not exist yet
-      await api.registerCamp({
-        camp: selectedCamp,
-        week: selectedWeek,
-        camper: {
-          firstName: formData.camperFirstName,
-          lastName: formData.camperLastName,
-          age: formData.camperAge,
-          gender: formData.camperGender,
-          tshirtSize: formData.tshirtSize,
-          skillLevel: formData.skillLevel,
+      const total = selectedCamp.price;
+      const bookingDate = selectedWeek || new Date().toISOString().split('T')[0];
+
+      const { clientSecret } = await api.createPaymentIntent(
+        total * 100,
+        `Soccer Camp - ${selectedCamp.name} - ${bookingDate}`
+      );
+
+      const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardNumberEl,
+          billing_details: {
+            name: `${formData.parentFirstName} ${formData.parentLastName}`,
+            email: formData.email,
+            phone: formData.phone,
+          },
         },
-        parent: {
-          firstName: formData.parentFirstName,
-          lastName: formData.parentLastName,
-          email: formData.email,
-          phone: formData.phone,
-        },
-        emergency: {
-          contact: formData.emergencyContact,
-          phone: formData.emergencyPhone,
-        },
-        medical: {
-          conditions: formData.medicalConditions,
-          allergies: formData.allergies,
-          medications: formData.medications,
-          specialNeeds: formData.specialNeeds,
-        },
-        payment: {
-          cardNumber: formData.cardNumber,
-          cardExpiry: formData.cardExpiry,
-          cardCVV: formData.cardCVV,
-          billingZip: formData.billingZip,
-        }
       });
-      
+
+      if (stripeError) { setCardError(stripeError.message ?? 'Payment failed.'); return; }
+      if (paymentIntent?.status !== 'succeeded') { setCardError('Payment not completed.'); return; }
+
+      await api.createBooking({
+        booking_type: 'camp',
+        customer_name: `${formData.parentFirstName} ${formData.parentLastName}`,
+        customer_email: formData.email,
+        customer_phone: formData.phone,
+        booking_date: bookingDate,
+        total_amount: total,
+        stripe_payment_intent_id: paymentIntent.id,
+        metadata: {
+          camp_name: selectedCamp.name,
+          week: selectedWeek,
+          camper_name: `${formData.camperFirstName} ${formData.camperLastName}`,
+          camper_age: formData.camperAge,
+        },
+      });
+
+      await sendEmail({
+        type: 'confirmation',
+        booking: {
+          id: paymentIntent.id,
+          customerName: `${formData.parentFirstName} ${formData.parentLastName}`,
+          customerEmail: formData.email,
+          service: 'camp',
+          bookingDate,
+          totalAmount: total,
+          metadata: { camp_name: selectedCamp.name, camper_name: `${formData.camperFirstName} ${formData.camperLastName}` },
+        },
+      });
+
       setShowSuccessAnimation(true);
-      
       setFormData({
         camperFirstName: '', camperLastName: '', camperAge: '', camperGender: '',
         tshirtSize: '', skillLevel: '', parentFirstName: '', parentLastName: '',
         email: '', phone: '', emergencyContact: '', emergencyPhone: '',
         medicalConditions: '', allergies: '', medications: '', specialNeeds: '',
-        cardNumber: '', cardExpiry: '', cardCVV: '', billingZip: ''
       });
       setSelectedCamp(null);
       setSelectedWeek('');
-    } catch (error) {
+      cardNumberEl.clear();
+    } catch (error: any) {
       console.error('Registration failed:', error);
-      alert(t('register.fieldRental.errors.bookingFailed'));
+      setCardError(error?.message ?? t('register.fieldRental.errors.bookingFailed'));
     } finally {
       setIsSubmitting(false);
     }
@@ -898,70 +884,27 @@ const RegisterCamps: React.FC = () => {
                 </h3>
                 <div className={styles.form}>
                   <div className={styles.inputGroup}>
-                    <input
-                      type="text"
-                      name="cardNumber"
-                      value={formData.cardNumber}
-                      onChange={handleCardNumberChange}
-                      className={`${styles.input} ${errors.cardNumber ? styles.inputError : ''}`}
-                      placeholder=" "
-                      maxLength={19}
-                    />
-                    <label className={`${styles.floatingLabel} ${formData.cardNumber ? styles.active : ''}`}>
-                      {t('register.payment.cardNumber')} *
-                    </label>
-                    {errors.cardNumber && <span className={styles.errorMessage}>{errors.cardNumber}</span>}
+                    <div className={`${styles.stripeInput} ${stripeFocused.cardNumber ? styles.stripeInputFocused : ''}`}>
+                      <CardNumberElement options={STRIPE_STYLE} onFocus={() => setStripeFocused(s => ({...s, cardNumber: true}))} onBlur={() => setStripeFocused(s => ({...s, cardNumber: false}))} />
+                    </div>
+                    <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.payment.cardNumber')} *</label>
                   </div>
 
                   <div className={styles.formRow}>
                     <div className={styles.inputGroup}>
-                      <input
-                        type="text"
-                        name="cardExpiry"
-                        value={formData.cardExpiry}
-                        onChange={handleCardExpiryChange}
-                        className={`${styles.input} ${errors.cardExpiry ? styles.inputError : ''}`}
-                        placeholder=" "
-                        maxLength={5}
-                      />
-                      <label className={`${styles.floatingLabel} ${formData.cardExpiry ? styles.active : ''}`}>
-                        {t('register.payment.expiry')} *
-                      </label>
-                      {errors.cardExpiry && <span className={styles.errorMessage}>{errors.cardExpiry}</span>}
+                      <div className={`${styles.stripeInput} ${stripeFocused.cardExpiry ? styles.stripeInputFocused : ''}`}>
+                        <CardExpiryElement options={STRIPE_STYLE} onFocus={() => setStripeFocused(s => ({...s, cardExpiry: true}))} onBlur={() => setStripeFocused(s => ({...s, cardExpiry: false}))} />
+                      </div>
+                      <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.payment.expiry')} *</label>
                     </div>
-
                     <div className={styles.inputGroup}>
-                      <input
-                        type="text"
-                        name="cardCVV"
-                        value={formData.cardCVV}
-                        onChange={handleInputChange}
-                        className={`${styles.input} ${errors.cardCVV ? styles.inputError : ''}`}
-                        placeholder=" "
-                        maxLength={3}
-                      />
-                      <label className={`${styles.floatingLabel} ${formData.cardCVV ? styles.active : ''}`}>
-                        {t('register.payment.cvv')} *
-                      </label>
-                      {errors.cardCVV && <span className={styles.errorMessage}>{errors.cardCVV}</span>}
+                      <div className={`${styles.stripeInput} ${stripeFocused.cardCvc ? styles.stripeInputFocused : ''}`}>
+                        <CardCvcElement options={STRIPE_STYLE} onFocus={() => setStripeFocused(s => ({...s, cardCvc: true}))} onBlur={() => setStripeFocused(s => ({...s, cardCvc: false}))} />
+                      </div>
+                      <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.payment.cvv')} *</label>
                     </div>
                   </div>
-
-                  <div className={styles.inputGroup}>
-                    <input
-                      type="text"
-                      name="billingZip"
-                      value={formData.billingZip}
-                      onChange={handleInputChange}
-                      className={`${styles.input} ${errors.billingZip ? styles.inputError : ''}`}
-                      placeholder=" "
-                      maxLength={5}
-                    />
-                    <label className={`${styles.floatingLabel} ${formData.billingZip ? styles.active : ''}`}>
-                      {t('register.payment.billingZip')} *
-                    </label>
-                    {errors.billingZip && <span className={styles.errorMessage}>{errors.billingZip}</span>}
-                  </div>
+                  {cardError && <span className={styles.errorMessage}>{cardError}</span>}
                 </div>
 
                 <div className={styles.securityNotice}>
@@ -1013,5 +956,11 @@ const RegisterCamps: React.FC = () => {
     </div>
   );
 };
+
+const RegisterCamps: React.FC = () => (
+  <Elements stripe={stripePromise}>
+    <RegisterCampsInner />
+  </Elements>
+);
 
 export default RegisterCamps;
