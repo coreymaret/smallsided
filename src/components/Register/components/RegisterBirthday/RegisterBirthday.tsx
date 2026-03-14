@@ -59,10 +59,6 @@ const BirthdayPartiesInner: React.FC = () => {
   const [validationErrors, setValidationErrors] = useState<{
     email?: string;
     phone?: string;
-    cardNumber?: string;
-    cardExpiry?: string;
-    cardCVV?: string;
-    billingZip?: string;
   }>({});
 
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
@@ -183,26 +179,6 @@ const BirthdayPartiesInner: React.FC = () => {
     }
   };
 
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatters.formatCardNumber(e.target.value);
-    setFormData({ ...formData, cardNumber: formatted });
-    if (validation.validateCardNumber(formatted)) {
-      const newErrors = { ...validationErrors };
-      delete newErrors.cardNumber;
-      setValidationErrors(newErrors);
-    }
-  };
-
-  const handleCardExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatters.formatCardExpiry(e.target.value);
-    setFormData({ ...formData, cardExpiry: formatted });
-    if (validation.validateCardExpiry(formatted)) {
-      const newErrors = { ...validationErrors };
-      delete newErrors.cardExpiry;
-      setValidationErrors(newErrors);
-    }
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -226,7 +202,6 @@ const BirthdayPartiesInner: React.FC = () => {
 
   const handleNext = () => {
     if (step === 3 && !validateStep3Fields()) return;
-    if (step === 5 && !validateStep5Fields()) return;
     if (!canProceed()) return;
 
     const newCompletedSteps = new Set(completedSteps);

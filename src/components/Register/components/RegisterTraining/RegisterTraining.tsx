@@ -52,11 +52,7 @@ const RegisterTrainingInner: React.FC = () => {
     preferredDays: string[];
     preferredTime: string;
     additionalInfo: string;
-    cardNumber: string;
-    cardExpiry: string;
-    cardCVV: string;
-    billingZip: string;
-  }>({
+          }>({
     trainingType: '',
     playerName: '',
     playerAge: '',
@@ -73,10 +69,6 @@ const RegisterTrainingInner: React.FC = () => {
   const [validationErrors, setValidationErrors] = useState<{
     email?: string;
     phone?: string;
-    cardNumber?: string;
-    cardExpiry?: string;
-    cardCVV?: string;
-    billingZip?: string;
   }>({});
 
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
@@ -164,12 +156,10 @@ const RegisterTrainingInner: React.FC = () => {
     }
     if (name === 'cardCVV' && validation.validateCVV(value)) {
       const newErrors = { ...validationErrors };
-      delete newErrors.cardCVV;
       setValidationErrors(newErrors);
     }
     if (name === 'billingZip' && validation.validateZipCode(value)) {
       const newErrors = { ...validationErrors };
-      delete newErrors.billingZip;
       setValidationErrors(newErrors);
     }
   };
@@ -180,26 +170,6 @@ const RegisterTrainingInner: React.FC = () => {
     if (validation.validatePhone(formatted)) {
       const newErrors = { ...validationErrors };
       delete newErrors.phone;
-      setValidationErrors(newErrors);
-    }
-  };
-
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatters.formatCardNumber(e.target.value);
-    setFormData({ ...formData, cardNumber: formatted });
-    if (validation.validateCardNumber(formatted)) {
-      const newErrors = { ...validationErrors };
-      delete newErrors.cardNumber;
-      setValidationErrors(newErrors);
-    }
-  };
-
-  const handleCardExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatters.formatCardExpiry(e.target.value);
-    setFormData({ ...formData, cardExpiry: formatted });
-    if (validation.validateCardExpiry(formatted)) {
-      const newErrors = { ...validationErrors };
-      delete newErrors.cardExpiry;
       setValidationErrors(newErrors);
     }
   };
@@ -248,7 +218,6 @@ const RegisterTrainingInner: React.FC = () => {
 
   const handleNext = () => {
     if (step === 3 && !validateStep3Fields()) return;
-    if (step === 5 && !validateStep5Fields()) return;
     if (!canProceed()) return;
 
     const newCompletedSteps = new Set(completedSteps);
@@ -269,7 +238,6 @@ const RegisterTrainingInner: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep5Fields()) return;
     if (!stripe || !elements) return;
     const cardNumberEl = elements.getElement(CardNumberElement);
     if (!cardNumberEl) return;

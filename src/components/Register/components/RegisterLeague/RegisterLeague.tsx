@@ -6,14 +6,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { api } from '../../../../services/api';
 import { useSendEmail } from '../../../../hooks/useSendEmail';
-
-// Shared hooks for validation and formatting
 import { useValidation } from '../shared/useValidation';
 import { useFormFormatters } from '../shared/useFormFormatters';
-
-  // Use shared validation and formatting hooks
-  const validation = useValidation();
-  const formatters = useFormFormatters();
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -34,6 +28,8 @@ const RegisterLeagueInner: React.FC = () => {
   const stripe = useStripe();
   const elements = useElements();
   const { sendEmail } = useSendEmail();
+  const validation = useValidation();
+  const formatters = useFormFormatters();
   const [cardError, setCardError] = useState<string | null>(null);
   const [stripeFocused, setStripeFocused] = useState({ cardNumber: false, cardExpiry: false, cardCvc: false });
 
@@ -42,23 +38,7 @@ const RegisterLeagueInner: React.FC = () => {
   const [maxStepReached, setMaxStepReached] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   
-  const [formData, setFormData] = useState<{
-    category: string;
-    league: string;
-    youthGender: string;
-    teamName: string;
-    captainName: string;
-    email: string;
-    phone: string;
-    playerCount: number;
-    experienceLevel: string;
-    preferredDay: string;
-    additionalInfo: string;
-    cardNumber: string;
-    cardExpiry: string;
-    cardCVV: string;
-    billingZip: string;
-  }>({
+  const [formData, setFormData] = useState({
     category: '',
     league: '',
     youthGender: '',
@@ -75,10 +55,6 @@ const RegisterLeagueInner: React.FC = () => {
   const [validationErrors, setValidationErrors] = useState<{
     email?: string;
     phone?: string;
-    cardNumber?: string;
-    cardExpiry?: string;
-    cardCVV?: string;
-    billingZip?: string;
   }>({});
 
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
@@ -102,10 +78,7 @@ const RegisterLeagueInner: React.FC = () => {
 
   const handleCloseBanner = () => {
     setIsClosing(true);
-    setTimeout(() => {
-      setShowSuccessAnimation(false);
-      setIsClosing(false);
-    }, 400);
+    setTimeout(() => { setShowSuccessAnimation(false); setIsClosing(false); }, 400);
   };
 
   const handleCategorySelect = (category: string) => {
@@ -125,12 +98,6 @@ const RegisterLeagueInner: React.FC = () => {
     setFormData({ ...formData, [name]: value });
     if (name === 'email' && validation.validateEmail(value)) {
       setValidationErrors(prev => ({ ...prev, email: undefined }));
-    }
-    if (name === 'cardCVV' && validation.validateCVV(value)) {
-      setValidationErrors(prev => ({ ...prev, cardCVV: undefined }));
-    }
-    if (name === 'billingZip' && validation.validateZipCode(value)) {
-      setValidationErrors(prev => ({ ...prev, billingZip: undefined }));
     }
   };
 
@@ -152,55 +119,6 @@ const RegisterLeagueInner: React.FC = () => {
     setFormData({ ...formData, preferredDay: formData.preferredDay === day ? '' : day });
   };
 
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 16) value = value.slice(0, 16);
-    let formatted = value;
-    if (value.length > 4) {
-      formatted = `${value.slice(0, 4)}-`;
-      if (value.length > 8) {
-        formatted += `${value.slice(4, 8)}-`;
-        if (value.length > 12) {
-          formatted += `${value.slice(8, 12)}-${value.slice(12)}`;
-        } else {
-          formatted += value.slice(8);
-        }
-      } else {
-        formatted += value.slice(4);
-      }
-    }
-    setFormData({ ...formData, cardNumber: formatted });
-    if (validation.validateCardNumber(formatted)) {
-      setValidationErrors(prev => ({ ...prev, cardNumber: undefined }));
-    }
-  };
-
-  const handleCardExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    if (input.includes('/')) {
-      const parts = input.split('/');
-      let month = parts[0].replace(/\D/g, '');
-      let year = parts[1] ? parts[1].replace(/\D/g, '') : '';
-      if (month.length === 1) month = '0' + month;
-      month = month.slice(0, 2);
-      year = year.slice(0, 2);
-      const formatted = year ? `${month}/${year}` : `${month}/`;
-      setFormData({ ...formData, cardExpiry: formatted });
-      if (validation.validateCardExpiry(formatted)) {
-        setValidationErrors(prev => ({ ...prev, cardExpiry: undefined }));
-      }
-      return;
-    }
-    let value = input.replace(/\D/g, '');
-    if (value.length > 4) value = value.slice(0, 4);
-    let formatted = value;
-    if (value.length >= 3) formatted = `${value.slice(0, 2)}/${value.slice(2)}`;
-    setFormData({ ...formData, cardExpiry: formatted });
-    if (validation.validateCardExpiry(formatted)) {
-      setValidationErrors(prev => ({ ...prev, cardExpiry: undefined }));
-    }
-  };
-
   const canProceed = (): boolean => {
     switch (step) {
       case 1:
@@ -209,13 +127,10 @@ const RegisterLeagueInner: React.FC = () => {
       case 2:
         return formData.teamName !== '' && formData.captainName !== '' &&
                formData.email !== '' && formData.phone !== '';
-      case 3:
-        return formData.experienceLevel !== '' && formData.preferredDay !== '';
-      case 4:
-        return true;
+      case 3: return formData.experienceLevel !== '' && formData.preferredDay !== '';
+      case 4: return true;
       case 5: return true;
-      default:
-        return false;
+      default: return false;
     }
   };
 
@@ -234,11 +149,9 @@ const RegisterLeagueInner: React.FC = () => {
     return isValid;
   };
 
-
   const handleNext = () => {
     setValidationErrors({});
     if (step === 2 && !validateStep2Fields()) return;
-    if (step === 5 && !validateStep4Fields()) return;
     if (canProceed() && step < 5) {
       setCompletedSteps(prev => new Set([...prev, step]));
       const nextStep = step + 1;
@@ -247,8 +160,7 @@ const RegisterLeagueInner: React.FC = () => {
       setTimeout(() => {
         const container = document.getElementById('register-container');
         if (container) {
-          const yOffset = -20;
-          const y = container.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          const y = container.getBoundingClientRect().top + window.pageYOffset - 20;
           window.scrollTo({ top: y, behavior: 'smooth' });
         }
       }, 50);
@@ -261,8 +173,7 @@ const RegisterLeagueInner: React.FC = () => {
       setTimeout(() => {
         const container = document.getElementById('register-container');
         if (container) {
-          const yOffset = -20;
-          const y = container.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          const y = container.getBoundingClientRect().top + window.pageYOffset - 20;
           window.scrollTo({ top: y, behavior: 'smooth' });
         }
       }, 50);
@@ -275,8 +186,7 @@ const RegisterLeagueInner: React.FC = () => {
       setTimeout(() => {
         const container = document.getElementById('register-container');
         if (container) {
-          const yOffset = -20;
-          const y = container.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          const y = container.getBoundingClientRect().top + window.pageYOffset - 20;
           window.scrollTo({ top: y, behavior: 'smooth' });
         }
       }, 50);
@@ -284,7 +194,6 @@ const RegisterLeagueInner: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep4Fields()) return;
     if (!stripe || !elements) return;
     const cardNumberEl = elements.getElement(CardNumberElement);
     if (!cardNumberEl) return;
@@ -324,11 +233,11 @@ const RegisterLeagueInner: React.FC = () => {
         total_amount: total,
         stripe_payment_intent_id: paymentIntent.id,
         waiver_signed: true,
-        hear_about_us: formData.additionalInfo || null,
-        additional_notes: null,
+        hear_about_us: formData.additionalInfo || undefined,
+        additional_notes: undefined,
       };
 
-      const result: any = await api.createLeagueRegistration(registrationData);
+      const result = await api.createLeagueRegistration(registrationData) as any;
       if (!result || !result.success) throw new Error('Failed to save registration');
 
       await sendEmail({
@@ -363,14 +272,12 @@ const RegisterLeagueInner: React.FC = () => {
 
   return (
     <div className={styles.register}>
-      {/* Success Banner */}
       {showSuccessAnimation && (
         <>
           <div
             className={`${styles.bannerBackdrop} ${isClosing ? styles.backdropClosing : ''}`}
             onClick={handleCloseBanner}
-          ></div>
-
+          />
           <div
             className={`${styles.successBanner} ${isClosing ? styles.closing : ''}`}
             onClick={(e) => e.stopPropagation()}
@@ -380,7 +287,6 @@ const RegisterLeagueInner: React.FC = () => {
                 <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round"/>
               </svg>
             </button>
-
             <div className={styles.bannerHeader}>
               <div className={styles.bannerIcon}>
                 <svg viewBox="0 0 24 24" width="24" height="24">
@@ -393,7 +299,6 @@ const RegisterLeagueInner: React.FC = () => {
                 <p className={styles.bannerSubtitle}>{t('register.leagues.success.subtitle')}</p>
               </div>
             </div>
-
             <div className={styles.bannerDetails}>
               <div className={styles.detailsGrid}>
                 <div className={styles.detailItem}>
@@ -448,7 +353,6 @@ const RegisterLeagueInner: React.FC = () => {
                   </div>
                 )}
               </div>
-
               <div className={styles.emailNotice}>
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -461,21 +365,15 @@ const RegisterLeagueInner: React.FC = () => {
       )}
 
       <div className={styles.container} id="register-container">
-        {/* Progress Bar */}
         <div className={styles.progress}>
           <div className={styles.progressSteps}>
             {[1, 2, 3, 4, 5].map((s) => {
               const isClickable = s <= maxStepReached;
               const isCompleted = completedSteps.has(s) || step > s;
               return (
-                <div
-                  key={s}
-                  onClick={() => isClickable && handleStepClick(s)}
-                  className={`${styles.progressStep} ${isClickable ? styles.clickable : ''} ${isCompleted ? styles.completed : ''} ${step === s ? styles.active : ''}`}
-                >
-                  <div className={styles.progressCircle}>
-                    {isCompleted ? <Check size={16} /> : s}
-                  </div>
+                <div key={s} onClick={() => isClickable && handleStepClick(s)}
+                  className={`${styles.progressStep} ${isClickable ? styles.clickable : ''} ${isCompleted ? styles.completed : ''} ${step === s ? styles.active : ''}`}>
+                  <div className={styles.progressCircle}>{isCompleted ? <Check size={16} /> : s}</div>
                   <span className={styles.progressLabel}>
                     {s === 1 && t('register.leagues.steps.league')}
                     {s === 2 && t('register.leagues.steps.teamInfo')}
@@ -492,36 +390,26 @@ const RegisterLeagueInner: React.FC = () => {
           </div>
         </div>
 
-        {/* Step Content */}
         <div className={styles.content}>
-          {/* Step 1: League Selection */}
           {step === 1 && (
             <div className={styles.step}>
               <h2 className={styles.title}>{t('register.leagues.step1.title')}</h2>
-
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}><Users size={20} /></div>
                   {t('register.leagues.step1.chooseCategory')}
                 </h3>
                 <div className={styles.categoryCards}>
-                  <button
-                    onClick={() => handleCategorySelect('Adult')}
-                    className={`${styles.categoryCard} ${formData.category === 'Adult' ? styles.selected : ''}`}
-                  >
+                  <button onClick={() => handleCategorySelect('Adult')} className={`${styles.categoryCard} ${formData.category === 'Adult' ? styles.selected : ''}`}>
                     <div className={styles.categoryTitle}>{t('register.leagues.step1.adultLeagues')}</div>
                     <div className={styles.categorySubtitle}>Men • Women • Coed • Over 40 • Over 50</div>
                   </button>
-                  <button
-                    onClick={() => handleCategorySelect('Youth')}
-                    className={`${styles.categoryCard} ${formData.category === 'Youth' ? styles.selected : ''}`}
-                  >
+                  <button onClick={() => handleCategorySelect('Youth')} className={`${styles.categoryCard} ${formData.category === 'Youth' ? styles.selected : ''}`}>
                     <div className={styles.categoryTitle}>{t('register.leagues.step1.youthLeagues')}</div>
                     <div className={styles.categorySubtitle}>U8 • U10 • U12 • U14 • U16 • U18</div>
                   </button>
                 </div>
               </div>
-
               {formData.category === 'Youth' && (
                 <div className={styles.section}>
                   <h3 className={styles.sectionTitle}>
@@ -529,22 +417,11 @@ const RegisterLeagueInner: React.FC = () => {
                     {t('register.leagues.step1.chooseGender')}
                   </h3>
                   <div className={styles.genderTabs}>
-                    <button
-                      onClick={() => handleYouthGenderSelect('Male')}
-                      className={`${styles.genderTab} ${formData.youthGender === 'Male' ? styles.selected : ''}`}
-                    >
-                      {t('register.camps.step2.male')}
-                    </button>
-                    <button
-                      onClick={() => handleYouthGenderSelect('Female')}
-                      className={`${styles.genderTab} ${formData.youthGender === 'Female' ? styles.selected : ''}`}
-                    >
-                      {t('register.camps.step2.female')}
-                    </button>
+                    <button onClick={() => handleYouthGenderSelect('Male')} className={`${styles.genderTab} ${formData.youthGender === 'Male' ? styles.selected : ''}`}>{t('register.camps.step2.male')}</button>
+                    <button onClick={() => handleYouthGenderSelect('Female')} className={`${styles.genderTab} ${formData.youthGender === 'Female' ? styles.selected : ''}`}>{t('register.camps.step2.female')}</button>
                   </div>
                 </div>
               )}
-
               {formData.category && (formData.category === 'Adult' || formData.youthGender) && (
                 <div className={styles.section}>
                   <h3 className={styles.sectionTitle}>
@@ -553,13 +430,8 @@ const RegisterLeagueInner: React.FC = () => {
                   </h3>
                   <div className={styles.leagueOptions}>
                     {(formData.category === 'Adult' ? adultLeagues : youthLeagues).map((league) => (
-                      <button
-                        key={league}
-                        onClick={() => handleLeagueSelect(league)}
-                        className={`${styles.leagueOption} ${formData.league === league ? styles.selected : ''}`}
-                      >
-                        <Trophy size={24} />
-                        <span>{league}</span>
+                      <button key={league} onClick={() => handleLeagueSelect(league)} className={`${styles.leagueOption} ${formData.league === league ? styles.selected : ''}`}>
+                        <Trophy size={24} /><span>{league}</span>
                       </button>
                     ))}
                   </div>
@@ -568,64 +440,45 @@ const RegisterLeagueInner: React.FC = () => {
             </div>
           )}
 
-          {/* Step 2: Team Information */}
           {step === 2 && (
             <div className={styles.step}>
               <h2 className={styles.title}>{t('register.leagues.steps.teamInfo')}</h2>
-
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}><Trophy size={20} /></div>
                   {t('register.leagues.step2.teamDetails')}
                 </h3>
-
                 <div className={styles.form}>
                   <div className={styles.inputGroup}>
                     <input type="text" name="teamName" value={formData.teamName} onChange={handleInputChange} placeholder={t('register.leagues.step2.teamName')} className={styles.input} />
-                    <label className={`${styles.floatingLabel} ${formData.teamName ? styles.active : ''}`}>
-                      {t('register.leagues.step2.teamName')} *
-                    </label>
+                    <label className={`${styles.floatingLabel} ${formData.teamName ? styles.active : ''}`}>{t('register.leagues.step2.teamName')} *</label>
                   </div>
-
                   <div className={styles.inputGroup}>
                     <input type="text" name="captainName" value={formData.captainName} onChange={handleInputChange} placeholder={t('register.leagues.step2.captainName')} className={styles.input} />
-                    <label className={`${styles.floatingLabel} ${formData.captainName ? styles.active : ''}`}>
-                      {t('register.leagues.step2.captainName')} *
-                    </label>
+                    <label className={`${styles.floatingLabel} ${formData.captainName ? styles.active : ''}`}>{t('register.leagues.step2.captainName')} *</label>
                   </div>
-
                   <div className={styles.inputGroup}>
                     <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder={t('register.contact.email')} className={`${styles.input} ${validationErrors.email ? styles.inputError : ''}`} />
-                    <label className={`${styles.floatingLabel} ${formData.email ? styles.active : ''}`}>
-                      {t('register.contact.email')} *
-                    </label>
+                    <label className={`${styles.floatingLabel} ${formData.email ? styles.active : ''}`}>{t('register.contact.email')} *</label>
                     {validationErrors.email && <span className={styles.errorMessage}>{validationErrors.email}</span>}
                   </div>
-
                   <div className={styles.inputGroup}>
                     <input type="tel" name="phone" value={formData.phone} onChange={handlePhoneChange} placeholder={t('register.contact.phone')} className={`${styles.input} ${validationErrors.phone ? styles.inputError : ''}`} />
-                    <label className={`${styles.floatingLabel} ${formData.phone ? styles.active : ''}`}>
-                      {t('register.contact.phone')} *
-                    </label>
+                    <label className={`${styles.floatingLabel} ${formData.phone ? styles.active : ''}`}>{t('register.contact.phone')} *</label>
                     {validationErrors.phone && <span className={styles.errorMessage}>{validationErrors.phone}</span>}
                   </div>
-
                   <div className={styles.inputGroup}>
                     <input type="number" name="playerCount" value={formData.playerCount} onChange={handleInputChange} placeholder={t('register.leagues.step2.playerCount')} min="8" max="20" className={styles.input} />
-                    <label className={`${styles.floatingLabel} ${styles.active}`}>
-                      {t('register.leagues.step2.playerCount')}
-                    </label>
+                    <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.leagues.step2.playerCount')}</label>
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Step 3: Preferences */}
           {step === 3 && (
             <div className={styles.step}>
               <h2 className={styles.title}>{t('register.leagues.steps.preferences')}</h2>
-
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}><Shield size={20} /></div>
@@ -634,13 +487,11 @@ const RegisterLeagueInner: React.FC = () => {
                 <div className={styles.preferenceCards}>
                   {experienceLevels.map((level) => (
                     <button key={level.value} onClick={() => handleExperienceSelect(level.value)} className={`${styles.preferenceCard} ${formData.experienceLevel === level.value ? styles.selected : ''}`}>
-                      <h4>{level.label}</h4>
-                      <p>{level.description}</p>
+                      <h4>{level.label}</h4><p>{level.description}</p>
                     </button>
                   ))}
                 </div>
               </div>
-
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}><Calendar size={20} /></div>
@@ -649,13 +500,11 @@ const RegisterLeagueInner: React.FC = () => {
                 <div className={styles.preferenceCards}>
                   {preferredDays.map((day) => (
                     <button key={day.value} onClick={() => handleDaySelect(day.value)} className={`${styles.preferenceCard} ${formData.preferredDay === day.value ? styles.selected : ''}`}>
-                      <h4>{day.label}</h4>
-                      <p>{day.description}</p>
+                      <h4>{day.label}</h4><p>{day.description}</p>
                     </button>
                   ))}
                 </div>
               </div>
-
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}><Mail size={20} /></div>
@@ -668,11 +517,9 @@ const RegisterLeagueInner: React.FC = () => {
             </div>
           )}
 
-          {/* Step 4: Review */}
           {step === 4 && (
             <div className={styles.step}>
               <h2 className={styles.title}>{t('register.leagues.step4.title')}</h2>
-
               <div className={styles.confirmation}>
                 <div className={styles.summary}>
                   <div className={styles.summarySection}>
@@ -685,7 +532,6 @@ const RegisterLeagueInner: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
                   <div className={styles.summarySection}>
                     <h3>{t('register.leagues.step4.teamDetails')}</h3>
                     <div className={styles.summaryItem}>
@@ -697,18 +543,13 @@ const RegisterLeagueInner: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
                   <div className={styles.summarySection}>
                     <h3>{t('register.contact.contactDetails')}</h3>
                     <div className={styles.summaryItem}>
                       <div className={styles.iconCircle}><Mail size={18} /></div>
-                      <div>
-                        <strong>{formData.email}</strong>
-                        <span>{formData.phone}</span>
-                      </div>
+                      <div><strong>{formData.email}</strong><span>{formData.phone}</span></div>
                     </div>
                   </div>
-
                   <div className={styles.summarySection}>
                     <h3>{t('register.leagues.steps.preferences')}</h3>
                     <div className={styles.summaryItem}>
@@ -719,7 +560,6 @@ const RegisterLeagueInner: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
                   {formData.additionalInfo && (
                     <div className={styles.summarySection}>
                       <h3>{t('register.training.step3.additionalInfo')}</h3>
@@ -730,25 +570,19 @@ const RegisterLeagueInner: React.FC = () => {
                     </div>
                   )}
                 </div>
-
-                <div className={styles.terms}>
-                  <p>{t('register.leagues.step4.terms')}</p>
-                </div>
+                <div className={styles.terms}><p>{t('register.leagues.step4.terms')}</p></div>
               </div>
             </div>
           )}
 
-          {/* Step 5: Payment */}
           {step === 5 && (
             <div className={styles.step}>
               <h2 className={styles.title}>{t('register.leagues.steps.payment')}</h2>
-
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   <div className={styles.iconCircle}><CreditCard size={20} /></div>
                   {t('register.leagues.step5.registrationFee')}
                 </h3>
-
                 <div className={styles.form}>
                   <div className={styles.inputGroup}>
                     <div className={`${styles.stripeInput} ${stripeFocused.cardNumber ? styles.stripeInputFocused : ''}`}>
@@ -756,7 +590,6 @@ const RegisterLeagueInner: React.FC = () => {
                     </div>
                     <label className={`${styles.floatingLabel} ${styles.active}`}>{t('register.payment.cardNumber')} *</label>
                   </div>
-
                   <div className={styles.formRow}>
                     <div className={styles.inputGroup}>
                       <div className={`${styles.stripeInput} ${stripeFocused.cardExpiry ? styles.stripeInputFocused : ''}`}>
@@ -772,13 +605,11 @@ const RegisterLeagueInner: React.FC = () => {
                     </div>
                   </div>
                   {cardError && <span className={styles.errorMessage}>{cardError}</span>}
-
                   <div className={styles.securityNotice}>
                     <Lock size={16} />
                     <span>{t('register.payment.securityNotice')}</span>
                   </div>
                 </div>
-
                 <div className={styles.total}>
                   <div className={styles.totalRow}>
                     <span>{t('register.leagues.step5.registrationFeeLabel')}</span>
@@ -794,7 +625,6 @@ const RegisterLeagueInner: React.FC = () => {
           )}
         </div>
 
-        {/* Navigation Buttons */}
         <div className={styles.actions}>
           {step > 1 && (
             <button className={`${styles.button} ${styles.buttonSecondary}`} onClick={handleBack}>
@@ -803,8 +633,7 @@ const RegisterLeagueInner: React.FC = () => {
           )}
           {step < 5 ? (
             <button className={`${styles.button} ${styles.buttonPrimary}`} onClick={handleNext} disabled={!canProceed()}>
-              {t('register.nav.continue')}
-              <ChevronRight size={20} />
+              {t('register.nav.continue')}<ChevronRight size={20} />
             </button>
           ) : (
             <button className={`${styles.button} ${styles.buttonPrimary}`} onClick={handleSubmit} disabled={isProcessing}>

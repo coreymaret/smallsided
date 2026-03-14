@@ -1,5 +1,4 @@
 // src/hooks/useSendEmail.ts
-// Lightweight hook for triggering transactional emails from the admin dashboard
 
 export type EmailType = 'confirmation' | 'reminder' | 'status_change' | 'follow_up';
 
@@ -29,11 +28,14 @@ interface SendEmailOptions {
 export const useSendEmail = () => {
   const sendEmail = async (opts: SendEmailOptions): Promise<boolean> => {
     try {
+      // Use (import.meta.env as any) to avoid TypeScript errors on custom env vars
+      const secret = (import.meta.env as any).VITE_INTERNAL_SECRET ?? '';
+
       const response = await fetch('/.netlify/functions/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-internal-secret': import.meta.env.VITE_INTERNAL_SECRET ?? '',
+          'x-internal-secret': secret,
         },
         body: JSON.stringify({
           type:      opts.type,
