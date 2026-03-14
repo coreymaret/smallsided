@@ -35,7 +35,7 @@ export const useSendEmail = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-internal-secret': secret,
+          'x-internal-secret': (import.meta.env as any).VITE_INTERNAL_SECRET ?? '',
         },
         body: JSON.stringify({
           type:      opts.type,
