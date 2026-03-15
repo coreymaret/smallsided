@@ -55,7 +55,7 @@ class PublicErrorFallback extends Component<{ error: Error | null; onReset: () =
           />
           <h1 className={styles.heading}>Oops!</h1>
           <h2 className={styles.subheading}>Something went wrong</h2>
-          {import.meta.env.DEV && this.props.error && (
+          {(import.meta.env as any).DEV && this.props.error && (
             <pre className={styles.errorStack}>{this.props.error.message}</pre>
           )}
           <div className={styles.buttonRow}>
@@ -75,7 +75,7 @@ const AdminErrorFallback = ({ error, onReset }: { error: Error | null; onReset: 
     <div className={styles.content}>
       <h1 className={styles.heading}>Oops!</h1>
       <h2 className={styles.subheading}>Something went wrong in the dashboard</h2>
-      {import.meta.env.DEV && error && (
+      {(import.meta.env as any).DEV && error && (
         <pre className={styles.errorStack}>{error.message}</pre>
       )}
       <div className={styles.buttonRow}>

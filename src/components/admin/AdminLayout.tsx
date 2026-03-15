@@ -1,14 +1,20 @@
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
+  AlertCircle,
+  BarChart2,
   Calendar,
+  Clock,
   Trophy,
   Users,
   Cake,
   ChartNoAxesCombined,
+  DollarSign,
+  FileText,
   Smile,
   LogOut,
   Menu,
+  MessageSquare,
   X,
   Home,
   User,
