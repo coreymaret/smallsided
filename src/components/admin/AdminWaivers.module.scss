@@ -1,0 +1,27 @@
+.page { padding: 1.5rem 0.5rem 4rem; }
+.header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.25rem;
+  h1 { font-size: 1.75rem; font-weight: 700; color: #15141a; margin: 0 0 0.25rem; }
+  p  { font-size: 0.9375rem; color: #6b7280; margin: 0; } }
+.searchWrap { position: relative; margin-bottom: 1.25rem; }
+.searchIcon { position: absolute; left: 0.875rem; top: 50%; transform: translateY(-50%); color: #9ca3af; }
+.searchInput { width: 100%; padding: 0.625rem 0.875rem 0.625rem 2.5rem; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.9375rem; font-family: inherit; box-sizing: border-box; &:focus { outline: none; border-color: #98ED66; } }
+.loading { text-align: center; padding: 3rem; color: #9ca3af; }
+.empty  { text-align: center; padding: 3rem; color: #9ca3af; }
+.table { background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+.tableHeader { display: grid; grid-template-columns: 2fr 1fr 1.5fr 0.5fr 1fr; gap: 1rem; padding: 0.75rem 1.25rem; background: #f8f9fa; border-bottom: 1px solid #e5e7eb; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; }
+.tableRow { display: grid; grid-template-columns: 2fr 1fr 1.5fr 0.5fr 1fr; gap: 1rem; padding: 0.875rem 1.25rem; border-bottom: 1px solid #f3f4f6; align-items: center; cursor: pointer; transition: background 0.1s; &:last-child { border-bottom: none; } &:hover { background: #fafafa; } }
+.name  { font-size: 0.9375rem; font-weight: 600; color: #15141a; }
+.email { font-size: 0.8125rem; color: #6b7280; }
+.service { font-size: 0.875rem; color: #374151; text-transform: capitalize; }
+.date  { font-size: 0.8125rem; color: #6b7280; }
+.sigThumb { height: 36px; border: 1px solid #e5e7eb; border-radius: 4px; background: white; object-fit: contain; }
+
+.previewBackdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 500; }
+.previewModal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 480px; max-width: calc(100vw - 2rem); background: white; border-radius: 16px; z-index: 501; box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden; }
+.previewHeader { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; background: #15141a;
+  h2 { font-size: 1.125rem; font-weight: 700; color: white; margin: 0; }
+  button { background: rgba(255,255,255,0.1); border: none; border-radius: 8px; color: white; cursor: pointer; padding: 0.375rem; display: flex; align-items: center; &:hover { background: rgba(255,255,255,0.2); } } }
+.previewBody { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+.previewMeta { display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9375rem; color: #374151; span { display: flex; gap: 0.5rem; } strong { color: #15141a; } }
+.previewSigWrap { border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem; background: #fafafa; display: flex; align-items: center; justify-content: center; }
+.previewSig { max-width: 100%; max-height: 150px; object-fit: contain; }

@@ -1,0 +1,15 @@
+.page { display: flex; flex-direction: column; gap: 1.25rem; }
+.title { font-size: 1.5rem; font-weight: 800; color: #15141a; margin: 0; }
+.card { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; }
+.desc { font-size: 0.9375rem; color: #6b7280; margin: 0 0 1.25rem; line-height: 1.5; }
+.loading { color: #9ca3af; padding: 1rem 0; }
+.error   { padding: 0.75rem; background: #fee2e2; color: #991b1b; border-radius: 8px; font-size: 0.875rem; }
+.empty { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 2rem; text-align: center; p { font-size: 0.9375rem; font-weight: 600; color: #374151; margin: 0; } span { font-size: 0.875rem; color: #9ca3af; } }
+.emptyIcon { color: #d1d5db; margin-bottom: 0.25rem; }
+.cardList { display: flex; flex-direction: column; gap: 0.5rem; }
+.cardRow { display: flex; align-items: center; gap: 1rem; padding: 0.875rem 1rem; background: #fafafa; border: 1px solid #f3f4f6; border-radius: 10px; }
+.cardIcon { width: 36px; height: 36px; background: #f3f4f6; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #374151; }
+.cardInfo { flex: 1; display: flex; align-items: center; gap: 0.75rem; }
+.cardBrand { font-size: 0.9375rem; font-weight: 700; color: #15141a; }
+.cardNumber { font-size: 0.9375rem; color: #6b7280; }
+.cardExpiry { font-size: 0.8125rem; color: #9ca3af; white-space: nowrap; }

@@ -1,0 +1,188 @@
+// AdminLeagueSeason.module.scss
+
+.page { padding: 1.5rem 0.5rem 4rem; min-height: 100vh; }
+
+.header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.backBtn { display: flex; align-items: center; gap: 0.25rem; background: none; border: none; font-size: 0.9375rem; font-weight: 500; color: #6b7280; cursor: pointer; font-family: inherit; padding: 0; transition: color 0.15s; &:hover { color: #15141a; } }
+.headerInfo { h1 { font-size: 1.5rem; font-weight: 700; color: #15141a; margin: 0 0 0.25rem; } p { font-size: 0.9375rem; color: #6b7280; margin: 0; } }
+
+// ─── Tabs ──────────────────────────────────────────────────────────────────────
+.tabs { display: flex; border-bottom: 1px solid #e5e7eb; margin-bottom: 1.5rem; }
+.tab { padding: 0.75rem 1.25rem; background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; font-size: 0.9375rem; font-weight: 500; color: #6b7280; cursor: pointer; font-family: inherit; transition: all 0.15s; &:hover { color: #15141a; } }
+.tabActive { color: #15141a; border-bottom-color: #98ED66; font-weight: 600; }
+.tabContent { min-height: 400px; }
+.loading { text-align: center; padding: 3rem; color: #6b7280; }
+.empty { text-align: center; padding: 3rem; color: #9ca3af; font-size: 0.9375rem; }
+
+// ─── Schedule ──────────────────────────────────────────────────────────────────
+.scheduleActions { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.generateBtn { padding: 0.5625rem 1.25rem; background: #15141a; color: #98ED66; border: none; border-radius: 8px; font-size: 0.9375rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity 0.15s; &:hover:not(:disabled) { opacity: 0.85; } &:disabled { opacity: 0.4; cursor: not-allowed; } }
+.scheduleHint { font-size: 0.875rem; color: #9ca3af; }
+
+.roundBlock { margin-bottom: 1.5rem; }
+.roundTitle { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9ca3af; margin-bottom: 0.625rem; }
+.matchList { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.matchRow {
+  display: flex; align-items: center; justify-content: space-between;
+  background: white; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 0.875rem 1.25rem; cursor: pointer; transition: all 0.15s;
+  &:hover { border-color: #15141a; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+}
+.matchCompleted { background: #f9fafb; }
+
+.matchTeams { display: flex; align-items: center; gap: 1rem; flex: 1; }
+.matchTeam { font-size: 0.9375rem; font-weight: 600; color: #374151; flex: 1; }
+.matchTeamAway { text-align: right; }
+.winner { color: #15141a; }
+.matchScore { font-size: 1rem; font-weight: 800; color: #15141a; min-width: 60px; text-align: center; }
+.matchVs { font-size: 0.875rem; font-weight: 500; color: #9ca3af; }
+.forfeitBadge { font-size: 0.75rem; font-weight: 700; color: #991b1b; background: #fee2e2; padding: 0.125rem 0.375rem; border-radius: 6px; }
+
+.matchMeta { display: flex; align-items: center; gap: 0.75rem; font-size: 0.8125rem; color: #9ca3af; flex-shrink: 0; margin-left: 1rem; }
+.matchStatus { font-size: 0.75rem; font-weight: 600; text-transform: capitalize; padding: 0.125rem 0.5rem; border-radius: 10px; }
+.ms_scheduled  { background: #eff6ff; color: #1d4ed8; }
+.ms_completed  { background: #f0fdf4; color: #166534; }
+.ms_postponed  { background: #fef3c7; color: #92400e; }
+.ms_cancelled  { background: #fee2e2; color: #991b1b; }
+.ms_forfeit    { background: #fee2e2; color: #991b1b; }
+
+// ─── Score modal ───────────────────────────────────────────────────────────────
+.modalBackdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 500; }
+.modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 480px; max-width: calc(100vw - 2rem); background: white; border-radius: 16px; z-index: 501; box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden; }
+.modalHeader { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; background: #15141a; h2 { font-size: 1.125rem; font-weight: 700; color: white; margin: 0; } }
+.modalClose { background: rgba(255,255,255,0.1); border: none; border-radius: 8px; color: white; cursor: pointer; padding: 0.375rem; display: flex; align-items: center; &:hover { background: rgba(255,255,255,0.2); } }
+.modalBody { padding: 1.5rem; }
+.modalFooter { display: flex; justify-content: flex-end; gap: 0.625rem; padding: 1rem 1.5rem; border-top: 1px solid #e5e7eb; background: #fafafa; }
+
+.scoreRow { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+.scoreTeam { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; flex: 1; }
+.scoreTeamName { font-size: 0.9375rem; font-weight: 700; color: #15141a; text-align: center; }
+.scoreInput { width: 72px; height: 72px; text-align: center; font-size: 2rem; font-weight: 800; border: 2px solid #e5e7eb; border-radius: 12px; color: #15141a; font-family: inherit; &:focus { outline: none; border-color: #98ED66; } }
+.scoreSep { font-size: 1.25rem; font-weight: 700; color: #9ca3af; }
+
+.matchFields { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+// ─── Standings ─────────────────────────────────────────────────────────────────
+.standingsWrap { background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+.standingsTable {
+  width: 100%; border-collapse: collapse; font-size: 0.875rem;
+  th { background: #f8f9fa; padding: 0.625rem 0.75rem; text-align: center; font-size: 0.75rem; font-weight: 700; color: #9ca3af; border-bottom: 1px solid #e5e7eb; }
+  th:nth-child(2) { text-align: left; }
+  td { padding: 0.75rem; border-bottom: 1px solid #f3f4f6; text-align: center; color: #374151; }
+  td:nth-child(2) { text-align: left; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #fafafa; }
+}
+.qualifies td { background: #f0fdf4; }
+.tdPos { font-weight: 700; color: #9ca3af; width: 32px; }
+.tdTeam { font-weight: 700; color: #15141a; }
+.tdPts { font-weight: 800; color: #15141a; font-size: 1rem; }
+.gdPos { color: #166534; font-weight: 600; }
+.gdNeg { color: #991b1b; font-weight: 600; }
+.standingsNote { padding: 0.75rem 1rem; font-size: 0.8125rem; color: #9ca3af; border-top: 1px solid #f3f4f6; }
+
+// ─── Rosters ───────────────────────────────────────────────────────────────────
+.addTeamRow { display: flex; gap: 0.625rem; margin-bottom: 1.25rem; }
+.addTeamBtn { padding: 0.5625rem 1.25rem; background: #15141a; color: #98ED66; border: none; border-radius: 8px; font-size: 0.9375rem; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; transition: opacity 0.15s; &:hover:not(:disabled) { opacity: 0.85; } &:disabled { opacity: 0.4; cursor: not-allowed; } }
+
+.teamList { display: flex; flex-direction: column; gap: 0.75rem; }
+.teamCard { background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+.teamCardHeader { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; cursor: pointer; transition: background 0.1s; &:hover { background: #fafafa; } }
+.teamCardInfo { display: flex; flex-direction: column; gap: 0.25rem; }
+.teamCardName { font-size: 1rem; font-weight: 700; color: #15141a; }
+.teamCardMeta { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: #6b7280; }
+.teamCardActions { display: flex; align-items: center; gap: 0.75rem; }
+.addPlayerBtn { padding: 0.3125rem 0.75rem; background: #f0fdf4; color: #166534; border: 1px solid #86efac; border-radius: 6px; font-size: 0.8125rem; font-weight: 600; cursor: pointer; font-family: inherit; &:hover { background: #dcfce7; } }
+.expandIcon { font-size: 0.75rem; color: #9ca3af; }
+.warnBadge { background: #fef3c7; color: #92400e; padding: 0.125rem 0.5rem; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
+.dangerBadge { background: #fee2e2; color: #991b1b; padding: 0.125rem 0.5rem; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
+
+.rosterTable { border-top: 1px solid #f3f4f6; padding: 0 1.25rem 1.25rem; }
+.emptyRoster { padding: 1rem 0; font-size: 0.875rem; color: #9ca3af; text-align: center; }
+
+.playerTable {
+  width: 100%; border-collapse: collapse; font-size: 0.875rem; margin-top: 0.75rem;
+  th { text-align: left; padding: 0.5rem 0.625rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; border-bottom: 1px solid #e5e7eb; }
+  td { padding: 0.625rem; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+}
+.jerseyCell { font-weight: 700; color: #374151; width: 40px; }
+.playerName { font-weight: 600; color: #15141a; margin-right: 0.375rem; }
+.captainBadge { background: #fef3c7; color: #92400e; font-size: 0.6875rem; font-weight: 700; padding: 0.0625rem 0.375rem; border-radius: 8px; }
+.tdMuted { color: #9ca3af; }
+.checkGreen { color: #16a34a; }
+.checkRed   { color: #dc2626; }
+.playerActions { display: flex; gap: 0.375rem; }
+.editSmallBtn { padding: 0.25rem 0.5rem; background: #f3f4f6; border: none; border-radius: 5px; font-size: 0.75rem; cursor: pointer; font-family: inherit; &:hover { background: #e5e7eb; } }
+.deleteSmallBtn { padding: 0.25rem 0.5rem; background: none; border: none; color: #9ca3af; font-size: 0.75rem; cursor: pointer; &:hover { color: #dc2626; } }
+
+// ─── Bracket ───────────────────────────────────────────────────────────────────
+.bracketEmpty { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 4rem 2rem; text-align: center; p { color: #9ca3af; margin: 0; } }
+.bracketHint { font-size: 0.875rem !important; }
+.bracketWrap { display: flex; gap: 3rem; align-items: flex-start; overflow-x: auto; padding: 1rem 0; }
+.bracketRound { display: flex; flex-direction: column; gap: 1.5rem; min-width: 260px; }
+.bracketRoundTitle { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9ca3af; margin-bottom: 0.25rem; }
+.bracketMatch { background: white; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; cursor: pointer; transition: box-shadow 0.15s; &:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); } }
+.bracketTeam { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-bottom: 1px solid #f3f4f6; font-size: 0.9375rem; font-weight: 600; color: #374151; &:last-child { border-bottom: none; } }
+.bracketWinner { background: #f0fdf4; color: #15141a; }
+.bracketScore { font-size: 1.125rem; font-weight: 800; color: #15141a; }
+
+// ─── Shared drawer/form styles (reused in PlayerDrawer) ────────────────────────
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 500; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 420px; max-width: 100vw; background: white; z-index: 501; display: flex; flex-direction: column; box-shadow: -4px 0 32px rgba(0,0,0,0.15); animation: slideInRight 0.25s cubic-bezier(0.16,1,0.3,1); @media (max-width: 768px) { top: auto; left: 0; width: 100%; max-height: 92vh; border-radius: 20px 20px 0 0; } }
+.drawerHeader { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; background: #15141a; flex-shrink: 0; h2 { font-size: 1.125rem; font-weight: 700; color: white; margin: 0; } }
+.drawerClose { background: rgba(255,255,255,0.1); border: none; border-radius: 8px; color: white; cursor: pointer; padding: 0.375rem; display: flex; align-items: center; &:hover { background: rgba(255,255,255,0.2); } }
+.drawerBody { flex: 1; overflow-y: auto; padding: 0 1.5rem 1rem; }
+.drawerFooter { display: flex; justify-content: flex-end; gap: 0.625rem; padding: 1rem 1.5rem; border-top: 1px solid #e5e7eb; flex-shrink: 0; background: #fafafa; }
+.section { padding: 1.25rem 0 0; border-bottom: 1px solid #f3f4f6; &:last-child { border-bottom: none; } h3 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9ca3af; margin: 0 0 0.875rem; } }
+.formRow { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
+.formField { display: flex; flex-direction: column; gap: 0.3125rem; margin-bottom: 0.75rem; label { font-size: 0.8125rem; font-weight: 600; color: #374151; } }
+.input { padding: 0.5625rem 0.875rem; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.9375rem; color: #15141a; background: white; font-family: inherit; width: 100%; box-sizing: border-box; &:focus { outline: none; border-color: #98ED66; } }
+.textarea { padding: 0.625rem 0.875rem; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.9375rem; color: #15141a; font-family: inherit; width: 100%; box-sizing: border-box; resize: vertical; &:focus { outline: none; border-color: #98ED66; } }
+.checkLabel { display: flex; align-items: center; gap: 0.625rem; cursor: pointer; font-size: 0.9375rem; color: #374151; margin-bottom: 0.5rem; input { accent-color: #15141a; } }
+.cancelBtn { padding: 0.5625rem 1.25rem; background: white; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.9375rem; font-weight: 500; color: #374151; cursor: pointer; font-family: inherit; &:hover:not(:disabled) { background: #f3f4f6; } &:disabled { opacity: 0.5; cursor: not-allowed; } }
+.saveBtn { padding: 0.5625rem 1.5rem; background: #15141a; color: #98ED66; border: none; border-radius: 8px; font-size: 0.9375rem; font-weight: 600; cursor: pointer; font-family: inherit; &:hover:not(:disabled) { opacity: 0.85; } &:disabled { opacity: 0.5; cursor: not-allowed; } }
+.emptyIcon { color: #d1d5db; }
+
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@media (max-width: 768px) { .page { padding: 1rem 0.5rem 5rem; } .matchRow { flex-direction: column; align-items: flex-start; gap: 0.5rem; } .bracketWrap { flex-direction: column; } }
+
+// ─── DnD additions ────────────────────────────────────────────────────────────
+.matchDragHandle { 
+  cursor: grab; color: #d1d5db; font-size: 1.125rem; padding: 0 0.375rem;
+  flex-shrink: 0; user-select: none; display: flex; align-items: center;
+  &:hover { color: #9ca3af; }
+  &:active { cursor: grabbing; }
+}
+.matchDragOverlay {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18); transform: rotate(1deg);
+  border-color: #98ED66; pointer-events: none;
+}
+.dragOverlay {
+  display: flex; flex-direction: column; gap: 0.25rem;
+  padding: 0.625rem 0.875rem; border-radius: 8px;
+  border: 1.5px solid; min-width: 120px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18); cursor: grabbing;
+}
+.editableMeta {
+  cursor: pointer; border-radius: 4px; padding: 0.125rem 0.25rem;
+  transition: background 0.1s;
+  &:hover { background: #f3f4f6; color: #15141a; }
+}
+.inlineInput {
+  padding: 0.125rem 0.375rem; border: 1px solid #98ED66; border-radius: 4px;
+  font-size: 0.8125rem; color: #15141a; background: white; font-family: inherit;
+  &:focus { outline: none; }
+}
+.weekCellOver { background: #f0fdf4; border: 1.5px dashed #86efac; }
+.weekShiftBlockDraggable { cursor: grab; &:active { cursor: grabbing; } }
+.dragHandle { font-size: 0.875rem; opacity: 0.4; margin-left: auto; }
+.weekCellAddBtn {
+  width: 100%; padding: 0.25rem; background: none; border: 1px dashed #e5e7eb;
+  border-radius: 6px; color: #9ca3af; font-size: 0.75rem; cursor: pointer; margin-top: 0.25rem;
+  &:hover { border-color: #9ca3af; color: #374151; }
+}
+.bracketDropTarget { background: #f0fdf4 !important; border: 1.5px dashed #86efac; }
+.bracketDndHint { font-size: 0.8125rem; color: #9ca3af; margin-bottom: 1rem; }
+.dndHint { font-size: 0.8125rem; color: #9ca3af; margin: 0; }

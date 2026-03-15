@@ -1,12 +1,14 @@
 import { useState, useRef, useEffect, lazy, Suspense } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, ChevronDown,ChartNoAxesCombined, Smile } from '../../components/Icons/Icons';
+import { Facebook, Instagram, Youtube, Twitter, Calendar, Trophy, Users, Cake, ChevronDown, ChartNoAxesCombined, Smile } from '../../components/Icons/Icons';
 import styles from "./Header.module.scss";
 import Logo from "../../assets/logo.svg";
 import { useMobileMenu } from "../../contexts/MobileMenuContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { routePairs } from "../../constants/routePairs";
+import { useAccount } from "../../contexts/AccountContext";
+import AccountNavButton from "../AccountNavButton/AccountNavButton";
 
 const DesktopLanguageToggle = lazy(() =>
   import("../../components/LanguageToggle/LanguageToggle").then(m => ({ default: m.DesktopLanguageToggle }))
@@ -20,6 +22,7 @@ const Header = () => {
   const { t } = useTranslation();
   const { isSpanish } = useLanguage();
   const { setIsHeaderMenuOpen } = useMobileMenu();
+  const { user, isCustomer } = useAccount();
   const [menuState, setMenuState] = useState<"open" | "closing" | "closed" | undefined>("closed");
   const isOpen = menuState === "open";
   const [isMobile, setIsMobile] = useState(window.innerWidth < 785);
@@ -31,7 +34,6 @@ const Header = () => {
   const [servicesAnimationComplete, setServicesAnimationComplete] = useState(false);
   const megaMenuTimeoutRef = useRef<number | null>(null);
 
-  // Returns the localized path based on current language
   const lp = (enPath: string) => isSpanish ? (routePairs[enPath] ?? enPath) : enPath;
 
   useEffect(() => {
@@ -40,63 +42,38 @@ const Header = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Update context when menu state changes
   useEffect(() => {
     setIsHeaderMenuOpen(isOpen);
   }, [isOpen, setIsHeaderMenuOpen]);
 
   useEffect(() => {
     if (isMobile && isOpen) {
-      // Calculate scrollbar width before hiding it
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-      
       document.body.style.overflow = "hidden";
       document.body.style.paddingRight = `${scrollbarWidth}px`;
-      
-      // Also add padding to header to prevent shift
       const headerElement = document.querySelector('header');
-      if (headerElement) {
-        (headerElement as HTMLElement).style.paddingRight = `${scrollbarWidth}px`;
-      }
+      if (headerElement) (headerElement as HTMLElement).style.paddingRight = `${scrollbarWidth}px`;
     } else {
       document.body.style.overflow = "";
       document.body.style.paddingRight = "";
-      
-      // Reset header padding
       const headerElement = document.querySelector('header');
-      if (headerElement) {
-        (headerElement as HTMLElement).style.paddingRight = "";
-      }
-      
-      // Close services submenu when mobile menu closes
-      if (isMobile) {
-        setMobileServicesOpen(false);
-      }
+      if (headerElement) (headerElement as HTMLElement).style.paddingRight = "";
+      if (isMobile) setMobileServicesOpen(false);
     }
   }, [isMobile, isOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Don't hide header when mobile menu is open
-      if (isOpen) {
-        setVisible(true);
-        return;
-      }
-
+      if (isOpen) { setVisible(true); return; }
       const currentScrollY = window.scrollY;
       const windowHeight = window.innerHeight;
       const documentHeight = document.body.scrollHeight;
       const nearBottom = documentHeight - (currentScrollY + windowHeight) < 200;
-
       if (nearBottom) setVisible(true);
-      else if (currentScrollY > lastScrollY.current && currentScrollY > 100)
-        setVisible(false);
-      else
-        setVisible(true);
-
+      else if (currentScrollY > lastScrollY.current && currentScrollY > 100) setVisible(false);
+      else setVisible(true);
       lastScrollY.current = currentScrollY;
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isOpen]);
@@ -107,10 +84,7 @@ const Header = () => {
       setMenuAnimationComplete(false);
     } else {
       setMenuState("open");
-      // Enable hover effects after the longest animation completes (0.7s + 0.5s animation + 0.1s buffer)
-      setTimeout(() => {
-        setMenuAnimationComplete(true);
-      }, 1300);
+      setTimeout(() => setMenuAnimationComplete(true), 1300);
     }
   };
 
@@ -127,95 +101,44 @@ const Header = () => {
       setServicesAnimationComplete(false);
     } else {
       setMobileServicesOpen(true);
-      // Enable hover effects after the longest animation completes (0.25s + 0.4s animation + 0.1s buffer)
-      setTimeout(() => {
-        setServicesAnimationComplete(true);
-      }, 750);
+      setTimeout(() => setServicesAnimationComplete(true), 750);
     }
   };
 
   const handleServicesMouseEnter = () => {
     if (!isMobile) {
-      if (megaMenuTimeoutRef.current) {
-        clearTimeout(megaMenuTimeoutRef.current);
-      }
+      if (megaMenuTimeoutRef.current) clearTimeout(megaMenuTimeoutRef.current);
       setMegaMenuOpen(true);
     }
   };
 
-  const handleServicesMouseLeave = () => {
-    // Don't close immediately - let handleMegaMenuMouseLeave handle it
-  };
-
-  const handleMegaMenuMouseEnter = () => {
-    if (!isMobile) {
-      setMegaMenuOpen(true);
-    }
-  };
-
-  const handleMegaMenuMouseLeave = () => {
-    if (!isMobile) {
-      setMegaMenuOpen(false);
-    }
-  };
+  const handleServicesMouseLeave = () => {};
+  const handleMegaMenuMouseEnter = () => { if (!isMobile) setMegaMenuOpen(true); };
+  const handleMegaMenuMouseLeave = () => { if (!isMobile) setMegaMenuOpen(false); };
 
   const isActive = (path: string) => {
-    if (path === "/") {
-      return location.pathname === "/";
-    }
+    if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
   };
 
   const serviceItems = [
-  {
-    title: t('services.fieldRentals.title'),
-    path: "/services/field-rental",
-    icon: Calendar,
-    description: t('services.fieldRentals.description')
-  },
-  {
-    title: t('services.leagues.title'),
-    path: "/services/leagues",
-    icon: Trophy,
-    description: t('services.leagues.description')
-  },
-  {
-    title: t('services.pickup.title'),
-    path: "/services/pickup",
-    icon: Users,
-    description: t('services.pickup.description')
-  },
-  {
-    title: t('services.birthdayParties.title'),
-    path: "/services/birthday-parties",
-    icon: Cake,
-    description: t('services.birthdayParties.description')
-  },
-  {
-    title: t('services.camps.title'),
-    path: "/services/camps",
-    icon: Smile,
-    description: t('services.camps.description')
-  },
-  {
-    title: t('services.training.title'),
-    path: "/services/training",
-    icon: ChartNoAxesCombined,
-    description: t('services.training.description')
-  }
-];
+    { title: t('services.fieldRentals.title'),    path: "/services/field-rental",     icon: Calendar,            description: t('services.fieldRentals.description') },
+    { title: t('services.leagues.title'),         path: "/services/leagues",           icon: Trophy,              description: t('services.leagues.description') },
+    { title: t('services.pickup.title'),          path: "/services/pickup",            icon: Users,               description: t('services.pickup.description') },
+    { title: t('services.birthdayParties.title'), path: "/services/birthday-parties", icon: Cake,                description: t('services.birthdayParties.description') },
+    { title: t('services.camps.title'),           path: "/services/camps",             icon: Smile,               description: t('services.camps.description') },
+    { title: t('services.training.title'),        path: "/services/training",          icon: ChartNoAxesCombined, description: t('services.training.description') },
+  ];
 
   return (
     <>
-      <header 
-        className={`${styles.header} ${visible ? styles.show : styles.hide}`}
-      >
+      <header className={`${styles.header} ${visible ? styles.show : styles.hide}`}>
         <div className={styles.headerContent}>
           <Link to={isSpanish ? "/es/" : "/"} className={styles.logo} onClick={handleLinkClick}>
             <img src={Logo} alt="Small Sided Logo" width="180" height="40" />
           </Link>
 
-          {/* Desktop Nav - inside header */}
+          {/* Desktop Nav */}
           {!isMobile && (
             <nav className={styles["main-nav"]}>
               <div className={styles.linksSection}>
@@ -230,16 +153,10 @@ const Header = () => {
                       {t('nav.about')}
                     </Link>
                   </li>
-                  <li
-                    className={styles.servicesItem}
-                    onMouseEnter={handleServicesMouseEnter}
-                    onMouseLeave={handleServicesMouseLeave}
-                  >
+                  <li className={styles.servicesItem} onMouseEnter={handleServicesMouseEnter} onMouseLeave={handleServicesMouseLeave}>
                     <span className={`${styles.servicesLabel} ${isActive("/services") ? styles.active : ""}`}>
                       {t('nav.services')}
                     </span>
-                    
-                    {/* Desktop Mega Menu */}
                     <div
                       className={`${styles.megaMenu} ${megaMenuOpen ? styles.megaMenuOpen : ""}`}
                       onMouseEnter={handleMegaMenuMouseEnter}
@@ -254,13 +171,8 @@ const Header = () => {
                             onClick={handleLinkClick}
                             style={{ transitionDelay: `${index * 0.05}s` }}
                           >
-                            <div className={styles.megaMenuIcon}>
-                              <item.icon size={24} />
-                            </div>
-                            <div className={styles.megaMenuText}>
-                              <h3>{item.title}</h3>
-                              <p>{item.description}</p>
-                            </div>
+                            <div className={styles.megaMenuIcon}><item.icon size={24} /></div>
+                            <div className={styles.megaMenuText}><h3>{item.title}</h3><p>{item.description}</p></div>
                           </Link>
                         ))}
                       </div>
@@ -277,17 +189,19 @@ const Header = () => {
                     </Link>
                   </li>
 
+                  {/* Desktop CTA — Get Started or account avatar */}
                   <li className={styles.ctaItem}>
-                    <Link to={lp("/services")} onClick={handleLinkClick} className={styles.ctaButton}>
-                      {t('nav.getStarted')}
-                    </Link>
+                    {isCustomer ? (
+                      <AccountNavButton />
+                    ) : (
+                      <Link to="/account/login" onClick={handleLinkClick} className={styles.ctaButton}>
+                        {t('nav.getStarted')}
+                      </Link>
+                    )}
                   </li>
 
-                  {/* ── Desktop language toggle ── */}
                   <li className={styles.languageToggleItem}>
-                    <Suspense fallback={null}>
-                      <DesktopLanguageToggle />
-                    </Suspense>
+                    <Suspense fallback={null}><DesktopLanguageToggle /></Suspense>
                   </li>
                 </ul>
               </div>
@@ -308,22 +222,16 @@ const Header = () => {
         </div>
       </header>
 
-      {/* Mobile Nav - outside header */}
+      {/* Mobile Nav */}
       {isMobile && (
         <nav
           className={`${styles["main-nav"]} ${
-            menuState === "open"
-              ? styles.open
-              : menuState === "closing"
-              ? styles.closing
-              : menuState === "closed"
-              ? styles.closed
-              : ""
+            menuState === "open" ? styles.open :
+            menuState === "closing" ? styles.closing :
+            menuState === "closed" ? styles.closed : ""
           }`}
           data-hover-enabled={menuAnimationComplete ? "true" : "false"}
-          onTransitionEnd={() => {
-            if (menuState === "closing") setMenuState("closed");
-          }}
+          onTransitionEnd={() => { if (menuState === "closing") setMenuState("closed"); }}
         >
           <div className={styles.linksSection}>
             <ul>
@@ -338,19 +246,11 @@ const Header = () => {
                 </Link>
               </li>
               <li className={styles.servicesItem}>
-                <button
-                  className={styles.servicesToggle}
-                  onClick={toggleMobileServices}
-                >
+                <button className={styles.servicesToggle} onClick={toggleMobileServices}>
                   <span>{t('nav.services')}</span>
-                  <ChevronDown 
-                    size={20} 
-                    className={`${styles.chevron} ${mobileServicesOpen ? styles.chevronOpen : ''}`}
-                  />
+                  <ChevronDown size={20} className={`${styles.chevron} ${mobileServicesOpen ? styles.chevronOpen : ''}`} />
                 </button>
-                
-                {/* Mobile Mega Menu Cards */}
-                <div 
+                <div
                   className={`${styles.mobileServiceCards} ${mobileServicesOpen ? styles.mobileServiceCardsOpen : ''}`}
                   data-hover-enabled={servicesAnimationComplete ? "true" : "false"}
                 >
@@ -362,13 +262,8 @@ const Header = () => {
                       onClick={handleLinkClick}
                       style={{ transitionDelay: mobileServicesOpen ? `${index * 0.05}s` : '0s' }}
                     >
-                      <div className={styles.mobileServiceIcon}>
-                        <item.icon size={24} />
-                      </div>
-                      <div className={styles.mobileServiceText}>
-                        <h3>{item.title}</h3>
-                        <p>{item.description}</p>
-                      </div>
+                      <div className={styles.mobileServiceIcon}><item.icon size={24} /></div>
+                      <div className={styles.mobileServiceText}><h3>{item.title}</h3><p>{item.description}</p></div>
                     </Link>
                   ))}
                 </div>
@@ -384,10 +279,17 @@ const Header = () => {
                 </Link>
               </li>
 
+              {/* Mobile CTA — Get Started or account avatar */}
               <li className={styles.ctaItem}>
-                <Link to={lp("/services")} onClick={handleLinkClick} className={styles.ctaButton}>
-                  {t('nav.getStarted')}
-                </Link>
+                {isCustomer ? (
+                  <div className={styles.mobileAccountBtn}>
+                    <AccountNavButton />
+                  </div>
+                ) : (
+                  <Link to="/account/login" onClick={handleLinkClick} className={styles.ctaButton}>
+                    {t('nav.getStarted')}
+                  </Link>
+                )}
               </li>
             </ul>
           </div>
@@ -407,7 +309,6 @@ const Header = () => {
             </a>
           </div>
 
-          {/* ── Mobile language toggle — slides in after social icons ── */}
           <Suspense fallback={null}>
             <MobileLanguageToggle menuIsOpen={isOpen} />
           </Suspense>
